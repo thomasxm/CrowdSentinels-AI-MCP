@@ -29,7 +29,8 @@
 
 - **Natural Language Threat Hunting** — Query Elasticsearch using plain English
 - **AI-Guided Investigation Workflows** — Built-in prompts guide agents through proper IR methodology
-- **Cross-Tool IoC Correlation** — IoCs discovered in one tool are available to all others
+- **Persistent Investigation State** — Memory-managed IoC tracking, forensic timelines, and cross-query correlation that survives across sessions (8GB FIFO storage)
+- **Cross-Tool IoC Correlation** — IoCs discovered in one tool are automatically available to all others
 - **Multi-Source Analysis** — Elasticsearch, EVTX logs (Chainsaw), PCAP files (Wireshark)
 - **Standalone CLI** — Full threat hunting from the terminal without an MCP client
 
