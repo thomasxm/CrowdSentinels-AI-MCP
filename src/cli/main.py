@@ -299,6 +299,85 @@ def _cmd_ioc(args):
     return 0 if total else 2
 
 
+def _cmd_pcap(args):
+    """Analyse a PCAP file for network threats."""
+    from src.tools.wireshark_tools import WiresharkTools
+    ws = WiresharkTools()
+
+    if args.action == "overview":
+        result = ws._pcap_overview(args.pcap)
+    elif args.action == "beaconing":
+        result = ws._detect_beaconing(
+            args.pcap,
+            min_connections=args.min_connections,
+        )
+    elif args.action == "lateral":
+        result = ws._detect_lateral_movement(args.pcap)
+    elif args.action == "sessions":
+        result = ws._track_sessions(
+            args.pcap,
+            protocol=args.protocol,
+        )
+    elif args.action == "iocs":
+        if not args.indicators:
+            print("Error: --indicators required for ioc hunt", file=sys.stderr)
+            return 1
+        result = ws._hunt_iocs(
+            args.pcap,
+            iocs=args.indicators,
+        )
+    else:
+        print(f"Error: unknown action: {args.action}", file=sys.stderr)
+        return 1
+
+    _emit(result, args.output)
+    return 0
+
+
+def _cmd_chainsaw(args):
+    """Hunt through EVTX logs using Chainsaw with Sigma rules."""
+    from src.clients.common.chainsaw_client import ChainsawClient
+    client = ChainsawClient()
+
+    if args.action == "hunt":
+        if not args.evtx:
+            print("Error: EVTX path required for hunt", file=sys.stderr)
+            return 1
+        # Resolve mapping path relative to chainsaw binary if not found at project root
+        mapping_path = args.mapping
+        if not mapping_path and not client.mappings.exists():
+            chainsaw_dir = client.chainsaw_path.parent
+            fallback = chainsaw_dir / "mappings" / "sigma-event-logs-all.yml"
+            if fallback.exists():
+                mapping_path = str(fallback)
+        result = client.hunt(
+            evtx_path=args.evtx,
+            sigma_path=args.sigma_rules,
+            mapping_path=mapping_path,
+        )
+    elif args.action == "search":
+        if not args.evtx or not args.keyword:
+            print("Error: EVTX path and --keyword required for search", file=sys.stderr)
+            return 1
+        result = client.search(
+            evtx_path=args.evtx,
+            search_term=args.keyword,
+        )
+    elif args.action == "status":
+        result = {
+            "chainsaw_path": str(client.chainsaw_path),
+            "installed": client.chainsaw_path.exists(),
+            "sigma_rules_path": str(client.sigma_rules),
+            "sigma_rules_exist": client.sigma_rules.exists(),
+        }
+    else:
+        print(f"Error: unknown action: {args.action}", file=sys.stderr)
+        return 1
+
+    _emit(result, args.output)
+    return 0
+
+
 def _cmd_analyse(args):
     """Analyse search results read from stdin (JSON)."""
     raw = sys.stdin.read()
@@ -517,6 +596,59 @@ def _build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--context", "-c", default="",
                     help="Context about what was searched for")
     sp.set_defaults(func=_cmd_analyse)
+
+    # --- pcap ------------------------------------------------------------
+    sp = subparsers.add_parser(
+        "pcap",
+        parents=[output_parent],
+        help="Analyse PCAP files for network threats (Wireshark/TShark)",
+        epilog=(
+            "Examples:\n"
+            "  crowdsentinel pcap overview capture.pcap\n"
+            "  crowdsentinel pcap beaconing capture.pcap --min-connections 5\n"
+            "  crowdsentinel pcap lateral capture.pcap\n"
+            "  crowdsentinel pcap sessions capture.pcap --protocol tcp\n"
+            "  crowdsentinel pcap iocs capture.pcap --indicators 203.0.113.42 evil.com"
+        ),
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    sp.add_argument("action",
+                    choices=["overview", "beaconing", "lateral", "sessions", "iocs"],
+                    help="Analysis type")
+    sp.add_argument("pcap", help="Path to PCAP/PCAPNG file")
+    sp.add_argument("--min-connections", type=int, default=10, dest="min_connections",
+                    help="Minimum connections for beaconing detection (default: 10)")
+    sp.add_argument("--protocol", default="tcp", choices=["tcp", "udp"],
+                    help="Protocol for session tracking (default: tcp)")
+    sp.add_argument("--indicators", nargs="+",
+                    help="IoC values to hunt for (IPs, domains, hashes)")
+    sp.set_defaults(func=_cmd_pcap)
+
+    # --- chainsaw --------------------------------------------------------
+    sp = subparsers.add_parser(
+        "chainsaw",
+        parents=[output_parent],
+        help="Hunt through EVTX logs with Chainsaw and Sigma rules",
+        epilog=(
+            "Examples:\n"
+            "  crowdsentinel chainsaw hunt /path/to/logs/\n"
+            "  crowdsentinel chainsaw hunt /path/to/file.evtx --sigma-rules /path/to/sigma/\n"
+            "  crowdsentinel chainsaw search /path/to/logs/ --keyword mimikatz\n"
+            "  crowdsentinel chainsaw status"
+        ),
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    sp.add_argument("action", choices=["hunt", "search", "status"],
+                    help="Chainsaw action")
+    sp.add_argument("evtx", nargs="?", default=None,
+                    help="Path to EVTX file or directory")
+    sp.add_argument("--sigma-rules", dest="sigma_rules", default=None,
+                    help="Path to Sigma rules directory")
+    sp.add_argument("--mapping", default=None,
+                    help="Path to Chainsaw mapping file")
+    sp.add_argument("--keyword", default=None,
+                    help="Keyword to search for (for 'search' action)")
+    sp.set_defaults(func=_cmd_chainsaw)
 
     return parser
 
