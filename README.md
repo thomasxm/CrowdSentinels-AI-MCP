@@ -39,15 +39,23 @@
 <a name="installation"></a>
 ## Installation
 
-### Install from PyPI
+### Install from PyPI (recommended)
 
 ```bash
 # Install with pip
 pip install crowdsentinel-mcp-server
 
-# Or install with uv (recommended)
+# Or install with uv
 uv pip install crowdsentinel-mcp-server
+
+# Download detection rules, Chainsaw, and Sigma rules (one-time)
+crowdsentinel setup
 ```
+
+The `setup` command downloads everything needed for offline threat hunting into `~/.crowdsentinel/`:
+- 5,049 detection rules (EQL + Lucene)
+- Chainsaw binary for EVTX analysis
+- 3,000+ Sigma rules for Chainsaw
 
 ### Run directly with uvx (no install needed)
 
@@ -62,15 +70,6 @@ uvx opensearch-mcp-server          # OpenSearch 1.x/2.x/3.x
 ```
 
 ### Install from source
-
-```bash
-git clone https://github.com/thomasxm/CrowdSentinels-AI-MCP.git
-cd CrowdSentinels-AI-MCP
-uv sync
-uv run crowdsentinel-mcp-server
-```
-
-### Automated setup (recommended for first-time users)
 
 ```bash
 git clone https://github.com/thomasxm/CrowdSentinels-AI-MCP.git
@@ -122,17 +121,25 @@ export VERIFY_CERTS="false"
 ### 3. Or use the CLI directly
 
 ```bash
+# Download rules and tools (one-time)
+crowdsentinel setup
+
 # Check cluster health
 crowdsentinel health
 
 # Hunt for threats
 crowdsentinel hunt "powershell encoded" -i winlogbeat-*
 
-# Run a detection rule
-crowdsentinel detect windows_builtin_win_security_susp_logon_eql -i winlogbeat-*
-
-# List detection rules
+# Run detection rules
 crowdsentinel rules -p windows --tactic credential_access
+crowdsentinel detect windows_builtin_win_alert_mimikatz_keywords_lucene -i winlogbeat-*
+
+# Analyse PCAP files
+crowdsentinel pcap overview capture.pcap
+crowdsentinel pcap beaconing capture.pcap
+
+# Hunt EVTX logs with Chainsaw
+crowdsentinel chainsaw hunt /path/to/evtx/ --sigma-rules /path/to/sigma/
 ```
 
 ---
@@ -140,17 +147,19 @@ crowdsentinel rules -p windows --tactic credential_access
 <a name="cli-usage"></a>
 ## CLI Usage
 
-CrowdSentinel provides a full CLI for threat hunting from the terminal. Install via `pip install crowdsentinel-mcp-server`, then:
+CrowdSentinel provides a full CLI for threat hunting from the terminal:
 
 ```bash
+pip install crowdsentinel-mcp-server
+crowdsentinel setup    # Download rules, Chainsaw, Sigma (one-time)
 crowdsentinel --help
-crowdsentinel --version
 ```
 
 ### Available Commands
 
 | Command | Description | Example |
 |:--------|:------------|:--------|
+| `setup` | Download detection rules, Chainsaw, and Sigma rules | `crowdsentinel setup` |
 | `health` | Show cluster health | `crowdsentinel health` |
 | `indices` | List all indices | `crowdsentinel indices` |
 | `hunt` | IR-focused threat hunt with IoC extraction | `crowdsentinel hunt "powershell" -i winlogbeat-*` |
@@ -161,6 +170,8 @@ crowdsentinel --version
 | `schema` | Detect schema for an index pattern | `crowdsentinel schema -i winlogbeat-*` |
 | `ioc` | Hunt for a specific Indicator of Compromise | `crowdsentinel ioc 203.0.113.42 --type ip -i winlogbeat-*` |
 | `analyse` | Analyse search results from stdin (JSON) | `cat results.json \| crowdsentinel analyse -c "context"` |
+| `pcap` | Analyse PCAP files (overview, beaconing, lateral movement) | `crowdsentinel pcap beaconing capture.pcap` |
+| `chainsaw` | Hunt EVTX logs with Chainsaw and Sigma rules | `crowdsentinel chainsaw hunt /path/to/evtx/` |
 
 ### Output Formats
 
@@ -248,11 +259,12 @@ Persistent IoC tracking across tools and sessions with FIFO storage
 │ Elasticsearch │    │   Chainsaw    │    │   Wireshark   │
 │  /OpenSearch  │    │  (EVTX/Sigma) │    │    (PCAP)     │
 └───────────────┘    └───────────────┘    └───────────────┘
-        │
-        ▼ (Roadmap)
-┌───────────────┐
-│    Splunk     │
-└───────────────┘
+                              │
+                              ▼ (Roadmap)
+┌───────────────┐    ┌───────────────┐    ┌───────────────┐
+│    Splunk     │    │ Velociraptor  │    │     Zeek      │
+│               │    │  (EDR/DFIR)   │    │   (NSM/IDS)   │
+└───────────────┘    └───────────────┘    └───────────────┘
 ```
 
 ---
@@ -578,6 +590,8 @@ docker-compose -f docker-compose-opensearch.yml up -d
 
 | Feature | Status | Description |
 |:--------|:------:|:------------|
+| **Velociraptor Integration** | Planned | EDR/DFIR artifact collection and live response via Velociraptor API |
+| **Zeek Integration** | Planned | Network security monitoring — parse Zeek logs (conn, dns, http, ssl, x509) for threat hunting |
 | **Splunk Integration** | Planned | Add Splunk as a data source alongside Elasticsearch |
 | **Sigma Rule Converter** | Planned | Convert Sigma rules to native ES/Splunk queries |
 | **Threat Intel Feeds** | Planned | Automatic IoC enrichment from MISP, OTX, etc. |
