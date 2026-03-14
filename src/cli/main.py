@@ -225,6 +225,7 @@ def _cmd_rules(args):
         log_source=args.log_source,
         rule_type=args.rule_type,
         search_term=args.search,
+        mitre_tactic=args.tactic,
         limit=min(args.limit, 200),
     )
 
@@ -536,11 +537,12 @@ def _build_parser() -> argparse.ArgumentParser:
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    sp.add_argument("--platform", help="Filter by platform (windows, linux, macos, ...)")
+    sp.add_argument("--platform", "-p", help="Filter by platform (windows, linux, macos, ...)")
+    sp.add_argument("--tactic", help="Filter by MITRE ATT&CK tactic (e.g. credential_access)")
     sp.add_argument("--log-source", dest="log_source", help="Filter by log source")
     sp.add_argument("--rule-type", dest="rule_type", choices=["lucene", "eql"], help="Filter by rule type")
-    sp.add_argument("--search", help="Search term (name, tags, description)")
-    sp.add_argument("--limit", type=int, default=50, help="Max results (default: 50, max: 200)")
+    sp.add_argument("--search", "-s", help="Search term (name, tags, description)")
+    sp.add_argument("--limit", "-l", type=int, default=50, help="Max results (default: 50, max: 200)")
     sp.set_defaults(func=_cmd_rules)
 
     # --- schema ----------------------------------------------------------
