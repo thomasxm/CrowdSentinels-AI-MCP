@@ -1,7 +1,7 @@
 <!-- mcp-name: io.github.thomasxm/crowdsentinel-mcp-server -->
 
 <div align="center">
-  <img src="logo.png" alt="CrowdSentinel Logo" width="400"/>
+  <img src="https://raw.githubusercontent.com/thomasxm/crowdsentinel-assets/main/logo.png" alt="CrowdSentinel Logo" width="400"/>
 
 # CrowdSentinel MCP Server
 
@@ -14,7 +14,6 @@
 [![MCP](https://img.shields.io/badge/MCP-Compatible-purple.svg)](https://modelcontextprotocol.io/)
 [![Tools](https://img.shields.io/badge/MCP%20Tools-79-brightgreen.svg)](https://github.com/thomasxm/CrowdSentinels-AI-MCP)
 [![Rules](https://img.shields.io/badge/Detection%20Rules-5%2C049-blue.svg)](https://github.com/thomasxm/CrowdSentinels-AI-MCP)
-[![Stars](https://img.shields.io/github/stars/thomasxm/CrowdSentinels-AI-MCP?style=social)](https://github.com/thomasxm/CrowdSentinels-AI-MCP)
 
 **Open-source threat hunting orchestrator connecting LLMs to enterprise security data via Model Context Protocol (MCP)**
 
