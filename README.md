@@ -23,6 +23,12 @@
 
 ---
 
+## Demo
+
+https://github.com/thomasxm/CrowdSentinels-AI-MCP/releases/download/v0.3.2/demo_small.mp4
+
+---
+
 ## What is CrowdSentinel?
 
 **CrowdSentinel** transforms traditional SIEM querying into intelligent, framework-driven investigations using natural language. It serves as a unified security intelligence layer that connects large language models to enterprise security data sources, enabling:
