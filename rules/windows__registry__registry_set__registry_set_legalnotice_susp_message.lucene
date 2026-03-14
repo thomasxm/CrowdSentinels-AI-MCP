@@ -1,0 +1,1 @@
+(registry.path:(*\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\LegalNoticeCaption* OR *\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\LegalNoticeText*)) AND (winlog.event_data.Details:(*encrypted* OR *Unlock\-Password* OR *paying*))

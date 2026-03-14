@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*new\-object\ * AND powershell.file.script_block_text:*\-ComObject\ * AND powershell.file.script_block_text:*.application* AND powershell.file.script_block_text:*.RegisterXLL*

@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:4624 AND winlog.event_data.LogonType:10 AND winlog.event_data.AuthenticationPackageName:Negotiate AND winlog.event_data.TargetUserName:Admin*)

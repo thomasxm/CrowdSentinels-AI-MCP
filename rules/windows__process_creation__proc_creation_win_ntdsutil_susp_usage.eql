@@ -1,0 +1,1 @@
+any where (process.executable:"*\\ntdsutil.exe" or process.pe.original_file_name:"ntdsutil.exe") and ((process.command_line:"*snapshot*" and process.command_line:"*mount *") or (process.command_line:"*ac*" and process.command_line:"* i*" and process.command_line:"* ntds*"))

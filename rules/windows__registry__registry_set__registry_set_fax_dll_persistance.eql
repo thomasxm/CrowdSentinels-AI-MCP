@@ -1,0 +1,1 @@
+any where (registry.path:"*\\Software\\Microsoft\\Fax\\Device Providers\*" and registry.path:"*\\ImageName*") and (not winlog.event_data.Details:"%systemroot%\\system32\\fxst30.dll")

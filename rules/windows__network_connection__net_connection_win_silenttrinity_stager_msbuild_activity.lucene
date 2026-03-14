@@ -1,0 +1,1 @@
+process.executable:*\\msbuild.exe AND ((destination.port:(80 OR 443)) AND network.direction:true)

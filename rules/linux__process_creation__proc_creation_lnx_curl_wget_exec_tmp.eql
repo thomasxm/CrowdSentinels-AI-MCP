@@ -1,0 +1,1 @@
+any where (CommandLine like~ ("*/curl*", "*/wget*")) and (CommandLine like~ ("*/tmp/*", "*/dev/shm/*")) and CommandLine:"*sh -c*"

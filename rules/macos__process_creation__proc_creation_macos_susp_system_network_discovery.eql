@@ -1,0 +1,1 @@
+any where ((Image like~ ("*/arp", "*/ifconfig", "*/netstat", "*/networksetup", "*/socketfilterfw")) or (Image:"/usr/bin/defaults" and (CommandLine:"*/Library/Preferences/com.apple.alf*" and CommandLine:"*read*"))) and (not ParentImage:"*/wifivelocityd")

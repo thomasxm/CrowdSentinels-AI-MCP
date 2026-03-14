@@ -1,0 +1,1 @@
+any where (operationName like~ ("MICROSOFT.NETWORK/VIRTUALNETWORKGATEWAYS/*", "MICROSOFT.NETWORK/VIRTUALNETWORKS/*")) and (operationName like~ ("*/WRITE", "*/DELETE"))

@@ -1,0 +1,1 @@
+any where file.path like~ ("*\\AppData\\Roaming\\AnyDesk\\user.conf*", "*\\AppData\\Roaming\\AnyDesk\\system.conf*")

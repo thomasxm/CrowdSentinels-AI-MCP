@@ -1,0 +1,1 @@
+any where Image:"*/hdiutil" and (CommandLine like~ ("*attach *", "*mount *"))

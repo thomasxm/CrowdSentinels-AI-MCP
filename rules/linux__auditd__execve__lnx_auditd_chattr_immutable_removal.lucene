@@ -1,0 +1,1 @@
+type:EXECVE AND a0:*chattr* AND a1:*\-i*

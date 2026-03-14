@@ -1,0 +1,1 @@
+any where file.path:"*\\waveedit.dll" and (not ((process.executable like~ ("C:\\Program Files (x86)\\Nero\\Nero Apps\\Nero WaveEditor\\waveedit.exe", "C:\\Program Files\\Nero\\Nero Apps\\Nero WaveEditor\\waveedit.exe")) and (file.path like~ ("C:\\Program Files (x86)\\Nero\\Nero Apps\\Nero WaveEditor\*", "C:\\Program Files\\Nero\\Nero Apps\\Nero WaveEditor\*"))))

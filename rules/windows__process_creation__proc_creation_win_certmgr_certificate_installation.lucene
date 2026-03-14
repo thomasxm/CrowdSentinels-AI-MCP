@@ -1,0 +1,1 @@
+(process.executable:*\\CertMgr.exe OR process.pe.original_file_name:CERTMGT.EXE) AND (process.command_line:*\/add* AND process.command_line:*root*)

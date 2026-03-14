@@ -1,0 +1,1 @@
+any where winlog.event_data.Contents:"[ZoneTransfer]  ZoneId=3*" and (winlog.event_data.Contents like~ ("*://1*", "*://2*", "*://3*", "*://4*", "*://5*", "*://6*", "*://7*", "*://8*", "*://9*")) and file.path:"*:Zone.Identifier" and file.path:"*\\AppData\\Local\\Temp\\WinGet\*"

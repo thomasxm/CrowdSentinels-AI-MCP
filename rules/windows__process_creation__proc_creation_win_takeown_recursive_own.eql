@@ -1,0 +1,1 @@
+any where process.executable:"*\\takeown.exe" and (process.command_line:"*/f *" and process.command_line:"*/r*")

@@ -1,0 +1,1 @@
+any where process.command_line:"*\\System\\CurrentControlSet\\Control\\Lsa*" and process.command_line:"*NoLMHash*" and process.command_line:"* 0*"

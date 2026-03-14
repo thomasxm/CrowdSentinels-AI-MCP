@@ -1,0 +1,1 @@
+any where process.executable:"C:\\Windows\*" and (file.path like~ ("C:\\Users\\Public\*", "C:\\PerfLogs\*"))

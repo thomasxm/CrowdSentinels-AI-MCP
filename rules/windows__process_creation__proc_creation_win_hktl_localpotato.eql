@@ -1,0 +1,1 @@
+any where process.executable:"*\\LocalPotato.exe" or (process.command_line:"*.exe -i C:\*" and process.command_line:"*-o Windows\*") or (winlog.event_data.Hashes like~ ("*IMPHASH=E1742EE971D6549E8D4D81115F88F1FC*", "*IMPHASH=DD82066EFBA94D7556EF582F247C8BB5*"))

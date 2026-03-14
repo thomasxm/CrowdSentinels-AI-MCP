@@ -1,0 +1,1 @@
+any where registry.path:"*\\Root\\InventoryApplicationFile\\winsat.exe|*" and registry.path:"*\\LowerCaseLongPath" and winlog.event_data.Details:"c:\\users\*" and winlog.event_data.Details:"*\\appdata\\local\\temp\\system32\\winsat.exe"

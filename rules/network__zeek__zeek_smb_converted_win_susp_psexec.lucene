@@ -1,0 +1,1 @@
+((path:*\\* AND path:*\\IPC$*) AND (name:(*\-stdin OR *\-stdout OR *\-stderr))) AND (NOT name:PSEXESVC*)

@@ -1,0 +1,1 @@
+registry.path:*shell\\open\\command\* AND (winlog.event_data.Details:*powershell* AND winlog.event_data.Details:*\-command*)

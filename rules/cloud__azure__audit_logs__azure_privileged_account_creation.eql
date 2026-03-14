@@ -1,0 +1,1 @@
+any where (properties.message:"*Add user*" and properties.message:"*Add member to role*") and Status:"Success"

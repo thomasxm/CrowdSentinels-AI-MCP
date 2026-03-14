@@ -1,0 +1,1 @@
+process.executable:*\\xordump.exe OR (process.command_line:(*\ \-process\ lsass.exe\ * OR *\ \-m\ comsvcs\ * OR *\ \-m\ dbghelp\ * OR *\ \-m\ dbgcore\ *))

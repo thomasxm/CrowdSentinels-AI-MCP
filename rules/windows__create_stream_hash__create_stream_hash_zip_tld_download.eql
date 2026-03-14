@@ -1,0 +1,1 @@
+any where winlog.event_data.Contents:"*.zip/*" and (file.path like~ ("*.bat:Zone*", "*.dat:Zone*", "*.dll:Zone*", "*.doc:Zone*", "*.docm:Zone*", "*.exe:Zone*", "*.hta:Zone*", "*.pptm:Zone*", "*.ps1:Zone*", "*.rar:Zone*", "*.rtf:Zone*", "*.sct:Zone*", "*.vbe:Zone*", "*.vbs:Zone*", "*.ws:Zone*", "*.wsf:Zone*", "*.xll:Zone*", "*.xls:Zone*", "*.xlsm:Zone*", "*.zip:Zone*"))

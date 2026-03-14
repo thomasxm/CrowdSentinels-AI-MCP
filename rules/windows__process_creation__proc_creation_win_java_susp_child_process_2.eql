@@ -1,0 +1,1 @@
+any where (process.parent.executable:"*\\java.exe" and (process.executable like~ ("*\\bash.exe", "*\\cmd.exe", "*\\powershell.exe", "*\\pwsh.exe"))) and (not (process.parent.executable:"*build*" and process.command_line:"*build*"))

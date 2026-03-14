@@ -1,0 +1,1 @@
+any where ParentImage:"*/java" and (CommandLine like~ ("*/bin/sh*", "*bash*", "*dash*", "*ksh*", "*zsh*", "*csh*", "*fish*", "*curl*", "*wget*", "*python*"))

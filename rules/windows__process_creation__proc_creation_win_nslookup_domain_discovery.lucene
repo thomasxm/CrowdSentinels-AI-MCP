@@ -1,0 +1,1 @@
+process.command_line:*nslookup* AND process.command_line:*_ldap._tcp.dc._msdcs.*

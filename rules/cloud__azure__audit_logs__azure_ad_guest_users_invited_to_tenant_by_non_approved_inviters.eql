@@ -1,0 +1,1 @@
+any where (Category:"UserManagement" and OperationName:"Invite external user") and (not InitiatedBy:"*<approved guest inviter use OR for multiple>*")

@@ -1,0 +1,1 @@
+any where eventSource:"rds.amazonaws.com" and responseElements.publiclyAccessible:"true" and eventName:"RestoreDBInstanceFromDBSnapshot"

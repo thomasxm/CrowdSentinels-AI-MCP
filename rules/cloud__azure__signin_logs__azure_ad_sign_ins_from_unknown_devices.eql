@@ -1,0 +1,1 @@
+any where AuthenticationRequirement:"singleFactorAuthentication" and ResultType:0 and NetworkLocationDetails:"[]" and DeviceDetail.deviceId==""

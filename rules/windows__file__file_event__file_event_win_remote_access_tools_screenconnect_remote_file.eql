@@ -1,0 +1,1 @@
+any where process.executable:"*\\ScreenConnect.WindowsClient.exe" and file.path:"*\\Documents\\ConnectWiseControl\\Temp\*"

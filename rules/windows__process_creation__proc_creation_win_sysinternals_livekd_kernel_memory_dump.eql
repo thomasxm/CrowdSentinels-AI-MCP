@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\livekd.exe", "*\\livekd64.exe")) or process.pe.original_file_name:"livekd.exe") and process.command_line like~ ("* -m*", "* /m*", "* –m*", "* —m*", "* ―m*")

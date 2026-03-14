@@ -1,0 +1,1 @@
+any where powershell.file.script_block_text:"*Set-Acl *" and powershell.file.script_block_text:"*-AclObject *" and powershell.file.script_block_text:"*-Path *"

@@ -1,0 +1,1 @@
+any where ParentImage:"*/git" and (ParentCommandLine:"* -p *" and ParentCommandLine:"*help*") and (CommandLine like~ ("*bash 0<&1*", "*dash 0<&1*", "*sh 0<&1*"))

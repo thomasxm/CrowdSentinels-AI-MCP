@@ -1,0 +1,1 @@
+Image:*\/hdiutil AND (CommandLine:(*attach\ * OR *mount\ *))

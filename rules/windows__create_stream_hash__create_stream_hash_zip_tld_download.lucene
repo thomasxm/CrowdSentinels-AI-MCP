@@ -1,0 +1,1 @@
+winlog.event_data.Contents:*.zip\/* AND (file.path:(*.bat\:Zone* OR *.dat\:Zone* OR *.dll\:Zone* OR *.doc\:Zone* OR *.docm\:Zone* OR *.exe\:Zone* OR *.hta\:Zone* OR *.pptm\:Zone* OR *.ps1\:Zone* OR *.rar\:Zone* OR *.rtf\:Zone* OR *.sct\:Zone* OR *.vbe\:Zone* OR *.vbs\:Zone* OR *.ws\:Zone* OR *.wsf\:Zone* OR *.xll\:Zone* OR *.xls\:Zone* OR *.xlsm\:Zone* OR *.zip\:Zone*))

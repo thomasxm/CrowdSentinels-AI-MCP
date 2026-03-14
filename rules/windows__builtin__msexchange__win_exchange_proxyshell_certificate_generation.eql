@@ -1,0 +1,1 @@
+any where winlog.channel:"MSExchange Management" and (("New-ExchangeCertificate" and " -GenerateRequest" and " -BinaryEncoded" and " -RequestFile") and ("\\localhost\\C$" or "\\127.0.0.1\\C$" or "C:\\inetpub" or ".aspx"))

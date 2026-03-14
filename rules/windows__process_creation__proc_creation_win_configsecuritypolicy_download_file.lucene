@@ -1,0 +1,1 @@
+(process.command_line:*ConfigSecurityPolicy.exe* OR process.executable:*\\ConfigSecurityPolicy.exe OR process.pe.original_file_name:ConfigSecurityPolicy.exe) AND (process.command_line:(*ftp\:\/\/* OR *http\:\/\/* OR *https\:\/\/*))

@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\mysqld.exe", "*\\mysqld-nt.exe")) and (file.path like~ ("*.bat", "*.dat", "*.dll", "*.exe", "*.ps1", "*.psm1", "*.vbe", "*.vbs"))

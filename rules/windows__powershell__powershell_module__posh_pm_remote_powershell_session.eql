@@ -1,0 +1,1 @@
+any where (winlog.event_data.ContextInfo:"* = ServerRemoteHost *" and winlog.event_data.ContextInfo:"*wsmprovhost.exe*") and (not winlog.event_data.ContextInfo:"*\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\Microsoft.PowerShell.Archive\\Microsoft.PowerShell.Archive.psm1*")

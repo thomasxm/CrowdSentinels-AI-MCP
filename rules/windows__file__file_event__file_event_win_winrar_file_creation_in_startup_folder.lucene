@@ -1,0 +1,1 @@
+(process.executable:(*\\WinRAR.exe OR *\\Rar.exe)) AND file.path:*\\Start\ Menu\\Programs\\Startup\*

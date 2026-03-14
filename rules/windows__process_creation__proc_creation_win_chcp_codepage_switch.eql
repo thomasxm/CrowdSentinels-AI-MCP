@@ -1,0 +1,1 @@
+any where process.executable:"*\\chcp.com" and (process.command_line like~ ("* 936", "* 1258"))

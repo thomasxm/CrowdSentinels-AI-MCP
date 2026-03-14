@@ -1,0 +1,1 @@
+any where "new user" and ("GID=0," or "UID=0," or "GID=10," or "GID=27,")

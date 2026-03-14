@@ -1,0 +1,1 @@
+type:EXECVE AND ((*shutdown* OR *reboot* OR *halt* OR *poweroff*) OR ((*init* OR *telinit*) AND (0 OR 6)))

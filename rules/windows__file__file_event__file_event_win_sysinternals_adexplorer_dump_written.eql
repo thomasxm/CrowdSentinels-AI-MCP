@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\ADExp.exe", "*\\ADExplorer.exe", "*\\ADExplorer64.exe", "*\\ADExplorer64a.exe")) and file.path:"*.dat"

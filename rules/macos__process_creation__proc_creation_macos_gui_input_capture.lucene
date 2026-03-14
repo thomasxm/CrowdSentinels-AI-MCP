@@ -1,0 +1,1 @@
+Image:*\/osascript AND (CommandLine:*\-e* AND CommandLine:*display* AND CommandLine:*dialog* AND CommandLine:*answer*) AND (CommandLine:(*admin* OR *administrator* OR *authenticate* OR *authentication* OR *credentials* OR *pass* OR *password* OR *unlock*))

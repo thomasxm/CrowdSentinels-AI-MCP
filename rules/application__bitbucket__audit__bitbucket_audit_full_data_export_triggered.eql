@@ -1,0 +1,1 @@
+any where auditType.category:"Data pipeline" and auditType.action:"Full data export triggered"

@@ -1,0 +1,48 @@
+# IDE
+.idea
+.vscode
+.kiro
+
+# Claude Code
+.claude/
+
+# Python
+.venv
+dist
+__pycache__
+*.egg-info
+
+# Configuration and Credentials
+.env
+
+# Spring AI
+.gradle/
+build
+
+# MCP Registry
+.mcpregistry*
+
+# Ignore everything in chainsaw directory
+chainsaw/*
+
+# Investigation State Storage (up to 8GB of cached data)
+.crowdsentinel/
+crowdsentinel/
+
+# Investigation data if created in project root
+investigations/
+storage_stats.json
+
+# Discovered assets from MCP server
+assets/discovered_assets.json
+
+# Test storage directories
+/tmp/crowdsentinel-*
+
+# Detection rules (downloaded by setup.sh)
+detection-rules/**
+detection-rules/
+
+# Git worktrees
+.worktrees/
+worktrees/

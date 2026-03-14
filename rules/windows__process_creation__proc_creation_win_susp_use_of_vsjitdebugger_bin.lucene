@@ -1,0 +1,1 @@
+process.parent.executable:*\\vsjitdebugger.exe AND (NOT (process.executable:(*\\vsimmersiveactivatehelper*.exe OR *\\devenv.exe)))

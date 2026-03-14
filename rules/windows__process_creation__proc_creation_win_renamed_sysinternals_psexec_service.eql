@@ -1,0 +1,1 @@
+any where process.pe.original_file_name:"psexesvc.exe" and (not process.executable:"C:\\Windows\\PSEXESVC.exe")

@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\gpg.exe", "*\\gpg2.exe")) or process.pe.description:"GnuPG’s OpenPGP tool") and (process.command_line:"* -d *" and process.command_line:"*passphrase*")

@@ -1,0 +1,1 @@
+any where winlog.channel:"System" and (winlog.provider_name:"Microsoft-Windows-DistributedCOM" and event.code:"10001" and winlog.event_data.param1:"C:\\Program Files\\Common Files\\microsoft shared\\ink\\TabTip.exe" and winlog.event_data.param2:"2147943140" and winlog.event_data.param3:"{054AAE20-4BEA-4347-8A35-64A533254A9D}")

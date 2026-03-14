@@ -1,0 +1,1 @@
+(process.command_line:(*.DownloadString\(* OR *.DownloadFile\(* OR *Invoke\-WebRequest\ * OR *iwr\ * OR *Invoke\-RestMethod\ * OR *irm\ *)) AND (process.command_line:(*;iex\ $* OR *\|\ IEX* OR *\|IEX\ * OR *I`E`X* OR *I`EX* OR *IE`X* OR *iex\ * OR *IEX\ \(* OR *IEX\(* OR *Invoke\-Expression*))

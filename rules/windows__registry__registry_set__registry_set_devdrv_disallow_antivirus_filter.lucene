@@ -1,0 +1,1 @@
+registry.path:*\\FilterManager\\FltmgrDevDriveAllowAntivirusFilter AND winlog.event_data.Details:DWORD\ \(0x00000000\)

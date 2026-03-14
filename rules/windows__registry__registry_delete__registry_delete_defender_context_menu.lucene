@@ -1,0 +1,1 @@
+registry.path:*shellex\\ContextMenuHandlers\\EPP* AND (NOT ((process.executable:(C\:\\ProgramData\\Microsoft\\Windows\ Defender\\Platform\* OR C\:\\Program\ Files\\Windows\ Defender\* OR C\:\\Program\ Files\ \(x86\)\\Windows\ Defender\*)) AND process.executable:*\\MsMpEng.exe))

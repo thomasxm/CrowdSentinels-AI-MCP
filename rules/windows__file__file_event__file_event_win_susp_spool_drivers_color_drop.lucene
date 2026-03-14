@@ -1,0 +1,1 @@
+file.path:C\:\\Windows\\System32\\spool\\drivers\\color\* AND (file.path:(*.dll OR *.exe OR *.sys))

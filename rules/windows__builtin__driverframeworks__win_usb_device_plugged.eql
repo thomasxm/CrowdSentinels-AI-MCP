@@ -1,0 +1,1 @@
+any where winlog.channel:"Microsoft-Windows-DriverFrameworks-UserMode/Operational" and (event.code like~ ("2003", "2100", "2102"))

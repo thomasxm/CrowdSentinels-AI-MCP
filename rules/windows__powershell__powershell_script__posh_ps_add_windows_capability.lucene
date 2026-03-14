@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*Add\-WindowsCapability\ * AND powershell.file.script_block_text:*\-Name\ OpenSSH.*

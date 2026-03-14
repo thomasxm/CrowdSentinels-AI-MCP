@@ -1,0 +1,1 @@
+any where Image:"*/grep" and (CommandLine like~ ("*aarch64", "*arm", "*i386", "*i686", "*mips", "*x86_64"))

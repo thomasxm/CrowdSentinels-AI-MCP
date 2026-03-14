@@ -1,0 +1,1 @@
+any where (process.executable:"*\\rundll32.exe" or process.pe.original_file_name:"RUNDLL32.EXE" or (process.command_line like~ ("*rundll32.exe*", "*rundll32 *"))) and (process.command_line:"*.dll*" and (process.command_line like~ ("* StartW", "*,StartW")))

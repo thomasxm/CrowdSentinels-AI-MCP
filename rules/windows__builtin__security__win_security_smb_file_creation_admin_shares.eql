@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and ((event.code:"5145" and winlog.event_data.ShareName:"*C$" and winlog.event_data.AccessMask:"0x2") and (not user.name:"*$") and (not source.ip=="::1"))

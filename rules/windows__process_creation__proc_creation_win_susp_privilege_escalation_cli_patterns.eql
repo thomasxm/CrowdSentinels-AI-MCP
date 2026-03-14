@@ -1,0 +1,1 @@
+any where (process.command_line like~ ("* -u system *", "* --user system *", "* -u NT*", "* -u \"NT*", "* -u 'NT*", "* --system *", "* -u administrator *")) and (process.command_line like~ ("* -c cmd*", "* -c \"cmd*", "* -c powershell*", "* -c \"powershell*", "* --command cmd*", "* --command powershell*", "* -c whoami*", "* -c wscript*", "* -c cscript*"))

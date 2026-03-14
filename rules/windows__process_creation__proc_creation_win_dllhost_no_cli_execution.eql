@@ -1,0 +1,1 @@
+any where (process.executable:"*\\dllhost.exe" and (process.command_line like~ ("dllhost.exe", "dllhost"))) and (not process.command_line:"<sigma.types.SigmaNull object at 0x7f245e4e1160>")

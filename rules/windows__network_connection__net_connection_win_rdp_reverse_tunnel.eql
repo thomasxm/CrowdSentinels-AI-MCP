@@ -1,0 +1,1 @@
+any where (process.executable:"*\\svchost.exe" and network.direction:"true" and source.port:3389) and (cidrMatch(destination.ip, "127.0.0.0/8") or cidrMatch(destination.ip, "::1/128"))

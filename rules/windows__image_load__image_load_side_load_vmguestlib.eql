@@ -1,0 +1,1 @@
+any where ((file.path:"*\\VMware\\VMware Tools\\vmStatsProvider\\win32*" and file.path:"*\\vmGuestLib.dll*") and process.executable:"*\\Windows\\System32\\wbem\\WmiApSrv.exe") and (not file.code_signature.signed:"true")

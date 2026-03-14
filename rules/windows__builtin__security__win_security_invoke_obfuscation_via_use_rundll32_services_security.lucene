@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:4697 AND (winlog.event_data.ServiceFileName:*\&\&* AND winlog.event_data.ServiceFileName:*rundll32* AND winlog.event_data.ServiceFileName:*shell32.dll* AND winlog.event_data.ServiceFileName:*shellexec_rundll*) AND (winlog.event_data.ServiceFileName:(*value* OR *invoke* OR *comspec* OR *iex*)))

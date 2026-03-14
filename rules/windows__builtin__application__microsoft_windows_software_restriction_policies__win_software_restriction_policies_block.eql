@@ -1,0 +1,1 @@
+any where winlog.channel:"Application" and (winlog.provider_name:"Microsoft-Windows-SoftwareRestrictionPolicies" and (event.code like~ ("865", "866", "867", "868", "882")))

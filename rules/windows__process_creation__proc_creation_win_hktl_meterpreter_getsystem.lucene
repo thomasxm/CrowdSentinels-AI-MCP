@@ -1,0 +1,1 @@
+process.parent.executable:*\\services.exe AND (((process.command_line:*\/c* AND process.command_line:*echo* AND process.command_line:*\\pipe\*) AND (process.command_line:(*cmd* OR *%COMSPEC%*))) OR (process.command_line:*rundll32* AND process.command_line:*.dll,a* AND process.command_line:*\/p\:*)) AND (NOT process.command_line:*MpCmdRun*)

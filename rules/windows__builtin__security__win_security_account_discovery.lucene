@@ -1,0 +1,1 @@
+winlog.channel:Security AND ((event.code:4661 AND (winlog.event_data.ObjectType:(SAM_USER OR SAM_GROUP))) AND ((winlog.event_data.ObjectName:(*\-512 OR *\-502 OR *\-500 OR *\-505 OR *\-519 OR *\-520 OR *\-544 OR *\-551 OR *\-555)) OR winlog.event_data.ObjectName:*admin*) AND (NOT user.name:*$))

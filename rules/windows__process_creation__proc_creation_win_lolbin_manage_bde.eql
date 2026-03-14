@@ -1,0 +1,1 @@
+any where ((process.executable:"*\\wscript.exe" or process.pe.original_file_name:"wscript.exe") and process.command_line:"*manage-bde.wsf*") or (((process.parent.executable like~ ("*\\cscript.exe", "*\\wscript.exe")) and process.parent.command_line:"*manage-bde.wsf*") and (not process.executable:"*\\cmd.exe"))

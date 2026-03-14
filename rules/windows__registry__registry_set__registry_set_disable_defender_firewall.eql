@@ -1,0 +1,1 @@
+any where registry.path:"*\\Services\\SharedAccess\\Parameters\\FirewallPolicy\*" and registry.path:"*\\EnableFirewall" and winlog.event_data.Details:"DWORD (0x00000000)"

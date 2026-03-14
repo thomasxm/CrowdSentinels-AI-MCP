@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\excel.exe" and ((process.pe.original_file_name like~ ("foxprow.exe", "schdplus.exe", "winproj.exe")) or (process.executable like~ ("*\\foxprow.exe", "*\\schdplus.exe", "*\\winproj.exe")))

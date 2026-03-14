@@ -1,0 +1,1 @@
+objectRef.apiGroup:rbac.authorization.k8s.io AND (objectRef.resource:(clusterrolebindings OR rolebindings)) AND (verb:(create OR delete OR patch OR replace OR update))

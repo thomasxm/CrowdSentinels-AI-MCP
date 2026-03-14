@@ -1,0 +1,1 @@
+any where LoggedByService:"Core Directory" and Category:"UserManagement" and OperationName:"Update user" and TargetResources.ModifiedProperties.DisplayName:"StrongAuthenticationRequirement" and TargetResources.ModifiedProperties.NewValue:"*State\":0*"

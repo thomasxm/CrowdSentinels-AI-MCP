@@ -1,0 +1,1 @@
+((process.executable:(*\\thor.exe OR *\\thor64.exe)) AND (file.path:(*\\thor.exe OR *\\thor64.exe))) AND (NOT (file.code_signature.signed:true AND file.code_signature.status:valid AND winlog.event_data.Signature:Nextron\ Systems\ GmbH))

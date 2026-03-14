@@ -1,0 +1,1 @@
+any where file.path:"*\\MpSvc.dll" and (not (file.path like~ ("C:\\Program Files\\Windows Defender\*", "C:\\ProgramData\\Microsoft\\Windows Defender\\Platform\*", "C:\\Windows\\WinSxS\*")))

@@ -1,0 +1,1 @@
+file.path:*\\SolidPDFCreator.dll AND (NOT (process.executable:*\\SolidPDFCreator.exe AND (file.path:(C\:\\Program\ Files\ \(x86\)\\SolidDocuments\\SolidPDFCreator\* OR C\:\\Program\ Files\\SolidDocuments\\SolidPDFCreator\*))))

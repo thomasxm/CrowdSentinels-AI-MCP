@@ -1,0 +1,1 @@
+(registry.path:*\\SOFTWARE\* AND registry.path:*\\Microsoft\\Office\* AND registry.path:*\\Common\\Security*) AND registry.path:*\\MacroRuntimeScanScope AND winlog.event_data.Details:DWORD\ \(0x00000000\)

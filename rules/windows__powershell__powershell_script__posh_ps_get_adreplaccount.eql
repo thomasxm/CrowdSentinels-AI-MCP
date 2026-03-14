@@ -1,0 +1,1 @@
+any where powershell.file.script_block_text:"*Get-ADReplAccount*" and powershell.file.script_block_text:"*-All *" and powershell.file.script_block_text:"*-Server *"

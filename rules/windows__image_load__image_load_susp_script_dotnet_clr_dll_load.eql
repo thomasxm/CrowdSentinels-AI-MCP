@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\cmstp.exe", "*\\cscript.exe", "*\\mshta.exe", "*\\msxsl.exe", "*\\regsvr32.exe", "*\\wmic.exe", "*\\wscript.exe")) and (file.path like~ ("*\\clr.dll", "*\\mscoree.dll", "*\\mscorlib.dll"))

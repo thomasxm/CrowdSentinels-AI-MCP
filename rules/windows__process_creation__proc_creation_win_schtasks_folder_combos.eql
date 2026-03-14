@@ -1,0 +1,1 @@
+any where (process.executable:"*\\schtasks.exe" or process.pe.original_file_name:"schtasks.exe") and process.command_line:"* /create *" and (process.command_line like~ ("*powershell*", "*pwsh*", "*cmd /c *", "*cmd /k *", "*cmd /r *", "*cmd.exe /c *", "*cmd.exe /k *", "*cmd.exe /r *")) and (process.command_line like~ ("*C:\\ProgramData\*", "*%ProgramData%*"))

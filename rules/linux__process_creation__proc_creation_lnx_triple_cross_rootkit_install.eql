@@ -1,0 +1,1 @@
+any where Image:"*/sudo" and (CommandLine:"* tc *" and CommandLine:"* enp0s3 *") and (CommandLine like~ ("* qdisc *", "* filter *"))

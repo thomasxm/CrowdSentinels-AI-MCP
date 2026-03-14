@@ -1,0 +1,1 @@
+any where process.executable:"*\\at.exe" and process.command_line:"*interactive*"

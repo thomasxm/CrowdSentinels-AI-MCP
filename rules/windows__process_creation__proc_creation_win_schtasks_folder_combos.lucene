@@ -1,0 +1,1 @@
+(process.executable:*\\schtasks.exe OR process.pe.original_file_name:schtasks.exe) AND process.command_line:*\ \/create\ * AND (process.command_line:(*powershell* OR *pwsh* OR *cmd\ \/c\ * OR *cmd\ \/k\ * OR *cmd\ \/r\ * OR *cmd.exe\ \/c\ * OR *cmd.exe\ \/k\ * OR *cmd.exe\ \/r\ *)) AND (process.command_line:(*C\:\\ProgramData\* OR *%ProgramData%*))

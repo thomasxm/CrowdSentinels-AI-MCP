@@ -1,0 +1,1 @@
+any where cs-user-agent like~ ("*Wfuzz/*", "*WPScan v*", "*Recon-ng/v*", "*GIS - AppSec Team - Project Vision*")

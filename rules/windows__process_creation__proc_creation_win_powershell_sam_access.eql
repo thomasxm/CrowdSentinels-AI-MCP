@@ -1,0 +1,1 @@
+any where (process.command_line:"*\\HarddiskVolumeShadowCopy*" and process.command_line:"*System32\\config\\sam*") and (process.command_line like~ ("*Copy-Item*", "*cp $_.*", "*cpi $_.*", "*copy $_.*", "*.File]::Copy(*"))

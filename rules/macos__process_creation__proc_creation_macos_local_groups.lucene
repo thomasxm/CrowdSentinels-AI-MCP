@@ -1,0 +1,1 @@
+(Image:*\/dscacheutil AND (CommandLine:*\-q* AND CommandLine:*group*)) OR (Image:*\/cat AND CommandLine:*\/etc\/group*) OR (Image:*\/dscl AND (CommandLine:*\-list* AND CommandLine:*\/groups*))

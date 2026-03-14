@@ -1,0 +1,1 @@
+(process.executable:*\\bcdedit.exe OR process.pe.original_file_name:bcdedit.exe) AND process.command_line:*set* AND ((process.command_line:*bootstatuspolicy* AND process.command_line:*ignoreallfailures*) OR (process.command_line:*recoveryenabled* AND process.command_line:*no*))

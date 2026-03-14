@@ -1,0 +1,1 @@
+any where Image:"*/ls" and (CommandLine like~ ("* /", "* / *")) and CommandLine regex~ "(?:\s-[^-\s]{0,20}i|\s--inode\s)" and CommandLine regex~ "(?:\s-[^-\s]{0,20}d|\s--directory\s)"

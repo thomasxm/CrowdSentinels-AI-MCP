@@ -1,0 +1,1 @@
+any where file.path:"C:\\Users\*" and file.path:"*\\AppData\\Local\\Temp\\pkgmgr.exe"

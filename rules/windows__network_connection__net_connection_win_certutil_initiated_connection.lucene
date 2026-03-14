@@ -1,0 +1,1 @@
+process.executable:*\\certutil.exe AND network.direction:true AND (destination.port:(80 OR 135 OR 443 OR 445))

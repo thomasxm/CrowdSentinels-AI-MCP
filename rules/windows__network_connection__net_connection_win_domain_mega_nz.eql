@@ -1,0 +1,1 @@
+any where network.direction:"true" and (destination.domain like~ ("*mega.co.nz", "*mega.nz"))

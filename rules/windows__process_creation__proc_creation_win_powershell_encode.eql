@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\powershell.exe", "*\\pwsh.exe")) and (process.command_line like~ ("* -e *", "* -en *", "* -enc *", "* -enco*", "* -ec *"))) and (not (process.command_line:"* -Encoding *" or (process.parent.executable like~ ("*C:\\Packages\\Plugins\\Microsoft.GuestConfiguration.ConfigurationforWindows\*", "*\\gc_worker.exe*"))))

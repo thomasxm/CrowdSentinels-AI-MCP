@@ -1,0 +1,1 @@
+any where (process.command_line:"*Enable-WindowsOptionalFeature*" and process.command_line:"*-Online*" and process.command_line:"*-FeatureName*") and (process.command_line like~ ("*TelnetServer*", "*Internet-Explorer-Optional-amd64*", "*TFTP*", "*SMB1Protocol*", "*Client-ProjFS*", "*Microsoft-Windows-Subsystem-Linux*"))

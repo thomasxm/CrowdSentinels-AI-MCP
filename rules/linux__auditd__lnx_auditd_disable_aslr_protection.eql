@@ -1,0 +1,1 @@
+any where (type:"SYSCALL" and SYSCALL:"personality" and a0:40000) or (type:"EXECVE" and a0:"sysctl" and a1:"-w" and a2:"kernel.randomize_va_space=0")

@@ -1,0 +1,1 @@
+any where (process.executable:"*\\schtasks.exe" and process.command_line like~ ("* -create *", "* /create *", "* –create *", "* —create *", "* ―create *")) and (process.command_line:"*curl *" and process.command_line:"*http*" and process.command_line:"*-o*") and process.command_line:"*powershell*"

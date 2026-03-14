@@ -1,0 +1,1 @@
+any where (powershell.file.script_block_text:"*Set-NetFirewallProfile *" and powershell.file.script_block_text:"* -Enabled *" and powershell.file.script_block_text:"* False*") and (powershell.file.script_block_text like~ ("* -All *", "*Public*", "*Domain*", "*Private*"))

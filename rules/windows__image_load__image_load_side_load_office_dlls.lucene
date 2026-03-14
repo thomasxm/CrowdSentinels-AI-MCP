@@ -1,0 +1,1 @@
+file.path:*\\outllib.dll AND (NOT (file.path:(C\:\\Program\ Files\\Microsoft\ Office\\OFFICE* OR C\:\\Program\ Files\ \(x86\)\\Microsoft\ Office\\OFFICE* OR C\:\\Program\ Files\\Microsoft\ Office\\Root\\OFFICE* OR C\:\\Program\ Files\ \(x86\)\\Microsoft\ Office\\Root\\OFFICE*)))

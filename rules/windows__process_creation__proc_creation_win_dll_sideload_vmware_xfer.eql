@@ -1,0 +1,1 @@
+any where process.executable:"*\\VMwareXferlogs.exe" and (not process.executable:"C:\\Program Files\\VMware\*")

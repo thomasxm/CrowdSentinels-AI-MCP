@@ -1,0 +1,1 @@
+(process.executable:*\\logman.exe OR process.pe.original_file_name:Logman.exe) AND (process.command_line:(*stop\ * OR *delete\ *)) AND (process.command_line:(*Circular\ Kernel\ Context\ Logger* OR *EventLog\-* OR *SYSMON\ TRACE* OR *SysmonDnsEtwSession*))

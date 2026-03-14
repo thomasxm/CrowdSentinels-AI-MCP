@@ -1,0 +1,1 @@
+any where Image:"*/touch" and CommandLine:"* -t *" and CommandLine:"*.service"

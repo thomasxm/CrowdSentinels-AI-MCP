@@ -1,0 +1,1 @@
+((process.executable:(*\\find.exe OR *\\findstr.exe)) OR (process.pe.original_file_name:(FIND.EXE OR FINDSTR.EXE))) AND process.command_line:*\ 385201*

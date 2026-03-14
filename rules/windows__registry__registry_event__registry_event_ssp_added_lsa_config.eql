@@ -1,0 +1,1 @@
+any where (registry.path like~ ("*\\Control\\Lsa\\Security Packages", "*\\Control\\Lsa\\OSConfig\\Security Packages")) and (not (process.executable like~ ("C:\\Windows\\system32\\msiexec.exe", "C:\\Windows\\syswow64\\MsiExec.exe")))

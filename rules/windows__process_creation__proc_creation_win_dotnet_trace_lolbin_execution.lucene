@@ -1,0 +1,1 @@
+(process.executable:*\\dotnet\-trace.exe OR process.pe.original_file_name:dotnet\-trace.dll) AND (process.command_line:*\-\-\ * AND process.command_line:*collect*)

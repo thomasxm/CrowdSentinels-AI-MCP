@@ -1,0 +1,1 @@
+(winlog.event_data.ContextInfo:(*\ \-enc\ * OR *\ \-EncodedCommand\ * OR *\ \-ec\ *)) AND (winlog.event_data.ContextInfo:(*\ \-w\ hidden\ * OR *\ \-window\ hidden\ * OR *\ \-windowstyle\ hidden\ * OR *\ \-w\ 1\ *)) AND (winlog.event_data.ContextInfo:(*\ \-noni\ * OR *\ \-noninteractive\ *))

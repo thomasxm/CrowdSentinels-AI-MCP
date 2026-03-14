@@ -1,0 +1,1 @@
+any where dns.question.name like~ ("*.v2.argotunnel.com", "*protocol-v2.argotunnel.com", "*trycloudflare.com", "*update.argotunnel.com")

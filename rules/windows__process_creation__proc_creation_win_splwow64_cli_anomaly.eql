@@ -1,0 +1,1 @@
+any where process.executable:"*\\splwow64.exe" and process.command_line:"*splwow64.exe"

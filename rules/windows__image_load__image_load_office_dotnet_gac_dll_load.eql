@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\excel.exe", "*\\mspub.exe", "*\\onenote.exe", "*\\onenoteim.exe", "*\\outlook.exe", "*\\powerpnt.exe", "*\\winword.exe")) and file.path:"C:\\Windows\\Microsoft.NET\\assembly\\GAC_MSIL*"

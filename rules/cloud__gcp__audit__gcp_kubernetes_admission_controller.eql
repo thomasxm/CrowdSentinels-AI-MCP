@@ -1,0 +1,1 @@
+any where gcp.audit.method_name:"admissionregistration.k8s.io.v*" and (gcp.audit.method_name like~ ("*.mutatingwebhookconfigurations.*", "*.validatingwebhookconfigurations.*")) and (gcp.audit.method_name like~ ("*create", "*patch", "*replace"))

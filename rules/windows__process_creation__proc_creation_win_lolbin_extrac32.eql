@@ -1,0 +1,1 @@
+any where (process.command_line:"*extrac32.exe*" or process.executable:"*\\extrac32.exe" or process.pe.original_file_name:"extrac32.exe") and process.command_line:"*.cab*" and (process.command_line like~ ("*/C*", "*/Y*", "* \\*"))

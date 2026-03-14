@@ -1,0 +1,1 @@
+any where OperationName:"Authentication Methods Policy Update" and TargetResources.modifiedProperties:"*AuthenticationMethodsPolicy*"

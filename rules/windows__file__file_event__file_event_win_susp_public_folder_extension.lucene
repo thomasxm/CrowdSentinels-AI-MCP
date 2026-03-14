@@ -1,0 +1,1 @@
+file.path:*\:\\Users\\Public\* AND (file.path:(*.bat OR *.dll OR *.exe OR *.hta OR *.js OR *.ps1 OR *.vbe OR *.vbs))

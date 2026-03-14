@@ -1,0 +1,1 @@
+(process.executable:*\\certoc.exe OR process.pe.original_file_name:CertOC.exe) AND (process.command_line:*\-GetCACAPS* AND process.command_line:*http*)

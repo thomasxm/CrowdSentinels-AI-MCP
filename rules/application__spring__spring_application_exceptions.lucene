@@ -1,0 +1,1 @@
+*AccessDeniedException* OR *CsrfException* OR *InvalidCsrfTokenException* OR *MissingCsrfTokenException* OR *CookieTheftException* OR *InvalidCookieException* OR *RequestRejectedException*

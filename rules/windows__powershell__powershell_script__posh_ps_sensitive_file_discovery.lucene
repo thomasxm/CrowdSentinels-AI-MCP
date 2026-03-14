@@ -1,0 +1,1 @@
+(powershell.file.script_block_text:(*ls* OR *get\-childitem* OR *gci*)) AND powershell.file.script_block_text:*\-recurse* AND (powershell.file.script_block_text:(*.pass* OR *.kdbx* OR *.kdb*))

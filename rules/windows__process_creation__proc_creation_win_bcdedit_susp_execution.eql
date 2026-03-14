@@ -1,0 +1,1 @@
+any where (process.executable:"*\\bcdedit.exe" or process.pe.original_file_name:"bcdedit.exe") and (process.command_line like~ ("*delete*", "*deletevalue*", "*import*", "*safeboot*", "*network*"))

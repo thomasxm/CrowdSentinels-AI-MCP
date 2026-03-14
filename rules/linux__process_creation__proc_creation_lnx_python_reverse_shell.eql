@@ -1,0 +1,1 @@
+any where Image:"*python*" and (CommandLine:"* -c *" and CommandLine:"*import*" and CommandLine:"*pty*" and CommandLine:"*socket*" and CommandLine:"*spawn*" and CommandLine:"*.connect*")

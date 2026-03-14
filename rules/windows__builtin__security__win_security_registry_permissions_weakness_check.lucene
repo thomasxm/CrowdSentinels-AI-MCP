@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:4663 AND (winlog.event_data.ObjectName:*\\SYSTEM\* AND winlog.event_data.ObjectName:*ControlSet\\Services\*) AND winlog.event_data.AccessList:*%%1538*)

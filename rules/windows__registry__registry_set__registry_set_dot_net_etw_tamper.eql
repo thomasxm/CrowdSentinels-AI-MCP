@@ -1,0 +1,1 @@
+any where (registry.path:"*SOFTWARE\\Microsoft\\.NETFramework\\ETWEnabled" and winlog.event_data.Details:"DWORD (0x00000000)") or ((registry.path like~ ("*\\COMPlus_ETWEnabled", "*\\COMPlus_ETWFlags")) and (winlog.event_data.Details like~ ("0", "DWORD (0x00000000)")))

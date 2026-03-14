@@ -1,0 +1,1 @@
+any where (Image:"*/ioreg" or CommandLine:"*ioreg*") and (CommandLine like~ ("*-l*", "*-c*")) and (CommandLine like~ ("*AppleAHCIDiskDriver*", "*IOPlatformExpertDevice*", "*Oracle*", "*Parallels*", "*USB Vendor Name*", "*VirtualBox*", "*VMware*"))

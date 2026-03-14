@@ -1,0 +1,1 @@
+any where (registry.path like~ ("*\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\LegalNoticeCaption*", "*\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\LegalNoticeText*")) and (winlog.event_data.Details like~ ("*encrypted*", "*Unlock-Password*", "*paying*"))

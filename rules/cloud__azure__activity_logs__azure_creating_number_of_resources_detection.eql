@@ -1,0 +1,1 @@
+any where "Microsoft.Compute/virtualMachines/write" or "Microsoft.Resources/deployments/write"

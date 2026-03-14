@@ -1,0 +1,1 @@
+(process.executable:*\\regsvr32.exe AND process.command_line:(*\ \-i\:* OR *\ \/i\:* OR *\ –i\:* OR *\ —i\:* OR *\ ―i\:*)) AND (NOT process.command_line:(*\ \-n\ * OR *\ \/n\ * OR *\ –n\ * OR *\ —n\ * OR *\ ―n\ *))

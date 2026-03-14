@@ -1,0 +1,1 @@
+file.path:*\\chrome_frame_helper.dll AND (NOT (file.path:(C\:\\Program\ Files\\Google\\Chrome\\Application\* OR C\:\\Program\ Files\ \(x86\)\\Google\\Chrome\\Application\*))) AND (NOT file.path:*\\AppData\\local\\Google\\Chrome\\Application\*)

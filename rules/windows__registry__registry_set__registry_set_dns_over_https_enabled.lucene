@@ -1,0 +1,1 @@
+(registry.path:*\\SOFTWARE\\Policies\\Microsoft\\Edge\\BuiltInDnsClientEnabled AND winlog.event_data.Details:DWORD\ \(0x00000001\)) OR (registry.path:*\\SOFTWARE\\Google\\Chrome\\DnsOverHttpsMode AND winlog.event_data.Details:secure) OR (registry.path:*\\SOFTWARE\\Policies\\Mozilla\\Firefox\\DNSOverHTTPS\\Enabled AND winlog.event_data.Details:DWORD\ \(0x00000001\))

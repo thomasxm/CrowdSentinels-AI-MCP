@@ -1,0 +1,1 @@
+process.parent.executable:(*\\bginfo.exe OR *\\bginfo64.exe)

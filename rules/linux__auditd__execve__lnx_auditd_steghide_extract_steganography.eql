@@ -1,0 +1,1 @@
+any where type:"EXECVE" and a0:"steghide" and a1:"extract" and a2:"-sf" and (a3 like~ ("*.jpg", "*.png"))

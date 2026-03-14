@@ -1,0 +1,1 @@
+winlog.channel:Security AND ((event.code:5136 AND winlog.event_data.AttributeLDAPDisplayName:ntSecurityDescriptor AND (winlog.event_data.AttributeValue:(*1131f6ad\-9c07\-11d1\-f79f\-00c04fc2dcd2* OR *1131f6aa\-9c07\-11d1\-f79f\-00c04fc2dcd2* OR *89e95b76\-444d\-4c62\-991a\-0facbeda640c*))) AND (NOT (winlog.event_data.ObjectClass:(dnsNode OR dnsZoneScope OR dnsZone))))

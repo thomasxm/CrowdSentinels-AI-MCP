@@ -1,0 +1,1 @@
+registry.path:*Software\\Microsoft\\Office\* AND registry.path:*\\Excel\\Options AND winlog.event_data.Details:\/R\ * AND winlog.event_data.Details:*.xll

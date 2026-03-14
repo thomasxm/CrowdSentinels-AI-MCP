@@ -1,0 +1,1 @@
+any where (CommandLine:"*osascript*" and CommandLine:"* -e *" and CommandLine:"*eval*" and CommandLine:"*NSData.dataWithContentsOfURL*") and ((CommandLine:"* -l *" and CommandLine:"*JavaScript*") or CommandLine:"*.js*")

@@ -1,0 +1,1 @@
+any where (process.executable:"*\\dism.exe" and file.path:"*\\dismcore.dll") and (not file.path:"C:\\Windows\\System32\\Dism\\dismcore.dll")

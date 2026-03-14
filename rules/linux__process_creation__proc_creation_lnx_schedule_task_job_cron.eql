@@ -1,0 +1,1 @@
+any where Image:"*crontab" and CommandLine:"*/tmp/*"

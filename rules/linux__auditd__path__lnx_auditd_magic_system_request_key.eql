@@ -1,0 +1,1 @@
+any where type:"PATH" and (name like~ ("*/sysrq", "*/sysctl.conf", "*/sysrq-trigger"))

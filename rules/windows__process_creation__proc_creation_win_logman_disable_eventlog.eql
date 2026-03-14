@@ -1,0 +1,1 @@
+any where (process.executable:"*\\logman.exe" or process.pe.original_file_name:"Logman.exe") and (process.command_line like~ ("*stop *", "*delete *")) and (process.command_line like~ ("*Circular Kernel Context Logger*", "*EventLog-*", "*SYSMON TRACE*", "*SysmonDnsEtwSession*"))

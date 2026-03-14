@@ -1,0 +1,1 @@
+objectRef.apiGroup:admissionregistration.k8s.io AND (objectRef.resource:(mutatingwebhookconfigurations OR validatingwebhookconfigurations)) AND (verb:(create OR delete OR patch OR replace OR update))

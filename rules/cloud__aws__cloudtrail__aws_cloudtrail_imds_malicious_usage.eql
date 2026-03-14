@@ -1,0 +1,1 @@
+any where userIdentity.arn regex~ ".+:assumed-role\/aws:.+" and (not (eventSource:"ssm.amazonaws.com" or eventName:"RegisterManagedInstance" or sourceIPAddress:"AWS Internal"))

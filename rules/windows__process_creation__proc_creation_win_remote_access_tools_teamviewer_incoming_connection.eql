@@ -1,0 +1,1 @@
+any where process.executable:"TeamViewer_Desktop.exe" and process.parent.executable:"TeamViewer_Service.exe" and process.command_line:"*TeamViewer_Desktop.exe --IPCport 5939 --Module 1"

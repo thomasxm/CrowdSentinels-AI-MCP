@@ -1,0 +1,1 @@
+any where winlog.channel:"Microsoft-ServiceBus-Client" and ((event.code like~ ("40300", "40301", "40302")) and ("HybridConnection" or "sb://" or "servicebus.windows.net" or "HybridConnectionManage"))

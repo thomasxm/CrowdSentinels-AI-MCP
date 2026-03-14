@@ -1,0 +1,1 @@
+(powershell.file.script_block_text:*Disable\-WindowsOptionalFeature* AND powershell.file.script_block_text:*\-Online* AND powershell.file.script_block_text:*\-FeatureName*) AND (powershell.file.script_block_text:(*Windows\-Defender\-Gui* OR *Windows\-Defender\-Features* OR *Windows\-Defender* OR *Windows\-Defender\-ApplicationGuard*))

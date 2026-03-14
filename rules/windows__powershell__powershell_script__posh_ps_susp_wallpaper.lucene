@@ -1,0 +1,1 @@
+(powershell.file.script_block_text:*Get\-ItemProperty* AND powershell.file.script_block_text:*Registry\:\:* AND powershell.file.script_block_text:*HKEY_CURRENT_USER\\Control\ Panel\\Desktop\* AND powershell.file.script_block_text:*WallPaper*) OR powershell.file.script_block_text:*SystemParametersInfo\(20,0,*,3\)*

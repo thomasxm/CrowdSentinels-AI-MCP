@@ -1,0 +1,1 @@
+powershell.file.script_block_text:(*Disable\-LocalUser* OR *Enable\-LocalUser* OR *Get\-LocalUser* OR *Set\-LocalUser* OR *New\-LocalUser* OR *Rename\-LocalUser* OR *Remove\-LocalUser*)

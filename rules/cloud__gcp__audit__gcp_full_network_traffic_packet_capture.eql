@@ -1,0 +1,1 @@
+any where gcp.audit.method_name like~ ("v*.Compute.PacketMirrorings.Get", "v*.Compute.PacketMirrorings.Delete", "v*.Compute.PacketMirrorings.Insert", "v*.Compute.PacketMirrorings.Patch", "v*.Compute.PacketMirrorings.List", "v*.Compute.PacketMirrorings.aggregatedList")

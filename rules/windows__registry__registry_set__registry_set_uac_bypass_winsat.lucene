@@ -1,0 +1,1 @@
+registry.path:*\\Root\\InventoryApplicationFile\\winsat.exe\|* AND registry.path:*\\LowerCaseLongPath AND winlog.event_data.Details:c\:\\users\* AND winlog.event_data.Details:*\\appdata\\local\\temp\\system32\\winsat.exe

@@ -1,0 +1,1 @@
+any where process.command_line:"*rundll32.exe*" and process.command_line:"*.dll*" and process.command_line:"*StartNodeRelay*"

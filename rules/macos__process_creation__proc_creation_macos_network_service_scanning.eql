@@ -1,0 +1,1 @@
+any where ((Image like~ ("*/nc", "*/netcat")) and (not CommandLine:"*l*")) or (Image like~ ("*/nmap", "*/telnet"))

@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:4624 AND winlog.event_data.LogonType:9 AND winlog.event_data.LogonProcessName:Advapi AND winlog.event_data.AuthenticationPackageName:Negotiate AND winlog.event_data.ImpersonationLevel:%%1833)

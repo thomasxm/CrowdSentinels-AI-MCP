@@ -1,0 +1,1 @@
+winlog.channel:Security AND ((event.code:4663 AND (winlog.event_data.ObjectName:(*\\Microsoft\\Teams\\Cookies* OR *\\Microsoft\\Teams\\Local\ Storage\\leveldb*))) AND (NOT process.executable:*\\Microsoft\\Teams\\current\\Teams.exe*))

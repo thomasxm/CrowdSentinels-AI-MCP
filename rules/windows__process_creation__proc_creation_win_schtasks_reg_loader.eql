@@ -1,0 +1,1 @@
+any where ((process.executable:"*\\schtasks.exe" or process.pe.original_file_name:"schtasks.exe") and process.command_line:"*/Create*" and (process.command_line like~ ("*Get-ItemProperty*", "* gp *")) and (process.command_line like~ ("*HKCU:*", "*HKLM:*", "*registry::*", "*HKEY_*"))) and (not (process.command_line like~ ("*FromBase64String*", "*encodedcommand*")))

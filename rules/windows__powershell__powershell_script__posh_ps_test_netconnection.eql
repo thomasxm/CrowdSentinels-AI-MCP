@@ -1,0 +1,1 @@
+any where (powershell.file.script_block_text:"*Test-NetConnection*" and powershell.file.script_block_text:"*-ComputerName *" and powershell.file.script_block_text:"*-port *") and (not (powershell.file.script_block_text like~ ("* 443 *", "* 80 *")))

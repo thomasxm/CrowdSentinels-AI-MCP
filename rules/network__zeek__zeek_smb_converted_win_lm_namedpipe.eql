@@ -1,0 +1,1 @@
+any where path:"\\\\\*\\IPC$" and (not ("samr" or "lsarpc" or "winreg" or "netlogon" or "srvsvc" or "protected_storage" or "wkssvc" or "browser" or "netdfs" or "svcctl" or "spoolss" or "ntsvcs" or "LSM_API_service" or "HydraLsPipe" or "TermSrv_API_service" or "MsFteWds"))

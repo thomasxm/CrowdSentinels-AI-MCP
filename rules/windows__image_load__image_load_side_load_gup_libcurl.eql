@@ -1,0 +1,1 @@
+any where (process.executable:"*\\gup.exe" and file.path:"*\\libcurl.dll") and (not process.executable:"*\\Notepad++\\updater\\GUP.exe")

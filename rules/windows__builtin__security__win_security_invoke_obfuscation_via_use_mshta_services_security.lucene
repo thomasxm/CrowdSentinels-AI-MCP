@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:4697 AND (winlog.event_data.ServiceFileName:*mshta* AND winlog.event_data.ServiceFileName:*vbscript\:createobject* AND winlog.event_data.ServiceFileName:*.run* AND winlog.event_data.ServiceFileName:*window.close*))

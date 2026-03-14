@@ -1,0 +1,1 @@
+(process.command_line:*Import\-Certificate* AND process.command_line:*\ \-FilePath\ * AND process.command_line:*Cert\:\\LocalMachine\\Root*) AND (process.command_line:(*\\AppData\\Local\\Temp\* OR *\:\\Windows\\TEMP\* OR *\\Desktop\* OR *\\Downloads\* OR *\\Perflogs\* OR *\:\\Users\\Public\*))

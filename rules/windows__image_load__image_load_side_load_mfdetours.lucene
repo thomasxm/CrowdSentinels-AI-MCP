@@ -1,0 +1,1 @@
+file.path:*\\mfdetours.dll AND (NOT file.path:*\:\\Program\ Files\ \(x86\)\\Windows\ Kits\\10\\bin\*)

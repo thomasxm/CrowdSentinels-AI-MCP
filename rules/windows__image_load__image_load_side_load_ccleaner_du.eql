@@ -1,0 +1,1 @@
+any where file.path:"*\\CCleanerDU.dll" and (not ((process.executable like~ ("C:\\Program Files\\CCleaner\*", "C:\\Program Files (x86)\\CCleaner\*")) and (process.executable like~ ("*\\CCleaner.exe", "*\\CCleaner64.exe"))))

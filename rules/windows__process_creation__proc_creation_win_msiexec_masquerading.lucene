@@ -1,0 +1,1 @@
+(process.executable:*\\msiexec.exe OR process.pe.original_file_name:\\msiexec.exe) AND (NOT (process.executable:(C\:\\Windows\\System32\* OR C\:\\Windows\\SysWOW64\* OR C\:\\Windows\\WinSxS\*)))

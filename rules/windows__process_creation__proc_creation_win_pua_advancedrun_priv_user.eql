@@ -1,0 +1,1 @@
+any where (process.command_line like~ ("*/EXEFilename*", "*/CommandLine*")) and ((process.command_line like~ ("* /RunAs 8 *", "* /RunAs 4 *", "* /RunAs 10 *", "* /RunAs 11 *")) or (process.command_line like~ ("*/RunAs 8", "*/RunAs 4", "*/RunAs 10", "*/RunAs 11")))

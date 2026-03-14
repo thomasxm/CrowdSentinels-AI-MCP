@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-CertificateServicesClient\-Lifecycle\-System\/Operational AND event.code:1007

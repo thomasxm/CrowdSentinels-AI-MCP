@@ -1,0 +1,1 @@
+any where process.pe.original_file_name:"finger.exe" or process.executable:"*\\finger.exe"

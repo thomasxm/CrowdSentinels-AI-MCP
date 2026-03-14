@@ -1,0 +1,1 @@
+(registry.path:*\\SOFTWARE\\Microsoft\\Windows\ NT\\CurrentVersion\\AeDebug\\Debugger* AND winlog.event_data.Details:*.dll) AND (NOT winlog.event_data.Details:\"C\:\\WINDOWS\\system32\\vsjitdebugger.exe\"\ \-p\ %ld\ \-e\ %ld\ \-j\ 0x%p)

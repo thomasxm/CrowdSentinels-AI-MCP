@@ -1,0 +1,1 @@
+any where file.path:"C:\\Windows\\System32\\consent.exe.@*" and file.path:"*\\comctl32.dll"

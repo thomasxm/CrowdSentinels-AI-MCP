@@ -1,0 +1,1 @@
+any where (Image like~ ("*/grep", "*/egrep")) and (CommandLine like~ ("*nessusd*", "*td-agent*", "*packetbeat*", "*filebeat*", "*auditbeat*", "*osqueryd*", "*cbagentd*", "*falcond*"))

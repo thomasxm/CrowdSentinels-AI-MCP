@@ -1,0 +1,1 @@
+process.parent.executable:C\:\\WINDOWS\\System32\\svchost.exe AND (process.parent.command_line:*\-k\ netsvcs* AND process.parent.command_line:*\-s\ Schedule*) AND (process.command_line:(*\ \-windowstyle\ hidden OR *\ \-w\ hidden OR *\ \-ep\ bypass OR *\ \-noni))

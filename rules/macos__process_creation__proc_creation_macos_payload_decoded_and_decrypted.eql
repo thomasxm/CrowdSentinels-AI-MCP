@@ -1,0 +1,1 @@
+any where Image:"*/openssl" and (CommandLine:"*/Volumes/*" and CommandLine:"*enc*" and CommandLine:"*-base64*" and CommandLine:"* -d *")

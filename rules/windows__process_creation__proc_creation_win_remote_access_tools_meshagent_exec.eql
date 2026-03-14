@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\meshagent.exe" and (process.executable like~ ("*\\cmd.exe", "*\\powershell.exe", "*\\pwsh.exe"))

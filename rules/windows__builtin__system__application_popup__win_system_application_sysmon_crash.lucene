@@ -1,0 +1,1 @@
+winlog.channel:System AND (winlog.provider_name:Application\ Popup AND event.code:26 AND (winlog.event_data.Caption:(sysmon64.exe\ \-\ Application\ Error OR sysmon.exe\ \-\ Application\ Error)))

@@ -1,0 +1,1 @@
+(NOT (process.executable:(C\:\\Windows\\System32\* OR C\:\\Windows\\SysWOW64\*))) AND (process.parent.command_line:*cmd.exe\ \/c* AND process.parent.command_line:*RoamDiag.cmd* AND process.parent.command_line:*\-outputpath*)

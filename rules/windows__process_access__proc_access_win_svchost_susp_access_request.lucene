@@ -1,0 +1,1 @@
+(winlog.event_data.TargetImage:*\:\\Windows\\System32\\svchost.exe AND winlog.event_data.GrantedAccess:0x1F3FFF AND winlog.event_data.CallTrace:*UNKNOWN*) AND (NOT (process.executable:*\:\\Program\ Files\\Microsoft\ Visual\ Studio\* AND process.executable:*\\MSBuild\\Current\\Bin\\MSBuild.exe AND (winlog.event_data.CallTrace:(*Microsoft.Build.ni.dll* OR *System.ni.dll*))))

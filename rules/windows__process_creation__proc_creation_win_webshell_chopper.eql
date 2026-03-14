@@ -1,0 +1,1 @@
+any where (process.executable:"*\\w3wp.exe" or process.parent.executable:"*\\w3wp.exe") and (process.command_line like~ ("*&ipconfig&echo*", "*&quser&echo*", "*&whoami&echo*", "*&c:&echo*", "*&cd&echo*", "*&dir&echo*", "*&echo [E]*", "*&echo [S]*"))

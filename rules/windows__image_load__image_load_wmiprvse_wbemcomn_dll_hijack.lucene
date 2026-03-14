@@ -1,0 +1,1 @@
+process.executable:*\\wmiprvse.exe AND file.path:*\\wbem\\wbemcomn.dll

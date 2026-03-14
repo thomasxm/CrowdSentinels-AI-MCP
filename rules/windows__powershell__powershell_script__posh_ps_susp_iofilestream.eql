@@ -1,0 +1,1 @@
+any where powershell.file.script_block_text:"*New-Object*" and powershell.file.script_block_text:"*IO.FileStream*" and powershell.file.script_block_text:"*\\.\*"

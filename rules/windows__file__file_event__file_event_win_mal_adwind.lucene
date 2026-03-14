@@ -1,0 +1,1 @@
+(file.path:*\\AppData\\Roaming\\Oracle\\bin\\java* AND file.path:*.exe*) OR (file.path:*\\Retrive* AND file.path:*.vbs*)

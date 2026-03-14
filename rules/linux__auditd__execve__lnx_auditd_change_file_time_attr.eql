@@ -1,0 +1,1 @@
+any where type:"EXECVE" and "touch" and ("-t" or "-acmr" or "-d" or "-r")

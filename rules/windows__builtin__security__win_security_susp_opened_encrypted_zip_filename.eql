@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and ((event.code:"5379" and winlog.event_data.TargetName:"*Microsoft_Windows_Shell_ZipFolder:filename*") and (winlog.event_data.TargetName like~ ("*invoice*", "*new order*", "*rechnung*", "*factura*", "*delivery*", "*purchase*", "*order*", "*payment*")))

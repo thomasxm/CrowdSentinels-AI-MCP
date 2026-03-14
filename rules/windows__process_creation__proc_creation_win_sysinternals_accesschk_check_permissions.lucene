@@ -1,0 +1,1 @@
+(process.pe.product:*AccessChk OR process.pe.description:*Reports\ effective\ permissions* OR (process.executable:(*\\accesschk.exe OR *\\accesschk64.exe)) OR process.pe.original_file_name:accesschk.exe) AND (process.command_line:(*uwcqv\ * OR *kwsu\ * OR *qwsu\ * OR *uwdqs\ *))

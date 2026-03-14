@@ -1,0 +1,1 @@
+any where (process.pe.original_file_name:"Cmd.Exe" or process.executable:"*\\cmd.exe") and (process.command_line like~ ("*Invoke-UserHunter*", "*Invoke-ShareFinder*", "*Invoke-Kerberoast*", "*Invoke-SMBAutoBrute*", "*Invoke-Nightmare*", "*zerologon*", "*av_query*"))

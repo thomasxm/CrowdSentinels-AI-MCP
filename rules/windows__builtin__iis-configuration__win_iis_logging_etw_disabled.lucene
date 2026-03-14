@@ -1,0 +1,1 @@
+(event.code:29 AND winlog.event_data.Configuration:*@logTargetW3C AND winlog.event_data.OldValue:*ETW*) AND (NOT winlog.event_data.NewValue:*ETW*)

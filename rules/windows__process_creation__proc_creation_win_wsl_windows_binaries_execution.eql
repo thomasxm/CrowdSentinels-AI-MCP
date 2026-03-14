@@ -1,0 +1,1 @@
+any where process.executable:"SigmaRegularExpression(regexp=SigmaString(['[a-zA-Z]:\\\\']), flags=set())" and process.working_directory:"*\\wsl.localhost*"

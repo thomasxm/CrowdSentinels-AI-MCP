@@ -1,0 +1,1 @@
+any where (process.executable:"*\\tasklist.exe" or process.pe.original_file_name:"tasklist.exe") and process.command_line like~ ("*-m*", "*/m*", "*–m*", "*—m*", "*―m*") and process.command_line:"*rdpcorets.dll*"

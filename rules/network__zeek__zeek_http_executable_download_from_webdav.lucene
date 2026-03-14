@@ -1,0 +1,1 @@
+(c-useragent:*WebDAV* OR c-uri:*webdav*) AND (resp_mime_types:*dosexec* OR c-uri:*.exe)

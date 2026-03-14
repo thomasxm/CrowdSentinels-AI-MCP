@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\rar.exe", "*\\winrar.exe")) or (process.pe.description like~ ("Command line RAR", "WinRAR"))) and (not (process.executable:"*\\UnRAR.exe" or (process.executable like~ ("*:\\Program Files (x86)\\WinRAR\*", "*:\\Program Files\\WinRAR\*")))) and (not process.executable:"*:\\Windows\\Temp\*")

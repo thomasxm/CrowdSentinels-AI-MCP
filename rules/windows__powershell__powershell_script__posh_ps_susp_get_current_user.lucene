@@ -1,0 +1,1 @@
+powershell.file.script_block_text:(*\[System.Environment\]\:\:UserName* OR *$env\:UserName* OR *\[System.Security.Principal.WindowsIdentity\]\:\:GetCurrent\(\)*)

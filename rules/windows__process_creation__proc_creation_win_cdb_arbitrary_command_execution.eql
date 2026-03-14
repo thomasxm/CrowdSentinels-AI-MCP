@@ -1,0 +1,1 @@
+any where (process.executable:"*\\cdb.exe" or process.pe.original_file_name:"CDB.Exe") and (process.command_line like~ ("* -c *", "* -cf *"))

@@ -1,0 +1,1 @@
+registry.path:*InprocServer32\\\(Default\) AND winlog.event_data.Details:C\:\\WINDOWS\\system32\\scrobj.dll

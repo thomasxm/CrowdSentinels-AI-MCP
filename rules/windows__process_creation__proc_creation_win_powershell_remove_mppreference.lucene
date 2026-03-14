@@ -1,0 +1,1 @@
+process.command_line:*Remove\-MpPreference* AND (process.command_line:(*\-ControlledFolderAccessProtectedFolders\ * OR *\-AttackSurfaceReductionRules_Ids\ * OR *\-AttackSurfaceReductionRules_Actions\ * OR *\-CheckForSignaturesBeforeRunningScan\ *))

@@ -1,0 +1,1 @@
+any where (process.command_line like~ ("*/in:*", "*/out:*", "*/uri:*")) and (process.executable:"*\\DataSvcUtil.exe" or process.pe.original_file_name:"DataSvcUtil.exe")

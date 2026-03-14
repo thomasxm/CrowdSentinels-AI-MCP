@@ -1,0 +1,1 @@
+any where userIdentity.type:"AssumedRole" and userIdentity.sessionContext.sessionIssuer.type:"Role"

@@ -1,0 +1,1 @@
+file.path:C\:\\Windows\\System32\\drivers\\LiveKdD.SYS AND (NOT (process.executable:(*\\livekd.exe OR *\\livek64.exe)))

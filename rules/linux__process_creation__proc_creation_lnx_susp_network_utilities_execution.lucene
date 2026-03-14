@@ -1,0 +1,1 @@
+((Image:(*\/nc OR *\/ncat OR *\/netcat OR *\/socat)) AND (NOT (CommandLine:(*\ \-\-listen\ * OR *\ \-l\ *)))) OR (Image:(*\/autorecon OR *\/hping OR *\/hping2 OR *\/hping3 OR *\/naabu OR *\/nmap OR *\/nping OR *\/telnet OR *\/zenmap))

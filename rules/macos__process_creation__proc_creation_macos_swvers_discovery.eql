@@ -1,0 +1,1 @@
+any where Image:"*/sw_vers" and (CommandLine like~ ("*-buildVersion*", "*-productName*", "*-productVersion*"))

@@ -1,0 +1,1 @@
+any where (c-useragent:"*WebDAV*" or c-uri:"*webdav*") and (resp_mime_types:"*dosexec*" or c-uri:"*.exe")

@@ -1,0 +1,1 @@
+any where (not Z:0) and query:"*.*" and (not ((query like~ ("*.arpa", "*.local", "*.ultradns.net", "*.twtrdns.net", "*.azuredns-prd.info", "*.azure-dns.com", "*.azuredns-ff.info", "*.azuredns-ff.org", "*.azuregov-dns.org")) or (qtype_name like~ ("ns", "mx")) or answers:"*\\x00" or (id.resp_p like~ (137, 138, 139))))

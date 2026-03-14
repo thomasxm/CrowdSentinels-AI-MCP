@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*Install\-WindowsFeature\ WindowsPowerShellWebAccess* OR powershell.file.script_block_text:*Install\-PswaWebApplication* OR (powershell.file.script_block_text:*Add\-PswaAuthorizationRule* AND powershell.file.script_block_text:*\-UserName\ * AND powershell.file.script_block_text:*\-ComputerName\ *)

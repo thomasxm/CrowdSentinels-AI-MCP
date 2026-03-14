@@ -1,0 +1,1 @@
+any where (process.executable:"*\\mmc.exe" or process.pe.original_file_name:"MMC.exe") and (process.command_line:"*gpme.msc*" and process.command_line:"*gpobject:*") and (process.command_line like~ ("*31B2F340-016D-11D2-945F-00C04FB984F9*", "*6AC1786C-016F-11D2-945F-00C04FB984F9*"))

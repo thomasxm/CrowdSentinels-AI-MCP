@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\dns.exe" and (not process.executable:"*\\conhost.exe")

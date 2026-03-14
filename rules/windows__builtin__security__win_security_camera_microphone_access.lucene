@@ -1,0 +1,1 @@
+winlog.channel:Security AND ((event.code:(4657 OR 4656 OR 4663)) AND (winlog.event_data.ObjectName:(*\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\microphone\\NonPackaged* OR *\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\webcam\\NonPackaged*)))

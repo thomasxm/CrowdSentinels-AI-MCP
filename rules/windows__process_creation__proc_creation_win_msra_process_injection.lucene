@@ -1,0 +1,1 @@
+process.parent.executable:*\\msra.exe AND process.parent.command_line:*msra.exe AND (process.executable:(*\\arp.exe OR *\\cmd.exe OR *\\net.exe OR *\\netstat.exe OR *\\nslookup.exe OR *\\route.exe OR *\\schtasks.exe OR *\\whoami.exe))

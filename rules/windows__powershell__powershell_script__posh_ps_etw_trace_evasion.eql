@@ -1,0 +1,1 @@
+any where powershell.file.script_block_text:"*Remove-EtwTraceProvider *" or (powershell.file.script_block_text:"*Set-EtwTraceProvider *" and powershell.file.script_block_text:"*0x11*")

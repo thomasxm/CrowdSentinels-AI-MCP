@@ -1,0 +1,1 @@
+any where winlog.channel:"Microsoft-Windows-CodeIntegrity/Operational" and event.code:"3077"

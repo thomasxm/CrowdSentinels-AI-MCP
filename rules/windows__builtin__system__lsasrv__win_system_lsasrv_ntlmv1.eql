@@ -1,0 +1,1 @@
+any where winlog.channel:"System" and (winlog.provider_name:"LsaSrv" and (event.code like~ ("6038", "6039")))

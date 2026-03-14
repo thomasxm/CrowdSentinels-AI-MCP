@@ -1,0 +1,1 @@
+(registry.path:*\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\* AND registry.path:*\\NonPackaged*) AND (registry.path:(*microphone* OR *webcam*)) AND (registry.path:(*\:#Windows#Temp#* OR *\:#$Recycle.bin#* OR *\:#Temp#* OR *\:#Users#Public#* OR *\:#Users#Default#* OR *\:#Users#Desktop#*))

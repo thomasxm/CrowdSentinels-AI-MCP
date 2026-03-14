@@ -1,0 +1,1 @@
+winlog.channel:System AND ((winlog.provider_name:(Kerberos\-Key\-Distribution\-Center OR Microsoft\-Windows\-Kerberos\-Key\-Distribution\-Center)) AND (event.code:(39 OR 41)))

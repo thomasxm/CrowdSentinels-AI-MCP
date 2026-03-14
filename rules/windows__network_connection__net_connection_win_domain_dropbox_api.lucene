@@ -1,0 +1,1 @@
+(network.direction:true AND (destination.domain:(*api.dropboxapi.com OR *content.dropboxapi.com))) AND (NOT process.executable:*\\Dropbox*)

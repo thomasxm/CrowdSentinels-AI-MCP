@@ -1,0 +1,1 @@
+any where process.command_line:"RunWizard" and process.command_line:"SigmaRegularExpression(regexp=SigmaString(['\\{[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}\\}']), flags=set())"

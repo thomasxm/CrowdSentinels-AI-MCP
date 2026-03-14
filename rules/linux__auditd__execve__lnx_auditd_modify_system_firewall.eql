@@ -1,0 +1,1 @@
+any where (type:"EXECVE" and a0:"iptables" and a1:"*DROP*") or (type:"EXECVE" and a0:"firewall-cmd" and a1:"*remove*") or (type:"EXECVE" and a0:"ufw" and a1:"*delete*") or (type:"EXECVE" and a0:"nft" and (a1 like~ ("*delete*", "*flush*")))

@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*\[System.Net.HttpWebRequest\]* AND powershell.file.script_block_text:*System.Net.Sockets.TcpListener* AND powershell.file.script_block_text:*AcceptTcpClient*

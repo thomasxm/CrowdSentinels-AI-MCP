@@ -1,0 +1,1 @@
+any where Image:"*/PlistBuddy" and (CommandLine:"*RunAtLoad*" and CommandLine:"*true*") and (CommandLine like~ ("*LaunchAgents*", "*LaunchDaemons*"))

@@ -1,0 +1,1 @@
+any where (process.executable:"*\\ilasm.exe" or process.pe.original_file_name:"ilasm.exe") and (process.command_line like~ ("* /dll*", "* /exe*"))

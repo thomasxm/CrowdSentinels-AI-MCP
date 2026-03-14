@@ -1,0 +1,1 @@
+any where (process.executable:"*\\cmd.exe" or process.pe.original_file_name:"Cmd.Exe") and (process.command_line:"*/q*" and process.command_line:"*/c*" and process.command_line:"*chcp*")

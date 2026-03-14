@@ -1,0 +1,1 @@
+any where (process.executable:"*\\rundll32.exe" or process.pe.original_file_name:"RUNDLL32.EXE") and process.parent.executable:"*\\cmd.exe" and process.command_line:"*user32.dll,*" and process.command_line:"*LockWorkStation*"

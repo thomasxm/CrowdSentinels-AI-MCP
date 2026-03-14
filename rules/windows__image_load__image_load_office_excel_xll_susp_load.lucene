@@ -1,0 +1,1 @@
+process.executable:*\\excel.exe AND (file.path:(*\\Desktop\* OR *\\Downloads\* OR *\\Perflogs\* OR *\\Temp\* OR *\\Users\\Public\* OR *\\Windows\\Tasks\*)) AND file.path:*.xll

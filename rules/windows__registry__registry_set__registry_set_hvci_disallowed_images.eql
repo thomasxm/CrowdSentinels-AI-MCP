@@ -1,0 +1,1 @@
+any where registry.path:"*\\Control\\CI\*" and registry.path:"*\\HVCIDisallowedImages*"

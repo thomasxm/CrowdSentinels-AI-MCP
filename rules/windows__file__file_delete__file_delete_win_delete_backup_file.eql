@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\cmd.exe", "*\\powershell.exe", "*\\pwsh.exe", "*\\wt.exe", "*\\rundll32.exe", "*\\regsvr32.exe")) and (file.path like~ ("*.VHD", "*.bac", "*.bak", "*.wbcat", "*.bkf", "*.set", "*.win", "*.dsk"))

@@ -1,0 +1,1 @@
+any where process.executable:"*\\schtasks.exe" and (process.command_line:"* /create *" and process.command_line:"* /sc once *" and process.command_line:"*\\Temp\*")

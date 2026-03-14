@@ -1,0 +1,1 @@
+any where (type:"EXECVE" and a0:"import") and ((a1:"-window" and a2:"root" and (a3 like~ ("*.png", "*.jpg", "*.jpeg"))) or (a1 like~ ("*.png", "*.jpg", "*.jpeg")))

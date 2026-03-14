@@ -1,0 +1,1 @@
+any where (process.executable:"*\\wsudo.exe" or process.pe.original_file_name:"wsudo.exe" or process.pe.description:"Windows sudo utility" or process.parent.executable:"*\\wsudo-bridge.exe") or (process.command_line like~ ("*-u System*", "*-uSystem*", "*-u TrustedInstaller*", "*-uTrustedInstaller*", "* --ti *"))

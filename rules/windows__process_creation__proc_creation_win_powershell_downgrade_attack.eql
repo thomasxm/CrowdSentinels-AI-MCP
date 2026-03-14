@@ -1,0 +1,1 @@
+any where process.executable:"*\\powershell.exe" and (process.command_line like~ ("* -version 2 *", "* -versio 2 *", "* -versi 2 *", "* -vers 2 *", "* -ver 2 *", "* -ve 2 *", "* -v 2 *"))

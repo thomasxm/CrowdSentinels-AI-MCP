@@ -1,0 +1,1 @@
+(winlog.channel:(Microsoft\-Windows\-Security\-Mitigations\/Kernel\ Mode OR Microsoft\-Windows\-Security\-Mitigations\/User\ Mode)) AND ((event.code:(11 OR 12)) AND (winlog.event_data.ImageName:(*\\Users\\Public\* OR *\\PerfLogs\* OR *\\Desktop\* OR *\\Downloads\* OR *\\AppData\\Local\\Temp\* OR *C\:\\Windows\\TEMP\*)))

@@ -1,0 +1,1 @@
+file.path:(*.docm OR *.dotm OR *.xlsm OR *.xltm OR *.potm OR *.pptm)

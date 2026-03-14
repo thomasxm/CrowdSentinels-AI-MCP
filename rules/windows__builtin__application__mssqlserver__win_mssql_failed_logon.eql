@@ -1,0 +1,1 @@
+any where winlog.channel:"Application" and (winlog.provider_name:"*MSSQL*" and event.code:"18456")

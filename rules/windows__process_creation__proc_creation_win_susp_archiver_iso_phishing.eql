@@ -1,0 +1,1 @@
+any where (process.parent.executable like~ ("*\\Winrar.exe", "*\\7zFM.exe", "*\\peazip.exe")) and (process.executable like~ ("*\\isoburn.exe", "*\\PowerISO.exe", "*\\ImgBurn.exe"))

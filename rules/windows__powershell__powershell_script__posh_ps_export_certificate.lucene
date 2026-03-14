@@ -1,0 +1,1 @@
+(powershell.file.script_block_text:(*Export\-PfxCertificate* OR *Export\-Certificate*)) AND (NOT powershell.file.script_block_text:*CmdletsToExport\ \=\ @\(*)

@@ -1,0 +1,1 @@
+file.path:(*\\WindowsPowerShell\\Modules\*\\.ps OR *\\WindowsPowerShell\\Modules\*\\.dll)

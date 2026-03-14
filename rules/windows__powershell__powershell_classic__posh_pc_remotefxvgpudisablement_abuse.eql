@@ -1,0 +1,1 @@
+any where winlog.channel:"Windows PowerShell" and winlog.event_data.Data:"*ModuleContents=function Get-VMRemoteFXPhysicalVideoAdapter {*"

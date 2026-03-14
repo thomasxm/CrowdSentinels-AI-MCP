@@ -1,0 +1,1 @@
+powershell.file.script_block_text:(*Function\ Get\-ADRExcelComOb* OR *Get\-ADRGPO* OR *Get\-ADRDomainController* OR *ADRecon\-Report.xlsx*)

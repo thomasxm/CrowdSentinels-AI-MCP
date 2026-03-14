@@ -1,0 +1,1 @@
+winlog.channel:System AND ((event.code:4100 AND winlog.provider_name:Microsoft\-Windows\-Iphlpsvc) AND (NOT (winlog.event_data.IsatapRouter:(127.0.0.1 OR \:\:1))) AND (NOT winlog.event_data.IsatapRouter:\<sigma.types.SigmaNull\ object\ at\ 0x7ffbaf984d70\>))

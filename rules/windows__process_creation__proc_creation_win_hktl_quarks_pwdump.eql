@@ -1,0 +1,1 @@
+any where process.executable:"*\\QuarksPwDump.exe" or (process.command_line like~ (" -dhl", " --dump-hash-local", " -dhdc", " --dump-hash-domain-cached", " --dump-bitlocker", " -dhd ", " --dump-hash-domain ", "--ntds-file"))

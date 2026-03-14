@@ -1,0 +1,1 @@
+any where (registry.path:"*\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\HideFileExt" and winlog.event_data.Details:"DWORD (0x00000001)") or (registry.path:"*\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\Hidden" and winlog.event_data.Details:"DWORD (0x00000002)")

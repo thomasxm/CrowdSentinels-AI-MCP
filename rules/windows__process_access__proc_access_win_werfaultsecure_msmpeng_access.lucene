@@ -1,0 +1,1 @@
+process.executable:*\\WerFaultSecure.exe AND winlog.event_data.TargetImage:*\\MsMpEng.exe AND (winlog.event_data.CallTrace:(*\\dbgcore.dll* OR *\\dbghelp.dll*))

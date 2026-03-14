@@ -1,0 +1,1 @@
+any where process.command_line:"*\"\\system32\\cleanmgr.exe /autoclean /d C:" and process.parent.command_line:"C:\\Windows\\system32\\svchost.exe -k netsvcs -p -s Schedule" and (winlog.event_data.IntegrityLevel like~ ("High", "System", "S-1-16-16384", "S-1-16-12288"))

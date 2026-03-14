@@ -1,0 +1,1 @@
+((process.executable:*\\WMIC.exe OR process.pe.original_file_name:wmic.exe) AND process.command_line:(*\-node\:* OR *\/node\:* OR *–node\:* OR *—node\:* OR *―node\:*)) AND (NOT (process.command_line:(*localhost* OR *127.0.0.1*)))

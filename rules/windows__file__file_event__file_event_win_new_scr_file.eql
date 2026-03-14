@@ -1,0 +1,1 @@
+any where file.path:"*.scr" and (not (file.path like~ ("*:\\$WINDOWS.~BT\\NewOS\*", "*:\\Windows\\System32\*", "*:\\Windows\\SysWOW64\*", "*:\\Windows\\WinSxS\*", "*:\\WUDownloadCache\*")))

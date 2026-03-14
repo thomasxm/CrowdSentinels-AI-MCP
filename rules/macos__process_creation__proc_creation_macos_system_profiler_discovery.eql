@@ -1,0 +1,1 @@
+any where (Image:"*/system_profiler" or CommandLine:"*system_profiler*") and (CommandLine like~ ("*SPApplicationsDataType*", "*SPHardwareDataType*", "*SPNetworkDataType*", "*SPUSBDataType*"))

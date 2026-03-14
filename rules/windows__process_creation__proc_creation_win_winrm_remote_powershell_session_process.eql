@@ -1,0 +1,1 @@
+any where process.executable:"*\\wsmprovhost.exe" or process.parent.executable:"*\\wsmprovhost.exe"

@@ -1,0 +1,1 @@
+any where (process.parent.executable like~ ("*\\cmd.exe", "*\\cscript.exe", "*\\mshta.exe", "*\\powershell.exe", "*\\pwsh.exe", "*\\regsvr32.exe", "*\\rundll32.exe", "*\\schtasks.exe", "*\\wmic.exe", "*\\wscript.exe", "*\\wsl.exe")) and (process.executable:"*\\msdt.exe" or process.pe.original_file_name:"msdt.exe")

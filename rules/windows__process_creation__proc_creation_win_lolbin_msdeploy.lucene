@@ -1,0 +1,1 @@
+(process.command_line:*verb\:sync* AND process.command_line:*\-source\:RunCommand* AND process.command_line:*\-dest\:runCommand*) AND process.executable:*\\msdeploy.exe

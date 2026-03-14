@@ -1,0 +1,1 @@
+any where (registry.path like~ ("*{2781761E-28E0-4109-99FE-B9D127C57AFE}", "*{A7C452EF-8E9F-42EB-9F2B-245613CA0DC9}")) and (not ((process.executable like~ ("C:\\ProgramData\\Microsoft\\Windows Defender\\Platform\*", "C:\\Program Files\\Windows Defender\*", "C:\\Program Files (x86)\\Windows Defender\*")) and process.executable:"*\\MsMpEng.exe"))

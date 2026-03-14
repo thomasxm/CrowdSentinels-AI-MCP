@@ -1,0 +1,1 @@
+process.pe.company:SecurityXploded OR process.executable:*PasswordDump.exe OR process.pe.original_file_name:*PasswordDump.exe

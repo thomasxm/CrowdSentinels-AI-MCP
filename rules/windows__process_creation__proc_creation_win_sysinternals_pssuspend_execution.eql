@@ -1,0 +1,1 @@
+any where process.pe.original_file_name:"pssuspend.exe" or (process.executable like~ ("*\\pssuspend.exe", "*\\pssuspend64.exe"))

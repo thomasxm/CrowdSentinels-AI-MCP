@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:4624 AND winlog.event_data.LogonType:3 AND winlog.event_data.TargetUserName:ANONYMOUS\ LOGON AND source.domain:\- AND (source.ip:(127.0.0.1 OR \:\:1)))

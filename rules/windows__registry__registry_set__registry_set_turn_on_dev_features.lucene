@@ -1,0 +1,1 @@
+(registry.path:(*\\Microsoft\\Windows\\CurrentVersion\\AppModelUnlock* OR *\\Policies\\Microsoft\\Windows\\Appx\*)) AND (registry.path:(*\\AllowAllTrustedApps OR *\\AllowDevelopmentWithoutDevLicense)) AND winlog.event_data.Details:DWORD\ \(0x00000001\)

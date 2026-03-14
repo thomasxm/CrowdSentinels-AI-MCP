@@ -1,0 +1,1 @@
+any where Image:"*/sudo" and CommandLine:"*execve_hijack*"

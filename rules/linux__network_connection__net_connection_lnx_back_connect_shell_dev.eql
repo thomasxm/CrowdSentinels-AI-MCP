@@ -1,0 +1,1 @@
+any where Image:"*/bin/bash" and (not (DestinationIp like~ ("127.0.0.1", "0.0.0.0")))

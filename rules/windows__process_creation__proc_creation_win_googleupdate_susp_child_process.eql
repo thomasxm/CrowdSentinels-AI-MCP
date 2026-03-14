@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\GoogleUpdate.exe" and (not ((process.executable:"*\\Google*" or (process.executable like~ ("*\\setup.exe", "*chrome_updater.exe", "*chrome_installer.exe"))) or process.executable:"<sigma.types.SigmaNull object at 0x7fcad1725010>"))

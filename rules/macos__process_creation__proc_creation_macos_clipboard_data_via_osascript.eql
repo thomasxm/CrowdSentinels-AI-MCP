@@ -1,0 +1,1 @@
+any where CommandLine:"*osascript*" and CommandLine:"* -e *" and CommandLine:"*clipboard*"

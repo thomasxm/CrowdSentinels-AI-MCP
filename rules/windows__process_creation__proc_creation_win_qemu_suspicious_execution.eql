@@ -1,0 +1,1 @@
+any where ((process.command_line like~ ("*-m 1M*", "*-m 2M*", "*-m 3M*")) and (process.command_line:"*restrict=off*" and process.command_line:"*-netdev *" and process.command_line:"*connect=*" and process.command_line:"*-nographic*")) and (not (process.command_line like~ ("* -cdrom *", "* type=virt *", "* -blockdev *")))

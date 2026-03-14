@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-Shell\-Core\/Operational AND ((event.code:28115 AND (winlog.event_data.Name:(*Zenmap* OR *AnyDesk* OR *wireshark* OR *openvpn*))) OR (event.code:28115 AND (winlog.event_data.AppID:(*zenmap.exe* OR *prokzult\ ad* OR *wireshark* OR *openvpn*))))

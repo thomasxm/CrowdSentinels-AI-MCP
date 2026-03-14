@@ -1,0 +1,1 @@
+(file.path:(*BloodHound.zip OR *_computers.json OR *_containers.json OR *_domains.json OR *_gpos.json OR *_groups.json OR *_ous.json OR *_users.json)) AND (NOT (process.executable:*\\svchost.exe AND file.path:C\:\\Program\ Files\\WindowsApps\\Microsoft.* AND file.path:*\\pocket_containers.json))

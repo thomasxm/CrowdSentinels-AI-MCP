@@ -1,0 +1,1 @@
+(process.executable:*\\mmc.exe OR process.pe.original_file_name:MMC.exe) AND (process.command_line:*gpme.msc* AND process.command_line:*gpobject\:*) AND (process.command_line:(*31B2F340\-016D\-11D2\-945F\-00C04FB984F9* OR *6AC1786C\-016F\-11D2\-945F\-00C04FB984F9*))

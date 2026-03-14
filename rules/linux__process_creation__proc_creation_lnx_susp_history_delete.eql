@@ -1,0 +1,1 @@
+any where (Image like~ ("*/rm", "*/unlink", "*/shred")) and ((CommandLine like~ ("*/.bash_history*", "*/.zsh_history*")) or (CommandLine like~ ("*_history", "*.history", "*zhistory")))

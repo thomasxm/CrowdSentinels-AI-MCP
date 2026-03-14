@@ -1,0 +1,1 @@
+any where (file.path:"*\\Microsoft\\Windows\\Start Menu\\Programs\\Startup*" and file.path:"*.lnk.{0AFACED1-E828-11D1-9187-B532F1E9575D}*") and process.executable:"*\\explorer.exe"

@@ -1,0 +1,1 @@
+any where verb:"create" and objectRef.resource:"pods" and objectRef.namespace:"kube-system"

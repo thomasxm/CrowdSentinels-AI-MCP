@@ -1,0 +1,1 @@
+any where (process.executable:"*\\cmdkey.exe" or process.pe.original_file_name:"cmdkey.exe") and process.command_line like~ ("* -g*", "* /g*", "* –g*", "* —g*", "* ―g*") and process.command_line like~ ("* -u*", "* /u*", "* –u*", "* —u*", "* ―u*") and process.command_line like~ ("* -p*", "* /p*", "* –p*", "* —p*", "* ―p*")

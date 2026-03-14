@@ -1,0 +1,1 @@
+any where (Image:"*/file" and CommandLine regex~ "(.){200,}") or (Image:"*/ls" and CommandLine:"*-R*") or Image:"*/find" or Image:"*/tree" or Image:"*/findmnt" or Image:"*/mlocate"

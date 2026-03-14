@@ -1,0 +1,1 @@
+any where process.executable:"*\\ditsnap.exe" or process.command_line:"*ditsnap.exe*"

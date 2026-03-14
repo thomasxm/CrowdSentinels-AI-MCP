@@ -1,0 +1,1 @@
+any where winlog.channel:"Microsoft-Windows-SmbClient/Security" and (event.code:"31017" and winlog.event_data.UserName=="" and winlog.event_data.ServerName:"\\1*")

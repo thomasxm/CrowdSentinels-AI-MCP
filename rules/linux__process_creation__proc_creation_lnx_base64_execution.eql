@@ -1,0 +1,1 @@
+any where CommandLine:"*base64 *" and ((CommandLine like~ ("*| bash *", "*| sh *", "*|bash *", "*|sh *")) or (CommandLine like~ ("* |sh", "*| bash", "*| sh", "*|bash")))

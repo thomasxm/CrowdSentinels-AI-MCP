@@ -1,0 +1,1 @@
+(file.path:*\\Tomcat* AND file.path:*\\logs\*) AND (file.path:(*catalina.* OR *_access_log.* OR *localhost.*))

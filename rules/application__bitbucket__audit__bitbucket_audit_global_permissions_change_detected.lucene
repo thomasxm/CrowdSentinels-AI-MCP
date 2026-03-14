@@ -1,0 +1,1 @@
+auditType.category:Permissions AND (auditType.action:(Global\ permission\ remove\ request OR Global\ permission\ removed OR Global\ permission\ granted OR Global\ permission\ requested))

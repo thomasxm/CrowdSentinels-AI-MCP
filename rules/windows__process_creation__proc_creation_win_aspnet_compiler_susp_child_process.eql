@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\aspnet_compiler.exe" and ((process.executable like~ ("*\\calc.exe", "*\\notepad.exe")) or (process.executable like~ ("*\\Users\\Public\*", "*\\AppData\\Local\\Temp\*", "*\\AppData\\Local\\Roaming\*", "*:\\Temp\*", "*:\\Windows\\Temp\*", "*:\\Windows\\System32\\Tasks\*", "*:\\Windows\\Tasks\*")))

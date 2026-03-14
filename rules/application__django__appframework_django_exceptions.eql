@@ -1,0 +1,1 @@
+any where "SuspiciousOperation" or "DisallowedHost" or "DisallowedModelAdminLookup" or "DisallowedModelAdminToField" or "DisallowedRedirect" or "InvalidSessionKey" or "RequestDataTooBig" or "SuspiciousFileOperation" or "SuspiciousMultipartForm" or "SuspiciousSession" or "TooManyFieldsSent" or "PermissionDenied"

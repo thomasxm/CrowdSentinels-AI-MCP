@@ -1,0 +1,1 @@
+any where Image:"*ruby*" and (CommandLine:"* -e*" and CommandLine:"*rsocket*" and CommandLine:"*TCPSocket*") and (CommandLine like~ ("* ash*", "* bash*", "* bsh*", "* csh*", "* ksh*", "* pdksh*", "* sh*", "* tcsh*"))

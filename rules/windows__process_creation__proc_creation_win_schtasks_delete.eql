@@ -1,0 +1,1 @@
+any where process.executable:"*\\schtasks.exe" and (process.command_line:"*/delete*" and process.command_line:"*/tn*") and (process.command_line like~ ("*\\Windows\\BitLocker*", "*\\Windows\\ExploitGuard*", "*\\Windows\\SystemRestore\\SR*", "*\\Windows\\UpdateOrchestrator\*", "*\\Windows\\Windows Defender\*", "*\\Windows\\WindowsBackup\*", "*\\Windows\\WindowsUpdate\*"))

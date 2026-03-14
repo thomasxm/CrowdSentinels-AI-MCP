@@ -1,0 +1,1 @@
+ParentImage:*\/Script\ Editor AND ((Image:(*\/curl OR *\/bash OR *\/sh OR *\/zsh OR *\/dash OR *\/fish OR *\/osascript OR *\/mktemp OR *\/chmod OR *\/php OR *\/nohup OR *\/openssl OR *\/plutil OR *\/PlistBuddy OR *\/xattr OR *\/sqlite OR *\/funzip OR *\/popen)) OR (Image:(*python* OR *perl*)))

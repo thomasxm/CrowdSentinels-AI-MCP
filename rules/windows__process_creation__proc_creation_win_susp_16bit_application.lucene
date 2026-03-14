@@ -1,0 +1,1 @@
+process.executable:(*\\ntvdm.exe OR *\\csrstub.exe)

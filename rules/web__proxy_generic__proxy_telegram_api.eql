@@ -1,0 +1,1 @@
+any where cs-host:"api.telegram.org" and (not (c-useragent like~ ("*Telegram*", "*Bot*")))

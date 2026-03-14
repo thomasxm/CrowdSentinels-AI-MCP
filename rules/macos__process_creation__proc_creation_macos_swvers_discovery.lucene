@@ -1,0 +1,1 @@
+Image:*\/sw_vers AND (CommandLine:(*\-buildVersion* OR *\-productName* OR *\-productVersion*))

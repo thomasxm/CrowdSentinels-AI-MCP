@@ -1,0 +1,1 @@
+any where cs-uri-query:"*~1*" and cs-uri-query:"*a.aspx" and (cs-method like~ ("GET", "OPTIONS")) and (sc-status like~ (200, 301))

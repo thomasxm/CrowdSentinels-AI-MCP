@@ -1,0 +1,1 @@
+winlog.channel:DNS\ Server AND (event.code:(150 OR 770 OR 771))

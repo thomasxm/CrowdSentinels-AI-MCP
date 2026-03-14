@@ -1,0 +1,1 @@
+any where process.pe.description:"NetSupport Client Configurator" or process.pe.product:"NetSupport Remote Control" or process.pe.company:"NetSupport Ltd" or process.pe.original_file_name:"PCICFGUI.EXE"

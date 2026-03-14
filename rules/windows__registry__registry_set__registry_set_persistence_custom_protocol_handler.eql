@@ -1,0 +1,1 @@
+any where (registry.path:"HKCR\*" and winlog.event_data.Details:"URL:*") and (not (winlog.event_data.Details:"URL:ms-*" or (process.executable like~ ("C:\\Program Files (x86)*", "C:\\Program Files\*", "C:\\Windows\\System32\*", "C:\\Windows\\SysWOW64\*"))))

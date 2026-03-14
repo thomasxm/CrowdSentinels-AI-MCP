@@ -1,0 +1,1 @@
+any where eventtype like~ ("zone.deactivate", "zone.delete")

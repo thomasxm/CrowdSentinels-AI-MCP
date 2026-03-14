@@ -1,0 +1,1 @@
+(process.executable:*\\msdt.exe OR process.pe.original_file_name:msdt.exe) AND (process.command_line:*IT_BrowseForFile\=* OR (process.command_line:*\ PCWDiagnostic* AND process.command_line:(*\ \-af\ * OR *\ \/af\ * OR *\ –af\ * OR *\ —af\ * OR *\ ―af\ *)))

@@ -1,0 +1,1 @@
+any where (TargetFilename:"*/etc/emond.d/rules/*" and TargetFilename:"*.plist") or TargetFilename:"*/private/var/db/emondClients/*"

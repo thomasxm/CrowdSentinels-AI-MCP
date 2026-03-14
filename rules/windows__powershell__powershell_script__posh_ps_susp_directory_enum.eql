@@ -1,0 +1,1 @@
+any where powershell.file.script_block_text:"*foreach*" and powershell.file.script_block_text:"*Get-ChildItem*" and powershell.file.script_block_text:"*-Path *" and powershell.file.script_block_text:"*-ErrorAction *" and powershell.file.script_block_text:"*SilentlyContinue*" and powershell.file.script_block_text:"*Out-File *" and powershell.file.script_block_text:"*-append*"

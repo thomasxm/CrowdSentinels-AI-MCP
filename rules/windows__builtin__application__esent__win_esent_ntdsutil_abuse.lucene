@@ -1,0 +1,1 @@
+winlog.channel:Application AND (winlog.provider_name:ESENT AND (event.code:(216 OR 325 OR 326 OR 327)) AND winlog.event_data.Data:*ntds.dit*)

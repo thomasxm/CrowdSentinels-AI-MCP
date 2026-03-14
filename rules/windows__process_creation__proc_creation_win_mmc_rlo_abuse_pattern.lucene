@@ -1,0 +1,1 @@
+(process.executable:*\\mmc.exe OR process.pe.original_file_name:MMC.exe) AND (process.command_line:(*cod.msc* OR *fdp.msc* OR *ftr.msc* OR *lmth.msc* OR *slx.msc* OR *tdo.msc* OR *xcod.msc* OR *xslx.msc* OR *xtpp.msc*))

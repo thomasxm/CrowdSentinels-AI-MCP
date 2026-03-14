@@ -1,0 +1,1 @@
+any where (registry.path:"HKLM\\SYSTEM\\CurrentControlSet\\Control\\MiniNt" and winlog.event_data.EventType:"CreateKey") or winlog.event_data.NewName:"HKLM\\SYSTEM\\CurrentControlSet\\Control\\MiniNt"

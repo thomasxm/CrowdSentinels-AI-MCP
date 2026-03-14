@@ -1,0 +1,1 @@
+process.pe.original_file_name:sdelete.exe AND (NOT (process.executable:(*\\sdelete.exe OR *\\sdelete64.exe)))

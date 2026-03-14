@@ -1,0 +1,1 @@
+any where Image:"*/trufflehog" or ((CommandLine like~ ("* docker --image *", "* Git *", "* GitHub *", "* Jira *", "* Slack *", "* Confluence *", "* SharePoint *", "* s3 *", "* gcs *")) and CommandLine:"* --results=verified*")

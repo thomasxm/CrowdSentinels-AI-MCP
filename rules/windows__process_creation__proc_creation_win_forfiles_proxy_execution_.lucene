@@ -1,0 +1,1 @@
+(process.executable:*\\forfiles.exe OR process.pe.original_file_name:forfiles.exe) AND process.command_line:(*\ \-c\ * OR *\ \/c\ * OR *\ –c\ * OR *\ —c\ * OR *\ ―c\ *)

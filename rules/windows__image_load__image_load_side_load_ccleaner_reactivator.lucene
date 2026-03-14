@@ -1,0 +1,1 @@
+file.path:*\\CCleanerReactivator.dll AND (NOT ((process.executable:(C\:\\Program\ Files\\CCleaner\* OR C\:\\Program\ Files\ \(x86\)\\CCleaner\*)) AND process.executable:*\\CCleanerReactivator.exe))

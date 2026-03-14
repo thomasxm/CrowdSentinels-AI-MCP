@@ -1,0 +1,1 @@
+((process.executable:(*\\AnyDesk.exe OR *\\AnyDeskMSI.exe)) AND (file.path:(*.dll OR *.exe))) AND (NOT file.path:*\\gcapi.dll)

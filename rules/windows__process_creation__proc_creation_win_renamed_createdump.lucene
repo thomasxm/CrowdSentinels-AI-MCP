@@ -1,0 +1,1 @@
+(process.pe.original_file_name:FX_VER_INTERNALNAME_STR OR ((process.command_line:*\ \-u\ * AND process.command_line:*\ \-f\ * AND process.command_line:*.dmp*) OR (process.command_line:*\ \-\-full\ * AND process.command_line:*\ \-\-name\ * AND process.command_line:*.dmp*))) AND (NOT process.executable:*\\createdump.exe)

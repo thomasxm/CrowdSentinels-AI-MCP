@@ -1,0 +1,1 @@
+(process.pe.original_file_name:Cmd.Exe OR process.executable:*\\cmd.exe) AND ((process.command_line:(cmd\ * OR cmd.exe* OR c\:\\windows\\system32\\cmd.exe*)) AND (process.command_line:(*psinject* OR *spawnas* OR *make_token* OR *remote\-exec* OR *rev2self* OR *dcsync* OR *logonpasswords* OR *execute\-assembly* OR *getsystem*)))

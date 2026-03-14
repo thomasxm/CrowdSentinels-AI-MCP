@@ -1,0 +1,1 @@
+any where (process.executable:"*\\bcdedit.exe" or process.pe.original_file_name:"bcdedit.exe") and process.command_line:"*set*" and ((process.command_line:"*bootstatuspolicy*" and process.command_line:"*ignoreallfailures*") or (process.command_line:"*recoveryenabled*" and process.command_line:"*no*"))

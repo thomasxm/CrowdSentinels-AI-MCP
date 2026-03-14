@@ -1,0 +1,1 @@
+any where process.executable:"*\\cmd.exe" and (file.path:"*\\Users\*" and file.path:"*\\Desktop\*") and file.path:"*.txt"

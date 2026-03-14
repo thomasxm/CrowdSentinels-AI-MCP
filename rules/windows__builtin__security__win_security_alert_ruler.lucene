@@ -1,0 +1,1 @@
+winlog.channel:Security AND ((event.code:4776 AND winlog.event_data.Workstation:RULER) OR ((event.code:(4624 OR 4625)) AND source.domain:RULER))

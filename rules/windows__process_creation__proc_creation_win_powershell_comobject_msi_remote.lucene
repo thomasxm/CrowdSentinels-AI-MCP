@@ -1,0 +1,1 @@
+(((process.executable:(*\\powershell_ise.exe OR *\\powershell.exe OR *\\pwsh.exe)) OR (process.pe.original_file_name:(PowerShell_ISE.EXE OR PowerShell.EXE OR pwsh.dll))) AND (process.command_line:*\-ComObject* AND process.command_line:*InstallProduct\(*) AND (process.command_line:(*http* OR *\\*))) AND (NOT (process.command_line:(*\:\/\/127.0.0.1* OR *\:\/\/localhost*)))

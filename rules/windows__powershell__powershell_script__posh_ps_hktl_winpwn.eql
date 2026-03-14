@@ -1,0 +1,1 @@
+any where powershell.file.script_block_text like~ ("*Offline_Winpwn*", "*WinPwn *", "*WinPwn.exe*", "*WinPwn.ps1*")

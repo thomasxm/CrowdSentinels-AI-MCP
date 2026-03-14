@@ -1,0 +1,1 @@
+any where (process.executable:"*\\forfiles.exe" or process.pe.original_file_name:"forfiles.exe") and process.command_line like~ ("* -c *", "* /c *", "* –c *", "* —c *", "* ―c *")

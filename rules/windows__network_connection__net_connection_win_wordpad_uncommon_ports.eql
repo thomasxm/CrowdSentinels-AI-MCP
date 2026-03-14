@@ -1,0 +1,1 @@
+any where (network.direction:"true" and process.executable:"*\\wordpad.exe") and (not (destination.port like~ (80, 139, 443, 445, 465, 587, 993, 995)))

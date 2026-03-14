@@ -1,0 +1,1 @@
+any where (process.pe.product:"SQLite" or (process.executable like~ ("*\\sqlite.exe", "*\\sqlite3.exe"))) and (process.command_line like~ ("*cookies.sqlite*", "*places.sqlite*"))

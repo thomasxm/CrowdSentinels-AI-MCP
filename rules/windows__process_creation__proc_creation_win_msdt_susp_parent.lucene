@@ -1,0 +1,1 @@
+(process.parent.executable:(*\\cmd.exe OR *\\cscript.exe OR *\\mshta.exe OR *\\powershell.exe OR *\\pwsh.exe OR *\\regsvr32.exe OR *\\rundll32.exe OR *\\schtasks.exe OR *\\wmic.exe OR *\\wscript.exe OR *\\wsl.exe)) AND (process.executable:*\\msdt.exe OR process.pe.original_file_name:msdt.exe)

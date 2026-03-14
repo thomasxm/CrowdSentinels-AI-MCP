@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and (event.code:"4661" and winlog.event_data.AccessMask:"0x2d" and (winlog.event_data.ObjectType like~ ("SAM_USER", "SAM_GROUP")) and winlog.event_data.ObjectName:"S-1-5-21-*" and (winlog.event_data.ObjectName like~ ("*-500", "*-512")))

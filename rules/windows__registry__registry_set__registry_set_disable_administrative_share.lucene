@@ -1,0 +1,1 @@
+registry.path:*\\Services\\LanmanServer\\Parameters\* AND (registry.path:(*\\AutoShareWks OR *\\AutoShareServer)) AND winlog.event_data.Details:DWORD\ \(0x00000000\)

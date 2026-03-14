@@ -1,0 +1,1 @@
+any where (registry.path:"*\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AeDebug\\Debugger*" and winlog.event_data.Details:"*.dll") and (not winlog.event_data.Details:"\"C:\\WINDOWS\\system32\\vsjitdebugger.exe\" -p %ld -e %ld -j 0x%p")

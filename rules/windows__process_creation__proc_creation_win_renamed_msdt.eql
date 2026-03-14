@@ -1,0 +1,1 @@
+any where process.pe.original_file_name:"msdt.exe" and (not process.executable:"*\\msdt.exe")

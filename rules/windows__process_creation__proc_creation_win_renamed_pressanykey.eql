@@ -1,0 +1,1 @@
+any where process.pe.original_file_name:"Microsoft.NodejsTools.PressAnyKey.exe" and (not process.executable:"*\\Microsoft.NodejsTools.PressAnyKey.exe")

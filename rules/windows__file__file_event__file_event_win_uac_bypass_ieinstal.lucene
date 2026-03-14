@@ -1,0 +1,1 @@
+process.executable:C\:\\Program\ Files\\Internet\ Explorer\\IEInstal.exe AND file.path:C\:\\Users\* AND file.path:*\\AppData\\Local\\Temp\* AND file.path:*consent.exe

@@ -1,0 +1,1 @@
+any where (process.command_line:"* -Inject *" and (process.command_line like~ ("* -PayloadArgs *", "* -PayloadFile *"))) or ((process.command_line like~ ("* approve *", "* create *", "* check *", "* delete *")) and (process.command_line like~ ("* /payload:*", "* /payload=*", "* /updateid:*", "* /updateid=*")))

@@ -1,0 +1,1 @@
+*cat\ \<\/dev\/tcp\/* OR *exec\ 3\<\>\/dev\/tcp\/* OR *echo\ \>\/dev\/tcp\/* OR *bash\ \-i\ \>\&\ \/dev\/tcp\/* OR *sh\ \-i\ \>\&\ \/dev\/udp\/* OR *0\<\&196;exec\ 196\<\>\/dev\/tcp\/* OR *exec\ 5\<\>\/dev\/tcp\/* OR *\(sh\)0\>\/dev\/tcp\/* OR *bash\ \-c\ 'bash\ \-i\ \>\&\ \/dev\/tcp\/* OR *echo\ \-e\ '#\!\/bin\/bash\\nbash\ \-i\ \>\&\ \/dev\/tcp\/*

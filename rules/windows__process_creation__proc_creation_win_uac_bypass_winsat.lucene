@@ -1,0 +1,1 @@
+(winlog.event_data.IntegrityLevel:(High OR System OR S\-1\-16\-16384 OR S\-1\-16\-12288)) AND process.parent.executable:*\\AppData\\Local\\Temp\\system32\\winsat.exe AND process.parent.command_line:*C\:\\Windows\ \\system32\\winsat.exe*

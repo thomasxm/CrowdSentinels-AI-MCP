@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and ((winlog.event_data.SamAccountName:"SAMTHEADMIN-*" and winlog.event_data.SamAccountName:"*$") or (winlog.event_data.TargetUserName:"SAMTHEADMIN-*" and winlog.event_data.TargetUserName:"*$"))

@@ -1,0 +1,1 @@
+any where (process.executable:"*\\explorer.exe" and process.command_line:"*/NOUACCHECK*") and (not (process.parent.command_line:"C:\\Windows\\system32\\svchost.exe -k netsvcs -p -s Schedule" or process.parent.executable:"C:\\Windows\\System32\\svchost.exe"))

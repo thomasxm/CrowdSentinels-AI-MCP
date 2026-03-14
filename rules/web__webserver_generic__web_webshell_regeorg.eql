@@ -1,0 +1,1 @@
+any where (cs-uri-query like~ ("*cmd=read*", "*connect&target*", "*cmd=connect*", "*cmd=disconnect*", "*cmd=forward*")) and ((?cs-referer == null) and (?cs-user-agent == null) and cs-method:"POST")

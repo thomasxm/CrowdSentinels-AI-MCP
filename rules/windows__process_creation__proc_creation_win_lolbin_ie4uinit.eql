@@ -1,0 +1,1 @@
+any where (process.executable:"*\\ie4uinit.exe" or process.pe.original_file_name:"IE4UINIT.EXE") and (not ((process.working_directory like~ ("c:\\windows\\system32\\", "c:\\windows\\sysWOW64\\")) or process.working_directory:"<sigma.types.SigmaNull object at 0x7fc04bf39160>"))

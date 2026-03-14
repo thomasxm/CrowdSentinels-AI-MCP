@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\wab.exe", "*\\wabmig.exe")) and (not (process.executable like~ ("C:\\Windows\\WinSxS\*", "C:\\Program Files\\Windows Mail\*", "C:\\Program Files (x86)\\Windows Mail\*")))

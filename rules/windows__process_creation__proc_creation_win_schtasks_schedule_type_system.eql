@@ -1,0 +1,1 @@
+any where (process.executable:"*\\schtasks.exe" or process.pe.original_file_name:"schtasks.exe") and (process.command_line like~ ("* ONLOGON *", "* ONSTART *", "* ONCE *", "* ONIDLE *")) and (process.command_line like~ ("*NT AUT*", "* SYSTEM*", "*HIGHEST*"))

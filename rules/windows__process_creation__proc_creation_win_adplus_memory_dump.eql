@@ -1,0 +1,1 @@
+any where (process.executable:"*\\adplus.exe" or process.pe.original_file_name:"Adplus.exe") and (process.command_line like~ ("* -hang *", "* -pn *", "* -pmn *", "* -p *", "* -po *", "* -c *", "* -sc *"))

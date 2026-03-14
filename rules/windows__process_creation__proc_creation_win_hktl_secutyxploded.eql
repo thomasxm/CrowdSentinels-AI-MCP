@@ -1,0 +1,1 @@
+any where process.pe.company:"SecurityXploded" or process.executable:"*PasswordDump.exe" or process.pe.original_file_name:"*PasswordDump.exe"

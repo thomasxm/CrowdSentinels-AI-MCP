@@ -1,0 +1,1 @@
+any where (process.pe.original_file_name:"netsh.exe" or process.executable:"*\\netsh.exe") and (process.command_line:"*add*" and process.command_line:"*helper*")

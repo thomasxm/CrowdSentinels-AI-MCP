@@ -1,0 +1,1 @@
+any where file.path:"C:\\Users\*" and file.path:"*\\AppData\\Local\\Temp\\api-ms-win-core-kernel32-legacy-l1.DLL"

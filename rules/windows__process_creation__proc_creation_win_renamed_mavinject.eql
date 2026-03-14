@@ -1,0 +1,1 @@
+any where (process.pe.original_file_name like~ ("mavinject32.exe", "mavinject64.exe")) and (not (process.executable like~ ("*\\mavinject32.exe", "*\\mavinject64.exe")))

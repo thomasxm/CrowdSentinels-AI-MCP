@@ -1,0 +1,1 @@
+((process.executable:*\\schtasks.exe OR process.pe.original_file_name:schtasks.exe) AND process.command_line:*\/Create* AND (process.command_line:(*Get\-ItemProperty* OR *\ gp\ *)) AND (process.command_line:(*HKCU\:* OR *HKLM\:* OR *registry\:\:* OR *HKEY_*))) AND (NOT (process.command_line:(*FromBase64String* OR *encodedcommand*)))

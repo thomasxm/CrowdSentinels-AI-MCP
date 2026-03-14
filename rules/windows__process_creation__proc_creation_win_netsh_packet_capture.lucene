@@ -1,0 +1,1 @@
+(process.executable:*\\netsh.exe OR process.pe.original_file_name:netsh.exe) AND (process.command_line:*trace* AND process.command_line:*start*)

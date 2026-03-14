@@ -1,0 +1,1 @@
+any where process.pe.product:"*Mouse Lock*" or process.pe.company:"*Misc314*" or process.command_line:"*Mouse Lock_*"

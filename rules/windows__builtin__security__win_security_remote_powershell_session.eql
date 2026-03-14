@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and (event.code:"5156" and (destination.port like~ (5985, 5986)) and winlog.event_data.LayerRTID:"44")

@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*Get\-ADDBAccount* AND powershell.file.script_block_text:*BootKey\ * AND powershell.file.script_block_text:*DatabasePath\ *

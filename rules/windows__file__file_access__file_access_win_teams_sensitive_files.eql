@@ -1,0 +1,1 @@
+any where (file.path like~ ("*\\Microsoft\\Teams\\Cookies*", "*\\Microsoft\\Teams\\Local Storage\\leveldb*")) and (not process.executable:"*\\Microsoft\\Teams\\current\\Teams.exe")

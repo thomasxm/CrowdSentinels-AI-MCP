@@ -1,0 +1,1 @@
+(user_agent:*WebDAV* AND method:PUT) AND (NOT (id.resp_h:10.0.0.0\/8 OR id.resp_h:127.0.0.0\/8 OR id.resp_h:172.16.0.0\/12 OR id.resp_h:192.168.0.0\/16 OR id.resp_h:169.254.0.0\/16))

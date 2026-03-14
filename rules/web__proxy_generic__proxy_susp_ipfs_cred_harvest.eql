@@ -1,0 +1,1 @@
+any where cs-uri regex~ "(?i)(ipfs\.io\/|ipfs\.io\s).+\..+@.+\.[a-z]+"

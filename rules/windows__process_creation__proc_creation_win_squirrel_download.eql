@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\squirrel.exe", "*\\update.exe")) and (process.command_line like~ ("* --download *", "* --update *", "* --updateRollback=*")) and process.command_line:"*http*"

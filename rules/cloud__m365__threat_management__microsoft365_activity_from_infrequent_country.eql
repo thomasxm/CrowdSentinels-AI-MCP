@@ -1,0 +1,1 @@
+any where eventSource:"SecurityComplianceCenter" and eventName:"Activity from infrequent country" and status:"success"

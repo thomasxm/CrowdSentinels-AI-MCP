@@ -1,0 +1,1 @@
+any where (registry.path:"*\\SYSTEM\\CurrentControlSet\\Services\\EventLog\*" and registry.path:"*\\File") and (not winlog.event_data.Details:"*\\System32\\Winevt\\Logs\*")

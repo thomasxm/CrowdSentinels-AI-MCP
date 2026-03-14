@@ -1,0 +1,1 @@
+any where registry.path:"*\\System\\CurrentControlSet\\Services\\WinSock2\\Parameters*" and (registry.path like~ ("*\\Protocol_Catalog9\\Catalog_Entries*", "*\\NameSpace_Catalog5\\Catalog_Entries*")) and (not (winlog.event_data.Details:"(Empty)" or process.executable:"C:\\Windows\\System32\\MsiExec.exe" or process.executable:"C:\\Windows\\syswow64\\MsiExec.exe"))

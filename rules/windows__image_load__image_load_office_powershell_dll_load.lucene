@@ -1,0 +1,1 @@
+(process.executable:(*\\excel.exe OR *\\mspub.exe OR *\\outlook.exe OR *\\onenote.exe OR *\\onenoteim.exe OR *\\powerpnt.exe OR *\\winword.exe)) AND (file.path:(*\\System.Management.Automation.Dll* OR *\\System.Management.Automation.ni.Dll*))

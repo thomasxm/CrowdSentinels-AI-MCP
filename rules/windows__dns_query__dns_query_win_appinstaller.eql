@@ -1,0 +1,1 @@
+any where process.executable:"C:\\Program Files\\WindowsApps\\Microsoft.DesktopAppInstaller_*" and process.executable:"*\\AppInstaller.exe"

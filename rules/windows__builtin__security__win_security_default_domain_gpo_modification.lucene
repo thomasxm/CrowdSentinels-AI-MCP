@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:5136 AND winlog.event_data.ObjectClass:groupPolicyContainer AND (winlog.event_data.ObjectDN:(CN\=\{31B2F340\-016D\-11D2\-945F\-00C04FB984F9\},CN\=POLICIES,CN\=SYSTEM* OR CN\=\{6AC1786C\-016F\-11D2\-945F\-00C04FB984F9\},CN\=POLICIES,CN\=SYSTEM*)))

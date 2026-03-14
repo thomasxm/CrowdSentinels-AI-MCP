@@ -1,0 +1,1 @@
+any where (Image:"*/dscacheutil" and (CommandLine:"*-q*" and CommandLine:"*group*")) or (Image:"*/cat" and CommandLine:"*/etc/group*") or (Image:"*/dscl" and (CommandLine:"*-list*" and CommandLine:"*/groups*"))

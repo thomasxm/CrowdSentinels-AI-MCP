@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:5145 AND ((winlog.event_data.RelativeTargetName:(*\\mimidrv* OR *\\lsass* OR *\\windows\\minidump\* OR *\\hiberfil* OR *\\sqldmpr*)) OR (winlog.event_data.RelativeTargetName:(Windows\\NTDS\\ntds.dit OR Windows\\System32\\config\\SAM OR Windows\\System32\\config\\SECURITY OR Windows\\System32\\config\\SYSTEM))))

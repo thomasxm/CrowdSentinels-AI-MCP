@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\powershell.exe", "*\\pwsh.exe")) and file.path:"*.ps1") and (not (file.path:"*__PSScriptPolicyTest_*" or (file.path:"C:\\Users\*" and file.path:"*\\AppData\\Local\\Temp\*") or file.path:"C:\\Windows\\Temp\*"))

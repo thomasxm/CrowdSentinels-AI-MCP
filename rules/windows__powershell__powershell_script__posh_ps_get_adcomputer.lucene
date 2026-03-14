@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*Get\-AdComputer\ * AND (powershell.file.script_block_text:(*\-Filter\ * OR *\-LDAPFilter\ * OR *\-Properties\ *))

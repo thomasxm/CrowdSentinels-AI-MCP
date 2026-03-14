@@ -1,0 +1,1 @@
+any where (process.executable:"*\\winget.exe" or process.pe.original_file_name:"winget.exe") and (process.command_line like~ ("*install*", "* add *")) and (process.command_line like~ ("*-m *", "*--manifest*"))

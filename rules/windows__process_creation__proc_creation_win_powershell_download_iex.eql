@@ -1,0 +1,1 @@
+any where (process.command_line like~ ("*.DownloadString(*", "*.DownloadFile(*", "*Invoke-WebRequest *", "*iwr *", "*Invoke-RestMethod *", "*irm *")) and (process.command_line like~ ("*;iex $*", "*| IEX*", "*|IEX *", "*I`E`X*", "*I`EX*", "*IE`X*", "*iex *", "*IEX (*", "*IEX(*", "*Invoke-Expression*"))

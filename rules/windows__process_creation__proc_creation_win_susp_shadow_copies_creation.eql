@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\powershell.exe", "*\\pwsh.exe", "*\\wmic.exe", "*\\vssadmin.exe")) or (process.pe.original_file_name like~ ("PowerShell.EXE", "pwsh.dll", "wmic.exe", "VSSADMIN.EXE"))) and (process.command_line:"*shadow*" and process.command_line:"*create*")

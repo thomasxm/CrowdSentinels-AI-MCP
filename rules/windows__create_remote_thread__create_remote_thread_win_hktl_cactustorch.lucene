@@ -1,0 +1,1 @@
+(process.executable:(*\\System32\\cscript.exe OR *\\System32\\wscript.exe OR *\\System32\\mshta.exe OR *\\winword.exe OR *\\excel.exe)) AND winlog.event_data.TargetImage:*\\SysWOW64\* AND winlog.event_data.StartModule:\<sigma.types.SigmaNull\ object\ at\ 0x7ff7b2b40ec0\>

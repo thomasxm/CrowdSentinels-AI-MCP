@@ -1,0 +1,1 @@
+any where ((process.executable:"*\\Runner.Worker.exe" or process.pe.original_file_name:"Runner.Worker.dll") and process.command_line:"*spawnclient*") or ((process.executable:"*\\Runner.Listener.exe" or process.pe.original_file_name:"Runner.Listener.dll") and (process.command_line like~ ("*run*", "*configure*")))

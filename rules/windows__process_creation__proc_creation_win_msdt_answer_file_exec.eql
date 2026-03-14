@@ -1,0 +1,1 @@
+any where (process.executable:"*\\msdt.exe" and process.command_line:"*\\WINDOWS\\diagnostics\\index\\PCWDiagnostic.xml*" and process.command_line like~ ("* -af *", "* /af *", "* –af *", "* —af *", "* ―af *")) and (not process.parent.executable:"*\\pcwrun.exe")

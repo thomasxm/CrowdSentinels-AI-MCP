@@ -1,0 +1,1 @@
+any where (winlog.event_data.State:"Stopped" or "Sysmon config state changed") and (not winlog.event_data.State:"Started")

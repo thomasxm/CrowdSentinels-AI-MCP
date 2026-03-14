@@ -1,0 +1,1 @@
+any where (file.path like~ ("*\\secur32.dll", "*\\tdh.dll")) and (not (file.path like~ ("*C:\\$WINDOWS.~BT\*", "*C:\\$WinREAgent\*", "*C:\\Windows\\SoftwareDistribution\*", "*C:\\Windows\\System32\*", "*C:\\Windows\\SysWOW64\*", "*C:\\Windows\\WinSxS\*", "*C:\\Windows\\uus\*")))

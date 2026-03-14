@@ -1,0 +1,1 @@
+(Image:(*\/systemctl OR *\/bash OR *\/sh)) AND (CommandLine:*stop* AND CommandLine:*kesl*)

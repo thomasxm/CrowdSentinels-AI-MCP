@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:4616 AND (NOT (process.executable:C\:\\Windows\\System32\\svchost.exe AND user.id:S\-1\-5\-19)) AND (NOT (process.executable:(C\:\\Program\ Files\\VMware\\VMware\ Tools\\vmtoolsd.exe OR C\:\\Program\ Files\ \(x86\)\\VMware\\VMware\ Tools\\vmtoolsd.exe OR C\:\\Windows\\System32\\VBoxService.exe OR C\:\\Windows\\System32\\oobe\\msoobe.exe))))

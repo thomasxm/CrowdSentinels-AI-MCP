@@ -1,0 +1,1 @@
+any where (process.executable:"*\\RegAsm.exe" or process.pe.original_file_name:"RegAsm.exe") and (process.command_line like~ ("*RegAsm", "*RegAsm.exe", "*RegAsm.exe\"", "*RegAsm.exe'"))

@@ -1,0 +1,1 @@
+any where (process.command_line like~ ("*echo *", "*copy *", "*type *", "*file createnew*")) and (process.command_line like~ ("* C:\\Windows\\System32\\Tasks\*", "* C:\\Windows\\SysWow64\\Tasks\*"))

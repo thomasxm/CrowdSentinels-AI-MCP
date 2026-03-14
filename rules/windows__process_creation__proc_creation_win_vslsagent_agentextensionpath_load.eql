@@ -1,0 +1,1 @@
+any where (process.executable:"*\\vsls-agent.exe" and process.command_line:"*--agentExtensionPath*") and (not process.command_line:"*Microsoft.VisualStudio.LiveShare.Agent.*")

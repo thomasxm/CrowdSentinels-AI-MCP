@@ -1,0 +1,1 @@
+process.executable:*\\aspnet_compiler.exe AND (file.path:*\\Temporary\ ASP.NET\ Files\* AND file.path:*\\assembly\\tmp\* AND file.path:*.dll*)

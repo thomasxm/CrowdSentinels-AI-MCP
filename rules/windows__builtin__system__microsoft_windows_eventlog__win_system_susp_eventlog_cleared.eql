@@ -1,0 +1,1 @@
+any where winlog.channel:"System" and (event.code:"104" and winlog.provider_name:"Microsoft-Windows-Eventlog" and (winlog.channel like~ ("Microsoft-Windows-PowerShell/Operational", "Microsoft-Windows-Sysmon/Operational", "PowerShellCore/Operational", "Security", "System", "Windows PowerShell")))

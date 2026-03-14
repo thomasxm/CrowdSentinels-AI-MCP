@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\PowerTool.exe", "*\\PowerTool64.exe")) or process.pe.original_file_name:"PowerTool.exe"

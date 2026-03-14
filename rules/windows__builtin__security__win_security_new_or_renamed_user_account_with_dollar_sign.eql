@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and (((event.code:"4720" and winlog.event_data.SamAccountName:"*$*") or (event.code:"4781" and winlog.event_data.NewTargetUserName:"*$*")) and (not (event.code:"4720" and winlog.event_data.TargetUserName:"HomeGroupUser$")))

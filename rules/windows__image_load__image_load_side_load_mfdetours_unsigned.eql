@@ -1,0 +1,1 @@
+any where file.path:"*\\mfdetours.dll" and (not (file.path:"*:\\Program Files (x86)\\Windows Kits\\10\\bin\*" and file.code_signature.status:"Valid"))

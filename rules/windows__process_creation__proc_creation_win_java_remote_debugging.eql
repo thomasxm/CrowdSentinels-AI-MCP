@@ -1,0 +1,1 @@
+any where (process.command_line:"*transport=dt_socket,address=*" and (process.command_line like~ ("*jre1.*", "*jdk1.*"))) and (not (process.command_line like~ ("*address=127.0.0.1*", "*address=localhost*")))

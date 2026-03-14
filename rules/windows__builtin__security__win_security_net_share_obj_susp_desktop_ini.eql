@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and (event.code:"5145" and winlog.event_data.ObjectType:"File" and winlog.event_data.RelativeTargetName:"*\\desktop.ini" and (winlog.event_data.AccessList like~ ("*WriteData*", "*DELETE*", "*WriteDAC*", "*AppendData*", "*AddSubdirectory*")))

@@ -1,0 +1,1 @@
+file.path:C\:\\Windows\\Temp\* AND ((file.path:(*\\temp.ps1 OR *\\msol.ps1)) OR (file.path:(SigmaRegularExpression\(regexp\=SigmaString\(\['\\\\\[0\-9a\-f\]\{8\}\-\[0\-9a\-f\]\{4\}\-\[0\-9a\-f\]\{4\}\-\[0\-9a\-f\]\{4\}\-\[0\-9a\-f\]\{12\}\\.txt$'\]\),\ flags\=set\(\)\) OR SigmaRegularExpression\(regexp\=SigmaString\(\['\\\\\[a\-zA\-Z\]\{8\}\\.tmp$'\]\),\ flags\=set\(\)\))))

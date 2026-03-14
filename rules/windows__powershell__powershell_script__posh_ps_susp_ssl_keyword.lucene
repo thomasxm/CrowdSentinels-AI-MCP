@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*System.Net.Security.SslStream* AND powershell.file.script_block_text:*Net.Security.RemoteCertificateValidationCallback* AND powershell.file.script_block_text:*.AuthenticateAsClient*

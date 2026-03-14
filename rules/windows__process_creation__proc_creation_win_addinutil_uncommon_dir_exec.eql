@@ -1,0 +1,1 @@
+any where (process.executable:"*\\addinutil.exe" or process.pe.original_file_name:"AddInUtil.exe") and (not (process.executable like~ ("*:\\Windows\\Microsoft.NET\\Framework\*", "*:\\Windows\\Microsoft.NET\\Framework64\*", "*:\\Windows\\Microsoft.NET\\FrameworkArm\*", "*:\\Windows\\Microsoft.NET\\FrameworkArm64\*", "*:\\Windows\\WinSxS\*")))

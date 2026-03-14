@@ -1,0 +1,1 @@
+any where (type:"execve" and a0:"zip") or (type:"execve" and a0:"gzip" and a1:"-k") or (type:"execve" and a0:"tar" and a1:"*-c*")

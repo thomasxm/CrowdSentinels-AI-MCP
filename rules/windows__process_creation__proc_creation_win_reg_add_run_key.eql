@@ -1,0 +1,1 @@
+any where process.executable:"*\\reg.exe" and (process.command_line:"*reg*" and process.command_line:"* add *") and (process.command_line like~ ("*Software\\Microsoft\\Windows\\CurrentVersion\\Run*", "*\\Software\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run*", "*\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Run*"))

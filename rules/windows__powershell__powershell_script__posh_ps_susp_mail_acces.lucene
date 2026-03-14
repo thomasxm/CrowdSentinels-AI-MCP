@@ -1,0 +1,1 @@
+powershell.file.script_block_text:(*Get\-Inbox.ps1* OR *Microsoft.Office.Interop.Outlook* OR *Microsoft.Office.Interop.Outlook.olDefaultFolders* OR *\-comobject\ outlook.application*)

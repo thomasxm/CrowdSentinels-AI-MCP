@@ -1,0 +1,1 @@
+Image:*\/dscl AND (CommandLine:*\ \-append\ * AND CommandLine:*\ \/Groups\/admin\ * AND CommandLine:*\ GroupMembership\ *)

@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\tree.com", "*\\WMIC.exe", "*\\doskey.exe", "*\\sc.exe")) or (process.pe.original_file_name like~ ("wmic.exe", "DOSKEY.EXE", "sc.exe"))) and (process.parent.command_line like~ ("* > %TEMP%\*", "* > %TMP%\*"))

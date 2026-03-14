@@ -1,0 +1,1 @@
+(process.executable:*\\MSOHTMED.exe OR process.pe.original_file_name:MsoHtmEd.exe) AND (process.command_line:(*ftp\:\/\/* OR *http\:\/\/* OR *https\:\/\/*))

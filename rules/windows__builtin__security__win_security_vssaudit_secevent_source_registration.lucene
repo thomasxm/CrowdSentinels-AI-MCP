@@ -1,0 +1,1 @@
+winlog.channel:Security AND (winlog.event_data.AuditSourceName:VSSAudit AND (event.code:(4904 OR 4905)))

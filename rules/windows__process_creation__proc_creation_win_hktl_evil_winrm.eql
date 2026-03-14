@@ -1,0 +1,1 @@
+any where process.executable:"*\\ruby.exe" and (process.command_line:"*-i *" and process.command_line:"*-u *" and process.command_line:"*-p *")

@@ -1,0 +1,1 @@
+registry.path:*\\System\\CurrentControlSet\\Control\\Session\ Manager* AND (registry.path:(*\\SetupExecute* OR *\\S0InitialCommand* OR *\\KnownDlls* OR *\\Execute* OR *\\BootExecute* OR *\\AppCertDlls*)) AND (NOT winlog.event_data.Details:\(Empty\))

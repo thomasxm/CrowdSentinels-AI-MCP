@@ -1,0 +1,1 @@
+any where (process.executable:"*\\rasautou.exe" or process.pe.original_file_name:"rasdlui.exe") and (process.command_line:"* -d *" and process.command_line:"* -p *")

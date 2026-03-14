@@ -1,0 +1,1 @@
+(Image:(*\/rm OR *\/shred OR *\/unlink)) AND (CommandLine:(*\/var\/log* OR *\/var\/spool\/mail*))

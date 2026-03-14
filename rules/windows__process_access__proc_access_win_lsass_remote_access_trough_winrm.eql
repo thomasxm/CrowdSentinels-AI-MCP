@@ -1,0 +1,1 @@
+any where (winlog.event_data.TargetImage:"*\\lsass.exe" and process.executable:"*:\\Windows\\system32\\wsmprovhost.exe") and (not winlog.event_data.GrantedAccess:"0x80000000")

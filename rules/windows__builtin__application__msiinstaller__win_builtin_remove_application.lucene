@@ -1,0 +1,1 @@
+winlog.channel:Application AND (winlog.provider_name:MsiInstaller AND (event.code:(1034 OR 11724)))

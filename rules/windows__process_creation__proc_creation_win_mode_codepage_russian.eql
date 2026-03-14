@@ -1,0 +1,1 @@
+any where (process.executable:"*\\mode.com" or process.pe.original_file_name:"MODE.COM") and ((process.command_line:"* con *" and process.command_line:"* cp *" and process.command_line:"* select=*") and (process.command_line like~ ("*=1251", "*=866")))

@@ -1,0 +1,1 @@
+file.path:*\\jli.dll AND (NOT ((file.path:(C\:\\Program\ Files\* OR C\:\\Program\ Files\ \(x86\)\*)) AND file.pe.description:OpenJDK\ Platform\ binary AND file.pe.original_file_name:jli.dll AND file.pe.product:OpenJDK\ Platform* AND file.code_signature.signed:true)) AND (NOT file.path:C\:\\eclipse\\plugins\*)

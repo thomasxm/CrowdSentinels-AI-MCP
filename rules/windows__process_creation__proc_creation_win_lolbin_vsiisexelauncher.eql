@@ -1,0 +1,1 @@
+any where (process.executable:"*\\VSIISExeLauncher.exe" or process.pe.original_file_name:"VSIISExeLauncher.exe") and (process.command_line like~ ("* -p *", "* -a *"))

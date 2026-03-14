@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*:\\Windows\\System32\\bash.exe", "*:\\Windows\\SysWOW64\\bash.exe")) or process.pe.original_file_name:"Bash.exe") and process.command_line:"* -c *"

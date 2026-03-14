@@ -1,0 +1,1 @@
+any where (eventName:"CreateInstanceExportTask" and eventSource:"ec2.amazonaws.com") and (not (errorMessage:"*" or errorCode:"*" or responseElements:"*Failure*"))

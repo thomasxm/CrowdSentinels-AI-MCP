@@ -1,0 +1,1 @@
+any where eventSource:"SecurityComplianceCenter" and (Payload:"*New-ComplianceSearchAction*" and Payload:"*Export*" and Payload:"*pst*")

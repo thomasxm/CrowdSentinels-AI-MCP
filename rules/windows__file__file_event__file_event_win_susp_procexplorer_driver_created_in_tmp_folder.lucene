@@ -1,0 +1,1 @@
+(file.path:*\\AppData\\Local\\Temp\* AND file.path:*PROCEXP152.sys) AND (NOT (process.executable:(*\\procexp64.exe* OR *\\procexp.exe* OR *\\procmon64.exe* OR *\\procmon.exe*)))

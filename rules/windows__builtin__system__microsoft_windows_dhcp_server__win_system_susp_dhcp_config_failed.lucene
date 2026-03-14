@@ -1,0 +1,1 @@
+winlog.channel:System AND ((event.code:(1031 OR 1032 OR 1034)) AND winlog.provider_name:Microsoft\-Windows\-DHCP\-Server)

@@ -1,0 +1,1 @@
+registry.path:*\\BFE\\Parameters\\Policy\\Persistent\\Filter\* AND (NOT (process.executable:(C\:\\Windows\\System32\\svchost.exe OR C\:\\Windows\\SysWOW64\\svchost.exe)))

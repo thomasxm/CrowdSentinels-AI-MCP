@@ -1,0 +1,1 @@
+(type:EXECVE AND a0:arecord AND a1:\-vv AND a2:\-fdat) OR (type:SYSCALL AND exe:*\/ecasound AND SYSCALL:memfd_create)

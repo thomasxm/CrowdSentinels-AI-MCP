@@ -1,0 +1,1 @@
+any where (type:"PATH" and (name like~ ("/etc/pam.d/system-auth", "/etc/pam.d/password-auth"))) or (type like~ ("TTY", "USER_TTY"))

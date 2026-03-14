@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-Windows\ Defender\/Operational AND ((event.code:(3002 OR 3007)) AND (NOT (winlog.event_data.Feature_Name:%%886 AND (winlog.event_data.Reason:(%%892 OR %%858)))))

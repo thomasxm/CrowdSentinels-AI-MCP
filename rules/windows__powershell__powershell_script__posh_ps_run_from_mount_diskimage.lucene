@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*Mount\-DiskImage\ * AND powershell.file.script_block_text:*\-ImagePath\ * AND powershell.file.script_block_text:*Get\-Volume* AND powershell.file.script_block_text:*.DriveLetter* AND powershell.file.script_block_text:*invoke\-item\ * AND powershell.file.script_block_text:*\)\:\*

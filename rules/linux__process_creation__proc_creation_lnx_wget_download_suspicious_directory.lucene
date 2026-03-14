@@ -1,0 +1,1 @@
+Image:*\/wget AND (CommandLine:/\s-O\s/ OR CommandLine:*\-\-output\-document*) AND CommandLine:*\/tmp\/*

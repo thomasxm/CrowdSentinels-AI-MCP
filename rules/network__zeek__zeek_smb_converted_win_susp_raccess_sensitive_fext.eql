@@ -1,0 +1,1 @@
+any where name like~ ("*.pst", "*.ost", "*.msg", "*.nst", "*.oab", "*.edb", "*.nsf", "*.bak", "*.dmp", "*.kirbi", "*.rdp")

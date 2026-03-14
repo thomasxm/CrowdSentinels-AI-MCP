@@ -1,0 +1,1 @@
+(Image:*\/perl AND CommandLine:*\ \-e\ *) AND ((CommandLine:*fdopen\(* AND CommandLine:*\:\:Socket\:\:INET*) OR (CommandLine:*Socket* AND CommandLine:*connect* AND CommandLine:*open* AND CommandLine:*exec*))

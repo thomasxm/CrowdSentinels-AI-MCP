@@ -1,0 +1,1 @@
+any where winlog.channel:"Microsoft-Windows-AppXDeploymentServer/Operational" and (event.code like~ ("441", "442", "453", "454"))

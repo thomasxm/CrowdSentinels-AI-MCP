@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*Set\-Mailbox\ * AND powershell.file.script_block_text:*\ \-DeliverToMailboxAndForward\ * AND powershell.file.script_block_text:*\ \-ForwardingSmtpAddress\ *

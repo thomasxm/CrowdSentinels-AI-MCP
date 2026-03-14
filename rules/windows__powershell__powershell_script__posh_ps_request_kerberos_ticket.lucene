@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*System.IdentityModel.Tokens.KerberosRequestorSecurityToken* AND powershell.file.script_block_text:*.GetRequest\(\)*

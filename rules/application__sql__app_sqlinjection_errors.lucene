@@ -1,0 +1,1 @@
+*quoted\ string\ not\ properly\ terminated* OR *You\ have\ an\ error\ in\ your\ SQL\ syntax* OR *Unclosed\ quotation\ mark* OR *near\ \"*\"\:\ syntax\ error* OR *SELECTs\ to\ the\ left\ and\ right\ of\ UNION\ do\ not\ have\ the\ same\ number\ of\ result\ columns*

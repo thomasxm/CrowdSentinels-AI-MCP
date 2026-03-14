@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\addinutil.exe" and (not (process.executable like~ ("*:\\Windows\\System32\\conhost.exe", "*:\\Windows\\System32\\werfault.exe", "*:\\Windows\\SysWOW64\\werfault.exe")))

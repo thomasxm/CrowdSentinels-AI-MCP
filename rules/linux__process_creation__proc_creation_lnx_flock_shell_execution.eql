@@ -1,0 +1,1 @@
+any where (Image:"*/flock" and CommandLine:"* -u *") and (CommandLine like~ ("*/bin/bash*", "*/bin/dash*", "*/bin/fish*", "*/bin/sh*", "*/bin/zsh*"))

@@ -1,0 +1,1 @@
+any where file.path like~ ("*\\Microsoft.PowerShell_profile.ps1", "*\\PowerShell\\profile.ps1", "*\\Program Files\\PowerShell\\7-preview\\profile.ps1", "*\\Program Files\\PowerShell\\7\\profile.ps1", "*\\Windows\\System32\\WindowsPowerShell\\v1.0\\profile.ps1", "*\\WindowsPowerShell\\profile.ps1")

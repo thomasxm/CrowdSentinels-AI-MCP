@@ -1,0 +1,1 @@
+file.path:*\\mscorsvc.dll AND (NOT (file.path:(C\:\\Windows\\Microsoft.NET\\Framework\* OR C\:\\Windows\\Microsoft.NET\\Framework64\* OR C\:\\Windows\\Microsoft.NET\\FrameworkArm\* OR C\:\\Windows\\Microsoft.NET\\FrameworkArm64\* OR C\:\\Windows\\WinSxS\*)))

@@ -1,0 +1,1 @@
+(ParentImage:(*\/package_script_service OR *\/installer)) AND (Image:(*\/sh OR *\/bash OR *\/dash OR *\/python OR *\/ruby OR *\/perl OR *\/php OR *\/javascript OR *\/osascript OR *\/tclsh OR *\/curl OR *\/wget)) AND (CommandLine:(*preinstall* OR *postinstall*))

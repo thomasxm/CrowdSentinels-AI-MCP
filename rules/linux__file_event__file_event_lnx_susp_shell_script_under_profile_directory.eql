@@ -1,0 +1,1 @@
+any where TargetFilename:"*/etc/profile.d/*" and (TargetFilename like~ ("*.csh", "*.sh"))

@@ -1,0 +1,1 @@
+file.path:*\\libvlc.dll AND (NOT (file.path:(C\:\\Program\ Files\ \(x86\)\\VideoLAN\\VLC\* OR C\:\\Program\ Files\\VideoLAN\\VLC\*)))

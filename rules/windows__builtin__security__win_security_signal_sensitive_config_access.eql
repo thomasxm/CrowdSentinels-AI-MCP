@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and ((event.code:"4663" and winlog.event_data.ObjectType:"File" and winlog.event_data.ObjectName:"*\\AppData\\Roaming\\Signal\*" and (winlog.event_data.ObjectName like~ ("*\\config.json", "*\\db.sqlite"))) and (not (process.executable like~ ("*\\signal-portable.exe", "*\\signal.exe"))))

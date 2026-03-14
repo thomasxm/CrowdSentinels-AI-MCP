@@ -1,0 +1,1 @@
+any where (process.executable:"*\\wbadmin.exe" or process.pe.original_file_name:"WBADMIN.EXE") and ((process.command_line:"* recovery*" and process.command_line:"*recoveryTarget*" and process.command_line:"*itemtype:File*") and (process.command_line like~ ("*\\config\\SAM*", "*\\config\\SECURITY*", "*\\config\\SYSTEM*", "*\\Windows\\NTDS\\NTDS.dit*")))

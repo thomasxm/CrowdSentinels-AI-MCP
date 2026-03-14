@@ -1,0 +1,1 @@
+record_type:TXT AND (answer:(*IEX* OR *Invoke\-Expression* OR *cmd.exe*))

@@ -1,0 +1,1 @@
+any where Image:"*/wget" and (TargetFilename like~ ("/tmp/*", "/var/tmp/*"))

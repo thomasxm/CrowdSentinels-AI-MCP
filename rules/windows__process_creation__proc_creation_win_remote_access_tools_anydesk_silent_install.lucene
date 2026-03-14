@@ -1,0 +1,1 @@
+process.command_line:*\-\-install* AND process.command_line:*\-\-start\-with\-win* AND process.command_line:*\-\-silent*

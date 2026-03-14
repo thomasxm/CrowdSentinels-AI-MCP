@@ -1,0 +1,1 @@
+any where ((ParentImage like~ ("*/rsync", "*/rsyncd")) and (Image like~ ("*/ash", "*/bash", "*/csh", "*/dash", "*/ksh", "*/sh", "*/tcsh", "*/zsh"))) and (not CommandLine:"* -e *")

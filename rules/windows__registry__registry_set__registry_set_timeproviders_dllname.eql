@@ -1,0 +1,1 @@
+any where (registry.path:"*\\Services\\W32Time\\TimeProviders*" and registry.path:"*\\DllName") and (not (winlog.event_data.Details like~ ("%SystemRoot%\\System32\\vmictimeprovider.dll", "%systemroot%\\system32\\w32time.dll", "C:\\Windows\\SYSTEM32\\w32time.DLL")))

@@ -1,0 +1,1 @@
+any where "%24%7B%28%23a%3D%40" or "${(#a=@" or "%24%7B%40java" or "${@java" or "u0022java" or "%2F%24%7B%23" or "/${#" or "new+java." or "getRuntime().exec(" or "getRuntime%28%29.exec%28"

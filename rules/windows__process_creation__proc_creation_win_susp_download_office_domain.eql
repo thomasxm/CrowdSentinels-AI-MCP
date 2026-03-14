@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\curl.exe", "*\\wget.exe")) or (process.command_line like~ ("*Invoke-WebRequest*", "*iwr *", "*curl *", "*wget *", "*Start-BitsTransfer*", "*.DownloadFile(*", "*.DownloadString(*"))) and (process.command_line like~ ("*https://attachment.outlook.live.net/owa/*", "*https://onenoteonlinesync.onenote.com/onenoteonlinesync/*"))

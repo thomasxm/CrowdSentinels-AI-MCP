@@ -1,0 +1,1 @@
+any where registry.path:"*InprocServer32\\(Default)" and winlog.event_data.Details:"C:\\WINDOWS\\system32\\scrobj.dll"

@@ -1,0 +1,1 @@
+(powershell.file.script_block_text:*New\-Object* AND powershell.file.script_block_text:*System.Xml.XmlDocument* AND powershell.file.script_block_text:*.Load*) AND (powershell.file.script_block_text:(*IEX\ * OR *Invoke\-Expression\ * OR *Invoke\-Command\ * OR *ICM\ \-*))

@@ -1,0 +1,1 @@
+Image:*\/PlistBuddy AND (CommandLine:*RunAtLoad* AND CommandLine:*true*) AND (CommandLine:(*LaunchAgents* OR *LaunchDaemons*))

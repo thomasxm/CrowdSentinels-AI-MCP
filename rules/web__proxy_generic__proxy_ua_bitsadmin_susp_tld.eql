@@ -1,0 +1,1 @@
+any where c-useragent:"Microsoft BITS/*" and (not (cs-host like~ ("*.com", "*.net", "*.org", "*.scdn.co", "*.sfx.ms")))

@@ -1,0 +1,1 @@
+any where (file.path:"*\\RjvPlatform.dll" and process.executable:"\\SystemResetPlatform.exe") and (not process.executable:"C:\\Windows\\System32\\SystemResetPlatform\*")

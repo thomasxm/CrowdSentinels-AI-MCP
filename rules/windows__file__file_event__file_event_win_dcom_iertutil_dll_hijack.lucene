@@ -1,0 +1,1 @@
+process.executable:System AND file.path:*\\Internet\ Explorer\\iertutil.dll

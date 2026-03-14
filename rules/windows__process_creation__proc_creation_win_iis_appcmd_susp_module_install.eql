@@ -1,0 +1,1 @@
+any where ((process.executable:"*\\appcmd.exe" or process.pe.original_file_name:"appcmd.exe") and ((process.command_line:"*install*" and process.command_line:"*module*") and process.command_line like~ ("*-name:*", "*/name:*", "*–name:*", "*—name:*", "*―name:*"))) and (not process.parent.executable:"C:\\Windows\\System32\\inetsrv\\iissetup.exe")

@@ -1,0 +1,1 @@
+registry.path:*\\Services\\HybridConnectionManager* OR (winlog.event_data.EventType:SetValue AND winlog.event_data.Details:*Microsoft.HybridConnectionManager.Listener.exe*)

@@ -1,0 +1,1 @@
+(destination.domain:(*.localto.net OR *.localtonet.com)) AND network.direction:true

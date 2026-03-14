@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\sqlps.exe" or ((process.executable:"*\\sqlps.exe" or process.pe.original_file_name:"sqlps.exe") and (not process.parent.executable:"*\\sqlagent.exe"))

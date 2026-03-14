@@ -1,0 +1,1 @@
+any where (Image:"*/truncate" and CommandLine:"*-s +*") or (Image:"*/dd" and (CommandLine like~ ("*if=/dev/zero*", "*if=/dev/random*", "*if=/dev/urandom*")))

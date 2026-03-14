@@ -1,0 +1,1 @@
+any where Status:"Success" and (not Location:"*<Countries you DO operate out of e,g GB, use OR for multiple>*")

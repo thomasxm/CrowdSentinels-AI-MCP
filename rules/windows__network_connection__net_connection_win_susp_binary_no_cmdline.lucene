@@ -1,0 +1,1 @@
+(network.direction:true AND (process.executable:(*\\regsvr32.exe OR *\\rundll32.exe OR *\\dllhost.exe)) AND (winlog.event_data.CommandLine:(*\\regsvr32.exe OR *\\rundll32.exe OR *\\dllhost.exe))) AND (NOT (winlog.event_data.CommandLine:("" OR \<sigma.types.SigmaNull\ object\ at\ 0x7f79561e1160\>)))

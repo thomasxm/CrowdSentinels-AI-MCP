@@ -1,0 +1,1 @@
+any where winlog.channel:"Windows PowerShell" and (winlog.event_data.Data like~ ("*Compress-Archive -Path*-DestinationPath $env:TEMP*", "*Compress-Archive -Path*-DestinationPath*\\AppData\\Local\\Temp\*", "*Compress-Archive -Path*-DestinationPath*:\\Windows\\Temp\*"))

@@ -1,0 +1,1 @@
+any where ((process.executable:"*\\attrib.exe" or process.pe.original_file_name:"ATTRIB.EXE") and process.command_line:"* +h *") and (not process.command_line:"*\\desktop.ini *") and (not (process.parent.executable:"*\\cmd.exe" and process.command_line:"+R +H +S +A \\*.cui" and process.parent.command_line:"C:\\WINDOWS\\system32\\*.bat"))

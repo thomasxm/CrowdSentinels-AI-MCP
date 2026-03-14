@@ -1,0 +1,1 @@
+winlog.channel:Security AND ((event.code:(4656 OR 4663)) AND winlog.event_data.ObjectType:key AND (winlog.event_data.ObjectName:(*lsa\\JD OR *lsa\\GBG OR *lsa\\Skew1 OR *lsa\\Data)))

@@ -1,0 +1,1 @@
+any where (user_agent:"*WebDAV*" and method:"PUT") and (not (cidrMatch(id.resp_h, "10.0.0.0/8") or cidrMatch(id.resp_h, "127.0.0.0/8") or cidrMatch(id.resp_h, "172.16.0.0/12") or cidrMatch(id.resp_h, "192.168.0.0/16") or cidrMatch(id.resp_h, "169.254.0.0/16")))

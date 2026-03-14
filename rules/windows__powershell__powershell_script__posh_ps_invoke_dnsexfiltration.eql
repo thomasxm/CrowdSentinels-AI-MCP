@@ -1,0 +1,1 @@
+any where powershell.file.script_block_text:"*Invoke-DNSExfiltrator*" or (powershell.file.script_block_text:"* -i *" and powershell.file.script_block_text:"* -d *" and powershell.file.script_block_text:"* -p *" and powershell.file.script_block_text:"* -doh *" and powershell.file.script_block_text:"* -t *")

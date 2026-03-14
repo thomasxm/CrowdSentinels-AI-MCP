@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*\[Ref\].Assembly.GetType* AND powershell.file.script_block_text:*SetValue\($null,$true\)* AND powershell.file.script_block_text:*NonPublic,Static*

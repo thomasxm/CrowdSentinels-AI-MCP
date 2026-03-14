@@ -1,0 +1,1 @@
+(Image:*\/dscl AND CommandLine:*create*) OR (Image:*\/sysadminctl AND CommandLine:*addUser*)

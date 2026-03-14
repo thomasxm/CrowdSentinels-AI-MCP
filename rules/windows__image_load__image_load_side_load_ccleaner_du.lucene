@@ -1,0 +1,1 @@
+file.path:*\\CCleanerDU.dll AND (NOT ((process.executable:(C\:\\Program\ Files\\CCleaner\* OR C\:\\Program\ Files\ \(x86\)\\CCleaner\*)) AND (process.executable:(*\\CCleaner.exe OR *\\CCleaner64.exe))))

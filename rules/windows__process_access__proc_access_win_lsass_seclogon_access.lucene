@@ -1,0 +1,1 @@
+winlog.event_data.TargetImage:*\\lsass.exe AND process.executable:*\\svchost.exe AND winlog.event_data.GrantedAccess:0x14c0 AND winlog.event_data.CallTrace:*seclogon.dll*

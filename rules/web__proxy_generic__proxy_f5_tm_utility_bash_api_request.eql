@@ -1,0 +1,1 @@
+any where cs-method:"POST" and c-uri:"*/mgmt/tm/util/bash"

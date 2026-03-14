@@ -1,0 +1,1 @@
+((registry.path:*\\Control\\Print\\Environments\\Windows\ x64\\Drivers* AND registry.path:*\\Manufacturer*) AND winlog.event_data.Details:\(Empty\)) AND (NOT (registry.path:*\\CutePDF\ Writer\ v4.0\* OR (registry.path:(*\\VNC\ Printer\ \(PS\)\* OR *\\VNC\ Printer\ \(UD\)\*)) OR registry.path:*\\Version\-3\\PDF24\*))

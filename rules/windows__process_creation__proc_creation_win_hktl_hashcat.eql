@@ -1,0 +1,1 @@
+any where process.executable:"*\\hashcat.exe" or (process.command_line:"*-a *" and process.command_line:"*-m 1000 *" and process.command_line:"*-r *")

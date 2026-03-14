@@ -1,0 +1,1 @@
+(Image:*\/esxcli AND CommandLine:*system*) AND (CommandLine:(*\ get* OR *\ list*))

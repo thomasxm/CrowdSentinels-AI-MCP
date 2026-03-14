@@ -1,0 +1,1 @@
+powershell.file.script_block_text:(*\-Properties*TrustedForDelegation* OR *\-Properties*TrustedToAuthForDelegation* OR *\-Properties*msDS\-AllowedToDelegateTo* OR *\-Properties*PrincipalsAllowedToDelegateToAccount* OR *\-LDAPFilter*\(userAccountControl\:1.2.840.113556.1.4.803\:\=524288\)*)

@@ -1,0 +1,1 @@
+any where powershell.file.script_block_text:"*[Windows.Input.Keyboard]::IsKeyDown([System.Windows.Input.Key]::*"

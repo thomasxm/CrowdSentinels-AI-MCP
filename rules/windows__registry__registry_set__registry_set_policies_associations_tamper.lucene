@@ -1,0 +1,1 @@
+registry.path:*\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Associations\* AND ((registry.path:*\\DefaultFileTypeRisk AND winlog.event_data.Details:DWORD\ \(0x00006152\)) OR (registry.path:*\\LowRiskFileTypes AND (winlog.event_data.Details:(*.zip;* OR *.rar;* OR *.exe;* OR *.bat;* OR *.com;* OR *.cmd;* OR *.reg;* OR *.msi;* OR *.htm;* OR *.html;*))))

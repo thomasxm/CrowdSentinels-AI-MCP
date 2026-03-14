@@ -1,0 +1,1 @@
+(process.executable:*\\gup.exe AND file.path:*\\libcurl.dll) AND (NOT process.executable:*\\Notepad\+\+\\updater\\GUP.exe)

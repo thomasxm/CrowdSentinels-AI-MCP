@@ -1,0 +1,1 @@
+any where (process.executable:"*\\certutil.exe" or process.pe.original_file_name:"CertUtil.exe") and process.command_line like~ ("*-addstore*", "*/addstore*", "*–addstore*", "*—addstore*", "*―addstore*") and process.command_line:"*root*"

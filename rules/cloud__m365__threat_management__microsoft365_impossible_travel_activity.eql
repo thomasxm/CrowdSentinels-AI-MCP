@@ -1,0 +1,1 @@
+any where eventSource:"SecurityComplianceCenter" and eventName:"Impossible travel activity" and status:"success"

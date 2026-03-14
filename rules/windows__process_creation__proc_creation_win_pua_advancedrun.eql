@@ -1,0 +1,1 @@
+any where process.pe.original_file_name:"AdvancedRun.exe" or (process.command_line:"* /EXEFilename *" and process.command_line:"* /Run*") or (process.command_line:"* /WindowState 0*" and process.command_line:"* /RunAs *" and process.command_line:"* /CommandLine *")

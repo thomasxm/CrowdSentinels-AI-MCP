@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*Get\-ADUser* AND powershell.file.script_block_text:*\-Filter* AND powershell.file.script_block_text:*useraccountcontrol* AND powershell.file.script_block_text:*\-band* AND powershell.file.script_block_text:*4194304*

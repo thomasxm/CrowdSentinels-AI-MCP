@@ -1,0 +1,1 @@
+any where registry.path:"*\\CurrentControlSet\\Control\\Session Manager\\PendingFileRenameOperations*" and (process.executable:"*\\Users\\Public\*" or (process.executable like~ ("*\\reg.exe", "*\\regedit.exe")))

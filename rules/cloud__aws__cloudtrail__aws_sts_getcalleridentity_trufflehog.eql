@@ -1,0 +1,1 @@
+any where eventSource:"sts.amazonaws.com" and eventName:"GetCallerIdentity" and userAgent:"*TruffleHog*"

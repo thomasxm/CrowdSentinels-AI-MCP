@@ -1,0 +1,1 @@
+any where registry.path:"*\\SOFTWARE\\MICROSOFT\\.NETFramework\\Security\\TrustManager\\PromptingLevel\*" and (registry.path like~ ("*\\Internet", "*\\LocalIntranet", "*\\MyComputer", "*\\TrustedSites", "*\\UntrustedSites")) and winlog.event_data.Details:"Enabled"

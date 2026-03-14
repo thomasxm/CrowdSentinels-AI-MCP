@@ -1,0 +1,1 @@
+any where ParentCommandLine:"bash -i" and ((CommandLine like~ ("*-c import *", "*base64*", "*pty.spawn*")) or (Image like~ ("*whoami", "*iptables", "*/ncat", "*/nc", "*/netcat")))

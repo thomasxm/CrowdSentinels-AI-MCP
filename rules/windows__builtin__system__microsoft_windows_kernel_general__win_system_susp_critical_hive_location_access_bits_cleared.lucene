@@ -1,0 +1,1 @@
+winlog.channel:System AND (event.code:16 AND winlog.provider_name:Microsoft\-Windows\-Kernel\-General AND (winlog.event_data.HiveName:(*\\Temp\\SAM* OR *\\Temp\\SECURITY*)))

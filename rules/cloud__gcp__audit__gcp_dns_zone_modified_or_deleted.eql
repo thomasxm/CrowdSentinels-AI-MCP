@@ -1,0 +1,1 @@
+any where gcp.audit.method_name like~ ("Dns.ManagedZones.Delete", "Dns.ManagedZones.Update", "Dns.ManagedZones.Patch")

@@ -1,0 +1,1 @@
+any where (process.executable:"*\\fsutil.exe" or process.pe.original_file_name:"fsutil.exe") and process.command_line:"*drives*"

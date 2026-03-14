@@ -1,0 +1,1 @@
+any where file.path like~ ("*\\AppData\\Local\\Microsoft\\Cache134.dat", "*\\AppData\\Local\\Microsoft\\ExplorerSync.db")

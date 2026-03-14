@@ -1,0 +1,1 @@
+(process.parent.executable:(*\\powershell.exe OR *\\pwsh.exe)) AND (process.executable:(*\\powershell.exe OR *\\pwsh.exe)) AND (process.command_line:*Get\-Content* AND process.command_line:*\-Stream*)

@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and ((event.code like~ ("5441", "5447")) and winlog.event_data.FilterName:"*Custom Outbound Filter*")

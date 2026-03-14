@@ -1,0 +1,1 @@
+process.executable:*\\3proxy.exe OR process.pe.description:3proxy\ \-\ tiny\ proxy\ server OR process.command_line:*.exe\ \-i127.0.0.1\ \-p*

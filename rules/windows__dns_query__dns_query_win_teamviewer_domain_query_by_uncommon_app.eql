@@ -1,0 +1,1 @@
+any where (dns.question.name like~ ("taf.teamviewer.com", "udp.ping.teamviewer.com")) and (not process.executable:"*TeamViewer*")

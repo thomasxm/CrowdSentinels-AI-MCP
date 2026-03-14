@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\msra.exe" and process.parent.command_line:"*msra.exe" and (process.executable like~ ("*\\arp.exe", "*\\cmd.exe", "*\\net.exe", "*\\netstat.exe", "*\\nslookup.exe", "*\\route.exe", "*\\schtasks.exe", "*\\whoami.exe"))

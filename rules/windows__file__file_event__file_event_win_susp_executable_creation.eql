@@ -1,0 +1,1 @@
+any where file.path like~ ("*:\\$Recycle.Bin.exe", "*:\\Documents and Settings.exe", "*:\\MSOCache.exe", "*:\\PerfLogs.exe", "*:\\Recovery.exe", "*.bat.exe", "*.sys.exe")

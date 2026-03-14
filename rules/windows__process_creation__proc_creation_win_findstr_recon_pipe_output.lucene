@@ -1,0 +1,1 @@
+(process.command_line:(*ipconfig*\|*find* OR *net*\|*find* OR *netstat*\|*find* OR *ping*\|*find* OR *systeminfo*\|*find* OR *tasklist*\|*find* OR *whoami*\|*find*)) AND (NOT (process.command_line:*cmd.exe\ \/c\ TASKLIST\ \/V\ \|* AND process.command_line:*FIND\ \/I* AND process.command_line:*\\xampp\* AND process.command_line:*\\catalina_start.bat*))

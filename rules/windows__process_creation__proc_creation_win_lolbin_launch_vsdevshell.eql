@@ -1,0 +1,1 @@
+any where process.command_line:"*Launch-VsDevShell.ps1*" and (process.command_line like~ ("*VsWherePath *", "*VsInstallationPath *"))

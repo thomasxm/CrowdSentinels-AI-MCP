@@ -1,0 +1,1 @@
+(TargetFilename:*\/etc\/emond.d\/rules\/* AND TargetFilename:*.plist) OR TargetFilename:*\/private\/var\/db\/emondClients\/*

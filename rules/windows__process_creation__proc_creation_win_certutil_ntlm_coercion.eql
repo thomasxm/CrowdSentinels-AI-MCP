@@ -1,0 +1,1 @@
+any where (process.executable:"*\\certutil.exe" or process.pe.original_file_name:"CertUtil.exe") and (process.command_line:"* -syncwithWU *" and process.command_line:"* \\*")

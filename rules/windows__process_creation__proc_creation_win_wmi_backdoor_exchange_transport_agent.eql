@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\EdgeTransport.exe" and (not (process.executable:"C:\\Windows\\System32\\conhost.exe" or (process.executable:"C:\\Program Files\\Microsoft\\Exchange Server\*" and process.executable:"*\\Bin\\OleConverter.exe")))

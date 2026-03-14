@@ -1,0 +1,1 @@
+(registry.path:*SOFTWARE\\Microsoft\\.NETFramework\\ETWEnabled AND winlog.event_data.Details:DWORD\ \(0x00000000\)) OR ((registry.path:(*\\COMPlus_ETWEnabled OR *\\COMPlus_ETWFlags)) AND (winlog.event_data.Details:(0 OR DWORD\ \(0x00000000\))))

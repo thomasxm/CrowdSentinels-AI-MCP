@@ -1,0 +1,1 @@
+any where file.path like~ ("*:\\Windows \\System32\*", "*:\\Windows \\SysWOW64\*")

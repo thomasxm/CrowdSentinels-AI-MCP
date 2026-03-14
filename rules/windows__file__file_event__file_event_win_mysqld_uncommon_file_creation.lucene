@@ -1,0 +1,1 @@
+(process.executable:(*\\mysqld.exe OR *\\mysqld\-nt.exe)) AND (file.path:(*.bat OR *.dat OR *.dll OR *.exe OR *.ps1 OR *.psm1 OR *.vbe OR *.vbs))

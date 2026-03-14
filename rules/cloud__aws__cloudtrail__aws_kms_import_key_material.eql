@@ -1,0 +1,1 @@
+any where eventSource:"kms.amazonaws.com" and (eventName like~ ("ImportKeyMaterial", "DeleteImportedKeyMaterial"))

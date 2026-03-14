@@ -1,0 +1,1 @@
+winlog.channel:System AND ((winlog.provider_name:Service\ Control\ Manager AND event.code:7045) AND (winlog.event_data.ImagePath:(SigmaRegularExpression\(regexp\=SigmaString\(\['\^\[Cc\]\:\\\\\[Pp\]rogram\[Dd\]ata\\\\.\{1,9\}\\.exe'\]\),\ flags\=set\(\)\) OR SigmaRegularExpression\(regexp\=SigmaString\(\['\^\[Cc\]\:\\\\.\{1,9\}\\.exe'\]\),\ flags\=set\(\)\))))

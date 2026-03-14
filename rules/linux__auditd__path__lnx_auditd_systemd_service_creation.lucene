@@ -1,0 +1,1 @@
+(type:PATH AND nametype:CREATE) AND ((name:(\/usr\/lib\/systemd\/system\/* OR \/etc\/systemd\/system\/*)) OR name:*\/.config\/systemd\/user\/*)

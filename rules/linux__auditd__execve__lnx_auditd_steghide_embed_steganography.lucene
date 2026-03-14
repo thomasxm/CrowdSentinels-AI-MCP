@@ -1,0 +1,1 @@
+type:EXECVE AND a0:steghide AND a1:embed AND (a2:(\-cf OR \-ef)) AND (a4:(\-cf OR \-ef))

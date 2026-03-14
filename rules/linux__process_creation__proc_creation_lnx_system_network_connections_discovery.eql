@@ -1,0 +1,1 @@
+any where (Image like~ ("*/who", "*/w", "*/last", "*/lsof", "*/netstat")) and (not (ParentCommandLine:"*/usr/bin/landscape-sysinfo*" and Image:"*/who"))

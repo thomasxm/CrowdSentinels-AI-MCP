@@ -1,0 +1,1 @@
+objectRef.apiGroup:batch AND (objectRef.resource:(cronjobs OR jobs)) AND (verb:(create OR delete OR patch OR replace OR update))

@@ -1,0 +1,1 @@
+any where (process.parent.executable like~ ("*\\java.exe", "*\\javaw.exe")) and process.parent.command_line:"*SysAidServer*"

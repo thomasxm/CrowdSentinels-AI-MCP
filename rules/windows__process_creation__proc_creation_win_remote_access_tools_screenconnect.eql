@@ -1,0 +1,1 @@
+any where process.pe.description:"ScreenConnect Service" or process.pe.product:"ScreenConnect" or process.pe.company:"ScreenConnect Software"

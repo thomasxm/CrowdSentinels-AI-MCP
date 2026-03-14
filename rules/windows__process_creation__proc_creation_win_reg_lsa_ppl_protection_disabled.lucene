@@ -1,0 +1,1 @@
+(process.executable:*\\reg.exe OR process.pe.original_file_name:reg.exe) AND (process.command_line:*SYSTEM\\CurrentControlSet\\Control\\Lsa* AND (process.command_line:*\ add\ * AND process.command_line:*\ \/d\ 0* AND process.command_line:*\ \/v\ RunAsPPL\ *))

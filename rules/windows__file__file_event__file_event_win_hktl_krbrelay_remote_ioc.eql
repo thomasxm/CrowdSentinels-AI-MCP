@@ -1,0 +1,1 @@
+any where file.path like~ ("*:\\windows\\temp\\sam.tmp", "*:\\windows\\temp\\sec.tmp", "*:\\windows\\temp\\sys.tmp")

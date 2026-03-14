@@ -1,0 +1,1 @@
+any where "ln -s -f /etc/passwd" or "ln -s /etc/passwd"

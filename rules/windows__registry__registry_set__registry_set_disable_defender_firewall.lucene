@@ -1,0 +1,1 @@
+registry.path:*\\Services\\SharedAccess\\Parameters\\FirewallPolicy\* AND registry.path:*\\EnableFirewall AND winlog.event_data.Details:DWORD\ \(0x00000000\)

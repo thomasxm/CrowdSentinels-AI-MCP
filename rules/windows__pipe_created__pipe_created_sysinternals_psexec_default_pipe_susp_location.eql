@@ -1,0 +1,1 @@
+any where file.name:"\\PSEXESVC" and (process.executable like~ ("*:\\Users\\Public\*", "*:\\Windows\\Temp\*", "*\\AppData\\Local\\Temp\*", "*\\Desktop\*", "*\\Downloads\*"))

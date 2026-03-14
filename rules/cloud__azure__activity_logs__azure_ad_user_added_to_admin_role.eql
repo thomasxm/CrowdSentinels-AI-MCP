@@ -1,0 +1,1 @@
+any where Operation:"Add member to role." and Workload:"AzureActiveDirectory" and (ModifiedProperties{}.NewValue like~ ("*Admins", "*Administrator"))

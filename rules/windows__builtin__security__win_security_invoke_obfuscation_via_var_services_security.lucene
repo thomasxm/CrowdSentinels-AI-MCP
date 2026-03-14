@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:4697 AND (winlog.event_data.ServiceFileName:*\&\&set* AND winlog.event_data.ServiceFileName:*cmd* AND winlog.event_data.ServiceFileName:*\/c* AND winlog.event_data.ServiceFileName:*\-f*) AND (winlog.event_data.ServiceFileName:(*\{0\}* OR *\{1\}* OR *\{2\}* OR *\{3\}* OR *\{4\}* OR *\{5\}*)))

@@ -1,0 +1,1 @@
+process.executable:*\\outlook.exe AND file.path:*\\outlvba.dll

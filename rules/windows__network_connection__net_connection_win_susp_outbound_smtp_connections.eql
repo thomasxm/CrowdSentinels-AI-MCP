@@ -1,0 +1,1 @@
+any where ((destination.port like~ (25, 587, 465, 2525)) and network.direction:"true") and (not ((process.executable like~ ("*\\thunderbird.exe", "*\\outlook.exe")) or process.executable:"C:\\Program Files\\Microsoft\\Exchange Server\*" or (process.executable:"C:\\Program Files\\WindowsApps\\microsoft.windowscommunicationsapps_*" and process.executable:"*\\HxTsr.exe")))

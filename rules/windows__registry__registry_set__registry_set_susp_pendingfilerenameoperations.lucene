@@ -1,0 +1,1 @@
+registry.path:*\\CurrentControlSet\\Control\\Session\ Manager\\PendingFileRenameOperations* AND (process.executable:*\\Users\\Public\* OR (process.executable:(*\\reg.exe OR *\\regedit.exe)))

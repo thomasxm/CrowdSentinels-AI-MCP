@@ -1,0 +1,1 @@
+any where c-uri:"*/checkupdate.php*" and (c-uri-query:"*lng=*" and c-uri-query:"*ver=*" and c-uri-query:"*beta=*" and c-uri-query:"*type=*" and c-uri-query:"*rmode=*" and c-uri-query:"*product=*")

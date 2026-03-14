@@ -1,0 +1,1 @@
+any where process.command_line:"*copy *" and process.command_line:"*/y *" and process.command_line:"*C:\\windows\\system32\\cmd.exe C:\\windows\\system32\\sethc.exe*"

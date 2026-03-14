@@ -1,0 +1,1 @@
+any where process.parent.executable:"C:\\Windows\\explorer.exe" and process.executable:"C:\\Windows\\System32\\cmd.exe" and (process.command_line:"*powershell*" and process.command_line:"*.lnk*")

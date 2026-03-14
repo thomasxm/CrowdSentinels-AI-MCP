@@ -1,0 +1,1 @@
+any where (process.parent.executable:"*\\explorer.exe" or process.parent.command_line:"*.lnk*") and ((process.command_line like~ ("*                 *", "*\\u0009*", "*\\u000A*", "*\\u0011*", "*\\u0012*", "*\\u0013*", "*\\u000B*", "*\\u000C*", "*\\u000D*")) or process.command_line:"SigmaRegularExpression(regexp=SigmaString(['\\n\\n\\n\\n\\n\\n']), flags=set())")

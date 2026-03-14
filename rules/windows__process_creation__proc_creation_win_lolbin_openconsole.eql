@@ -1,0 +1,1 @@
+any where (process.pe.original_file_name:"OpenConsole.exe" or process.executable:"*\\OpenConsole.exe") and (not process.executable:"C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal*")

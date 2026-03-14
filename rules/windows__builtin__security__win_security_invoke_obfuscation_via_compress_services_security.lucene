@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:4697 AND (winlog.event_data.ServiceFileName:*new\-object* AND winlog.event_data.ServiceFileName:*text.encoding\]\:\:ascii* AND winlog.event_data.ServiceFileName:*readtoend*) AND (winlog.event_data.ServiceFileName:(*system.io.compression.deflatestream* OR *system.io.streamreader*)))

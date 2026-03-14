@@ -1,0 +1,1 @@
+process.parent.executable:*\\eventvwr.exe AND (NOT (process.executable:(*\:\\Windows\\System32\\mmc.exe OR *\:\\Windows\\System32\\WerFault.exe OR *\:\\Windows\\SysWOW64\\WerFault.exe)))

@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*Clear\-History* OR ((powershell.file.script_block_text:(*Remove\-Item* OR *rm*)) AND (powershell.file.script_block_text:(*ConsoleHost_history.txt* OR *\(Get\-PSReadlineOption\).HistorySavePath*)))

@@ -1,0 +1,1 @@
+any where powershell.file.script_block_text:"*Install-WindowsFeature WindowsPowerShellWebAccess*" or powershell.file.script_block_text:"*Install-PswaWebApplication*" or (powershell.file.script_block_text:"*Add-PswaAuthorizationRule*" and powershell.file.script_block_text:"*-UserName *" and powershell.file.script_block_text:"*-ComputerName *")

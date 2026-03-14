@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and (((event.code like~ ("4625", "4776")) and ((winlog.event_data.Status like~ ("0xC0000072", "0xC000006F", "0xC0000070", "0xC0000413", "0xC000018C", "0xC000015B")) or (winlog.event_data.SubStatus like~ ("0xC0000072", "0xC000006F", "0xC0000070", "0xC0000413", "0xC000018C", "0xC000015B")))) and (not user.id:"S-1-0-0"))

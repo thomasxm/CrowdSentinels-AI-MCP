@@ -1,0 +1,1 @@
+any where auditType.category:"Auditing" and auditType.action:"Audit log configuration updated"

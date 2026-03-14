@@ -1,0 +1,1 @@
+(registry.path:(HKLM\\System\\CurrentControlSet\\Services\\NalDrv\\ImagePath OR HKLM\\System\\CurrentControlSet\\Services\\PROCEXP152\\ImagePath)) AND (NOT ((process.executable:(*\\procexp64.exe OR *\\procexp.exe OR *\\procmon64.exe OR *\\procmon.exe OR *\\handle.exe OR *\\handle64.exe)) AND winlog.event_data.Details:*\\WINDOWS\\system32\\Drivers\\PROCEXP152.SYS*))

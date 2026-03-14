@@ -1,0 +1,1 @@
+any where process.executable:"*\\chisel.exe" or ((process.command_line like~ ("*exe client *", "*exe server *")) and (process.command_line like~ ("*-socks5*", "*-reverse*", "* r:*", "*:127.0.0.1:*", "*-tls-skip-verify *", "*:socks*")))

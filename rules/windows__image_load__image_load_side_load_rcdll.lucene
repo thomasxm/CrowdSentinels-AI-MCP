@@ -1,0 +1,1 @@
+file.path:*\\rcdll.dll AND (NOT (file.path:(C\:\\Program\ Files\ \(x86\)\\Microsoft\ Visual\ Studio\* OR C\:\\Program\ Files\ \(x86\)\\Windows\ Kits\*)))

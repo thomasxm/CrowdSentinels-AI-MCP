@@ -1,0 +1,1 @@
+type:EXECVE AND ((*truncate* AND *\-s*) OR ((*dd* AND *if\=*) AND (NOT *of\=*)))

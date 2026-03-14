@@ -1,0 +1,1 @@
+(Image:\/usr\/bin\/file AND CommandLine:/(.){200,}/) OR (Image:\/bin\/ls AND CommandLine:*\-R*) OR Image:\/usr\/bin\/find OR Image:\/usr\/bin\/mdfind OR Image:\/tree

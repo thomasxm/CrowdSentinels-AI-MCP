@@ -1,0 +1,1 @@
+any where (properties.message like~ ("Add user", "Delete user")) and Status:"Success"

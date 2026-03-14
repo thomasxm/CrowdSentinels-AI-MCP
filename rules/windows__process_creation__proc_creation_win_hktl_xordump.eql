@@ -1,0 +1,1 @@
+any where process.executable:"*\\xordump.exe" or (process.command_line like~ ("* -process lsass.exe *", "* -m comsvcs *", "* -m dbghelp *", "* -m dbgcore *"))

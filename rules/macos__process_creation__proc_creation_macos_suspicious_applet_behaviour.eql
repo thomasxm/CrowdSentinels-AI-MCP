@@ -1,0 +1,1 @@
+any where (ParentImage like~ ("*/applet", "*/osascript")) and CommandLine:"*osacompile*"

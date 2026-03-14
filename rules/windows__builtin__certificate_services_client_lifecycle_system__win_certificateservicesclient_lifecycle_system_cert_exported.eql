@@ -1,0 +1,1 @@
+any where winlog.channel:"Microsoft-Windows-CertificateServicesClient-Lifecycle-System/Operational" and event.code:"1007"

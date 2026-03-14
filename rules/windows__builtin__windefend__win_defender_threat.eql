@@ -1,0 +1,1 @@
+any where winlog.channel:"Microsoft-Windows-Windows Defender/Operational" and (event.code like~ ("1006", "1015", "1116", "1117"))

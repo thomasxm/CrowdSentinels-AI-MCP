@@ -1,0 +1,1 @@
+(powershell.file.script_block_text:*Set\-NetFirewallProfile\ * AND powershell.file.script_block_text:*\ \-Enabled\ * AND powershell.file.script_block_text:*\ False*) AND (powershell.file.script_block_text:(*\ \-All\ * OR *Public* OR *Domain* OR *Private*))

@@ -1,0 +1,1 @@
+any where (process.executable:"*\\node.exe" and (process.command_line like~ ("* -e *", "* --eval *"))) and (process.command_line:"*.exec(*" and process.command_line:"*net.socket*" and process.command_line:"*.connect*" and process.command_line:"*child_process*")

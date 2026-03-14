@@ -1,0 +1,1 @@
+(registry.path:*\\SOFTWARE\\Microsoft\\Windows\ NT\\CurrentVersion\\AppCompatFlags\\InstalledSDB\* AND registry.path:*\\DatabasePath*) AND (NOT winlog.event_data.Details:*\:\\Windows\\AppPatch\\Custom*)

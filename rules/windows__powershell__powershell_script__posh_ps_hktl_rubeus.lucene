@@ -1,0 +1,1 @@
+powershell.file.script_block_text:(*asreproast\ * OR *dump\ \/service\:krbtgt\ * OR *dump\ \/luid\:0x* OR *kerberoast\ * OR *createnetonly\ \/program\:* OR *ptt\ \/ticket\:* OR *\/impersonateuser\:* OR *renew\ \/ticket\:* OR *asktgt\ \/user\:* OR *harvest\ \/interval\:* OR *s4u\ \/user\:* OR *s4u\ \/ticket\:* OR *hash\ \/password\:* OR *golden\ \/aes256\:* OR *silver\ \/user\:*)

@@ -1,0 +1,1 @@
+any where (process.executable:"*\\sdbinst.exe" or process.pe.original_file_name:"sdbinst.exe") and (not (process.command_line:"*.sdb*" or ((process.command_line like~ ("* -c", "* -f", "* -mm", "* -t")) or process.command_line:"* -m -bg*") or process.command_line:"<sigma.types.SigmaNull object at 0x7f67f3571010>" or process.command_line==""))

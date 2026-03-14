@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*New\-MailboxExportRequest* AND powershell.file.script_block_text:*\ \-Mailbox\ * AND powershell.file.script_block_text:*\ \-FilePath\ \\*

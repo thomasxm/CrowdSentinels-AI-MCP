@@ -1,0 +1,1 @@
+any where eventtype like~ ("application.lifecycle.update", "application.lifecycle.delete")

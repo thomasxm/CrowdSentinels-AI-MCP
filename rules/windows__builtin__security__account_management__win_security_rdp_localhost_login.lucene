@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:4624 AND winlog.event_data.LogonType:10 AND (source.ip:(\:\:1 OR 127.0.0.1)))

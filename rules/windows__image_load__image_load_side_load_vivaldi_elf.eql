@@ -1,0 +1,1 @@
+any where file.path:"*\\vivaldi_elf.dll" and (not (process.executable:"*\\Vivaldi\\Application\\vivaldi.exe" and file.path:"*\\Vivaldi\\Application\*"))

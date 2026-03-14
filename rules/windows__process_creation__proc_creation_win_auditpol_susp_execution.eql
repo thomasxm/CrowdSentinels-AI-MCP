@@ -1,0 +1,1 @@
+any where (process.executable:"*\\auditpol.exe" or process.pe.original_file_name:"AUDITPOL.EXE") and (process.command_line like~ ("*disable*", "*clear*", "*remove*", "*restore*"))

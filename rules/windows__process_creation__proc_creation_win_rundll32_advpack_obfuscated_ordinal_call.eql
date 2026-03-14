@@ -1,0 +1,1 @@
+any where (process.executable:"*\\rundll32.exe" or process.pe.original_file_name:"RUNDLL32.EXE" or process.command_line:"*rundll32*") and process.command_line:"*advpack*" and ((process.command_line:"*#+*" and process.command_line:"*12*") or process.command_line:"*#-*")

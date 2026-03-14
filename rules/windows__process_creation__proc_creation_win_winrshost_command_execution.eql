@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\winrshost.exe" and (not process.executable:"C:\\Windows\\System32\\conhost.exe")

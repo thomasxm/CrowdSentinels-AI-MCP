@@ -1,0 +1,1 @@
+any where (process.command_line like~ ("*-i*", "*/install*", "*-a*", "*/add-driver*", "*.inf*")) and process.executable:"*\\pnputil.exe"

@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\dotnet.exe", "*\\w3wp.exe", "*\\java.exe")) and (file.path like~ ("*\\apache*", "*\\tomcat*")) and file.path:"*\\webapps\\ROOT\*" and file.path:"*.jsp"

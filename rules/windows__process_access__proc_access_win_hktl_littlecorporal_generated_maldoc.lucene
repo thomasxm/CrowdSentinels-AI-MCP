@@ -1,0 +1,1 @@
+process.executable:*\\winword.exe AND (winlog.event_data.CallTrace:*\:\\Windows\\Microsoft.NET\\Framework64\\v2.* AND winlog.event_data.CallTrace:*UNKNOWN*)

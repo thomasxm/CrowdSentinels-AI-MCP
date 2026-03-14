@@ -1,0 +1,1 @@
+(registry.path:(*\\Sophos\ Endpoint\ Defense\\TamperProtection\\Config\\SAVEnabled* OR *\\Sophos\ Endpoint\ Defense\\TamperProtection\\Config\\SEDEnabled* OR *\\Sophos\\SAVService\\TamperProtection\\Enabled*)) AND winlog.event_data.Details:DWORD\ \(0x00000000\)

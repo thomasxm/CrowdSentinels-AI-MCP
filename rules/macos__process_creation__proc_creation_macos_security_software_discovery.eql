@@ -1,0 +1,1 @@
+any where Image:"/usr/bin/grep" and ((CommandLine like~ ("*nessusd*", "*santad*", "*CbDefense*", "*falcond*", "*td-agent*", "*packetbeat*", "*filebeat*", "*auditbeat*", "*osqueryd*", "*BlockBlock*", "*LuLu*")) or (CommandLine:"*Little*" and CommandLine:"*Snitch*"))

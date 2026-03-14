@@ -1,0 +1,1 @@
+file.path:*\\JSESPR.dll AND (NOT file.path:C\:\\Program\ Files\\Common\ Files\\Justsystem\\JsSchHlp\*)

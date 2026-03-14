@@ -1,0 +1,1 @@
+type:PATH AND (name:(\/etc\/audit\/* OR \/etc\/libaudit.conf OR \/etc\/audisp\/*))

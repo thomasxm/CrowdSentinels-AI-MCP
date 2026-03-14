@@ -1,0 +1,1 @@
+(Image:(*\/firewall\-cmd OR *\/ufw OR *\/iptables OR *\/netstat OR *\/ss OR *\/ip OR *\/ifconfig OR *\/systemd\-resolve OR *\/route)) OR CommandLine:*\/etc\/resolv.conf*

@@ -1,0 +1,1 @@
+any where properties.message like~ ("Device no longer compliant", "Device no longer managed")

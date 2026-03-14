@@ -1,0 +1,1 @@
+any where (Image like~ ("*awk", "*/cat", "*grep", "*/head", "*/less", "*/more", "*/nl", "*/tail")) and (CommandLine:"*/proc/2/*" or (CommandLine:"*/proc/*" and (CommandLine like~ ("*/cgroup", "*/sched"))))

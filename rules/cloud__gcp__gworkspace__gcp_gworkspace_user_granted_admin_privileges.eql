@@ -1,0 +1,1 @@
+any where eventService:"admin.googleapis.com" and (eventName like~ ("GRANT_DELEGATED_ADMIN_PRIVILEGES", "GRANT_ADMIN_PRIVILEGE"))

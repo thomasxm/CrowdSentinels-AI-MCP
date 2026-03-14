@@ -1,0 +1,1 @@
+any where (TargetFilename like~ ("/Library/StartupItems/*", "/System/Library/StartupItems*")) and TargetFilename:"*.plist"

@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\powershell.exe", "*\\pwsh.exe")) and process.command_line:"SigmaRegularExpression(regexp=SigmaString(['\\s-\\s', <SpecialChars.WILDCARD_MULTI: 1>, '<']), flags=set())"

@@ -1,0 +1,1 @@
+file.path:*\\EACore.dll AND (NOT ((process.executable:*C\:\\Program\ Files\\Electronic\ Arts\\EA\ Desktop\* AND process.executable:*\\EACoreServer.exe*) AND file.path:C\:\\Program\ Files\\Electronic\ Arts\\EA\ Desktop\*))

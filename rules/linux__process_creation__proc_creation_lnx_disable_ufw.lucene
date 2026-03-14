@@ -1,0 +1,1 @@
+(CommandLine:*\-ufw\-init* AND CommandLine:*force\-stop*) OR (CommandLine:*ufw* AND CommandLine:*disable*)

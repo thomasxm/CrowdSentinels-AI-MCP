@@ -1,0 +1,1 @@
+(process.parent.command_line:*\:\\Windows\\TEMP\\ScreenConnect\* AND process.parent.command_line:*run.cmd*) AND (process.executable:(*\\bitsadmin.exe OR *\\cmd.exe OR *\\curl.exe OR *\\dllhost.exe OR *\\net.exe OR *\\nltest.exe OR *\\powershell.exe OR *\\pwsh.exe OR *\\rundll32.exe OR *\\wevtutil.exe))

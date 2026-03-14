@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\powershell.exe", "*\\pwsh.exe")) or (process.pe.original_file_name like~ ("PowerShell.EXE", "pwsh.dll"))) and process.command_line:"* -e*" and (process.command_line like~ ("*SQBuAHYAbwBrAGUALQ*", "*kAbgB2AG8AawBlAC0A*", "*JAG4AdgBvAGsAZQAtA*", "*SW52b2tlL*", "*ludm9rZS*", "*JbnZva2Ut*"))

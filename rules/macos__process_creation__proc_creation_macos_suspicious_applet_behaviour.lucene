@@ -1,0 +1,1 @@
+(ParentImage:(*\/applet OR *\/osascript)) AND CommandLine:*osacompile*

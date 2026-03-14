@@ -1,0 +1,1 @@
+any where type:"EXECVE" and a0:"steghide" and a1:"embed" and (a2 like~ ("-cf", "-ef")) and (a4 like~ ("-cf", "-ef"))

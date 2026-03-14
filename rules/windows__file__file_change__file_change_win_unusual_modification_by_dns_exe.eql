@@ -1,0 +1,1 @@
+any where process.executable:"*\\dns.exe" and (not file.path:"*\\dns.log")

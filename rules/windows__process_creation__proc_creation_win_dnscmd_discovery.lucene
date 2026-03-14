@@ -1,0 +1,1 @@
+process.executable:*\\dnscmd.exe AND (process.command_line:(*\/enumrecords* OR *\/enumzones* OR *\/ZonePrint* OR *\/info*))

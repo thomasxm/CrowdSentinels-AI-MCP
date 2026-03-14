@@ -1,0 +1,1 @@
+any where process.executable:"*\\SepRemovalToolNative_x64.exe" or (process.executable:"*\\CATClean.exe" and process.command_line:"*--uninstall*") or (process.executable:"*\\NetInstaller.exe" and process.command_line:"*-r*") or (process.executable:"*\\WFPUnins.exe" and (process.command_line:"*/uninstall*" and process.command_line:"*/enterprise*"))

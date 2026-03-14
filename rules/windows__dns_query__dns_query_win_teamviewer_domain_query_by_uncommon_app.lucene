@@ -1,0 +1,1 @@
+(dns.question.name:(taf.teamviewer.com OR udp.ping.teamviewer.com)) AND (NOT process.executable:*TeamViewer*)

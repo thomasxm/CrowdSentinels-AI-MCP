@@ -1,0 +1,1 @@
+(registry.path:*\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\HideFileExt AND winlog.event_data.Details:DWORD\ \(0x00000001\)) OR (registry.path:*\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\Hidden AND winlog.event_data.Details:DWORD\ \(0x00000002\))

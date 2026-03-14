@@ -1,0 +1,1 @@
+any where process.executable:"*\\sftp.exe" and (process.command_line like~ ("* -D ..*", "* -D C:\*"))

@@ -1,0 +1,1 @@
+process.executable:*\:\\Windows\\SysWOW64\* AND winlog.event_data.GrantedAccess:0x1fffff AND winlog.event_data.CallTrace:UNKNOWN\(0000000000000000\)\|UNKNOWN\(0000000000000000\)\|*

@@ -1,0 +1,1 @@
+(registry.path:*\\SOFTWARE\\Microsoft\\Windows\ NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\* AND registry.path:*Index*) AND winlog.event_data.Details:DWORD\ \(0x00000000\)

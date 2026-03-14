@@ -1,0 +1,1 @@
+any where ParentImage:"*/Script Editor" and ((Image like~ ("*/curl", "*/bash", "*/sh", "*/zsh", "*/dash", "*/fish", "*/osascript", "*/mktemp", "*/chmod", "*/php", "*/nohup", "*/openssl", "*/plutil", "*/PlistBuddy", "*/xattr", "*/sqlite", "*/funzip", "*/popen")) or (Image like~ ("*python*", "*perl*")))

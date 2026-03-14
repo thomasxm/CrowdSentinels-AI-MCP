@@ -1,0 +1,1 @@
+process.command_line:*\\System\\CurrentControlSet\\Services\* AND process.command_line:*\\NetworkProvider*

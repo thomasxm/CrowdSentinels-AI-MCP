@@ -1,0 +1,1 @@
+any where Image:"*/dsenableroot" and (not CommandLine:"* -d *")

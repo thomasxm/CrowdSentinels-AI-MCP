@@ -1,0 +1,1 @@
+any where type:"EXECVE" and ("grep" and "password")

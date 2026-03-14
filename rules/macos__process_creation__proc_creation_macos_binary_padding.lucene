@@ -1,0 +1,1 @@
+(Image:*\/truncate AND CommandLine:*\-s\ \+*) OR (Image:*\/dd AND (CommandLine:(*if\=\/dev\/zero* OR *if\=\/dev\/random* OR *if\=\/dev\/urandom*)))

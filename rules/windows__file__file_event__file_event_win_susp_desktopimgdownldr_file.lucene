@@ -1,0 +1,1 @@
+(process.executable:*\\svchost.exe AND file.path:*\\Personalization\\LockScreenImage\*) AND (NOT file.path:*C\:\\Windows\*) AND (NOT (file.path:(*.jpg* OR *.jpeg* OR *.png*)))

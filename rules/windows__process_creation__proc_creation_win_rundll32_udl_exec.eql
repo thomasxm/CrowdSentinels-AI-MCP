@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\explorer.exe" and (process.executable:"*\\rundll32.exe" or process.pe.original_file_name:"RUNDLL32.EXE") and ((process.command_line:"*oledb32.dll*" and process.command_line:"*,OpenDSLFile *" and process.command_line:"*\\Users\*\\Downloads\*") and process.command_line:"*.udl")

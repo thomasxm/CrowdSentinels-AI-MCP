@@ -1,0 +1,1 @@
+any where process.pe.original_file_name:"BrowserCore.exe" and (not process.executable:"*\\BrowserCore.exe")

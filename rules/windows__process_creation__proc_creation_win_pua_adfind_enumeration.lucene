@@ -1,0 +1,1 @@
+(process.command_line:(*lockoutduration* OR *lockoutthreshold* OR *lockoutobservationwindow* OR *maxpwdage* OR *minpwdage* OR *minpwdlength* OR *pwdhistorylength* OR *pwdproperties*)) OR process.command_line:*\-sc\ admincountdmp* OR process.command_line:*\-sc\ exchaddresses*

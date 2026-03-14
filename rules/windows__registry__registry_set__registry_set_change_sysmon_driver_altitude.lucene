@@ -1,0 +1,1 @@
+registry.path:*\\Services\* AND registry.path:*\\Instances\\Sysmon\ Instance\\Altitude

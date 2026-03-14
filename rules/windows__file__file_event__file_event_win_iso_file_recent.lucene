@@ -1,0 +1,1 @@
+(file.path:(*.iso.lnk OR *.img.lnk OR *.vhd.lnk OR *.vhdx.lnk)) AND file.path:*\\Microsoft\\Windows\\Recent\*

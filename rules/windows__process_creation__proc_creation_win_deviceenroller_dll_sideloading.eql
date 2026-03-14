@@ -1,0 +1,1 @@
+any where (process.executable:"*\\deviceenroller.exe" or process.pe.original_file_name:"deviceenroller.exe") and process.command_line:"*/PhoneDeepLink*"

@@ -1,0 +1,1 @@
+(process.parent.executable:*\\explorer.exe OR process.parent.command_line:*.lnk*) AND ((process.command_line:(*\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ * OR *\\u0009* OR *\\u000A* OR *\\u0011* OR *\\u0012* OR *\\u0013* OR *\\u000B* OR *\\u000C* OR *\\u000D*)) OR process.command_line:SigmaRegularExpression\(regexp\=SigmaString\(\['\\n\\n\\n\\n\\n\\n'\]\),\ flags\=set\(\)\))

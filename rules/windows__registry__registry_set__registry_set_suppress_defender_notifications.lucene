@@ -1,0 +1,1 @@
+registry.path:*SOFTWARE\\Policies\\Microsoft\\Windows\ Defender\\UX\ Configuration\\Notification_Suppress AND winlog.event_data.Details:DWORD\ \(0x00000001\)

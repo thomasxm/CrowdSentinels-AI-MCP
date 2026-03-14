@@ -1,0 +1,1 @@
+EventLog:RPCFW AND EventID:3 AND (InterfaceUuid:(12345678\-1234\-abcd\-ef00\-0123456789ab OR 76f03f96\-cdfd\-44fc\-a22c\-64950a001209 OR 0b6edbfa\-4a24\-4fc6\-8a23\-942b1eca65d1 OR ae33069b\-a2a8\-46ee\-a235\-ddfd339be281))

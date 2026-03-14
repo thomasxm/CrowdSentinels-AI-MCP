@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-SmbClient\/Security AND (event.code:31017 AND winlog.event_data.UserName:"" AND winlog.event_data.ServerName:\\1*)

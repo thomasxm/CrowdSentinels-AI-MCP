@@ -1,0 +1,1 @@
+any where process.executable:"*\\replace.exe" and process.command_line like~ ("*-a*", "*/a*", "*–a*", "*—a*", "*―a*")

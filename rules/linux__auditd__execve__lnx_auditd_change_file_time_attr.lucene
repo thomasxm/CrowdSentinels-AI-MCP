@@ -1,0 +1,1 @@
+type:EXECVE AND *touch* AND (*\-t* OR *\-acmr* OR *\-d* OR *\-r*)

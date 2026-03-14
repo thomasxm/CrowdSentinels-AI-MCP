@@ -1,0 +1,1 @@
+any where (process.command_line like~ ("*VBoxRT.dll,RTR3Init*", "*VBoxC.dll*", "*VBoxDrv.sys*")) or (process.command_line like~ ("*startvm*", "*controlvm*"))

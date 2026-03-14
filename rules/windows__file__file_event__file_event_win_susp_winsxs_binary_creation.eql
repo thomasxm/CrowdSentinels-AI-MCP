@@ -1,0 +1,1 @@
+any where (file.path:"C:\\Windows\\WinSxS\*" and file.path:"*.exe") and (not (process.executable like~ ("C:\\Windows\\Systems32\*", "C:\\Windows\\SysWOW64\*", "C:\\Windows\\WinSxS\*")))

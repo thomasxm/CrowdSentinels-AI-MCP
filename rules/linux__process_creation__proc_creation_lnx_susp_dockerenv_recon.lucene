@@ -1,0 +1,1 @@
+(Image:(*\/cat OR *\/dir OR *\/find OR *\/ls OR *\/stat OR *\/test OR *grep)) AND CommandLine:*.dockerenv

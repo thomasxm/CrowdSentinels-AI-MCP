@@ -1,0 +1,1 @@
+ParentCommandLine:bash\ \-i AND ((CommandLine:(*\-c\ import\ * OR *base64* OR *pty.spawn*)) OR (Image:(*whoami OR *iptables OR *\/ncat OR *\/nc OR *\/netcat)))

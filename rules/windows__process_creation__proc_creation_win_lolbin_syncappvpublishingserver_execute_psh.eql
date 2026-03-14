@@ -1,0 +1,1 @@
+any where (process.executable:"*\\SyncAppvPublishingServer.exe" or process.pe.original_file_name:"syncappvpublishingserver.exe") and process.command_line:"*\"n; *"

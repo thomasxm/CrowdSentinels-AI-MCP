@@ -1,0 +1,1 @@
+type:EXECVE AND a0:steghide AND a1:extract AND a2:\-sf AND (a3:(*.jpg OR *.png))

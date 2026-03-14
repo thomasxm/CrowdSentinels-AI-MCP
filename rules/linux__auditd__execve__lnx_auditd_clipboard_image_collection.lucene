@@ -1,0 +1,1 @@
+type:EXECVE AND a0:xclip AND (a1:(\-selection OR \-sel)) AND (a2:(clipboard OR clip)) AND a3:\-t AND a4:image\/* AND a5:\-o

@@ -1,0 +1,1 @@
+any where process.executable:"*\\GUP.exe" and (not ((process.executable like~ ("*\\Program Files\\Notepad++\\updater\\GUP.exe", "*\\Program Files (x86)\\Notepad++\\updater\\GUP.exe")) or (process.executable:"*\\Users\*" and (process.executable like~ ("*\\AppData\\Local\\Notepad++\\updater\\GUP.exe", "*\\AppData\\Roaming\\Notepad++\\updater\\GUP.exe")))))

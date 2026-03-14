@@ -1,0 +1,1 @@
+any where process.executable:"*\\TacticalAgent\\tacticalrmm.exe*" and (process.command_line:"*--api*" and process.command_line:"*--auth*" and process.command_line:"*--client-id*" and process.command_line:"*--site-id*" and process.command_line:"*--agent-type*")

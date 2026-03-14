@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and ((event.code:"4768" and winlog.event_data.TargetUserName:"*$" and winlog.event_data.CertThumbprint:"*") and (not (source.ip=="::1" or winlog.event_data.CertThumbprint=="")))

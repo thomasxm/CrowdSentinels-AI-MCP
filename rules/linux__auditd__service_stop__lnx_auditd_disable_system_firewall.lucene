@@ -1,0 +1,1 @@
+type:SERVICE_STOP AND (unit:(firewalld OR iptables OR ufw))

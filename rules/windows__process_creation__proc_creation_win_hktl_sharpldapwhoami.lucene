@@ -1,0 +1,1 @@
+process.executable:*\\SharpLdapWhoami.exe OR (process.pe.original_file_name:*SharpLdapWhoami* OR process.pe.product:SharpLdapWhoami) OR (process.command_line:(*\ \/method\:ntlm OR *\ \/method\:kerb OR *\ \/method\:nego OR *\ \/m\:nego OR *\ \/m\:ntlm OR *\ \/m\:kerb))

@@ -1,0 +1,1 @@
+any where winlog.event_data.TargetImage:"*\\lsass.exe" and process.executable:"*\\rundll32.exe" and winlog.event_data.CallTrace:"*comsvcs.dll*"

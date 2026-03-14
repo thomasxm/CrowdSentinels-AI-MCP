@@ -1,0 +1,1 @@
+any where eventService:"admin.googleapis.com" and (eventName like~ ("DELETE_ROLE", "RENAME_ROLE", "UPDATE_ROLE"))

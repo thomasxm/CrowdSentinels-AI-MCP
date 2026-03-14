@@ -1,0 +1,1 @@
+any where (registry.path like~ ("*\\Control\\SecurityProviders\\SCHANNEL\\Protocols\\TLS 1.0\*", "*\\Control\\SecurityProviders\\SCHANNEL\\Protocols\\TLS 1.1\*")) and registry.path:"*\\Enabled" and winlog.event_data.Details:"DWORD (0x00000001)"

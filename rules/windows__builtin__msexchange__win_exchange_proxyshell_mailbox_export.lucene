@@ -1,0 +1,1 @@
+winlog.channel:MSExchange\ Management AND (((*New\-MailboxExportRequest* AND *\ \-Mailbox\ *) AND (*\-FilePath\ \"\\* OR *.aspx*)) OR (*New\-ManagementRoleAssignment* AND *\ \-Role\ \"Mailbox\ Import\ Export\"* AND *\ \-User\ *))

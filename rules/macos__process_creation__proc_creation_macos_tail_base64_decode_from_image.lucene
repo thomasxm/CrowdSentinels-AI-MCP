@@ -1,0 +1,1 @@
+Image:*\/bash AND (CommandLine:*tail* AND CommandLine:*\-c*) AND (CommandLine:*base64* AND CommandLine:*\-d* AND CommandLine:*\>*) AND (CommandLine:(*.avif* OR *.gif* OR *.jfif* OR *.jpeg* OR *.jpg* OR *.pjp* OR *.pjpeg* OR *.png* OR *.svg* OR *.webp*))

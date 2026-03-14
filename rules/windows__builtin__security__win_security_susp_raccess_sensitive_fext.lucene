@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:5145 AND (winlog.event_data.RelativeTargetName:(*.bak OR *.dmp OR *.edb OR *.kirbi OR *.msg OR *.nsf OR *.nst OR *.oab OR *.ost OR *.pst OR *.rdp)))

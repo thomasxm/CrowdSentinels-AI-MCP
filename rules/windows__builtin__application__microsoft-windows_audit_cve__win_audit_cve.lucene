@@ -1,0 +1,1 @@
+winlog.channel:Application AND ((winlog.provider_name:(Microsoft\-Windows\-Audit\-CVE OR Audit\-CVE)) AND event.code:1)

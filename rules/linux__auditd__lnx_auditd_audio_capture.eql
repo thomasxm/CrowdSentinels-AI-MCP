@@ -1,0 +1,1 @@
+any where (type:"EXECVE" and a0:"arecord" and a1:"-vv" and a2:"-fdat") or (type:"SYSCALL" and exe:"*/ecasound" and SYSCALL:"memfd_create")

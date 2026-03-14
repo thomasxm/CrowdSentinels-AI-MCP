@@ -1,0 +1,1 @@
+((process.executable:(*\\cscript.exe OR *\\wscript.exe)) OR (process.pe.original_file_name:(cscript.exe OR wscript.exe))) AND process.command_line:*.vbs\ \-register\ *

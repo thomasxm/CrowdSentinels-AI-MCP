@@ -1,0 +1,1 @@
+(type:EXECVE AND a0:chmod AND a1:777) OR (type:EXECVE AND a0:chmod AND a1:u\+s) OR (type:EXECVE AND a0:cp AND a1:\/bin\/ksh) OR (type:EXECVE AND a0:cp AND a1:\/bin\/sh)

@@ -1,0 +1,1 @@
+any where (process.pe.product:"*NetSupport Remote Control*" or process.pe.original_file_name:"*client32.exe*" or winlog.event_data.Hashes:"*IMPHASH=A9D50692E95B79723F3E76FCF70D023E*") and (not process.executable:"*\\client32.exe")

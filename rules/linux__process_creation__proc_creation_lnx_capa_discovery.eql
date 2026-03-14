@@ -1,0 +1,1 @@
+any where Image:"*/getcap" and CommandLine like~ ("* -r *", "* /r *", "* –r *", "* —r *", "* ―r *")

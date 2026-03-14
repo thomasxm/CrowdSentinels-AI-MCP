@@ -1,0 +1,1 @@
+Image:\/usr\/bin\/grep AND ((CommandLine:(*nessusd* OR *santad* OR *CbDefense* OR *falcond* OR *td\-agent* OR *packetbeat* OR *filebeat* OR *auditbeat* OR *osqueryd* OR *BlockBlock* OR *LuLu*)) OR (CommandLine:*Little* AND CommandLine:*Snitch*))

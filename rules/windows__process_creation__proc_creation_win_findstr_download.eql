@@ -1,0 +1,1 @@
+any where (process.command_line:"*findstr*" or process.executable:"*findstr.exe" or process.pe.original_file_name:"FINDSTR.EXE") and (process.command_line like~ ("* -v *", "* /v *", "* –v *", "* —v *", "* ―v *") and process.command_line like~ ("* -l *", "* /l *", "* –l *", "* —l *", "* ―l *") and process.command_line:"*\\*")

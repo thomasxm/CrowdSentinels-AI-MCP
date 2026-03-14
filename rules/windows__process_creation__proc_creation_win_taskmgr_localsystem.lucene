@@ -1,0 +1,1 @@
+(user.name:(*AUTHORI* OR *AUTORI*)) AND process.executable:*\\taskmgr.exe

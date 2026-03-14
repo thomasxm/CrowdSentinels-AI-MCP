@@ -1,0 +1,1 @@
+((process.parent.command_line:(*.exe OR *.exe\")) AND process.executable:*\\cmd.exe AND process.command_line:\/c\ echo\ \"*) AND (NOT ((process.parent.executable:(*\:\\Windows\\System32\* OR *\:\\Windows\\SysWOW64\*)) AND process.parent.executable:*\\forfiles.exe AND (process.executable:(*\:\\Windows\\System32\* OR *\:\\Windows\\SysWOW64\*)) AND process.executable:*\\cmd.exe))

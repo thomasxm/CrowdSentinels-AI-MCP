@@ -1,0 +1,1 @@
+(type:PATH AND (name:(\/etc\/pam.d\/system\-auth OR \/etc\/pam.d\/password\-auth))) OR (type:(TTY OR USER_TTY))

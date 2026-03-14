@@ -1,0 +1,1 @@
+any where destination.domain like~ ("*tunnel.us.ngrok.com*", "*tunnel.eu.ngrok.com*", "*tunnel.ap.ngrok.com*", "*tunnel.au.ngrok.com*", "*tunnel.sa.ngrok.com*", "*tunnel.jp.ngrok.com*", "*tunnel.in.ngrok.com*")

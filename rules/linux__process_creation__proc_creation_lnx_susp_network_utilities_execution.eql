@@ -1,0 +1,1 @@
+any where ((Image like~ ("*/nc", "*/ncat", "*/netcat", "*/socat")) and (not (CommandLine like~ ("* --listen *", "* -l *")))) or (Image like~ ("*/autorecon", "*/hping", "*/hping2", "*/hping3", "*/naabu", "*/nmap", "*/nping", "*/telnet", "*/zenmap"))

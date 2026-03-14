@@ -1,0 +1,1 @@
+any where (process.pe.original_file_name:"iCACLS.EXE" or process.executable:"*\\icacls.exe") and (process.command_line:"*/deny*" and process.command_line:"*S-1-1-0:*")

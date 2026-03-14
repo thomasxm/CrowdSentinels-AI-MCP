@@ -1,0 +1,1 @@
+winlog.event_data.TargetImage:*\\mstsc.exe AND (process.executable:(*\:\\Temp\* OR *\:\\Users\\Public\* OR *\:\\Windows\\PerfLogs\* OR *\:\\Windows\\Tasks\* OR *\:\\Windows\\Temp\* OR *\\AppData\\Local\\Temp\*))

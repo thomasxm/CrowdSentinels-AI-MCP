@@ -1,0 +1,1 @@
+any where (process.executable:"*\\curl.exe" or process.pe.original_file_name:"curl.exe") and (process.command_line like~ ("SigmaRegularExpression(regexp=SigmaString(['\\s-c\\s']), flags=set())", "*--cookie-jar*"))

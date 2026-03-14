@@ -1,0 +1,1 @@
+Image:\/usr\/sbin\/firmwarepasswd AND (CommandLine:(*setpasswd* OR *full* OR *delete* OR *check*))

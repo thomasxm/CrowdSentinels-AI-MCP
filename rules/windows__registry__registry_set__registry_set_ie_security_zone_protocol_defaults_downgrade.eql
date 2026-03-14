@@ -1,0 +1,1 @@
+any where registry.path:"*\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\ZoneMap\\ProtocolDefaults*" and (registry.path like~ ("*\\http", "*\\https")) and winlog.event_data.Details:"*DWORD (0x00000000)*"

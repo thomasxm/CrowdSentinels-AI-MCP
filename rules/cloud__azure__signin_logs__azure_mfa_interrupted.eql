@@ -1,0 +1,1 @@
+any where (ResultType:50074 and ResultDescription:"*Strong Auth required*") or (ResultType:500121 and ResultDescription:"*Authentication failed during strong authentication request*")

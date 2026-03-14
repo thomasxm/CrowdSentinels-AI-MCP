@@ -1,0 +1,1 @@
+(Image:(*\/cat OR *\/ed OR *\/egrep OR *\/emacs OR *\/fgrep OR *\/grep OR *\/head OR *\/less OR *\/more OR *\/nano OR *\/tail)) AND CommandLine:*\ \/etc\/sudoers*

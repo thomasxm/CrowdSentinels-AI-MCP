@@ -1,0 +1,1 @@
+any where (process.executable:"*\\where.exe" or process.pe.original_file_name:"where.exe") and (process.command_line like~ ("*places.sqlite*", "*cookies.sqlite*", "*formhistory.sqlite*", "*logins.json*", "*key4.db*", "*key3.db*", "*sessionstore.jsonlz4*", "*History*", "*Bookmarks*", "*Cookies*", "*Login Data*"))

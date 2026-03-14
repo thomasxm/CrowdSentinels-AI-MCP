@@ -1,0 +1,1 @@
+any where process.command_line:"*rundll32.exe*" and process.command_line:"*Execute*" and process.command_line:"*RegRead*" and process.command_line:"*window.close*"

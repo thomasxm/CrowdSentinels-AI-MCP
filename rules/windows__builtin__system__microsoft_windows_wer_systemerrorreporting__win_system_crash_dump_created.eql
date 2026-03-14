@@ -1,0 +1,1 @@
+any where winlog.channel:"System" and (winlog.provider_name:"Microsoft-Windows-WER-SystemErrorReporting" and event.code:"1001")

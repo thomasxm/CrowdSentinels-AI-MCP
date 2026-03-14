@@ -1,0 +1,1 @@
+(Image:*\/sysctl OR CommandLine:*sysctl*) AND (CommandLine:(*hw.* OR *kern.* OR *machdep.*))

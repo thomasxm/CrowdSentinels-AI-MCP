@@ -1,0 +1,1 @@
+any where (ParentImage like~ ("*/package_script_service", "*/installer")) and (Image like~ ("*/sh", "*/bash", "*/dash", "*/python", "*/ruby", "*/perl", "*/php", "*/javascript", "*/osascript", "*/tclsh", "*/curl", "*/wget")) and (CommandLine like~ ("*preinstall*", "*postinstall*"))

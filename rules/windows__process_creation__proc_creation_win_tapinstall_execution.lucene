@@ -1,0 +1,1 @@
+process.executable:*\\tapinstall.exe AND (NOT ((process.executable:(*\:\\Program\ Files\\Avast\ Software\\SecureLine\ VPN\* OR *\:\\Program\ Files\ \(x86\)\\Avast\ Software\\SecureLine\ VPN\*)) OR process.executable:*\:\\Program\ Files\\OpenVPN\ Connect\\drivers\\tap\* OR process.executable:*\:\\Program\ Files\ \(x86\)\\Proton\ Technologies\\ProtonVPNTap\\installer\*))

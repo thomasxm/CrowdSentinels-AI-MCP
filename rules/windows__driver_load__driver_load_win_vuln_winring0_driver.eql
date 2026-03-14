@@ -1,0 +1,1 @@
+any where winlog.event_data.Hashes:"*IMPHASH=D41FA95D4642DC981F10DE36F4DC8CD7*" or (file.path like~ ("*\\WinRing0x64.sys", "*\\WinRing0.sys", "*\\WinRing0.dll", "*\\WinRing0x64.dll", "*\\winring00x64.sys"))

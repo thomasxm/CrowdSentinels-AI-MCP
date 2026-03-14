@@ -1,0 +1,1 @@
+any where registry.path:"*Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\DisallowRun" and winlog.event_data.Details:"DWORD (0x00000001)"

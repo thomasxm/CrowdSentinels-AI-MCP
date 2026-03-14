@@ -1,0 +1,1 @@
+(process.executable:(*\\AnyDesk.exe OR *\\AnyDeskMSI.exe)) AND network.direction:false

@@ -1,0 +1,1 @@
+(query:(aaa.stage.* OR post.1*)) OR query:*.stage.123456.*

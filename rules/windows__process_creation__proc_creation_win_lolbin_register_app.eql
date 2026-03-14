@@ -1,0 +1,1 @@
+any where process.command_line:"*\\register_app.vbs*" and process.command_line:"*-register*"

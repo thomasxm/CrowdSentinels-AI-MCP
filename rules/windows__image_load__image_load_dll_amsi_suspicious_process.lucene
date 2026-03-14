@@ -1,0 +1,1 @@
+file.path:*\\amsi.dll AND (process.executable:(*\\ExtExport.exe OR *\\odbcconf.exe OR *\\rundll32.exe))

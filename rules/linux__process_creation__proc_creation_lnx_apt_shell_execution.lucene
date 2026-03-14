@@ -1,0 +1,1 @@
+(Image:(*\/apt OR *\/apt\-get)) AND CommandLine:*APT\:\:Update\:\:Pre\-Invoke\:\:\=*

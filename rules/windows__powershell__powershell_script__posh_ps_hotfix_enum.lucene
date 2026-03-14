@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*Win32_QuickFixEngineering* AND powershell.file.script_block_text:*HotFixID*

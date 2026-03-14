@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and (event.code:"4768" and winlog.event_data.TicketEncryptionType:"0x17" and service.name:"krbtgt" and winlog.event_data.PreAuthType:"0")

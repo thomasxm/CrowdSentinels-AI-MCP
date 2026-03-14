@@ -1,0 +1,1 @@
+any where (process.executable:"*\\sc.exe" or process.pe.original_file_name:"sc.exe") and ((process.command_line:"* config *" and process.command_line:"*start*") and (process.command_line like~ ("*disabled*", "*demand*")))

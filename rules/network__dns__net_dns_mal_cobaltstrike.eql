@@ -1,0 +1,1 @@
+any where (query like~ ("aaa.stage.*", "post.1*")) or query:"*.stage.123456.*"

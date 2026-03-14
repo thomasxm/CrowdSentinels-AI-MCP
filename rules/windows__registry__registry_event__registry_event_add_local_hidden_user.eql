@@ -1,0 +1,1 @@
+any where registry.path:"*\\SAM\\SAM\\Domains\\Account\\Users\\Names\*" and registry.path:"*$\\(Default)" and process.executable:"*\\lsass.exe"

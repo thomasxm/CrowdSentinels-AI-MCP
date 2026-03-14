@@ -1,0 +1,1 @@
+(registry.path:(*\\SOFTWARE\\Policies\\Microsoft\\WindowsFirewall\\StandardProfile\\EnableFirewall OR *\\SOFTWARE\\Policies\\Microsoft\\WindowsFirewall\\DomainProfile\\EnableFirewall)) AND winlog.event_data.Details:DWORD\ \(0x00000000\)

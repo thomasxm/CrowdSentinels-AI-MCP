@@ -1,0 +1,1 @@
+any where ((process.executable:"*\\odbcconf.exe" or process.pe.original_file_name:"odbcconf.exe") and process.command_line:"*INSTALLDRIVER *") and (not process.command_line:"*.dll*")

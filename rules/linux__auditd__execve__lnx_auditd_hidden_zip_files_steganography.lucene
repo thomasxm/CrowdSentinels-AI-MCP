@@ -1,0 +1,1 @@
+(type:EXECVE AND a0:cat) AND (a1:(*.jpg OR *.png)) AND a2:*.zip

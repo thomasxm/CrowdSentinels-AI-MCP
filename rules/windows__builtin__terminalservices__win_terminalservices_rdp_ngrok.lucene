@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-TerminalServices\-LocalSessionManager\/Operational AND (event.code:21 AND winlog.event_data.Address:*16777216*)

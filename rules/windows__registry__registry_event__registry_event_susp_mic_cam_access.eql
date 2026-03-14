@@ -1,0 +1,1 @@
+any where (registry.path:"*\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\*" and registry.path:"*\\NonPackaged*") and (registry.path like~ ("*microphone*", "*webcam*")) and (registry.path like~ ("*:#Windows#Temp#*", "*:#$Recycle.bin#*", "*:#Temp#*", "*:#Users#Public#*", "*:#Users#Default#*", "*:#Users#Desktop#*"))

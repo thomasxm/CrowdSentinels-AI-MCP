@@ -1,0 +1,1 @@
+any where registry.path:"*System\\CurrentControlSet\\Control\\Lsa\\NoLMHash" and winlog.event_data.Details:"DWORD (0x00000000)"

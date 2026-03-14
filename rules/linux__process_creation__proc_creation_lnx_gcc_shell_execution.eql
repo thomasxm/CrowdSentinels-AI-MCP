@@ -1,0 +1,1 @@
+any where ((Image like~ ("*/c89", "*/c99", "*/gcc")) and CommandLine:"*-wrapper*") and (CommandLine like~ ("*/bin/bash,-s*", "*/bin/dash,-s*", "*/bin/fish,-s*", "*/bin/sh,-s*", "*/bin/zsh,-s*"))

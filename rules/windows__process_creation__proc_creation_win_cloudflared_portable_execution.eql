@@ -1,0 +1,1 @@
+any where process.executable:"*\\cloudflared.exe" and (not (process.executable like~ ("*:\\Program Files (x86)\\cloudflared\*", "*:\\Program Files\\cloudflared\*")))

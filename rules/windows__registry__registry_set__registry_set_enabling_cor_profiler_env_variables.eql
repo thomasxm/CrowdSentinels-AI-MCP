@@ -1,0 +1,1 @@
+any where (registry.path like~ ("*\\COR_ENABLE_PROFILING", "*\\COR_PROFILER", "*\\CORECLR_ENABLE_PROFILING")) or registry.path:"*\\CORECLR_PROFILER_PATH*"

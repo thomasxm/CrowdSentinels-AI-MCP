@@ -1,0 +1,1 @@
+any where process.command_line:"*--install*" and process.command_line:"*--start-with-win*" and process.command_line:"*--silent*"

@@ -1,0 +1,1 @@
+any where winlog.channel:"System" and (winlog.provider_name:"Microsoft-Windows-Ntfs" and event.code:"98" and winlog.event_data.DeviceName:"*HarddiskVolumeShadowCopy*")

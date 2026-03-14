@@ -1,0 +1,1 @@
+(process.executable:*\\tpmvscmgr.exe AND process.pe.original_file_name:TpmVscMgr.exe) AND process.command_line:*create*

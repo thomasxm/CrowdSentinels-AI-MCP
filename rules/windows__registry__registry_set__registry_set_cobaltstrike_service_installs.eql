@@ -1,0 +1,1 @@
+any where (registry.path:"*\\System\\CurrentControlSet\\Services*" or (registry.path:"*\\System\\ControlSet*" and registry.path:"*\\Services*")) and ((winlog.event_data.Details:"*ADMIN$*" and winlog.event_data.Details:"*.exe*") or (winlog.event_data.Details:"*%COMSPEC%*" and winlog.event_data.Details:"*start*" and winlog.event_data.Details:"*powershell*"))

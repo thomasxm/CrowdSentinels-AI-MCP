@@ -1,0 +1,1 @@
+any where (powershell.file.script_block_text:"*Disable-WindowsOptionalFeature*" and powershell.file.script_block_text:"*-Online*" and powershell.file.script_block_text:"*-FeatureName*") and (powershell.file.script_block_text like~ ("*Windows-Defender-Gui*", "*Windows-Defender-Features*", "*Windows-Defender*", "*Windows-Defender-ApplicationGuard*"))

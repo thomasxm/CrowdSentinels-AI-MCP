@@ -1,0 +1,1 @@
+any where file.path:"*\\dbgmodel.dll" and (not (file.path like~ ("C:\\Windows\\System32\*", "C:\\Windows\\SysWOW64\*", "C:\\Windows\\WinSxS\*"))) and (not (file.path:"C:\\Program Files\\WindowsApps\\Microsoft.WinDbg_*" or (file.path like~ ("C:\\Program Files (x86)\\Windows Kits\*", "C:\\Program Files\\Windows Kits\*"))))

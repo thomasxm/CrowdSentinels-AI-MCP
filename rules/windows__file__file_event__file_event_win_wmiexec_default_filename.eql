@@ -1,0 +1,1 @@
+any where file.path like~ ("SigmaRegularExpression(regexp=SigmaString(['\\\\Windows\\\\__1\\d{9}\\.\\d{1,7}$']), flags=set())", "SigmaRegularExpression(regexp=SigmaString(['C:\\\\__1\\d{9}\\.\\d{1,7}$']), flags=set())", "SigmaRegularExpression(regexp=SigmaString(['D:\\\\__1\\d{9}\\.\\d{1,7}$']), flags=set())")

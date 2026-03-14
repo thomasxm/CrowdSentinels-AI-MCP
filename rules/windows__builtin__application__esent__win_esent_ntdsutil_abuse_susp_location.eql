@@ -1,0 +1,1 @@
+any where winlog.channel:"Application" and ((winlog.provider_name:"ESENT" and event.code:"325" and winlog.event_data.Data:"*ntds.dit*") and (winlog.event_data.Data like~ ("*:\\ntds.dit*", "*\\Appdata\*", "*\\Desktop\*", "*\\Downloads\*", "*\\Perflogs\*", "*\\Temp\*", "*\\Users\\Public\*")))

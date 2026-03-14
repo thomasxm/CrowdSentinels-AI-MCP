@@ -1,0 +1,1 @@
+any where process.executable:"*\\shutdown.exe" and process.command_line:"*/l*"

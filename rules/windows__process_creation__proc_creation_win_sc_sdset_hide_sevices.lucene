@@ -1,0 +1,1 @@
+(process.executable:*\\sc.exe OR process.pe.original_file_name:sc.exe) AND (process.command_line:*sdset* AND process.command_line:*DCLCWPDTSD*)

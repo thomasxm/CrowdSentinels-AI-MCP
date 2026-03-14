@@ -1,0 +1,1 @@
+any where ((file.path like~ ("*\\AppData\\Local\\Temp\*", "*\\Users\\Public\*", "*\\Windows\\Temp\*", "*:\\Temp\*")) and (file.path like~ ("*.one", "*.onepkg"))) and (not (process.executable:"*:\\Program Files\\Microsoft Office\*" and process.executable:"*\\ONENOTE.EXE"))

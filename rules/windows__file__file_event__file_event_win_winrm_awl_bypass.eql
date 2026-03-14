@@ -1,0 +1,1 @@
+any where (file.path like~ ("*WsmPty.xsl", "*WsmTxt.xsl")) and (not (file.path like~ ("C:\\Windows\\System32\*", "C:\\Windows\\SysWOW64\*")))

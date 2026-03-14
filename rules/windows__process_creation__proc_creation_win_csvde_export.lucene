@@ -1,0 +1,1 @@
+((process.executable:*\\csvde.exe OR process.pe.original_file_name:csvde.exe) AND process.command_line:*\ \-f*) AND (NOT process.command_line:*\ \-i*)

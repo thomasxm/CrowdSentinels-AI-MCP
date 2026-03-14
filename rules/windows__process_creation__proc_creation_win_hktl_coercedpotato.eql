@@ -1,0 +1,1 @@
+any where process.executable:"*\\CoercedPotato.exe" or process.command_line:"* --exploitId *" or (winlog.event_data.Hashes like~ ("*IMPHASH=A75D7669DB6B2E107A44C4057FF7F7D6*", "*IMPHASH=F91624350E2C678C5DCBE5E1F24E22C9*", "*IMPHASH=14C81850A079A87E83D50CA41C709A15*"))

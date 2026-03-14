@@ -1,0 +1,1 @@
+any where (process.executable:"*\\unregmp2.exe" or process.pe.original_file_name:"unregmp2.exe") and process.command_line like~ ("* -HideWMP*", "* /HideWMP*", "* –HideWMP*", "* —HideWMP*", "* ―HideWMP*")

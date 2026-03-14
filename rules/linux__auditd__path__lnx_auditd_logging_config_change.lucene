@@ -1,0 +1,1 @@
+type:PATH AND (name:(\/etc\/syslog.conf OR \/etc\/rsyslog.conf OR \/etc\/syslog\-ng\/syslog\-ng.conf))

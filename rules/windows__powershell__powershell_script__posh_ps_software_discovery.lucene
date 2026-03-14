@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*get\-itemProperty* AND powershell.file.script_block_text:*\\software\* AND powershell.file.script_block_text:*select\-object* AND powershell.file.script_block_text:*format\-table*

@@ -1,0 +1,1 @@
+(winlog.channel:(Microsoft\-Windows\-AppLocker\/MSI\ and\ Script OR Microsoft\-Windows\-AppLocker\/EXE\ and\ DLL OR Microsoft\-Windows\-AppLocker\/Packaged\ app\-Deployment OR Microsoft\-Windows\-AppLocker\/Packaged\ app\-Execution)) AND (event.code:(8004 OR 8007 OR 8022 OR 8025))

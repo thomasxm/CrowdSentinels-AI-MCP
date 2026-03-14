@@ -1,0 +1,1 @@
+any where file.path:"*.scr" and (not ((process.executable like~ ("*\\Kindle.exe", "*\\Bin\\ccSvcHst.exe")) or (process.executable:"*\\TiWorker.exe" and file.path:"*\\uwfservicingscr.scr")))

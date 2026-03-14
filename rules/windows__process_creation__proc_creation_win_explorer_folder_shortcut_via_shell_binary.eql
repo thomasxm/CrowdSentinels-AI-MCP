@@ -1,0 +1,1 @@
+any where (process.parent.executable like~ ("*\\cmd.exe", "*\\powershell.exe", "*\\pwsh.exe")) and process.executable:"*\\explorer.exe" and process.command_line:"*shell:mycomputerfolder*"

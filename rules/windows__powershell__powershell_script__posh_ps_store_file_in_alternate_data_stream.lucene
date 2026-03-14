@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*Start\-Process* AND powershell.file.script_block_text:*\-FilePath\ \"$env\:comspec\"\ * AND powershell.file.script_block_text:*\-ArgumentList\ * AND powershell.file.script_block_text:*\>*

@@ -1,0 +1,1 @@
+any where process.executable:"*\\devtoolslauncher.exe" and process.command_line:"*LaunchForDeploy*"

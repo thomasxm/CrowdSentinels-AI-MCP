@@ -1,0 +1,1 @@
+(process.executable:*\\dllhost.exe AND (process.command_line:(dllhost.exe OR dllhost))) AND (NOT process.command_line:\<sigma.types.SigmaNull\ object\ at\ 0x7f4e723e9160\>)

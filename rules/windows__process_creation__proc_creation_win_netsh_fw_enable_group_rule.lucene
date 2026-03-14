@@ -1,0 +1,1 @@
+(process.executable:*\\netsh.exe OR process.pe.original_file_name:netsh.exe) AND (process.command_line:*advfirewall* AND process.command_line:*firewall* AND process.command_line:*set* AND process.command_line:*rule* AND process.command_line:*group\=* AND process.command_line:*new* AND process.command_line:*enable\=Yes*)

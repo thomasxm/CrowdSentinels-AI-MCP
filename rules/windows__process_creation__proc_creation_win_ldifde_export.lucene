@@ -1,0 +1,1 @@
+((process.executable:*\\ldifde.exe OR process.pe.original_file_name:ldifde.exe) AND process.command_line:*\-f*) AND (NOT process.command_line:*\ \-i*)

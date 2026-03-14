@@ -1,0 +1,1 @@
+any where process.executable:"*\\reg.exe" and (process.command_line:"*query*" and process.command_line:"*\\software\*" and process.command_line:"*/v*" and process.command_line:"*svcversion*")

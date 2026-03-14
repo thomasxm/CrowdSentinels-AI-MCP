@@ -1,0 +1,1 @@
+winlog.channel:Security AND ((winlog.event_data.AccessList:(*%%4417* OR *%%4418*)) AND (event.code:(4656 OR 4663)) AND winlog.event_data.ObjectName:*\\Microsoft\\Windows\ Defender\\Exclusions\*)

@@ -1,0 +1,1 @@
+any where powershell.file.script_block_text:"*Add-Content $profile*" and (powershell.file.script_block_text like~ ("*-Value \"IEX *", "*-Value \"Invoke-Expression*", "*-Value \"Invoke-WebRequest*", "*-Value \"Start-Process*", "*-Value 'IEX *", "*-Value 'Invoke-Expression*", "*-Value 'Invoke-WebRequest*", "*-Value 'Start-Process*"))

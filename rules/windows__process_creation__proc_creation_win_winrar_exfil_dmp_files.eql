@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\rar.exe", "*\\winrar.exe")) or process.pe.description:"Command line RAR") and (process.command_line like~ ("*.dmp*", "*.dump*", "*.hdmp*"))

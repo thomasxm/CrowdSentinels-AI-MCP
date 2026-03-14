@@ -1,0 +1,1 @@
+any where process.executable:"*\\SoundRecorder.exe" and process.command_line:"*/FILE*"

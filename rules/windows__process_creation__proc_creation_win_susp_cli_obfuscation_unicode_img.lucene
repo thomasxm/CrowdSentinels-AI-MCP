@@ -1,0 +1,1 @@
+((process.executable:(*\\cmd.exe OR *\\cscript.exe OR *\\powershell.exe OR *\\powershell_ise.exe OR *\\pwsh.exe OR *\\wscript.exe)) AND (process.pe.original_file_name:(Cmd.EXE OR cscript.exe OR PowerShell.EXE OR PowerShell_ISE.EXE OR pwsh.dll OR wscript.exe))) AND (process.command_line:(*ˣ* OR *˪* OR *ˢ* OR *∕* OR *⁄* OR *―* OR *—* OR * * OR *¯* OR *®* OR *¶* OR *⠀*))

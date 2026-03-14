@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\cscript.exe", "*\\wscript.exe")) or (process.pe.original_file_name like~ ("cscript.exe", "wscript.exe"))) and process.command_line:"*gatherNetworkInfo.vbs*"

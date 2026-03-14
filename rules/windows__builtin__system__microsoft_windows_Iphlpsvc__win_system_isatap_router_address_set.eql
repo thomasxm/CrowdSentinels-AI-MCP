@@ -1,0 +1,1 @@
+any where winlog.channel:"System" and ((event.code:"4100" and winlog.provider_name:"Microsoft-Windows-Iphlpsvc") and (not (winlog.event_data.IsatapRouter like~ ("127.0.0.1", "::1"))) and (not winlog.event_data.IsatapRouter:"<sigma.types.SigmaNull object at 0x7fb170048d70>"))

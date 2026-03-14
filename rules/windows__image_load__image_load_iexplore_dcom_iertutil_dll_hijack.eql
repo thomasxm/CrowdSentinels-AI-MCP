@@ -1,0 +1,1 @@
+any where process.executable:"*\\Internet Explorer\\iexplore.exe" and file.path:"*\\Internet Explorer\\iertutil.dll"

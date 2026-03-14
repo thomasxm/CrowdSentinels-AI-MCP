@@ -1,0 +1,1 @@
+(winlog.event_data.Data:(*EngineVersion\=2.* OR *EngineVersion\=4.* OR *EngineVersion\=5.*)) AND winlog.event_data.Data:*HostVersion\=3.*

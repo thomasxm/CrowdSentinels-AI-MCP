@@ -1,0 +1,1 @@
+CommandLine:*chown\ root* AND (CommandLine:(*\ chmod\ u\+s* OR *\ chmod\ g\+s*))

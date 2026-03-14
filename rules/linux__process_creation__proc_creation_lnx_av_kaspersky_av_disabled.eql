@@ -1,0 +1,1 @@
+any where (Image like~ ("*/systemctl", "*/bash", "*/sh")) and (CommandLine:"*stop*" and CommandLine:"*kesl*")

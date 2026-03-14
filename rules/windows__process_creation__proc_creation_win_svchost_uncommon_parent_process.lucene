@@ -1,0 +1,1 @@
+process.executable:*\\svchost.exe AND (NOT ((process.parent.executable:(*\\Mrt.exe OR *\\MsMpEng.exe OR *\\ngen.exe OR *\\rpcnet.exe OR *\\services.exe OR *\\TiWorker.exe)) OR process.parent.executable:\<sigma.types.SigmaNull\ object\ at\ 0x7fef57b39160\> OR (process.parent.executable:(\- OR ""))))

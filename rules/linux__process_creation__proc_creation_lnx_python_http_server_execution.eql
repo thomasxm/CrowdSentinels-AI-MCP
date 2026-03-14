@@ -1,0 +1,1 @@
+any where ((Image like~ ("*/python", "*/python2", "*/python3")) or (Image like~ ("*/python2.*", "*/python3.*"))) and (CommandLine like~ ("*http.server*", "*SimpleHTTPServer*"))

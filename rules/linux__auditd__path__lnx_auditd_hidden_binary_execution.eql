@@ -1,0 +1,1 @@
+any where (type:"PATH" and name:"*/.*") and (not (name like~ ("*/.cache/*", "*/.config/*", "*/.pyenv/*", "*/.rustup/toolchains*")))

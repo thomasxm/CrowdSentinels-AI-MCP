@@ -1,0 +1,1 @@
+any where dns.question.name:"*servicebus.windows.net*" and process.executable:"*HybridConnectionManager*"

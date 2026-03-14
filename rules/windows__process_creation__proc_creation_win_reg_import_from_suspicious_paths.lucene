@@ -1,0 +1,1 @@
+(process.executable:*\\reg.exe OR process.pe.original_file_name:reg.exe) AND process.command_line:*\ import\ * AND (process.command_line:(*C\:\\Users\* OR *%temp%* OR *%tmp%* OR *%appdata%* OR *\\AppData\\Local\\Temp\* OR *C\:\\Windows\\Temp\* OR *C\:\\ProgramData\*))

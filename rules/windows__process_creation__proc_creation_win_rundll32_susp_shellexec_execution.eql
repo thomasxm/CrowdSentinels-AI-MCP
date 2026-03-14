@@ -1,0 +1,1 @@
+any where process.command_line:"*ShellExec_RunDLL*" and (process.command_line like~ ("*\\Desktop\*", "*\\Temp\*", "*\\Users\\Public\*", "*comspec*", "*iex*", "*Invoke-*", "*msiexec*", "*odbcconf*", "*regsvr32*"))

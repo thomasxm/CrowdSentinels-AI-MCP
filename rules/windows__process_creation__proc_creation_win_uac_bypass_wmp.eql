@@ -1,0 +1,1 @@
+any where (process.executable:"C:\\Program Files\\Windows Media Player\\osk.exe" or (process.executable:"C:\\Windows\\System32\\cmd.exe" and process.parent.command_line:"\"C:\\Windows\\system32\\mmc.exe\" \"C:\\Windows\\system32\\eventvwr.msc\" /s")) and (winlog.event_data.IntegrityLevel like~ ("High", "System", "S-1-16-16384", "S-1-16-12288"))

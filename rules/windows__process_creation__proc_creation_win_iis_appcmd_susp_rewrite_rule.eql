@@ -1,0 +1,1 @@
+any where (process.executable:"*\\appcmd.exe" or process.pe.original_file_name:"appcmd.exe") and (process.command_line:"*set*" and process.command_line:"*config*" and process.command_line:"*section:system.webServer/rewrite/globalRules*" and process.command_line:"*commit:*")

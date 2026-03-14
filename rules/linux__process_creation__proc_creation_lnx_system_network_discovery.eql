@@ -1,0 +1,1 @@
+any where (Image like~ ("*/firewall-cmd", "*/ufw", "*/iptables", "*/netstat", "*/ss", "*/ip", "*/ifconfig", "*/systemd-resolve", "*/route")) or CommandLine:"*/etc/resolv.conf*"

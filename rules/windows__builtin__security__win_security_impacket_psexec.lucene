@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:5145 AND winlog.event_data.ShareName:\\\*\\IPC$ AND (winlog.event_data.RelativeTargetName:(*RemCom_stdin* OR *RemCom_stdout* OR *RemCom_stderr*)))

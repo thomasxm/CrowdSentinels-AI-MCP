@@ -1,0 +1,1 @@
+winlog.event_data.StartAddress:(*0B80 OR *0C7C OR *0C88)

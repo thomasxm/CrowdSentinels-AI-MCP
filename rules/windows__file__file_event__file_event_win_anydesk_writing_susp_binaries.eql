@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\AnyDesk.exe", "*\\AnyDeskMSI.exe")) and (file.path like~ ("*.dll", "*.exe"))) and (not file.path:"*\\gcapi.dll")

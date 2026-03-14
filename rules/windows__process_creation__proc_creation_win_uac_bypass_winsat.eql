@@ -1,0 +1,1 @@
+any where (winlog.event_data.IntegrityLevel like~ ("High", "System", "S-1-16-16384", "S-1-16-12288")) and process.parent.executable:"*\\AppData\\Local\\Temp\\system32\\winsat.exe" and process.parent.command_line:"*C:\\Windows \\system32\\winsat.exe*"

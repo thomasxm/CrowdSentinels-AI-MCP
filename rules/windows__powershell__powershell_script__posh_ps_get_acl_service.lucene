@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*get\-acl* AND powershell.file.script_block_text:*REGISTRY\:\:HKLM\\SYSTEM\\CurrentControlSet\\Services\*

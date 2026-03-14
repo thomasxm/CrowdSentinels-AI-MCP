@@ -1,0 +1,1 @@
+any where CommandLine:"*chown root*" and (CommandLine like~ ("* chmod u+s*", "* chmod g+s*"))

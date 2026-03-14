@@ -1,0 +1,1 @@
+any where file.path like~ ("*.docm", "*.dotm", "*.xlsm", "*.xltm", "*.potm", "*.pptm")

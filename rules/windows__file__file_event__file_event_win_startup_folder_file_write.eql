@@ -1,0 +1,1 @@
+any where file.path:"*\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp*" and (not ((process.executable like~ ("C:\\Windows\\System32\\wuauclt.exe", "C:\\Windows\\uus\\ARM64\\wuaucltcore.exe")) or (file.path like~ ("C:\\$WINDOWS.~BT\\NewOS\*", "C:\\$WinREAgent\\Scratch\\Mount\*")))) and (not (process.executable:"*\\ONENOTE.EXE" and file.path:"*\\Send to OneNote.lnk"))

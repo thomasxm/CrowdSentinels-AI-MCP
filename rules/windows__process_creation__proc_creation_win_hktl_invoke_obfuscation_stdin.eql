@@ -1,0 +1,1 @@
+any where process.command_line:"SigmaRegularExpression(regexp=SigmaString(['cmd.{0,5}(', <SpecialChars.WILDCARD_SINGLE: 2>, ':/c|/r).+powershell.+(', <SpecialChars.WILDCARD_SINGLE: 2>, ':\\$\\{', <SpecialChars.WILDCARD_SINGLE: 2>, 'input\\}', <SpecialChars.WILDCARD_SINGLE: 2>, '|noexit).+\\\"']), flags=set())"

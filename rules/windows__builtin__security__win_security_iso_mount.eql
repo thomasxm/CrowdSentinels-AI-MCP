@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and ((event.code:"4663" and winlog.event_data.ObjectServer:"Security" and winlog.event_data.ObjectType:"File" and winlog.event_data.ObjectName:"\\Device\\CdRom*") and (not (winlog.event_data.ObjectName like~ ("\\Device\\CdRom0\\autorun.ico", "\\Device\\CdRom0\\setup.exe", "\\Device\\CdRom0\\setup64.exe"))))

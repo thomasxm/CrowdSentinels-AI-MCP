@@ -1,0 +1,1 @@
+any where (Image like~ ("*/cat", "*/ed", "*/egrep", "*/emacs", "*/fgrep", "*/grep", "*/head", "*/less", "*/more", "*/nano", "*/tail")) and CommandLine:"* /etc/sudoers*"

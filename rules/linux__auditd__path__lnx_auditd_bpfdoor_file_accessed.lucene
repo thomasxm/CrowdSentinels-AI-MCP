@@ -1,0 +1,1 @@
+type:PATH AND (name:(\/var\/run\/haldrund.pid OR \/var\/run\/xinetd.lock OR \/var\/run\/kdevrund.pid))

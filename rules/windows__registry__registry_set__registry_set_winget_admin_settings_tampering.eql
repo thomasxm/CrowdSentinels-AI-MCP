@@ -1,0 +1,1 @@
+any where process.executable:"*\\winget.exe" and registry.path:"\\REGISTRY\\A\*" and registry.path:"*\\LocalState\\admin_settings"

@@ -1,0 +1,1 @@
+(powershell.file.script_block_text:*DumpCreds* AND powershell.file.script_block_text:*DumpCerts*) OR powershell.file.script_block_text:*sekurlsa\:\:logonpasswords* OR (powershell.file.script_block_text:*crypto\:\:certificates* AND powershell.file.script_block_text:*CERT_SYSTEM_STORE_LOCAL_MACHINE*)

@@ -1,0 +1,1 @@
+any where winlog.channel:"Application" and (winlog.provider_name:"Windows Error Reporting" and event.code:"1001" and (winlog.event_data.Data:"*MsMpEng.exe*" and winlog.event_data.Data:"*mpengine.dll*"))

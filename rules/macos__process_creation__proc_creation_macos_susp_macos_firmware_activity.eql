@@ -1,0 +1,1 @@
+any where Image:"/usr/sbin/firmwarepasswd" and (CommandLine like~ ("*setpasswd*", "*full*", "*delete*", "*check*"))

@@ -1,0 +1,1 @@
+any where (file.path:"C:\\Users\*" and file.path:"*\\AppData\*" and (file.path like~ ("*.bat", "*.cmd", "*.cpl", "*.dll", "*.exe", "*.hta", "*.iso", "*.lnk", "*.msi", "*.ps1", "*.psm1", "*.scr", "*.vbe", "*.vbs"))) and (not (file.path:"C:\\Users\*" and (file.path like~ ("*\\AppData\\Local\*", "*\\AppData\\LocalLow\*", "*\\AppData\\Roaming\*"))))

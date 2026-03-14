@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*Remove\-EtwTraceProvider\ * OR (powershell.file.script_block_text:*Set\-EtwTraceProvider\ * AND powershell.file.script_block_text:*0x11*)

@@ -1,0 +1,1 @@
+any where Image:"*/dseditgroup" and (CommandLine:"* -o edit *" and CommandLine:"* -a *" and CommandLine:"* -t user*" and CommandLine:"*admin*")

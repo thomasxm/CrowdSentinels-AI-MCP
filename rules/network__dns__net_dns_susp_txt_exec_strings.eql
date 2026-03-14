@@ -1,0 +1,1 @@
+any where record_type:"TXT" and (answer like~ ("*IEX*", "*Invoke-Expression*", "*cmd.exe*"))

@@ -1,0 +1,1 @@
+any where (powershell.file.script_block_text:"*&&*" and powershell.file.script_block_text:"*rundll32*" and powershell.file.script_block_text:"*shell32.dll*" and powershell.file.script_block_text:"*shellexec_rundll*") and (powershell.file.script_block_text like~ ("*value*", "*invoke*", "*comspec*", "*iex*"))

@@ -1,0 +1,1 @@
+any where (file.name like~ ("*\\pipe\*", "*\\pipe\\srvsvc*")) and (not (file.name like~ ("*\\CtxShare*", "\\pipe\*")))

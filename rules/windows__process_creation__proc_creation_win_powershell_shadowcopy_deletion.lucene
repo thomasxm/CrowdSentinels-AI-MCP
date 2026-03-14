@@ -1,0 +1,1 @@
+(process.command_line:(*Get\-WmiObject* OR *gwmi* OR *Get\-CimInstance* OR *gcim*)) AND process.command_line:*Win32_ShadowCopy* AND (process.command_line:(*.Delete\(\)* OR *Remove\-WmiObject* OR *rwmi* OR *Remove\-CimInstance* OR *rcim*))

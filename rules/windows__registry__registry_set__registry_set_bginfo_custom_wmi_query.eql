@@ -1,0 +1,1 @@
+any where registry.path:"*\\Software\\Winternals\\BGInfo\\UserFields\*" and winlog.event_data.Details:"6*"

@@ -1,0 +1,1 @@
+any where registry.path:"*\\Control\\Session Manager\\Configuration Manager\\EnablePeriodicBackup" and winlog.event_data.Details:"DWORD (0x00000001)"

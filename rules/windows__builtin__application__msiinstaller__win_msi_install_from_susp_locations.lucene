@@ -1,0 +1,1 @@
+winlog.channel:Application AND ((winlog.provider_name:MsiInstaller AND (event.code:(1040 OR 1042)) AND (winlog.event_data.Data:(*\:\\Windows\\TEMP\* OR *\\* OR *\\Desktop\* OR *\\PerfLogs\* OR *\\Users\\Public\*))) AND (NOT (winlog.event_data.Data:(*\\AppData\\Local\\Temp\\WinGet\* OR *C\:\\Windows\\TEMP\\UpdHealthTools.msi*))))

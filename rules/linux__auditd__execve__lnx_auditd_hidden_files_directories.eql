@@ -1,0 +1,1 @@
+any where (type:"EXECVE" and (a0 like~ ("mkdir", "nano", "touch", "vi", "vim"))) and (a1 regex~ "(^|\\/)\.[^.\\/]" or a2 regex~ "(^|\\/)\.[^.\\/]")

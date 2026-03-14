@@ -1,0 +1,1 @@
+registry.path:*\\Microsoft\\.NETFramework\\DbgManagedDebugger AND (NOT winlog.event_data.Details:\"C\:\\Windows\\system32\\vsjitdebugger.exe\"\ PID\ %d\ APPDOM\ %d\ EXTEXT\ \"%s\"\ EVTHDL\ %d)

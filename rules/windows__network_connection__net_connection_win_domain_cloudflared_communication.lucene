@@ -1,0 +1,1 @@
+network.direction:true AND (destination.domain:(*.v2.argotunnel.com OR *protocol\-v2.argotunnel.com OR *trycloudflare.com OR *update.argotunnel.com))

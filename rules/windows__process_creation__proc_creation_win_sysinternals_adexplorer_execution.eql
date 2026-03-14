@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\ADExp.exe", "*\\ADExplorer.exe", "*\\ADExplorer64.exe", "*\\ADExplorer64a.exe")) or process.pe.original_file_name:"AdExp" or process.pe.description:"Active Directory Editor" or process.pe.product:"Sysinternals ADExplorer") and process.command_line:"*snapshot*"

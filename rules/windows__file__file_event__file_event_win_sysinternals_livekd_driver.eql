@@ -1,0 +1,1 @@
+any where file.path:"C:\\Windows\\System32\\drivers\\LiveKdD.SYS" and (process.executable like~ ("*\\livekd.exe", "*\\livek64.exe"))

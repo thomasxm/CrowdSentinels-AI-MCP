@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\thor.exe", "*\\thor64.exe")) and (file.path like~ ("*\\thor.exe", "*\\thor64.exe"))) and (not (file.code_signature.signed:"true" and file.code_signature.status:"valid" and winlog.event_data.Signature:"Nextron Systems GmbH"))

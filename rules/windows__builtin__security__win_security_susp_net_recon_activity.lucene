@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:4661 AND winlog.event_data.AccessMask:0x2d AND (winlog.event_data.ObjectType:(SAM_USER OR SAM_GROUP)) AND winlog.event_data.ObjectName:S\-1\-5\-21\-* AND (winlog.event_data.ObjectName:(*\-500 OR *\-512)))

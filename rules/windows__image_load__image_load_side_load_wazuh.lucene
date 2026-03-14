@@ -1,0 +1,1 @@
+(file.path:(*\\libwazuhshared.dll OR *\\libwinpthread\-1.dll)) AND (NOT (file.path:(C\:\\Program\ Files\* OR C\:\\Program\ Files\ \(x86\)\*))) AND (NOT ((file.path:(*\\AppData\\Local\* OR *\\ProgramData\*)) AND file.path:*\\mingw64\\bin\\libwinpthread\-1.dll))

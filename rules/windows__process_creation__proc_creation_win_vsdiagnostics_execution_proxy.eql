@@ -1,0 +1,1 @@
+any where (process.executable:"*\\VSDiagnostics.exe" or process.pe.original_file_name:"VSDiagnostics.exe") and process.command_line:"*start*" and (process.command_line like~ ("* /launch:*", "* -launch:*"))

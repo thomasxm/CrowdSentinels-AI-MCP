@@ -1,0 +1,1 @@
+any where (process.executable:"*\\IMEWDBLD.exe" or process.pe.original_file_name:"imewdbld.exe") and (process.command_line like~ ("*http://*", "*https://*"))

@@ -1,0 +1,1 @@
+any where process.executable:"*\\wmic.exe" and (file.path like~ ("*\\jscript.dll", "*\\vbscript.dll"))

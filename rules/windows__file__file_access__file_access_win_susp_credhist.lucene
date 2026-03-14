@@ -1,0 +1,1 @@
+file.path:*\\Microsoft\\Protect\\CREDHIST AND (NOT ((process.executable:(C\:\\Program\ Files\* OR C\:\\Program\ Files\ \(x86\)\* OR C\:\\Windows\\system32\* OR C\:\\Windows\\SysWOW64\*)) OR process.executable:C\:\\Windows\\explorer.exe))

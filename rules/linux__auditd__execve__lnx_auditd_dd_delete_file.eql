@@ -1,0 +1,1 @@
+any where type:"EXECVE" and a0:"*dd*" and (a1 like~ ("*if=/dev/null*", "*if=/dev/zero*"))

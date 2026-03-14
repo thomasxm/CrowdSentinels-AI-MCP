@@ -1,0 +1,1 @@
+any where process.executable:"*\\mobsync.exe" and (file.path like~ ("*.dll", "*.exe"))

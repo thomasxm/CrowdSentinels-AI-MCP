@@ -1,0 +1,1 @@
+any where file.path:"*\\SolidPDFCreator.dll" and (not (process.executable:"*\\SolidPDFCreator.exe" and (file.path like~ ("C:\\Program Files (x86)\\SolidDocuments\\SolidPDFCreator\*", "C:\\Program Files\\SolidDocuments\\SolidPDFCreator\*"))))

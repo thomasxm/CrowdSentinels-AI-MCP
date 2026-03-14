@@ -1,0 +1,1 @@
+CommandLine:*base64\ * AND ((CommandLine:(*\|\ bash\ * OR *\|\ sh\ * OR *\|bash\ * OR *\|sh\ *)) OR (CommandLine:(*\ \|sh OR *\|\ bash OR *\|\ sh OR *\|bash)))

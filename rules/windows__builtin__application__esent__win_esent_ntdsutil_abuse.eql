@@ -1,0 +1,1 @@
+any where winlog.channel:"Application" and (winlog.provider_name:"ESENT" and (event.code like~ ("216", "325", "326", "327")) and winlog.event_data.Data:"*ntds.dit*")

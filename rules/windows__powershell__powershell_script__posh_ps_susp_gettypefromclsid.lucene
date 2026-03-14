@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*\:\:GetTypeFromCLSID\(* AND powershell.file.script_block_text:*.ShellExecute\(*

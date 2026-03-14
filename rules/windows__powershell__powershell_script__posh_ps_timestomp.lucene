@@ -1,0 +1,1 @@
+powershell.file.script_block_text:(*.CreationTime\ \=* OR *.LastWriteTime\ \=* OR *.LastAccessTime\ \=* OR *\[IO.File\]\:\:SetCreationTime* OR *\[IO.File\]\:\:SetLastAccessTime* OR *\[IO.File\]\:\:SetLastWriteTime*)

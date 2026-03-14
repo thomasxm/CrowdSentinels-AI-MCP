@@ -1,0 +1,1 @@
+any where registry.path:"*shellex\\ContextMenuHandlers\\EPP*" and (not ((process.executable like~ ("C:\\ProgramData\\Microsoft\\Windows Defender\\Platform\*", "C:\\Program Files\\Windows Defender\*", "C:\\Program Files (x86)\\Windows Defender\*")) and process.executable:"*\\MsMpEng.exe"))

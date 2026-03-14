@@ -1,0 +1,1 @@
+any where (process.command_line like~ ("*powershell.exe*", "*\\powershell*", "*\\pwsh*", "*pwsh.exe*")) and ((process.command_line:"*/c *" and process.command_line:"*\\AppData\*") and (process.command_line like~ ("*Local\*", "*Roaming\*")))

@@ -1,0 +1,1 @@
+any where (event.code:"29" and winlog.event_data.Configuration:"*@logTargetW3C" and winlog.event_data.OldValue:"*ETW*") and (not winlog.event_data.NewValue:"*ETW*")

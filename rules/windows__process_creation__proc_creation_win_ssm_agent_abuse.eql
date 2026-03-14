@@ -1,0 +1,1 @@
+any where process.executable:"*\\amazon-ssm-agent.exe" and (process.command_line:"*-register *" and process.command_line:"*-code *" and process.command_line:"*-id *" and process.command_line:"*-region *")

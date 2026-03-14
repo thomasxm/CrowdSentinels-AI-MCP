@@ -1,0 +1,1 @@
+any where (process.executable:"*\\curl.exe" or process.pe.original_file_name:"curl.exe") and (process.command_line like~ ("*--doh-insecure*", "*--proxy-insecure*"))

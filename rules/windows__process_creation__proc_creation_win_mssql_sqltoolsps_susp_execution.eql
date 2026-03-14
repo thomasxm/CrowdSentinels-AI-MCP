@@ -1,0 +1,1 @@
+any where (process.executable:"*\\sqltoolsps.exe" or process.parent.executable:"*\\sqltoolsps.exe" or process.pe.original_file_name:"\\sqltoolsps.exe") and (not process.parent.executable:"*\\smss.exe")

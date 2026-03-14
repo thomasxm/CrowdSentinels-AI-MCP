@@ -1,0 +1,1 @@
+any where winlog.event_data.TargetImage:"*\\mstsc.exe" and (process.executable like~ ("*:\\Temp\*", "*:\\Users\\Public\*", "*:\\Windows\\PerfLogs\*", "*:\\Windows\\Tasks\*", "*:\\Windows\\Temp\*", "*\\AppData\\Local\\Temp\*"))

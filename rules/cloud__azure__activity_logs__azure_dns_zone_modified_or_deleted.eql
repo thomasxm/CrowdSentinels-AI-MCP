@@ -1,0 +1,1 @@
+any where operationName:"MICROSOFT.NETWORK/DNSZONES*" and (operationName like~ ("*/WRITE", "*/DELETE"))

@@ -1,0 +1,1 @@
+any where process.executable:"*\\certutil.exe" and network.direction:"true" and (destination.port like~ (80, 135, 443, 445))

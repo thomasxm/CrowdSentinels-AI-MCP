@@ -1,0 +1,1 @@
+any where process.executable:"*\\msdt.exe" and (file.path like~ ("*\\Desktop\*", "*\\Start Menu\\Programs\\Startup\*", "*C:\\PerfLogs\*", "*C:\\ProgramData\*", "*C:\\Users\\Public\*"))

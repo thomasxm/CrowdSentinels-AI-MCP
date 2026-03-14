@@ -1,0 +1,1 @@
+any where (process.executable:"*\\rundll32.exe" or process.pe.original_file_name:"RUNDLL32.EXE") and process.command_line:"SigmaRegularExpression(regexp=SigmaString(['[Rr][Uu][Nn][Dd][Ll][Ll]32(\\.[Ee][Xx][Ee])', <SpecialChars.WILDCARD_SINGLE: 2>, ' \\S+', <SpecialChars.WILDCARD_SINGLE: 2>, '\\w:\\S+', <SpecialChars.WILDCARD_SINGLE: 2>, ':']), flags=set())"

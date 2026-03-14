@@ -1,0 +1,1 @@
+any where ((process.parent.executable like~ ("*\\WINWORD.EXE", "*\\EXCEL.EXE", "*\\POWERPNT.exe", "*\\MSPUB.exe", "*\\VISIO.exe", "*\\MSACCESS.exe", "*\\EQNEDT32.exe")) and process.executable:"C:\\users\*" and process.executable:"*.exe") and (not process.executable:"*\\Teams.exe")

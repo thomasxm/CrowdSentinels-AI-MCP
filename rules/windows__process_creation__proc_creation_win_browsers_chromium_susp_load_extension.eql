@@ -1,0 +1,1 @@
+any where (process.parent.executable like~ ("*\\cmd.exe", "*\\cscript.exe", "*\\mshta.exe", "*\\powershell.exe", "*\\pwsh.exe", "*\\regsvr32.exe", "*\\rundll32.exe", "*\\wscript.exe")) and (process.executable like~ ("*\\brave.exe", "*\\chrome.exe", "*\\msedge.exe", "*\\opera.exe", "*\\vivaldi.exe")) and process.command_line:"*--load-extension=*"

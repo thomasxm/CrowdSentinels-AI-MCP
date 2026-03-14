@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:4662 AND winlog.event_data.ObjectType:WMI\ Namespace AND winlog.event_data.ObjectName:*subscription*)

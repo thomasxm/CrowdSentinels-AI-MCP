@@ -1,0 +1,1 @@
+(process.command_line:*\/generic\:Microsoft_Windows_Shell_ZipFolder\:filename\=* AND process.command_line:*.zip* AND process.command_line:*\/pass\:* AND process.command_line:*\/user\:*) OR (process.command_line:*\/delete* AND process.command_line:*Microsoft_Windows_Shell_ZipFolder\:filename\=* AND process.command_line:*.zip*)

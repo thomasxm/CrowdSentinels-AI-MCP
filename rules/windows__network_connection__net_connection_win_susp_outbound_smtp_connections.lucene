@@ -1,0 +1,1 @@
+((destination.port:(25 OR 587 OR 465 OR 2525)) AND network.direction:true) AND (NOT ((process.executable:(*\\thunderbird.exe OR *\\outlook.exe)) OR process.executable:C\:\\Program\ Files\\Microsoft\\Exchange\ Server\* OR (process.executable:C\:\\Program\ Files\\WindowsApps\\microsoft.windowscommunicationsapps_* AND process.executable:*\\HxTsr.exe)))

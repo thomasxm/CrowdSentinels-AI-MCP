@@ -1,0 +1,1 @@
+any where process.command_line:"*Get-LocalGroupMember *" and (process.command_line like~ ("*domain admins*", "* administrator*", "* administrateur*", "*enterprise admins*", "*Exchange Trusted Subsystem*", "*Remote Desktop Users*", "*Utilisateurs du Bureau à distance*", "*Usuarios de escritorio remoto*"))

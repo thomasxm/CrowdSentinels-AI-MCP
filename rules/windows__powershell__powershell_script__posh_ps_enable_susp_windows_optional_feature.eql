@@ -1,0 +1,1 @@
+any where (powershell.file.script_block_text:"*Enable-WindowsOptionalFeature*" and powershell.file.script_block_text:"*-Online*" and powershell.file.script_block_text:"*-FeatureName*") and (powershell.file.script_block_text like~ ("*TelnetServer*", "*Internet-Explorer-Optional-amd64*", "*TFTP*", "*SMB1Protocol*", "*Client-ProjFS*", "*Microsoft-Windows-Subsystem-Linux*"))

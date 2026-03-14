@@ -1,0 +1,1 @@
+network.direction:true AND (destination.domain:(*.ngrok\-free.app OR *.ngrok\-free.dev OR *.ngrok.app OR *.ngrok.dev OR *.ngrok.io))

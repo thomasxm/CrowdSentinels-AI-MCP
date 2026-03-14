@@ -1,0 +1,1 @@
+any where ((process.executable:"*\\Windows\*" and (process.command_line like~ ("*\\..\\Windows\*", "*\\..\\System32\*", "*\\..\\..\*"))) or process.command_line:"*.exe\\..\*") and (not (process.command_line like~ ("*\\Google\\Drive\\googledrivesync.exe\\..\*", "*\\Citrix\\Virtual Smart Card\\Citrix.Authentication.VirtualSmartcard.Launcher.exe\\..\*")))

@@ -1,0 +1,1 @@
+any where (process.parent.executable:"*\\explorer.exe" and (process.executable:"*\\rundll32.exe" or process.pe.original_file_name:"RUNDLL32.EXE")) and (not (process.command_line like~ ("* C:\\Windows\\System32\*", "* -localserver 22d8c27b-47a1-48d1-ad08-7da7abd79617")))

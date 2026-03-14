@@ -1,0 +1,1 @@
+any where process.command_line:"*:3389*" and (process.command_line like~ ("* -L *", "* -P *", "* -R *", "* -pw *", "* -ssh *"))

@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*Invoke\-TroubleshootingPack* AND powershell.file.script_block_text:*C\:\\Windows\\Diagnostics\\System\\PCW* AND powershell.file.script_block_text:*\-AnswerFile* AND powershell.file.script_block_text:*\-Unattended*

@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\EXCEL.EXE", "*\\POWERPNT.EXE", "*\\WINWORD.exe")) or (process.pe.original_file_name like~ ("Excel.exe", "POWERPNT.EXE", "WinWord.exe"))) and (process.command_line like~ ("*http://*", "*https://*"))

@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and (((event.code:"4624" and user.id:"S-1-0-0" and winlog.event_data.LogonType:"3" and winlog.event_data.LogonProcessName:"NtLmSsp" and winlog.event_data.KeyLength:"0") or (event.code:"4624" and winlog.event_data.LogonType:"9" and winlog.event_data.LogonProcessName:"seclogo")) and (not winlog.event_data.TargetUserName:"ANONYMOUS LOGON"))

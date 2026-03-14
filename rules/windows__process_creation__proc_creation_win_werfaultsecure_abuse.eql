@@ -1,0 +1,1 @@
+any where (process.executable:"*\\WerFaultSecure.exe" or process.pe.original_file_name:"WerFaultSecure.exe") and (process.command_line:"* /h *" and process.command_line:"* /pid *" and process.command_line:"* /tid *" and process.command_line:"* /encfile *" and process.command_line:"* /cancel *" and process.command_line:"* /type *" and process.command_line:"* 268310*")

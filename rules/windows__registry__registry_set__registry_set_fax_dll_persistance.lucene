@@ -1,0 +1,1 @@
+(registry.path:*\\Software\\Microsoft\\Fax\\Device\ Providers\* AND registry.path:*\\ImageName*) AND (NOT winlog.event_data.Details:%systemroot%\\system32\\fxst30.dll)

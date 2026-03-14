@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*New\-Object\ * AND powershell.file.script_block_text:*System.DirectoryServices.DirectorySearcher* AND powershell.file.script_block_text:*.PropertiesToLoad.Add* AND powershell.file.script_block_text:*.findall\(\)* AND powershell.file.script_block_text:*Properties.name*

@@ -1,0 +1,1 @@
+any where process.executable:"*\\aspnet_compiler.exe" and (file.path:"*\\Temporary ASP.NET Files\*" and file.path:"*\\assembly\\tmp\*" and file.path:"*.dll*")

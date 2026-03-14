@@ -1,0 +1,1 @@
+any where (process.executable:"*\\plink.exe" and process.command_line:"*:127.0.0.1:3389*") or ((process.executable:"*\\plink.exe" and process.command_line:"*:3389*") and (process.command_line like~ ("* -P 443*", "* -P 22*")))

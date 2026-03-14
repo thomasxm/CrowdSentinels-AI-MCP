@@ -1,0 +1,1 @@
+process.executable:*\\QuarksPwDump.exe OR (process.command_line:(\ \-dhl OR \ \-\-dump\-hash\-local OR \ \-dhdc OR \ \-\-dump\-hash\-domain\-cached OR \ \-\-dump\-bitlocker OR \ \-dhd\  OR \ \-\-dump\-hash\-domain\  OR \-\-ntds\-file))

@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\brave.exe", "*\\chrome.exe", "*\\msedge.exe", "*\\opera.exe", "*\\vivaldi.exe")) and process.command_line:"*--headless*" and (process.command_line like~ ("*://run.mocky*", "*://mockbin*"))

@@ -1,0 +1,1 @@
+(winlog.event_data.Data:*powershell* AND winlog.event_data.Data:*nslookup* AND winlog.event_data.Data:*\[1\]*) AND (winlog.event_data.Data:(*\-q\=txt\ http* OR *\-querytype\=txt\ http* OR *\-type\=txt\ http*))

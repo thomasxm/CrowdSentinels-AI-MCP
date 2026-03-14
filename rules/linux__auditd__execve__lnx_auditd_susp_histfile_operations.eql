@@ -1,0 +1,1 @@
+any where type:"EXECVE" and (".bash_history" or ".zsh_history" or ".zhistory" or ".history" or ".sh_history" or "fish_history")

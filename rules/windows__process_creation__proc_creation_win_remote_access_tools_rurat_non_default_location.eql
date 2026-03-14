@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\rutserv.exe", "*\\rfusclient.exe")) or process.pe.product:"Remote Utilities") and (not (process.executable like~ ("C:\\Program Files\\Remote Utilities*", "C:\\Program Files (x86)\\Remote Utilities*")))

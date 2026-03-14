@@ -1,0 +1,1 @@
+(process.parent.executable:*\\stordiag.exe AND (process.executable:(*\\schtasks.exe OR *\\systeminfo.exe OR *\\fltmc.exe))) AND (NOT (process.parent.executable:(c\:\\windows\\system32\* OR c\:\\windows\\syswow64\*)))

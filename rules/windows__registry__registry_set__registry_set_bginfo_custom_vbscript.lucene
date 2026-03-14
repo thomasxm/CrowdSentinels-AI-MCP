@@ -1,0 +1,1 @@
+registry.path:*\\Software\\Winternals\\BGInfo\\UserFields\* AND winlog.event_data.Details:4*

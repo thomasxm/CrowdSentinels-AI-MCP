@@ -1,0 +1,1 @@
+(process.executable:(*\\Users\\Public\* OR *\\$Recycle.bin* OR *\\Users\\All\ Users\* OR *\\Users\\Default\* OR *\\Users\\Contacts\* OR *\\Users\\Searches\* OR *C\:\\Perflogs\* OR *\\config\\systemprofile\* OR *\\Windows\\Fonts\* OR *\\Windows\\IME\* OR *\\Windows\\addins\*)) AND (process.parent.executable:(*\\services.exe OR *\\svchost.exe))

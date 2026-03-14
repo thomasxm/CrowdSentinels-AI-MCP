@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\wsreset.exe" and (not (process.executable:"*\\conhost.exe" or process.pe.original_file_name:"CONHOST.EXE"))

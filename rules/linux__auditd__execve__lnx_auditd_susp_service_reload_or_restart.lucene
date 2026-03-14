@@ -1,0 +1,1 @@
+type:EXECVE AND (a0:(*systemctl* OR *service*)) AND (a1:(*reload* OR *start*))

@@ -1,0 +1,1 @@
+(powershell.file.script_block_text:*Test\-NetConnection* AND powershell.file.script_block_text:*\-ComputerName\ * AND powershell.file.script_block_text:*\-port\ *) AND (NOT (powershell.file.script_block_text:(*\ 443\ * OR *\ 80\ *)))

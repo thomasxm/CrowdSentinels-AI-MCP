@@ -1,0 +1,1 @@
+any where Image:"*/dscl" and (CommandLine:"* -append *" and CommandLine:"* /Groups/admin *" and CommandLine:"* GroupMembership *")

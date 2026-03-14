@@ -1,0 +1,1 @@
+process.executable:C\:\\WINDOWS\\system32\\WerFault.exe AND (file.path:(*\\lsass* OR *lsass.exe*))

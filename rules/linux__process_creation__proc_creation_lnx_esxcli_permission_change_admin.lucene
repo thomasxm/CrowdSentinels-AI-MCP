@@ -1,0 +1,1 @@
+Image:*\/esxcli AND CommandLine:*system* AND (CommandLine:*\ permission\ * AND CommandLine:*\ set* AND CommandLine:*Admin*)

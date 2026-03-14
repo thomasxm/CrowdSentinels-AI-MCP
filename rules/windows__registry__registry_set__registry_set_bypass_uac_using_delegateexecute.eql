@@ -1,0 +1,1 @@
+any where registry.path:"*\\open\\command\\DelegateExecute" and winlog.event_data.Details:"(Empty)"

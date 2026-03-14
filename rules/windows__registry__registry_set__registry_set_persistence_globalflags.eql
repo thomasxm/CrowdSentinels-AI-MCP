@@ -1,0 +1,1 @@
+any where (registry.path:"*\\Microsoft\\Windows NT\\CurrentVersion\*" and registry.path:"*\\Image File Execution Options\*" and registry.path:"*\\GlobalFlag*") or ((registry.path:"*\\Microsoft\\Windows NT\\CurrentVersion\*" and registry.path:"*\\SilentProcessExit\*") and (registry.path like~ ("*\\ReportingMode*", "*\\MonitorProcess*")))

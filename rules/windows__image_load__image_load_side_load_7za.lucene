@@ -1,0 +1,1 @@
+file.path:*\\7za.dll AND (NOT ((process.executable:(C\:\\Program\ Files\ \(x86\)\* OR C\:\\Program\ Files\*)) AND (file.path:(C\:\\Program\ Files\ \(x86\)\* OR C\:\\Program\ Files\*))))

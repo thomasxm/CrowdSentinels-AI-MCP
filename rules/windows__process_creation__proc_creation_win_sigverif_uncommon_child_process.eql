@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\sigverif.exe" and (not (process.executable like~ ("C:\\Windows\\System32\\WerFault.exe", "C:\\Windows\\SysWOW64\\WerFault.exe")))

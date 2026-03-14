@@ -1,0 +1,1 @@
+Image:*python* AND (CommandLine:*\ \-c\ * AND CommandLine:*import* AND CommandLine:*pty* AND CommandLine:*socket* AND CommandLine:*spawn* AND CommandLine:*.connect*)

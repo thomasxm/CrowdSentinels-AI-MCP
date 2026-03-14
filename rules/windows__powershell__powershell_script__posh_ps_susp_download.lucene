@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*System.Net.WebClient* AND (powershell.file.script_block_text:(*.DownloadFile\(* OR *.DownloadFileAsync\(* OR *.DownloadString\(* OR *.DownloadStringAsync\(*))

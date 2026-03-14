@@ -1,0 +1,1 @@
+any where (file.name:"*\\MSSE-*" and file.name:"*-server*") or file.name:"\\postex_*" or file.name:"\\status_*" or file.name:"\\msagent_*" or file.name:"\\mojo_*" or file.name:"\\interprocess_*" or file.name:"\\samr_*" or file.name:"\\netlogon_*" or file.name:"\\srvsvc_*" or file.name:"\\lsarpc_*" or file.name:"\\wkssvc_*"

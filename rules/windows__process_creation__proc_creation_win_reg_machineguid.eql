@@ -1,0 +1,1 @@
+any where process.executable:"*\\reg.exe" and (process.command_line:"*SOFTWARE\\Microsoft\\Cryptography*" and process.command_line:"*/v *" and process.command_line:"*MachineGuid*")

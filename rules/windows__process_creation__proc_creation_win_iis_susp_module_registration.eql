@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\w3wp.exe" and (process.command_line:"*appcmd.exe add module*" or (process.command_line:"* system.enterpriseservices.internal.publish*" and process.executable:"*\\powershell.exe") or (process.command_line:"*gacutil*" and process.command_line:"* /I*"))

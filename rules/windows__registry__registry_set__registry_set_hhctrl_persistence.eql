@@ -1,0 +1,1 @@
+any where registry.path:"*\\CLSID\\{52A2AAAE-085D-4187-97EA-8C30DB990436}\\InprocServer32\\(Default)*" and (not winlog.event_data.Details:"C:\\Windows\\System32\\hhctrl.ocx")

@@ -1,0 +1,1 @@
+type:EXECVE AND a0:*dd* AND (a1:(*if\=\/dev\/null* OR *if\=\/dev\/zero*))

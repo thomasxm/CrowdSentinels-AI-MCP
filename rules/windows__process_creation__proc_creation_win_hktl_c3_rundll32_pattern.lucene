@@ -1,0 +1,1 @@
+process.command_line:*rundll32.exe* AND process.command_line:*.dll* AND process.command_line:*StartNodeRelay*

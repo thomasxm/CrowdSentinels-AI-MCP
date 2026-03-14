@@ -1,0 +1,1 @@
+winlog.channel:MSExchange\ Management AND (event.code:6 AND winlog.event_data.Data:*Install\-TransportAgent*)

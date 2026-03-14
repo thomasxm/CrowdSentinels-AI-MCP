@@ -1,0 +1,1 @@
+process.executable:*\\cloudflared.exe AND (NOT (process.executable:(*\:\\Program\ Files\ \(x86\)\\cloudflared\* OR *\:\\Program\ Files\\cloudflared\*)))

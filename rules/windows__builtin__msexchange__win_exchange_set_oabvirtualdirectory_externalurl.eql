@@ -1,0 +1,1 @@
+any where winlog.channel:"MSExchange Management" and ("Set-OabVirtualDirectory" and "ExternalUrl" and "Page_Load" and "script")

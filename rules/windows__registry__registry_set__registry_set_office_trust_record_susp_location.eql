@@ -1,0 +1,1 @@
+any where registry.path:"*\\Security\\Trusted Documents\\TrustRecords*" and (registry.path like~ ("*/AppData/Local/Microsoft/Windows/INetCache/*", "*/AppData/Local/Temp/*", "*/PerfLogs/*", "*C:/Users/Public/*", "*file:///D:/*", "*file:///E:/*"))

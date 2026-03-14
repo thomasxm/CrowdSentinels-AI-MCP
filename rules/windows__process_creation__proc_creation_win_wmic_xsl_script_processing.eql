@@ -1,0 +1,1 @@
+any where (process.executable:"*\\wmic.exe" and process.command_line like~ ("*-format*", "*/format*", "*–format*", "*—format*", "*―format*")) and (not (process.command_line like~ ("*Format:List*", "*Format:htable*", "*Format:hform*", "*Format:table*", "*Format:mof*", "*Format:value*", "*Format:rawxml*", "*Format:xml*", "*Format:csv*")))

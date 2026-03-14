@@ -1,0 +1,1 @@
+any where (registry.path like~ ("*\\Policies\\Microsoft\\Windows NT\\SystemRestore*", "*\\Microsoft\\Windows NT\\CurrentVersion\\SystemRestore*")) and (registry.path like~ ("*DisableConfig", "*DisableSR")) and winlog.event_data.Details:"DWORD (0x00000001)"

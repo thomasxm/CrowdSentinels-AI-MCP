@@ -1,0 +1,1 @@
+(process.pe.original_file_name:whoami.exe OR process.executable:*\\whoami.exe) AND (user.name:(*AUTHORI* OR *AUTORI* OR *TrustedInstaller*))

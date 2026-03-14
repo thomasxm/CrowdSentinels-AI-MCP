@@ -1,0 +1,1 @@
+any where process.executable:"*\\mstsc.exe" and file.path:"*\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\*"

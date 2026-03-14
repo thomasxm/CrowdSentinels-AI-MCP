@@ -1,0 +1,1 @@
+any where Image:"*/dd" and (CommandLine:"*of=*" and CommandLine:"*/proc/*" and CommandLine:"*/mem*")

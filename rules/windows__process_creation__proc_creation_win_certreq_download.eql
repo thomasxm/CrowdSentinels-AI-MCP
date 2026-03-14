@@ -1,0 +1,1 @@
+any where (process.executable:"*\\certreq.exe" or process.pe.original_file_name:"CertReq.exe") and process.command_line like~ ("*-Post*", "*/Post*", "*–Post*", "*—Post*", "*―Post*") and process.command_line like~ ("*-config*", "*/config*", "*–config*", "*—config*", "*―config*") and process.command_line:"*http*"

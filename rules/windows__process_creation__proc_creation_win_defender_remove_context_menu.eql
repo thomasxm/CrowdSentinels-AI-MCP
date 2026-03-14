@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\powershell_ise.exe", "*\\powershell.exe", "*\\pwsh.exe", "*\\reg.exe")) or (process.pe.original_file_name like~ ("powershell_ise.EXE", "PowerShell.EXE", "pwsh.dll", "reg.exe"))) and (process.command_line like~ ("*del*", "*Remove-Item*", "*ri *")) and process.command_line:"*\\shellex\\ContextMenuHandlers\\EPP*"

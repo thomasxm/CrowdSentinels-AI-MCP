@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\htran.exe", "*\\lcx.exe")) or (process.command_line like~ ("*.exe -tran *", "*.exe -slave *"))

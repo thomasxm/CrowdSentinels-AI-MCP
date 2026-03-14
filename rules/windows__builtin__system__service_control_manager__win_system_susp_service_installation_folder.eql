@@ -1,0 +1,1 @@
+any where winlog.channel:"System" and ((winlog.provider_name:"Service Control Manager" and event.code:"7045" and (winlog.event_data.ImagePath like~ ("*\\AppData\*", "*\\127.0.0.1*", "*\\localhost*"))) and (not (winlog.event_data.ServiceName:"Zoom Sharing Service" and winlog.event_data.ImagePath:"*:\\Program Files\\Common Files\\Zoom\\Support\\CptService.exe*")))

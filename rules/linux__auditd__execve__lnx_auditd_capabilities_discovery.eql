@@ -1,0 +1,1 @@
+any where type:"EXECVE" and a0:"getcap" and a1:"-r" and a2:"/"

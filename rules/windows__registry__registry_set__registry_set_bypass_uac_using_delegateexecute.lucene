@@ -1,0 +1,1 @@
+registry.path:*\\open\\command\\DelegateExecute AND winlog.event_data.Details:\(Empty\)

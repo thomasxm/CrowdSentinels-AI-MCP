@@ -1,0 +1,1 @@
+registry.path:*\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\TypedPaths\* AND (NOT (process.executable:(C\:\\Windows\\explorer.exe OR C\:\\Windows\\SysWOW64\\explorer.exe)))

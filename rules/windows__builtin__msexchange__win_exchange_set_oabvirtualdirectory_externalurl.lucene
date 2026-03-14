@@ -1,0 +1,1 @@
+winlog.channel:MSExchange\ Management AND (*Set\-OabVirtualDirectory* AND *ExternalUrl* AND *Page_Load* AND *script*)

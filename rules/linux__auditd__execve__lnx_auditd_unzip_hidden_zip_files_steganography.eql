@@ -1,0 +1,1 @@
+any where (type:"EXECVE" and a0:"unzip") and (a1 like~ ("*.jpg", "*.png"))

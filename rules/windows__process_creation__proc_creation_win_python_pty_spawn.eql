@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*python.exe", "*python3.exe", "*python2.exe")) and ((process.command_line:"*import pty*" and process.command_line:"*.spawn(*") or process.command_line:"*from pty import spawn*")

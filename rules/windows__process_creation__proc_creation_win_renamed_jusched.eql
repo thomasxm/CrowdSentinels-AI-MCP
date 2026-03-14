@@ -1,0 +1,1 @@
+any where (process.pe.description like~ ("Java Update Scheduler", "Java(TM) Update Scheduler")) and (not process.executable:"*\\jusched.exe")

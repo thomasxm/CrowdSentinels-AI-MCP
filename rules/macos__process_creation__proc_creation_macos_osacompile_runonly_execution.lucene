@@ -1,0 +1,1 @@
+CommandLine:*osacompile* AND CommandLine:*\ \-x\ * AND CommandLine:*\ \-e\ *

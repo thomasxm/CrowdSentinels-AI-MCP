@@ -1,0 +1,1 @@
+type:EXECVE AND a0:getcap AND a1:\-r AND a2:\/

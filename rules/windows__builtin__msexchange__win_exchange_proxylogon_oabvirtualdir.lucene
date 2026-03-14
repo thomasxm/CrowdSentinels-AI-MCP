@@ -1,0 +1,1 @@
+winlog.channel:MSExchange\ Management AND ((*OabVirtualDirectory* AND *\ \-ExternalUrl\ *) AND (*eval\(request* OR *http\:\/\/f\/\<script* OR *\"unsafe\"\};* OR *function\ Page_Load\(\)*))

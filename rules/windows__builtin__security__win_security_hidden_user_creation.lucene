@@ -1,0 +1,1 @@
+winlog.channel:Security AND ((event.code:4720 AND winlog.event_data.TargetUserName:*$) AND (NOT winlog.event_data.TargetUserName:HomeGroupUser$))

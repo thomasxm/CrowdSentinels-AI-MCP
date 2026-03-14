@@ -1,0 +1,1 @@
+any where process.executable:"*\\3proxy.exe" or process.pe.description:"3proxy - tiny proxy server" or process.command_line:"*.exe -i127.0.0.1 -p*"

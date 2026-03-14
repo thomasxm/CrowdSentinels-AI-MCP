@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*Remove\-ADGroupMember* AND powershell.file.script_block_text:*\-Identity\ * AND powershell.file.script_block_text:*\-Members\ *

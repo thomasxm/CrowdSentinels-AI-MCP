@@ -1,0 +1,1 @@
+any where (eventSource:"iam.amazonaws.com" and eventName:"CreateAccessKey") and (not userIdentity.arn:"*responseElements.accessKey.userName*")

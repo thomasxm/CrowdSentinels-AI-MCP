@@ -1,0 +1,1 @@
+any where registry.path:"*\\CLSID\\{fdb00e52-a214-4aa1-8fba-4357bb0072ec}\\InProcServer32\\(Default)" and (not winlog.event_data.Details:"%windir%\\system32\\amsi.dll")

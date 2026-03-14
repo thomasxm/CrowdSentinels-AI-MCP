@@ -1,0 +1,1 @@
+any where (winlog.event_data.IntegrityLevel like~ ("Medium", "S-1-16-8192")) and (process.command_line:"*ControlSet*" and process.command_line:"*services*") and (process.command_line like~ ("*\\ImagePath*", "*\\FailureCommand*", "*\\ServiceDll*"))

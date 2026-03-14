@@ -1,0 +1,1 @@
+any where registry.path:"HKLM\\System\\CurrentControlSet\\Services\\Fax\\ObjectName" and (not winlog.event_data.Details:"*NetworkService*")

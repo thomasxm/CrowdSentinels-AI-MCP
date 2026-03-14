@@ -1,0 +1,1 @@
+any where (type:"execve" and a0:"tcpdump" and a1:"-c" and a3:"*-i*") or (type:"execve" and a0:"tshark" and a1:"-c" and a3:"-i")

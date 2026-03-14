@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-NTLM\/Operational AND (event.code:8001 AND winlog.event_data.TargetName:TERMSRV*)

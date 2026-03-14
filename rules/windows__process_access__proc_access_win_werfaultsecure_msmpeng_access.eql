@@ -1,0 +1,1 @@
+any where process.executable:"*\\WerFaultSecure.exe" and winlog.event_data.TargetImage:"*\\MsMpEng.exe" and (winlog.event_data.CallTrace like~ ("*\\dbgcore.dll*", "*\\dbghelp.dll*"))

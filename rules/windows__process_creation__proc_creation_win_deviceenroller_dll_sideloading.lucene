@@ -1,0 +1,1 @@
+(process.executable:*\\deviceenroller.exe OR process.pe.original_file_name:deviceenroller.exe) AND process.command_line:*\/PhoneDeepLink*

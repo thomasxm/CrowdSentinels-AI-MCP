@@ -1,0 +1,1 @@
+winlog.channel:Windows\ PowerShell AND (winlog.event_data.Data:(*Compress\-Archive\ \-Path*\-DestinationPath\ $env\:TEMP* OR *Compress\-Archive\ \-Path*\-DestinationPath*\\AppData\\Local\\Temp\* OR *Compress\-Archive\ \-Path*\-DestinationPath*\:\\Windows\\Temp\*))

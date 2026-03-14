@@ -1,0 +1,1 @@
+any where (powershell.file.script_block_text like~ ("*-SecurityDescriptorSddl *", "*-sd *")) and ((powershell.file.script_block_text:"*Set-Service *" and powershell.file.script_block_text:"*D;;*") and (powershell.file.script_block_text like~ ("*;;;IU*", "*;;;SU*", "*;;;BA*", "*;;;SY*", "*;;;WD*")))

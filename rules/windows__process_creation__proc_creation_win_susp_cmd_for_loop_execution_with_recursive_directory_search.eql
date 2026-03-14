@@ -1,0 +1,1 @@
+any where (process.command_line:"*for /f*" and process.command_line:"*tokens=*" and process.command_line:"*in (*" and process.command_line:"*dir*") or (process.parent.command_line:"*for /f*" and process.parent.command_line:"*tokens=*" and process.parent.command_line:"*in (*" and process.parent.command_line:"*dir*")

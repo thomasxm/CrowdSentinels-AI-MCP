@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\System32\\cscript.exe", "*\\System32\\wscript.exe", "*\\System32\\mshta.exe", "*\\winword.exe", "*\\excel.exe")) and winlog.event_data.TargetImage:"*\\SysWOW64\*" and winlog.event_data.StartModule:"<sigma.types.SigmaNull object at 0x7fbc32f28ec0>"

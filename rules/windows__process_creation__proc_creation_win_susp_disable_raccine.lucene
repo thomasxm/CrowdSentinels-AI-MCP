@@ -1,0 +1,1 @@
+(process.command_line:*taskkill\ * AND process.command_line:*RaccineSettings.exe*) OR (process.command_line:*reg.exe* AND process.command_line:*delete* AND process.command_line:*Raccine\ Tray*) OR (process.command_line:*schtasks* AND process.command_line:*\/DELETE* AND process.command_line:*Raccine\ Rules\ Updater*)

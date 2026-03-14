@@ -1,0 +1,1 @@
+any where file.path:"*\\jli.dll" and (not ((file.path like~ ("C:\\Program Files\*", "C:\\Program Files (x86)\*")) and file.pe.description:"OpenJDK Platform binary" and file.pe.original_file_name:"jli.dll" and file.pe.product:"OpenJDK Platform*" and file.code_signature.signed:"true")) and (not file.path:"C:\\eclipse\\plugins\*")

@@ -1,0 +1,1 @@
+(process.executable:*\\dism.exe AND file.path:*\\dismcore.dll) AND (NOT file.path:C\:\\Windows\\System32\\Dism\\dismcore.dll)

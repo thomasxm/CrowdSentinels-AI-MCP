@@ -1,0 +1,1 @@
+winlog.channel:System AND (winlog.provider_name:Service\ Control\ Manager AND event.code:7045 AND (winlog.event_data.ImagePath:*set* AND winlog.event_data.ImagePath:*\&\&*) AND (winlog.event_data.ImagePath:(*environment* OR *invoke* OR *input*)))

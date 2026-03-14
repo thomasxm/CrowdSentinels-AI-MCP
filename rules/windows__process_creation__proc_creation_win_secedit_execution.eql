@@ -1,0 +1,1 @@
+any where (process.executable:"*\\secedit.exe" or process.pe.original_file_name:"SeCEdit") and ((process.command_line:"*/export*" and process.command_line:"*/cfg*") or (process.command_line:"*/configure*" and process.command_line:"*/db*"))

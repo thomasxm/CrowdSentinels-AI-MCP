@@ -1,0 +1,1 @@
+any where (process.executable:"*\\vshadow.exe" or process.pe.original_file_name:"vshadow.exe") and process.command_line:"*-exec*"

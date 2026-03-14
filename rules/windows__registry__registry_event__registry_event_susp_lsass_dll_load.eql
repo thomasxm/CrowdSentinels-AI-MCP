@@ -1,0 +1,1 @@
+any where (registry.path like~ ("*\\CurrentControlSet\\Services\\NTDS\\DirectoryServiceExtPt*", "*\\CurrentControlSet\\Services\\NTDS\\LsaDbExtPt*")) and (not (process.executable:"C:\\Windows\\system32\\lsass.exe" and (winlog.event_data.Details like~ ("%%systemroot%%\\system32\\ntdsa.dll", "%%systemroot%%\\system32\\lsadb.dll"))))

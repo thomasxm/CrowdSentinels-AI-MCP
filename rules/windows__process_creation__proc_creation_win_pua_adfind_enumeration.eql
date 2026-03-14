@@ -1,0 +1,1 @@
+any where (process.command_line like~ ("*lockoutduration*", "*lockoutthreshold*", "*lockoutobservationwindow*", "*maxpwdage*", "*minpwdage*", "*minpwdlength*", "*pwdhistorylength*", "*pwdproperties*")) or process.command_line:"*-sc admincountdmp*" or process.command_line:"*-sc exchaddresses*"

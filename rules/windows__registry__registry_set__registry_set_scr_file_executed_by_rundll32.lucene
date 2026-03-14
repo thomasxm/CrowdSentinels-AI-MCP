@@ -1,0 +1,1 @@
+process.executable:*\\rundll32.exe AND (registry.path:*\\Control\ Panel\\Desktop\\SCRNSAVE.EXE* AND winlog.event_data.Details:*.scr) AND (NOT (winlog.event_data.Details:(*C\:\\Windows\\System32\* OR *C\:\\Windows\\SysWOW64\*)))

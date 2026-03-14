@@ -1,0 +1,1 @@
+Image:*\/bin\/bash AND (NOT (DestinationIp:(127.0.0.1 OR 0.0.0.0)))

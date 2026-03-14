@@ -1,0 +1,1 @@
+any where (eventSource:"signin.amazonaws.com" and eventName:"GetSigninToken") and (not userAgent:"*Jersey/${project.version}*")

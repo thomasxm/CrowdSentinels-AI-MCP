@@ -1,0 +1,1 @@
+any where process.executable:"C:\\Program Files\\Internet Explorer\\IEInstal.exe" and file.path:"C:\\Users\*" and file.path:"*\\AppData\\Local\\Temp\*" and file.path:"*consent.exe"

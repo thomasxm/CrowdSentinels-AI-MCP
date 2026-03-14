@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-AppXDeploymentServer\/Operational AND (event.code:(441 OR 442 OR 453 OR 454))

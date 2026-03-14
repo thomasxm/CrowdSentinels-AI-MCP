@@ -1,0 +1,1 @@
+(process.executable:*\\fxssvc.exe AND file.path:*ualapi.dll) AND (NOT file.path:C\:\\Windows\\WinSxS\*)

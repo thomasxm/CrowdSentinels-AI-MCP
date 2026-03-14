@@ -1,0 +1,1 @@
+any where (Image like~ ("*/service", "*/systemctl", "*/chkconfig")) and (CommandLine like~ ("*stop*", "*disable*"))

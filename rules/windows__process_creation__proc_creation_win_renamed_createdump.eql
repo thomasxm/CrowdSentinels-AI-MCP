@@ -1,0 +1,1 @@
+any where (process.pe.original_file_name:"FX_VER_INTERNALNAME_STR" or ((process.command_line:"* -u *" and process.command_line:"* -f *" and process.command_line:"*.dmp*") or (process.command_line:"* --full *" and process.command_line:"* --name *" and process.command_line:"*.dmp*"))) and (not process.executable:"*\\createdump.exe")

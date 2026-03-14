@@ -1,0 +1,1 @@
+(winlog.event_data.ContextInfo:*\ \=\ ServerRemoteHost\ * AND winlog.event_data.ContextInfo:*wsmprovhost.exe*) AND (NOT winlog.event_data.ContextInfo:*\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\Microsoft.PowerShell.Archive\\Microsoft.PowerShell.Archive.psm1*)

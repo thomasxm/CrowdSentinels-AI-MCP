@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:5136 AND winlog.event_data.AttributeValue:* AND (winlog.event_data.AttributeLDAPDisplayName:(primaryInternationalISDNNumber OR otherFacsimileTelephoneNumber OR primaryTelexNumber)))

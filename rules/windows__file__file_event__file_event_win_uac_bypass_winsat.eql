@@ -1,0 +1,1 @@
+any where file.path:"C:\\Users\*" and (file.path like~ ("*\\AppData\\Local\\Temp\\system32\\winsat.exe", "*\\AppData\\Local\\Temp\\system32\\winmm.dll"))

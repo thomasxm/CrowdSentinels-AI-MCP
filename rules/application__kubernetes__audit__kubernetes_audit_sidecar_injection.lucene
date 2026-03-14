@@ -1,0 +1,1 @@
+verb:patch AND apiGroup:apps AND objectRef.resource:deployments

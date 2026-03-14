@@ -1,0 +1,1 @@
+any where (process.executable:"*\\msedge_proxy.exe" or process.pe.original_file_name:"msedge_proxy.exe") and (process.command_line like~ ("*http://*", "*https://*"))

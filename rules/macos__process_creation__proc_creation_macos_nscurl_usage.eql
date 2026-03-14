@@ -1,0 +1,1 @@
+any where Image:"*/nscurl" and (CommandLine like~ ("*--download *", "*--download-directory *", "*--output *", "*-dir *", "*-dl *", "*-ld*", "*-o *"))

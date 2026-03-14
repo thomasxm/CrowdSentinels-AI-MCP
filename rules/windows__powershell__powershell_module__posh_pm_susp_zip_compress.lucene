@@ -1,0 +1,1 @@
+winlog.event_data.ContextInfo:*Compress\-Archive\ \-Path*\-DestinationPath\ $env\:TEMP* AND winlog.event_data.ContextInfo:*Compress\-Archive\ \-Path*\-DestinationPath*\\AppData\\Local\\Temp\* AND winlog.event_data.ContextInfo:*Compress\-Archive\ \-Path*\-DestinationPath*\:\\Windows\\Temp\*

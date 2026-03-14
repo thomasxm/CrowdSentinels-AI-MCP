@@ -1,0 +1,1 @@
+file.path:C\:\\Windows\\System32\\winevt\\Logs\* AND file.path:*.evtx

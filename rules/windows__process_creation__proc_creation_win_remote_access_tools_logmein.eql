@@ -1,0 +1,1 @@
+any where process.pe.description:"LMIGuardianSvc" or process.pe.product:"LMIGuardianSvc" or process.pe.company:"LogMeIn, Inc."

@@ -1,0 +1,1 @@
+any where User:"root" and LogonId:0 and CurrentDirectory:"/var/opt/microsoft/scx/tmp" and CommandLine:"*/bin/sh*"

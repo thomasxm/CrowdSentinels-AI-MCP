@@ -1,0 +1,1 @@
+any where process.executable:"*\\DumpStack.log" or process.command_line:"* -o DumpStack.log*"

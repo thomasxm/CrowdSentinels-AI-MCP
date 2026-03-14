@@ -1,0 +1,1 @@
+any where (process.parent.executable like~ ("*\\powershell.exe", "*\\pwsh.exe")) and process.executable:"*\\schtasks.exe" and (process.command_line:"*/Create*" and process.command_line:"*powershell.exe -NonI*" and process.command_line:"*/TN Updater /TR*") and (process.command_line like~ ("*/SC ONLOGON*", "*/SC DAILY /ST*", "*/SC ONIDLE*", "*/SC HOURLY*"))

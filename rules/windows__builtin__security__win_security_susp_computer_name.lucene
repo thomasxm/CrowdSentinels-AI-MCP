@@ -1,0 +1,1 @@
+winlog.channel:Security AND ((winlog.event_data.SamAccountName:SAMTHEADMIN\-* AND winlog.event_data.SamAccountName:*$) OR (winlog.event_data.TargetUserName:SAMTHEADMIN\-* AND winlog.event_data.TargetUserName:*$))

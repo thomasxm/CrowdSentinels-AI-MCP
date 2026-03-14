@@ -1,0 +1,1 @@
+any where winlog.channel:"Microsoft-Windows-NTLM/Operational" and (event.code:"8004" and (source.domain like~ ("Rdesktop", "Remmina", "Freerdp", "Windows7", "Windows8", "Windows2012", "Windows2016", "Windows2019")))

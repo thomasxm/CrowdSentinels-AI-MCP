@@ -1,0 +1,1 @@
+any where process.command_line:"*-autoreconnect *" and process.command_line:"*-connect *" and process.command_line:"*-id:*"

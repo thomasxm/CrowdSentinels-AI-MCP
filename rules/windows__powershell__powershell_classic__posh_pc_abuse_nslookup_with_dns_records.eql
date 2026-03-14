@@ -1,0 +1,1 @@
+any where (winlog.event_data.Data:"*powershell*" and winlog.event_data.Data:"*nslookup*" and winlog.event_data.Data:"*[1]*") and (winlog.event_data.Data like~ ("*-q=txt http*", "*-querytype=txt http*", "*-type=txt http*"))

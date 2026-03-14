@@ -1,0 +1,1 @@
+any where ((process.executable:"*\\gpscript.exe" or process.pe.original_file_name:"GPSCRIPT.EXE") and (process.command_line like~ ("* /logon*", "* /startup*"))) and (not process.parent.command_line:"C:\\windows\\system32\\svchost.exe -k netsvcs -p -s gpsvc")

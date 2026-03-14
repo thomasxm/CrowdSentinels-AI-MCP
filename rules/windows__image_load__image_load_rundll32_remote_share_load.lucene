@@ -1,0 +1,1 @@
+process.executable:*\\rundll32.exe AND file.path:\\*

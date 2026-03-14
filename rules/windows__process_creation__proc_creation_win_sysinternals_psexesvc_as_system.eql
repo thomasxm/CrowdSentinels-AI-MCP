@@ -1,0 +1,1 @@
+any where process.parent.executable:"C:\\Windows\\PSEXESVC.exe" and (user.name like~ ("*AUTHORI*", "*AUTORI*"))

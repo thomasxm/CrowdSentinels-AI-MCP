@@ -1,0 +1,1 @@
+any where process.command_line like~ ("* -NoP -sta -NonI -W Hidden -Enc *", "* -noP -sta -w 1 -enc *", "* -NoP -NonI -W Hidden -enc *", "* -noP -sta -w 1 -enc*", "* -enc  SQB*", "* -nop -exec bypass -EncodedCommand *")

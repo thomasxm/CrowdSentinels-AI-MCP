@@ -1,0 +1,1 @@
+any where (type:"EXECVE" and a0:"chmod" and a1:777) or (type:"EXECVE" and a0:"chmod" and a1:"u+s") or (type:"EXECVE" and a0:"cp" and a1:"/bin/ksh") or (type:"EXECVE" and a0:"cp" and a1:"/bin/sh")

@@ -1,0 +1,1 @@
+any where process.executable:"*\\sqlcmd.exe" and (process.command_line:"*SELECT*" and process.command_line:"*TOP*" and process.command_line:"*[VeeamBackup].[dbo].[Credentials]*")

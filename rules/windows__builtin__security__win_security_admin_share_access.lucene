@@ -1,0 +1,1 @@
+winlog.channel:Security AND ((event.code:5140 AND winlog.event_data.ShareName:Admin$) AND (NOT user.name:*$))

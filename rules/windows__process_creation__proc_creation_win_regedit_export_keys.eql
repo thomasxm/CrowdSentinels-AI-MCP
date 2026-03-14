@@ -1,0 +1,1 @@
+any where ((process.executable:"*\\regedit.exe" or process.pe.original_file_name:"REGEDIT.EXE") and process.command_line like~ ("* -E *", "* /E *", "* –E *", "* —E *", "* ―E *")) and (not ((process.command_line like~ ("*hklm*", "*hkey_local_machine*")) and (process.command_line like~ ("*\\system", "*\\sam", "*\\security"))))

@@ -1,0 +1,1 @@
+any where process.executable like~ ("*RECYCLERS.BIN\*", "*RECYCLER.BIN\*")

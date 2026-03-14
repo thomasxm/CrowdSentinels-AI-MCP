@@ -1,0 +1,1 @@
+(file.path:(*\\roboform.dll OR *\\roboform\-x64.dll)) AND (NOT ((process.executable:(\ C\:\\Program\ Files\ \(x86\)\\Siber\ Systems\\AI\ RoboForm\* OR \ C\:\\Program\ Files\\Siber\ Systems\\AI\ RoboForm\*)) AND (process.executable:(*\\robotaskbaricon.exe OR *\\robotaskbaricon\-x64.exe))))

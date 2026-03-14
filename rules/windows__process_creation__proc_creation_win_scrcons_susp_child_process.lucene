@@ -1,0 +1,1 @@
+process.parent.executable:*\\scrcons.exe AND (process.executable:(*\\svchost.exe OR *\\dllhost.exe OR *\\powershell.exe OR *\\pwsh.exe OR *\\wscript.exe OR *\\cscript.exe OR *\\schtasks.exe OR *\\regsvr32.exe OR *\\mshta.exe OR *\\rundll32.exe OR *\\msiexec.exe OR *\\msbuild.exe))

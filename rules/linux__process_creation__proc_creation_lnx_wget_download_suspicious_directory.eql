@@ -1,0 +1,1 @@
+any where Image:"*/wget" and (CommandLine regex~ "\s-O\s" or CommandLine:"*--output-document*") and CommandLine:"*/tmp/*"

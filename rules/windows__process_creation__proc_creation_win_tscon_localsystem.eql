@@ -1,0 +1,1 @@
+any where (user.name like~ ("*AUTHORI*", "*AUTORI*")) and process.executable:"*\\tscon.exe"

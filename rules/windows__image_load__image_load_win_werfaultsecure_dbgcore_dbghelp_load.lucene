@@ -1,0 +1,1 @@
+process.executable:*\\WerFaultSecure.exe AND (file.path:(*\\dbgcore.dll OR *\\dbghelp.dll))

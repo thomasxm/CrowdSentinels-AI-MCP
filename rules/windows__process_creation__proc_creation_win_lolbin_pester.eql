@@ -1,0 +1,1 @@
+any where ((process.parent.executable like~ ("*\\powershell.exe", "*\\pwsh.exe")) and process.parent.command_line:"*\\WindowsPowerShell\\Modules\\Pester\*") and (process.parent.command_line like~ ("*{ Invoke-Pester -EnableExit ;*", "*{ Get-Help \"*"))

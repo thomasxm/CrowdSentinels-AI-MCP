@@ -1,0 +1,1 @@
+process.executable:C\:\\Windows\* AND (file.path:(C\:\\Users\\Public\* OR C\:\\PerfLogs\*))

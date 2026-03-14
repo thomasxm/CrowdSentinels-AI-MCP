@@ -1,0 +1,1 @@
+any where (Image:"*/dscl" and CommandLine:"*create*") or (Image:"*/sysadminctl" and CommandLine:"*addUser*")

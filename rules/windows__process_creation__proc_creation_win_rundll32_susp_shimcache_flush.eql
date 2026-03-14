@@ -1,0 +1,1 @@
+any where ((process.command_line:"*rundll32*" and process.command_line:"*apphelp.dll*") and (process.command_line like~ ("*ShimFlushCache*", "*#250*"))) or ((process.command_line:"*rundll32*" and process.command_line:"*kernel32.dll*") and (process.command_line like~ ("*BaseFlushAppcompatCache*", "*#46*")))

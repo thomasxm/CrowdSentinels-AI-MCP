@@ -1,0 +1,1 @@
+any where winlog.event_data.TargetImage:"*\\lsass.exe" and winlog.event_data.GrantedAccess:"0x1440" and winlog.event_data.CallTrace:"C:\\Windows\\System32\\ntdll.dll+*" and winlog.event_data.CallTrace:"*|UNKNOWN(*" and winlog.event_data.CallTrace:"*)"

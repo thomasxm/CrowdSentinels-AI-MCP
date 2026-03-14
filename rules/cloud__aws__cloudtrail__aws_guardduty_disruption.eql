@@ -1,0 +1,1 @@
+any where eventSource:"guardduty.amazonaws.com" and eventName:"CreateIPSet"

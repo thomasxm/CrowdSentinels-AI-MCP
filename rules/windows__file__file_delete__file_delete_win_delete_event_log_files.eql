@@ -1,0 +1,1 @@
+any where file.path:"C:\\Windows\\System32\\winevt\\Logs\*" and file.path:"*.evtx"

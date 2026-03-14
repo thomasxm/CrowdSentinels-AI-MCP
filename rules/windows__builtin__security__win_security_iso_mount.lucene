@@ -1,0 +1,1 @@
+winlog.channel:Security AND ((event.code:4663 AND winlog.event_data.ObjectServer:Security AND winlog.event_data.ObjectType:File AND winlog.event_data.ObjectName:\\Device\\CdRom*) AND (NOT (winlog.event_data.ObjectName:(\\Device\\CdRom0\\autorun.ico OR \\Device\\CdRom0\\setup.exe OR \\Device\\CdRom0\\setup64.exe))))

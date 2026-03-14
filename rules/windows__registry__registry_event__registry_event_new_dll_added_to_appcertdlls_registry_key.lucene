@@ -1,0 +1,1 @@
+registry.path:HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session\ Manager\\AppCertDlls OR winlog.event_data.NewName:HKLM\\SYSTEM\\CurentControlSet\\Control\\Session\ Manager\\AppCertDlls

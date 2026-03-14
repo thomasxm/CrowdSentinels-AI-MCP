@@ -1,0 +1,1 @@
+any where Image:"*/groups" or ((Image like~ ("*/cat", "*/ed", "*/head", "*/less", "*/more", "*/nano", "*/tail", "*/vi", "*/vim")) and CommandLine:"*/etc/group*")

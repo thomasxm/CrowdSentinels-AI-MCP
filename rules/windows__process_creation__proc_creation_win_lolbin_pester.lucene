@@ -1,0 +1,1 @@
+((process.parent.executable:(*\\powershell.exe OR *\\pwsh.exe)) AND process.parent.command_line:*\\WindowsPowerShell\\Modules\\Pester\*) AND (process.parent.command_line:(*\{\ Invoke\-Pester\ \-EnableExit\ ;* OR *\{\ Get\-Help\ \"*))

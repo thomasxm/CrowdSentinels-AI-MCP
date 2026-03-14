@@ -1,0 +1,1 @@
+any where (file.path:"*\\mpclient.dll" and (process.executable like~ ("*\\MpCmdRun.exe", "*\\NisSrv.exe"))) and (not (process.executable like~ ("C:\\Program Files (x86)\\Windows Defender\*", "C:\\Program Files\\Microsoft Security Client\*", "C:\\Program Files\\Windows Defender\*", "C:\\ProgramData\\Microsoft\\Windows Defender\\Platform\*", "C:\\Windows\\WinSxS\*")))

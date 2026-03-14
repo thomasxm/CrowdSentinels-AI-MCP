@@ -1,0 +1,1 @@
+(process.parent.executable:(*\\java.exe OR *\\javaw.exe)) AND process.parent.command_line:*SysAidServer*

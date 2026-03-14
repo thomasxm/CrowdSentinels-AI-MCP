@@ -1,0 +1,1 @@
+any where cs-method:"GET" and ("={{" or "=%7B%7B" or "=${" or "=$%7B" or "=<%=" or "=%3C%25=" or "=@(" or "freemarker.template.utility.Execute" or ".getClass().forName('javax.script.ScriptEngineManager')" or "T(org.apache.commons.io.IOUtils)") and (not sc-status:404)

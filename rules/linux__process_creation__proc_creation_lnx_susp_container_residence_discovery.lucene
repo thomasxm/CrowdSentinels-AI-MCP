@@ -1,0 +1,1 @@
+(Image:(*awk OR *\/cat OR *grep OR *\/head OR *\/less OR *\/more OR *\/nl OR *\/tail)) AND (CommandLine:*\/proc\/2\/* OR (CommandLine:*\/proc\/* AND (CommandLine:(*\/cgroup OR *\/sched))))

@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and (event.code:"4624" and winlog.event_data.LogonType:"9" and winlog.event_data.LogonProcessName:"Advapi" and winlog.event_data.AuthenticationPackageName:"Negotiate" and winlog.event_data.ImpersonationLevel:"%%1833")

@@ -1,0 +1,1 @@
+any where c-uri like~ ("*.paste.ee/r/*", "*.pastebin.com/raw/*", "*.hastebin.com/raw/*", "*.ghostbin.co/paste/*/raw/*", "*pastetext.net/*", "*pastebin.pl/*", "*paste.ee/*")

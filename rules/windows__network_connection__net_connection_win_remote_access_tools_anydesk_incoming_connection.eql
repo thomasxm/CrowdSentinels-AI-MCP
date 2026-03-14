@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\AnyDesk.exe", "*\\AnyDeskMSI.exe")) and network.direction:"false"

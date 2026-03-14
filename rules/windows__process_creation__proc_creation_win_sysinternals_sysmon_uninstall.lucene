@@ -1,0 +1,1 @@
+((process.executable:(*\\Sysmon64.exe OR *\\Sysmon.exe)) OR process.pe.description:System\ activity\ monitor) AND process.command_line:(*\-u* OR *\/u* OR *–u* OR *—u* OR *―u*)

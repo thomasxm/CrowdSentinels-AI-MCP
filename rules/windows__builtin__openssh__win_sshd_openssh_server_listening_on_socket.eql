@@ -1,0 +1,1 @@
+any where winlog.channel:"OpenSSH/Operational" and (event.code:"4" and winlog.event_data.process:"sshd" and winlog.event_data.payload:"Server listening on *")

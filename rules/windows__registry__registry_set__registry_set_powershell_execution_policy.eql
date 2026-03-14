@@ -1,0 +1,1 @@
+any where ((registry.path like~ ("*\\ShellIds\\Microsoft.PowerShell\\ExecutionPolicy", "*\\Policies\\Microsoft\\Windows\\PowerShell\\ExecutionPolicy")) and (winlog.event_data.Details like~ ("*Bypass*", "*Unrestricted*"))) and (not (process.executable like~ ("*:\\Windows\\System32\*", "*:\\Windows\\SysWOW64\*")))

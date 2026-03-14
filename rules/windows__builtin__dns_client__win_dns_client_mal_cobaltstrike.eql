@@ -1,0 +1,1 @@
+any where winlog.channel:"Microsoft-Windows-DNS Client Events/Operational" and (event.code:"3008" and ((dns.question.name like~ ("aaa.stage.*", "post.1*")) or dns.question.name:"*.stage.123456.*"))

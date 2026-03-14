@@ -1,0 +1,1 @@
+file.path:*\\wwlib.dll AND (NOT ((process.executable:(C\:\\Program\ Files\ \(x86\)\\Microsoft\ Office\* OR C\:\\Program\ Files\\Microsoft\ Office\*)) AND process.executable:*\\winword.exe AND (file.path:(C\:\\Program\ Files\ \(x86\)\\Microsoft\ Office\* OR C\:\\Program\ Files\\Microsoft\ Office\*))))

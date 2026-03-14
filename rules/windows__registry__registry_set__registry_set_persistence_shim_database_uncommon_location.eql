@@ -1,0 +1,1 @@
+any where (registry.path:"*\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\InstalledSDB\*" and registry.path:"*\\DatabasePath*") and (not winlog.event_data.Details:"*:\\Windows\\AppPatch\\Custom*")

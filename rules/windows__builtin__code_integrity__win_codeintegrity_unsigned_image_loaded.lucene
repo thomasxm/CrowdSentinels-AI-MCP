@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-CodeIntegrity\/Operational AND event.code:3037

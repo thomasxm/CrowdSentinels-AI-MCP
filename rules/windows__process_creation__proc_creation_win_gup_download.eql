@@ -1,0 +1,1 @@
+any where ((process.executable:"*\\GUP.exe" or process.pe.original_file_name:"gup.exe") and (process.command_line:"* -unzipTo *" and process.command_line:"*http*")) and (not process.parent.executable:"*\\notepad++.exe")

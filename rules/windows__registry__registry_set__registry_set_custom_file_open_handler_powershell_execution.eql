@@ -1,0 +1,1 @@
+any where registry.path:"*shell\\open\\command\*" and (winlog.event_data.Details:"*powershell*" and winlog.event_data.Details:"*-command*")

@@ -1,0 +1,1 @@
+(type:SYSCALL AND SYSCALL:personality AND a0:40000) OR (type:EXECVE AND a0:sysctl AND a1:\-w AND a2:kernel.randomize_va_space\=0)

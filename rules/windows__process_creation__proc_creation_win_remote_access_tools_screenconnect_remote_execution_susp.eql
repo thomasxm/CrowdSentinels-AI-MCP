@@ -1,0 +1,1 @@
+any where (process.parent.command_line:"*:\\Windows\\TEMP\\ScreenConnect\*" and process.parent.command_line:"*run.cmd*") and (process.executable like~ ("*\\bitsadmin.exe", "*\\cmd.exe", "*\\curl.exe", "*\\dllhost.exe", "*\\net.exe", "*\\nltest.exe", "*\\powershell.exe", "*\\pwsh.exe", "*\\rundll32.exe", "*\\wevtutil.exe"))

@@ -1,0 +1,1 @@
+(Image:\/usr\/bin\/security AND (CommandLine:(*find\-certificate* OR *\ export\ *))) OR (CommandLine:(*\ dump\-keychain\ * OR *\ login\-keychain\ *))

@@ -1,0 +1,1 @@
+any where process.command_line like~ ("*/logon:none*", "*/system:none*", "*/sam:none*", "*/privilege:none*", "*/object:none*", "*/process:none*", "*/policy:none*")

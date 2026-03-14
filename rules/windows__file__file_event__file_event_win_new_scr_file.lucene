@@ -1,0 +1,1 @@
+file.path:*.scr AND (NOT (file.path:(*\:\\$WINDOWS.\~BT\\NewOS\* OR *\:\\Windows\\System32\* OR *\:\\Windows\\SysWOW64\* OR *\:\\Windows\\WinSxS\* OR *\:\\WUDownloadCache\*)))

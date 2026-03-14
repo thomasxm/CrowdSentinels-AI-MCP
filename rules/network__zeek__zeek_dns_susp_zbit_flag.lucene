@@ -1,0 +1,1 @@
+(NOT Z:0) AND query:*.* AND (NOT ((query:(*.arpa OR *.local OR *.ultradns.net OR *.twtrdns.net OR *.azuredns\-prd.info OR *.azure\-dns.com OR *.azuredns\-ff.info OR *.azuredns\-ff.org OR *.azuregov\-dns.org)) OR (qtype_name:(ns OR mx)) OR answers:*\\x00 OR (id.resp_p:(137 OR 138 OR 139))))

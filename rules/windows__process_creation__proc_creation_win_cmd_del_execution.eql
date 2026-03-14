@@ -1,0 +1,1 @@
+any where (process.executable:"*\\cmd.exe" or process.pe.original_file_name:"Cmd.Exe") and (process.command_line like~ ("*del *", "*erase *")) and (process.command_line like~ ("* -f*", "* /f*", "* –f*", "* —f*", "* ―f*") or process.command_line like~ ("* -s*", "* /s*", "* –s*", "* —s*", "* ―s*") or process.command_line like~ ("* -q*", "* /q*", "* –q*", "* —q*", "* ―q*"))

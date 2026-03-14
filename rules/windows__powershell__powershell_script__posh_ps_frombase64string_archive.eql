@@ -1,0 +1,1 @@
+any where powershell.file.script_block_text:"*FromBase64String*" and powershell.file.script_block_text:"*MemoryStream*" and powershell.file.script_block_text:"*H4sI*"

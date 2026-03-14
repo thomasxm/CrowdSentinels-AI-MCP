@@ -1,0 +1,1 @@
+(process.executable:(*\:\\Windows\\Microsoft.NET\\Framework\* OR *\:\\Windows\\Microsoft.NET\\Framework64\* OR *\:\\Windows\\Microsoft.NET\\FrameworkArm\* OR *\:\\Windows\\Microsoft.NET\\FrameworkArm64\*)) AND process.executable:*\\aspnet_compiler.exe

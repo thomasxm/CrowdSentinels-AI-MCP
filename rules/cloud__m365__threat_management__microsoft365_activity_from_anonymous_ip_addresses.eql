@@ -1,0 +1,1 @@
+any where eventSource:"SecurityComplianceCenter" and eventName:"Activity from anonymous IP addresses" and status:"success"

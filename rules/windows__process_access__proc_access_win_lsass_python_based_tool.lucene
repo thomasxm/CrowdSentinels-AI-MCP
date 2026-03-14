@@ -1,0 +1,1 @@
+winlog.event_data.TargetImage:*\\lsass.exe AND (winlog.event_data.CallTrace:*_ctypes.pyd\+* AND winlog.event_data.CallTrace:*\:\\Windows\\System32\\KERNELBASE.dll\+* AND winlog.event_data.CallTrace:*\:\\Windows\\SYSTEM32\\ntdll.dll\+*) AND (winlog.event_data.CallTrace:(*python27.dll\+* OR *python3*.dll\+*)) AND winlog.event_data.GrantedAccess:0x1FFFFF

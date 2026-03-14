@@ -1,0 +1,1 @@
+(process.executable:*\\msedge_proxy.exe OR process.pe.original_file_name:msedge_proxy.exe) AND (process.command_line:(*http\:\/\/* OR *https\:\/\/*))

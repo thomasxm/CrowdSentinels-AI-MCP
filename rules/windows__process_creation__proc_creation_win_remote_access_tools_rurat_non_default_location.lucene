@@ -1,0 +1,1 @@
+((process.executable:(*\\rutserv.exe OR *\\rfusclient.exe)) OR process.pe.product:Remote\ Utilities) AND (NOT (process.executable:(C\:\\Program\ Files\\Remote\ Utilities* OR C\:\\Program\ Files\ \(x86\)\\Remote\ Utilities*)))

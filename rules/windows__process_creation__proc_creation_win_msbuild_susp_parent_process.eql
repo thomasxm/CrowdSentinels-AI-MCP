@@ -1,0 +1,1 @@
+any where (process.executable:"*\\MSBuild.exe" or process.pe.original_file_name:"MSBuild.exe") and (not (process.parent.executable like~ ("*\\devenv.exe", "*\\cmd.exe", "*\\msbuild.exe", "*\\python.exe", "*\\explorer.exe", "*\\nuget.exe")))

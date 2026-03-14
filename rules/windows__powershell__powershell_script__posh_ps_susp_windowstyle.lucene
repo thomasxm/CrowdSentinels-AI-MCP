@@ -1,0 +1,1 @@
+(powershell.file.script_block_text:*powershell* AND powershell.file.script_block_text:*WindowStyle* AND powershell.file.script_block_text:*Hidden*) AND (NOT (powershell.file.script_block_text:*\:\\Program\ Files\\Amazon\\WorkSpacesConfig\\Scripts\* AND powershell.file.script_block_text:*$PSScriptRoot\\Module\\WorkspaceScriptModule\\WorkspaceScriptModule*))

@@ -1,0 +1,1 @@
+any where (process.executable:"C:\\Windows\\SysWOW64\\iscsicpl.exe" and file.path:"*\\iscsiexe.dll") and (not (file.path:"*C:\\Windows\*" and file.path:"*iscsiexe.dll*"))

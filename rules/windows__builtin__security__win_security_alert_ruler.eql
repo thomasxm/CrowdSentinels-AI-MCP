@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and ((event.code:"4776" and winlog.event_data.Workstation:"RULER") or ((event.code like~ ("4624", "4625")) and source.domain:"RULER"))

@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-Windows\ Firewall\ With\ Advanced\ Security\/Firewall AND (event.code:(2002 OR 2083 OR 2003 OR 2082 OR 2008))

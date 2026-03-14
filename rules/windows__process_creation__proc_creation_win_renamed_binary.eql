@@ -1,0 +1,1 @@
+any where (process.pe.original_file_name like~ ("Cmd.Exe", "CONHOST.EXE", "7z.exe", "7za.exe", "WinRAR.exe", "wevtutil.exe", "net.exe", "net1.exe", "netsh.exe", "InstallUtil.exe")) and (not (process.executable like~ ("*\\cmd.exe", "*\\conhost.exe", "*\\7z.exe", "*\\7za.exe", "*\\WinRAR.exe", "*\\wevtutil.exe", "*\\net.exe", "*\\net1.exe", "*\\netsh.exe", "*\\InstallUtil.exe")))

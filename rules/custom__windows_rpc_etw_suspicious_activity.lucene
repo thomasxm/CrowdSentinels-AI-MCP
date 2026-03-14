@@ -1,0 +1,1 @@
+event.provider:"Microsoft-Windows-RPC" AND (event.code:5 OR event.code:6) AND winlog.event_data.InterfaceUuid:*

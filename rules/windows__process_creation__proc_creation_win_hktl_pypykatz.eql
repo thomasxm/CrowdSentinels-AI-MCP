@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\pypykatz.exe", "*\\python.exe")) and (process.command_line:"*live*" and process.command_line:"*registry*")

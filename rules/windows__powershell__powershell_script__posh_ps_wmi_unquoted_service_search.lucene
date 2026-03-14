@@ -1,0 +1,1 @@
+(powershell.file.script_block_text:(*Get\-WmiObject\ * OR *gwmi\ *)) AND (powershell.file.script_block_text:*\ Win32_Service\ * AND powershell.file.script_block_text:*Name* AND powershell.file.script_block_text:*DisplayName* AND powershell.file.script_block_text:*PathName* AND powershell.file.script_block_text:*StartMode*)

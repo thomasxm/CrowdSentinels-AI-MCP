@@ -1,0 +1,1 @@
+any where (process.command_line like~ ("*Invoke-RestMethod *", "*Invoke-WebRequest *", "*IRM *", "*IWR *")) and (process.command_line:"*http*" and process.command_line:"*OutFile*" and process.command_line:"*.dll*")

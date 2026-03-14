@@ -1,0 +1,1 @@
+any where process.command_line like~ ("*cmd.exe /Q /c * 1> \\*\*\* 2>&1*", "*cmd.exe /C * > \\*\*\* 2>&1*", "*cmd.exe /C * > *\\Temp\* 2>&1*", "*powershell.exe -exec bypass -noni -nop -w 1 -C \"*", "*powershell.exe -noni -nop -w 1 -enc *")

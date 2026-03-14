@@ -1,0 +1,1 @@
+any where winlog.channel:"Microsoft-Windows-Bits-Client/Operational" and ((event.code:"16403" and (winlog.event_data.LocalName like~ ("*.bat", "*.dll", "*.exe", "*.hta", "*.ps1", "*.psd1", "*.sh", "*.vbe", "*.vbs"))) and (not (winlog.event_data.LocalName:"*\\AppData\*" and winlog.event_data.RemoteName:"*.com*")))

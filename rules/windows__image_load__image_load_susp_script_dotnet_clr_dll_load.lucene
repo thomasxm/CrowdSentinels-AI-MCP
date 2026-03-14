@@ -1,0 +1,1 @@
+(process.executable:(*\\cmstp.exe OR *\\cscript.exe OR *\\mshta.exe OR *\\msxsl.exe OR *\\regsvr32.exe OR *\\wmic.exe OR *\\wscript.exe)) AND (file.path:(*\\clr.dll OR *\\mscoree.dll OR *\\mscorlib.dll))

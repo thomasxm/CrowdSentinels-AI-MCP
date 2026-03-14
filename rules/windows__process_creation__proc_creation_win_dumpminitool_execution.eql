@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\DumpMinitool.exe", "*\\DumpMinitool.x86.exe", "*\\DumpMinitool.arm64.exe")) or (process.pe.original_file_name like~ ("DumpMinitool.exe", "DumpMinitool.x86.exe", "DumpMinitool.arm64.exe"))) and (process.command_line like~ ("* Full*", "* Mini*", "* WithHeap*"))

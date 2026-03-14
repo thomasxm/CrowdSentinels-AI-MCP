@@ -1,0 +1,1 @@
+any where (process.executable:"*\\control.exe" and process.parent.executable:"*\\WorkFolders.exe") and (not process.executable:"C:\\Windows\\System32\\control.exe")

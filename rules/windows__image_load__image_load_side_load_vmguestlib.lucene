@@ -1,0 +1,1 @@
+((file.path:*\\VMware\\VMware\ Tools\\vmStatsProvider\\win32* AND file.path:*\\vmGuestLib.dll*) AND process.executable:*\\Windows\\System32\\wbem\\WmiApSrv.exe) AND (NOT file.code_signature.signed:true)

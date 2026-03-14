@@ -1,0 +1,1 @@
+any where (file.path:"*.node" and (file.code_signature.signed:"false" or file.code_signature.status:"Unavailable")) and (not (process.executable:"*\\Code.exe" and file.path:"*.vscode\\extensions\\ms-toolsai.jupyter-*" and (file.path like~ ("*\\electron.napi.node", "*\\node.napi.glibc.node"))))

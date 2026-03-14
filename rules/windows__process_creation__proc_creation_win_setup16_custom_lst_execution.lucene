@@ -1,0 +1,1 @@
+(process.parent.executable:C\:\\Windows\\SysWOW64\\setup16.exe AND process.parent.command_line:*\ \-m\ *) AND (NOT process.executable:C\:\\\~MSSETUP.T\*)

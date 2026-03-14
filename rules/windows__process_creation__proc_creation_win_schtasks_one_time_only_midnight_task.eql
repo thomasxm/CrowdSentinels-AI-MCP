@@ -1,0 +1,1 @@
+any where (process.executable:"*\\schtasks.exe*" or process.pe.original_file_name:"schtasks.exe") and (process.command_line like~ ("*wscript*", "*vbscript*", "*cscript*", "*wmic *", "*wmic.exe*", "*regsvr32.exe*", "*powershell*", "*\\AppData\*")) and (process.command_line:"*once*" and process.command_line:"*00:00*")

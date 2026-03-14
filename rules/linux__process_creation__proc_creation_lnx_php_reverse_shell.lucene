@@ -1,0 +1,1 @@
+Image:*\/php* AND (CommandLine:*\ \-r\ * AND CommandLine:*fsockopen*) AND (CommandLine:(*ash* OR *bash* OR *bsh* OR *csh* OR *ksh* OR *pdksh* OR *sh* OR *tcsh* OR *zsh*))

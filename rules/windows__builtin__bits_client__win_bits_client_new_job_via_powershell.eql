@@ -1,0 +1,1 @@
+any where winlog.channel:"Microsoft-Windows-Bits-Client/Operational" and (event.code:"3" and (winlog.event_data.processPath like~ ("*\\powershell.exe", "*\\pwsh.exe")))

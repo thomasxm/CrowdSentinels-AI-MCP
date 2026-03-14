@@ -1,0 +1,1 @@
+any where powershell.file.script_block_text like~ ("*Get-Inbox.ps1*", "*Microsoft.Office.Interop.Outlook*", "*Microsoft.Office.Interop.Outlook.olDefaultFolders*", "*-comobject outlook.application*")

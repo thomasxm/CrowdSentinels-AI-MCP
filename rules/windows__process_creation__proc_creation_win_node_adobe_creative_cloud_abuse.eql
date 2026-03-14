@@ -1,0 +1,1 @@
+any where process.executable:"*\\Adobe Creative Cloud Experience\\libs\\node.exe" and (not process.command_line:"*Adobe Creative Cloud Experience\\js*")

@@ -1,0 +1,1 @@
+any where winlog.channel:"System" and (event.code:"7045" and winlog.event_data.ServiceName:"KrbSCM")

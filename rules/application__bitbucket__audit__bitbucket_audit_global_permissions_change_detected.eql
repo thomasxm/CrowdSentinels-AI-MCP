@@ -1,0 +1,1 @@
+any where auditType.category:"Permissions" and (auditType.action like~ ("Global permission remove request", "Global permission removed", "Global permission granted", "Global permission requested"))

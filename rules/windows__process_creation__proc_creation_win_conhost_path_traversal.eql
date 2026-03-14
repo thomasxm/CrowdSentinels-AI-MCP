@@ -1,0 +1,1 @@
+any where process.parent.command_line:"*conhost*" and process.command_line:"*/../../*"

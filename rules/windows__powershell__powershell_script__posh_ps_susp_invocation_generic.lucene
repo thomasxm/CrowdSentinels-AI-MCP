@@ -1,0 +1,1 @@
+(powershell.file.script_block_text:(*\ \-enc\ * OR *\ \-EncodedCommand\ * OR *\ \-ec\ *)) AND (powershell.file.script_block_text:(*\ \-w\ hidden\ * OR *\ \-window\ hidden\ * OR *\ \-windowstyle\ hidden\ * OR *\ \-w\ 1\ *)) AND (powershell.file.script_block_text:(*\ \-noni\ * OR *\ \-noninteractive\ *))

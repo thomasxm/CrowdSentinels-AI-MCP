@@ -1,0 +1,1 @@
+any where process.command_line:"*\\Services\\VSS\\Diag*" and process.command_line:"*/d Disabled*"

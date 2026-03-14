@@ -1,0 +1,1 @@
+(registry.path:*\\Microsoft\\Windows\\CurrentVersion\\WINEVT\\Channels\* AND registry.path:*\\ChannelAccess AND (winlog.event_data.Details:(*\(A;;0x1;;;LA\)* OR *\(A;;0x1;;;SY\)* OR *\(A;;0x5;;;BA\)*))) AND (NOT (process.executable:C\:\\Windows\\servicing\\TrustedInstaller.exe OR (process.executable:C\:\\Windows\\WinSxS\* AND process.executable:*\\TiWorker.exe)))

@@ -1,0 +1,1 @@
+(process.executable:(*\\powershell.exe OR *\\pwsh.exe)) AND winlog.event_data.TargetImage:*\\lsass.exe

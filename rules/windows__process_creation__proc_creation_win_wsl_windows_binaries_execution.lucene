@@ -1,0 +1,1 @@
+process.executable:SigmaRegularExpression\(regexp\=SigmaString\(\['\[a\-zA\-Z\]\:\\\\'\]\),\ flags\=set\(\)\) AND process.working_directory:*\\wsl.localhost*

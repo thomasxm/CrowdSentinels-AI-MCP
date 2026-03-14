@@ -1,0 +1,1 @@
+any where process.executable:"*\\netscan.exe" or process.pe.product:"Network Scanner" or process.pe.description:"Application for scanning networks"

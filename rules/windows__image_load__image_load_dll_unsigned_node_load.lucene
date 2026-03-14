@@ -1,0 +1,1 @@
+(file.path:*.node AND (file.code_signature.signed:false OR file.code_signature.status:Unavailable)) AND (NOT (process.executable:*\\Code.exe AND file.path:*.vscode\\extensions\\ms\-toolsai.jupyter\-* AND (file.path:(*\\electron.napi.node OR *\\node.napi.glibc.node))))

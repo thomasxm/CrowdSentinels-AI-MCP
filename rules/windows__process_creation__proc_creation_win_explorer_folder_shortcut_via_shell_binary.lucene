@@ -1,0 +1,1 @@
+(process.parent.executable:(*\\cmd.exe OR *\\powershell.exe OR *\\pwsh.exe)) AND process.executable:*\\explorer.exe AND process.command_line:*shell\:mycomputerfolder*

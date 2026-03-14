@@ -1,0 +1,1 @@
+any where event_type:"authentication" and reason:"bypass_user"

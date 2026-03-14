@@ -1,0 +1,1 @@
+(powershell.file.script_block_text:(*Clear\-EventLog\ * OR *Remove\-EventLog\ * OR *Limit\-EventLog\ * OR *Clear\-WinEvent\ *)) OR (powershell.file.script_block_text:*Eventing.Reader.EventLogSession* AND powershell.file.script_block_text:*ClearLog*) OR (powershell.file.script_block_text:*Diagnostics.EventLog* AND powershell.file.script_block_text:*Clear*)

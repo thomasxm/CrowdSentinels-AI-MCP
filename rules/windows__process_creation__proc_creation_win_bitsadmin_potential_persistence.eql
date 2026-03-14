@@ -1,0 +1,1 @@
+any where (process.executable:"*\\bitsadmin.exe" or process.pe.original_file_name:"bitsadmin.exe") and ((process.command_line:"*/SetNotifyCmdLine*" and (process.command_line like~ ("*%COMSPEC%*", "*cmd.exe*", "*regsvr32.exe*"))) or (process.command_line:"*/Addfile*" and (process.command_line like~ ("*http:*", "*https:*", "*ftp:*", "*ftps:*"))))

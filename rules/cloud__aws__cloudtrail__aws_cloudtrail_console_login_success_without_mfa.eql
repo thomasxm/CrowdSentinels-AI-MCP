@@ -1,0 +1,1 @@
+any where eventName:"ConsoleLogin" and additionalEventData.MFAUsed:"NO" and responseElements.ConsoleLogin:"Success"

@@ -1,0 +1,1 @@
+((file.path:*\\inetpub\\wwwroot\* AND (file.path:(*.ashx* OR *.asp* OR *.ph* OR *.soap*))) OR ((file.path:(*\\www\* OR *\\htdocs\* OR *\\html\*)) AND file.path:*.ph*)) AND (NOT ((file.path:(*\\AppData\\Local\\Temp\* OR *\\Windows\\Temp\*)) OR process.executable:System OR file.path:*\\xampp*))

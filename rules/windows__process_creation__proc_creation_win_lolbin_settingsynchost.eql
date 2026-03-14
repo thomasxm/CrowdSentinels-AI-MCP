@@ -1,0 +1,1 @@
+any where (not (process.executable like~ ("C:\\Windows\\System32\*", "C:\\Windows\\SysWOW64\*"))) and (process.parent.command_line:"*cmd.exe /c*" and process.parent.command_line:"*RoamDiag.cmd*" and process.parent.command_line:"*-outputpath*")

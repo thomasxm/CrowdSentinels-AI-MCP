@@ -1,0 +1,1 @@
+any where registry.path:"*\\Environment\\windir" and (not winlog.event_data.Details:"%SystemRoot%")

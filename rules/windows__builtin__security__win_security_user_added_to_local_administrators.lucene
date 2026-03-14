@@ -1,0 +1,1 @@
+winlog.channel:Security AND ((event.code:4732 AND (winlog.event_data.TargetUserName:Administr* OR winlog.event_data.TargetSid:S\-1\-5\-32\-544)) AND (NOT user.name:*$))

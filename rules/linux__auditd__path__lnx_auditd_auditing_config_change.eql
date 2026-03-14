@@ -1,0 +1,1 @@
+any where type:"PATH" and (name like~ ("/etc/audit/*", "/etc/libaudit.conf", "/etc/audisp/*"))

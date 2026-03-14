@@ -1,0 +1,1 @@
+any where file.path:"*\\ClassicExplorer32.dll" and (not file.path:"C:\\Program Files\\Classic Shell\*")

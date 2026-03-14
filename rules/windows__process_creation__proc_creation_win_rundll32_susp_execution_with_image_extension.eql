@@ -1,0 +1,1 @@
+any where (process.executable:"*\\rundll32.exe" or process.pe.original_file_name:"RUNDLL32.exe") and (process.command_line like~ ("*.bmp*", "*.cr2*", "*.eps*", "*.gif*", "*.ico*", "*.jpeg*", "*.jpg*", "*.nef*", "*.orf*", "*.png*", "*.raw*", "*.sr2*", "*.tif*", "*.tiff*"))

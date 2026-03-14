@@ -1,0 +1,1 @@
+(type:execve AND a0:tcpdump AND a1:\-c AND a3:*\-i*) OR (type:execve AND a0:tshark AND a1:\-c AND a3:\-i)

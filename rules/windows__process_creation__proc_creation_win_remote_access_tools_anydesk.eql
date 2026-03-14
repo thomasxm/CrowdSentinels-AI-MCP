@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\AnyDesk.exe", "*\\AnyDeskMSI.exe")) or process.pe.description:"AnyDesk" or process.pe.product:"AnyDesk" or process.pe.company:"AnyDesk Software GmbH"

@@ -1,0 +1,1 @@
+any where eventSource:"sts.amazonaws.com" and eventName:"GetSessionToken" and userIdentity.type:"IAMUser"

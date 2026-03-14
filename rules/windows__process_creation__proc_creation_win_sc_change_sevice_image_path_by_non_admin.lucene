@@ -1,0 +1,1 @@
+(process.executable:*\\sc.exe AND (winlog.event_data.IntegrityLevel:(Medium OR S\-1\-16\-8192))) AND ((process.command_line:*config* AND process.command_line:*binPath*) OR (process.command_line:*failure* AND process.command_line:*command*))

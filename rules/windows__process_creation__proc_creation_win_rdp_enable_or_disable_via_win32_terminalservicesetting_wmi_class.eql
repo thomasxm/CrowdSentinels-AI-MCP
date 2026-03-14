@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\wmic.exe", "*\\powershell.exe", "*\\pwsh.exe")) or (process.pe.original_file_name like~ ("wmic.exe", "PowerShell.EXE", "pwsh.dll"))) and (process.command_line like~ ("*rdtoggle*", "*Win32_TerminalServiceSetting*")) and process.command_line:"*SetAllowTSConnections*"

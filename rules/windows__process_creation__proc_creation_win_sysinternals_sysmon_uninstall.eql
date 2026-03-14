@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\Sysmon64.exe", "*\\Sysmon.exe")) or process.pe.description:"System activity monitor") and process.command_line like~ ("*-u*", "*/u*", "*–u*", "*—u*", "*―u*")

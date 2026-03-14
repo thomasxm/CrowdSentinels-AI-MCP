@@ -1,0 +1,1 @@
+any where process.command_line:"*-NoP -NoL -sta -NonI -W Hidden -Exec Bypass -Enc*"

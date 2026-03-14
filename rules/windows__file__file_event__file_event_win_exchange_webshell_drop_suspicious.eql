@@ -1,0 +1,1 @@
+any where (process.executable:"*\\w3wp.exe" and winlog.event_data.CommandLine:"*MSExchange*") and (file.path like~ ("*.aspx", "*.asp", "*.ashx", "*.ps1", "*.bat", "*.exe", "*.dll", "*.vbs"))

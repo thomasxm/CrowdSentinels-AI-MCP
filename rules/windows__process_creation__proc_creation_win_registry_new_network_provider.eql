@@ -1,0 +1,1 @@
+any where process.command_line:"*\\System\\CurrentControlSet\\Services\*" and process.command_line:"*\\NetworkProvider*"

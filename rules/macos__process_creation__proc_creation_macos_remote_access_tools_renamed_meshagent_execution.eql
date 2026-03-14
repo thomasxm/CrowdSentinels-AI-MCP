@@ -1,0 +1,1 @@
+any where (CommandLine:"*--meshServiceName*" or OriginalFileName:"*meshagent*") and (not (Image like~ ("*/meshagent", "*/meshagent_osx64")))

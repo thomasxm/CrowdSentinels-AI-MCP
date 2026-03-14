@@ -1,0 +1,1 @@
+process.executable:*\\MSExchangeMailboxReplication.exe AND (file.path:(*.aspx OR *.asp))

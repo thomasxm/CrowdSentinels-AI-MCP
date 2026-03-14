@@ -1,0 +1,1 @@
+(Image:(*\/rm OR *\/unlink OR *\/shred)) AND ((CommandLine:(*\/.bash_history* OR *\/.zsh_history*)) OR (CommandLine:(*_history OR *.history OR *zhistory)))

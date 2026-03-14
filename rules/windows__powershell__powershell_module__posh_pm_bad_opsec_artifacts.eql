@@ -1,0 +1,1 @@
+any where powershell.file.script_block_text like~ ("*$DoIt*", "*harmj0y*", "*mattifestation*", "*_RastaMouse*", "*tifkin_*", "*0xdeadbeef*")

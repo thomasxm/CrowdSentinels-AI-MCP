@@ -1,0 +1,1 @@
+any where registry.path:"*\\Control\\Lsa\\DsrmAdminLogonBehavior" and (not winlog.event_data.Details:"DWORD (0x00000000)")

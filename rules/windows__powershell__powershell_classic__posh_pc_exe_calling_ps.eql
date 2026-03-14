@@ -1,0 +1,1 @@
+any where (winlog.event_data.Data like~ ("*EngineVersion=2.*", "*EngineVersion=4.*", "*EngineVersion=5.*")) and winlog.event_data.Data:"*HostVersion=3.*"

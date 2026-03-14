@@ -1,0 +1,1 @@
+any where (((Image like~ ("*/apt", "*/apt-get")) and CommandLine:"*install*") or (Image:"*/yum" and (CommandLine like~ ("*localinstall*", "*install*"))) or (Image:"*/rpm" and CommandLine:"*-i*") or (Image:"*/dpkg" and (CommandLine like~ ("*--install*", "*-i*")))) and (CommandLine like~ ("*nmap*", "* nc*", "*netcat*", "*wireshark*", "*tshark*", "*openconnect*", "*proxychains*"))

@@ -1,0 +1,1 @@
+process.executable:(*\\mshta.exe OR *\\wscript.exe OR *\\cscript.exe)

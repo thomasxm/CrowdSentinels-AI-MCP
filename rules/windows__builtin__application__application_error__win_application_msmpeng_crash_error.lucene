@@ -1,0 +1,1 @@
+winlog.channel:Application AND (winlog.provider_name:Application\ Error AND event.code:1000 AND (winlog.event_data.Data:*MsMpEng.exe* AND winlog.event_data.Data:*mpengine.dll*))

@@ -1,0 +1,1 @@
+Image:*\/launchctl AND (CommandLine:(*submit* OR *load* OR *start*))

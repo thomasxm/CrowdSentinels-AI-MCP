@@ -1,0 +1,1 @@
+any where (registry.path like~ ("*\\Keyboard Layout\\Preload\*", "*\\Keyboard Layout\\Substitutes\*")) and (winlog.event_data.Details like~ ("*00000429*", "*00050429*", "*0000042a*"))

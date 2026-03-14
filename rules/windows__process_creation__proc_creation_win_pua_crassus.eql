@@ -1,0 +1,1 @@
+any where process.executable:"*\\Crassus.exe" or process.pe.original_file_name:"Crassus.exe" or process.pe.description:"*Crassus*"

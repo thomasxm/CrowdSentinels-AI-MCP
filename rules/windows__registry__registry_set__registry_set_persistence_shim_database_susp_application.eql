@@ -1,0 +1,1 @@
+any where registry.path:"*\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Custom\*" and (registry.path like~ ("*\\csrss.exe", "*\\dllhost.exe", "*\\explorer.exe", "*\\RuntimeBroker.exe", "*\\services.exe", "*\\sihost.exe", "*\\svchost.exe", "*\\taskhostw.exe", "*\\winlogon.exe", "*\\WmiPrvSe.exe"))

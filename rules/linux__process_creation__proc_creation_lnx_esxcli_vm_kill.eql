@@ -1,0 +1,1 @@
+any where Image:"*/esxcli" and (CommandLine:"*vm process*" and CommandLine:"*kill*")

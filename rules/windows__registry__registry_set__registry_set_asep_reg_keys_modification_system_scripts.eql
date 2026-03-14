@@ -1,0 +1,1 @@
+any where registry.path:"*\\Software\\Policies\\Microsoft\\Windows\\System\\Scripts*" and (registry.path like~ ("*\\Startup*", "*\\Shutdown*", "*\\Logon*", "*\\Logoff*")) and (not winlog.event_data.Details:"(Empty)")

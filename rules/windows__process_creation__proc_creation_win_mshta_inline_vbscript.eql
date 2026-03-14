@@ -1,0 +1,1 @@
+any where process.command_line:"*Wscript.*" and process.command_line:"*.Shell*" and process.command_line:"*.Run*"

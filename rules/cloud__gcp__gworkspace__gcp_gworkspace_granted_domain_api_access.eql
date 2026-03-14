@@ -1,0 +1,1 @@
+any where eventService:"admin.googleapis.com" and eventName:"AUTHORIZE_API_CLIENT_ACCESS"

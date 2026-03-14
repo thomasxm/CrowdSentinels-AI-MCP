@@ -1,0 +1,1 @@
+process.executable:*\\ruby.exe AND (process.command_line:*\-i\ * AND process.command_line:*\-u\ * AND process.command_line:*\-p\ *)

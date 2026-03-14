@@ -1,0 +1,1 @@
+file.path:*\\inetpub\\logs\\LogFiles\* AND file.path:*.log

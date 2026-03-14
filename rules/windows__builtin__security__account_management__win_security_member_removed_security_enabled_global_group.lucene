@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:(633 OR 4729))

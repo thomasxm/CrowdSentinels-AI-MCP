@@ -1,0 +1,1 @@
+any where powershell.file.script_block_text:"*CreateObject*" and powershell.file.script_block_text:"*Wscript.shell*" and powershell.file.script_block_text:"*.RegWrite*"

@@ -1,0 +1,1 @@
+any where process.executable:"*\\jsc.exe" or process.pe.original_file_name:"jsc.exe"

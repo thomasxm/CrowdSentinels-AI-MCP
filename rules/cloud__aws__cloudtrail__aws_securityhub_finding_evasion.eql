@@ -1,0 +1,1 @@
+any where eventSource:"securityhub.amazonaws.com" and (eventName like~ ("BatchUpdateFindings", "DeleteInsight", "UpdateFindings", "UpdateInsight"))

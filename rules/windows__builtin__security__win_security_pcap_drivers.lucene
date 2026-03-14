@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:4697 AND (winlog.event_data.ServiceFileName:(*pcap* OR *npcap* OR *npf* OR *nm3* OR *ndiscap* OR *nmnt* OR *windivert* OR *USBPcap* OR *pktmon*)))

@@ -1,0 +1,1 @@
+any where winlog.channel:"System" and ((winlog.provider_name:"Service Control Manager" and event.code:"7045" and (winlog.event_data.ImagePath:"*cmd*" and winlog.event_data.ImagePath:"*powershell*") and (winlog.event_data.ImagePath like~ ("*/c*", "*/r*"))) and (winlog.event_data.ImagePath:"*noexit*" or (winlog.event_data.ImagePath:"*input*" and winlog.event_data.ImagePath:"*$*")))

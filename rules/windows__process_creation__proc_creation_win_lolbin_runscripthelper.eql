@@ -1,0 +1,1 @@
+any where process.executable:"*\\Runscripthelper.exe" and process.command_line:"*surfacecheck*"

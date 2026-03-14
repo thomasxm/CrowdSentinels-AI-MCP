@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\conhost.exe" and (not (process.executable like~ ("*:\\Windows\\System32\\conhost.exe", "<sigma.types.SigmaNull object at 0x7fec31231010>", ""))) and (not winlog.provider_name:"SystemTraceProvider-Process")

@@ -1,0 +1,1 @@
+network.direction:true AND process.executable:*\\addinutil.exe

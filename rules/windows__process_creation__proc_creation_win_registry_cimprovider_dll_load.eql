@@ -1,0 +1,1 @@
+any where process.executable:"*\\register-cimprovider.exe" and (process.command_line:"*-path*" and process.command_line:"*dll*")

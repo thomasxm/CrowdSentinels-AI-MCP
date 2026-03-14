@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\mmc.exe" and ((process.executable like~ ("*\\cmd.exe", "*\\powershell.exe", "*\\pwsh.exe", "*\\wscript.exe", "*\\cscript.exe", "*\\sh.exe", "*\\bash.exe", "*\\reg.exe", "*\\regsvr32.exe")) or process.executable:"*\\BITSADMIN*")

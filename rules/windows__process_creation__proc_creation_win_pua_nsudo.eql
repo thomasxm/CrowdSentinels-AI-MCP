@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\NSudo.exe", "*\\NSudoLC.exe", "*\\NSudoLG.exe")) or (process.pe.original_file_name like~ ("NSudo.exe", "NSudoLC.exe", "NSudoLG.exe"))) and (process.command_line like~ ("*-U:S *", "*-U:T *", "*-U:E *", "*-P:E *", "*-M:S *", "*-M:H *", "*-U=S *", "*-U=T *", "*-U=E *", "*-P=E *", "*-M=S *", "*-M=H *", "*-ShowWindowMode:Hide*"))

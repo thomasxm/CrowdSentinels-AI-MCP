@@ -1,0 +1,1 @@
+winlog.channel:System AND (winlog.provider_name:Service\ Control\ Manager AND event.code:7045 AND (winlog.event_data.ImagePath:(*\ \-nop\ * OR *\ \-sta\ * OR *\ \-w\ hidden\ * OR *\:\\Temp\* OR *.downloadfile\(* OR *.downloadstring\(* OR *\\ADMIN$\* OR *\\Perflogs\* OR *\&\&*)))

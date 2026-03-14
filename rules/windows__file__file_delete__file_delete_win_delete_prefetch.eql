@@ -1,0 +1,1 @@
+any where (file.path:"*:\\Windows\\Prefetch\*" and file.path:"*.pf") and (not (process.executable:"*:\\windows\\system32\\svchost.exe" and (user.name like~ ("*AUTHORI*", "*AUTORI*"))))

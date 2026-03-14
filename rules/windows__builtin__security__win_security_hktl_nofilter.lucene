@@ -1,0 +1,1 @@
+winlog.channel:Security AND ((event.code:5447 AND winlog.event_data.FilterName:*RonPolicy*) OR (event.code:5449 AND winlog.event_data.ProviderContextName:*RonPolicy*))

@@ -1,0 +1,1 @@
+file.path:*\\waveedit.dll AND (NOT ((process.executable:(C\:\\Program\ Files\ \(x86\)\\Nero\\Nero\ Apps\\Nero\ WaveEditor\\waveedit.exe OR C\:\\Program\ Files\\Nero\\Nero\ Apps\\Nero\ WaveEditor\\waveedit.exe)) AND (file.path:(C\:\\Program\ Files\ \(x86\)\\Nero\\Nero\ Apps\\Nero\ WaveEditor\* OR C\:\\Program\ Files\\Nero\\Nero\ Apps\\Nero\ WaveEditor\*))))

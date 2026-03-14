@@ -1,0 +1,1 @@
+any where winlog.channel:"System" and ((winlog.provider_name:"Service Control Manager" and event.code:"7034") and (winlog.event_data.param1:"*Message Queuing*" or (winlog.event_data.Binary like~ ("*4d0053004d005100*", "*6d0073006d007100*"))))

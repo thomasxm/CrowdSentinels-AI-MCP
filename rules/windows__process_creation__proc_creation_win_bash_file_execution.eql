@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*:\\Windows\\System32\\bash.exe", "*:\\Windows\\SysWOW64\\bash.exe")) or process.pe.original_file_name:"Bash.exe") and (not ((process.command_line like~ ("*bash.exe -*", "*bash -*")) or process.command_line:"<sigma.types.SigmaNull object at 0x7f76ca6d1010>" or process.command_line=="" or (process.command_line like~ ("bash.exe", "bash"))))

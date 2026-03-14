@@ -1,0 +1,1 @@
+(Image:(*\/bash OR *\/csh OR *\/dash OR *\/fish OR *\/ksh OR *\/sh OR *\/zsh)) AND CommandLine:*\ \-c\ * AND CommandLine:*\/tmp\/*

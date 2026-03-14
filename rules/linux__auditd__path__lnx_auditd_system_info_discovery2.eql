@@ -1,0 +1,1 @@
+any where type:"PATH" and (name like~ ("/sys/class/dmi/id/bios_version", "/sys/class/dmi/id/product_name", "/sys/class/dmi/id/chassis_vendor", "/proc/scsi/scsi", "/proc/ide/hd0/model", "/proc/version", "/etc/*version", "/etc/*release", "/etc/issue"))

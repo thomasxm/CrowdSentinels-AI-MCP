@@ -1,0 +1,1 @@
+any where process.executable:"*\\csi.exe" and (process.parent.executable like~ ("*\\powershell.exe", "*\\pwsh.exe", "*\\powershell_ise.exe")) and process.pe.original_file_name:"csi.exe"

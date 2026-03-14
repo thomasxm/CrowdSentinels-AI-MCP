@@ -1,0 +1,1 @@
+any where process.command_line:"*esentutl*" and process.command_line:"* /p*"

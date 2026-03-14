@@ -1,0 +1,1 @@
+process.executable:System AND file.path:*\\wbem\\wbemcomn.dll

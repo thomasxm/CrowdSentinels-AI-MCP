@@ -1,0 +1,1 @@
+(process.parent.executable:(*\\cmd.exe OR *\\cscript.exe OR *\\mshta.exe OR *\\powershell.exe OR *\\pwsh.exe OR *\\regsvr32.exe OR *\\rundll32.exe OR *\\wscript.exe)) AND (process.executable:(*\\brave.exe OR *\\chrome.exe OR *\\msedge.exe OR *\\opera.exe OR *\\vivaldi.exe)) AND process.command_line:*\-\-load\-extension\=*

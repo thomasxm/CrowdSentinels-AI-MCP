@@ -1,0 +1,1 @@
+any where process.executable:"*\\SharpLdapWhoami.exe" or (process.pe.original_file_name:"*SharpLdapWhoami*" or process.pe.product:"SharpLdapWhoami") or (process.command_line like~ ("* /method:ntlm", "* /method:kerb", "* /method:nego", "* /m:nego", "* /m:ntlm", "* /m:kerb"))

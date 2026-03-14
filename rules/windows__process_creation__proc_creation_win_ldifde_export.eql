@@ -1,0 +1,1 @@
+any where ((process.executable:"*\\ldifde.exe" or process.pe.original_file_name:"ldifde.exe") and process.command_line:"*-f*") and (not process.command_line:"* -i*")

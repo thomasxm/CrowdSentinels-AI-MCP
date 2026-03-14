@@ -1,0 +1,1 @@
+any where Image:"/usr/bin/base64" and CommandLine:"*-d*"

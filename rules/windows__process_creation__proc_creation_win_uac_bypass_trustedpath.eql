@@ -1,0 +1,1 @@
+any where process.executable like~ ("*C:\\Windows \\System32\*", "*C:\\Windows \\SysWOW64\*")

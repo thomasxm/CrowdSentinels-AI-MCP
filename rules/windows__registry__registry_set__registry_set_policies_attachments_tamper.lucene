@@ -1,0 +1,1 @@
+registry.path:*\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Attachments\* AND ((registry.path:*\\HideZoneInfoOnProperties AND winlog.event_data.Details:DWORD\ \(0x00000001\)) OR (registry.path:*\\SaveZoneInformation AND winlog.event_data.Details:DWORD\ \(0x00000002\)) OR (registry.path:*\\ScanWithAntiVirus AND winlog.event_data.Details:DWORD\ \(0x00000001\)))

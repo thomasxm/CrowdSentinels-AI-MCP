@@ -1,0 +1,1 @@
+(network.direction:true AND process.executable:*\\wordpad.exe) AND (NOT (destination.port:(80 OR 139 OR 443 OR 445 OR 465 OR 587 OR 993 OR 995)))

@@ -1,0 +1,1 @@
+any where (CommandLine:"*echo 1 >*" and CommandLine:"*/sys/kernel/debug/tracing/events/kprobes/*") and (CommandLine like~ ("*/myprobe/enable*", "*/myretprobe/enable*"))

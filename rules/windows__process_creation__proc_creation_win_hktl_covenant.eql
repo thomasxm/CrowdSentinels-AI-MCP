@@ -1,0 +1,1 @@
+any where ((process.command_line:"*-Sta*" and process.command_line:"*-Nop*" and process.command_line:"*-Window*" and process.command_line:"*Hidden*") and (process.command_line like~ ("*-Command*", "*-EncodedCommand*"))) or (process.command_line like~ ("*sv o (New-Object IO.MemorySteam);sv d *", "*mshta file.hta*", "*GruntHTTP*", "*-EncodedCommand cwB2ACAAbwAgA*"))

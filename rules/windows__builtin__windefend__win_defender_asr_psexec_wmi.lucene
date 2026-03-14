@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-Windows\ Defender\/Operational AND (event.code:1121 AND (process.executable:(*\\wmiprvse.exe OR *\\psexesvc.exe)))

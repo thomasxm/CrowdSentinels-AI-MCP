@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\CustomShellHost.exe" and (not process.executable:"C:\\Windows\\explorer.exe")

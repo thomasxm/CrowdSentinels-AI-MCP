@@ -1,0 +1,1 @@
+process.command_line:*Launch\-VsDevShell.ps1* AND (process.command_line:(*VsWherePath\ * OR *VsInstallationPath\ *))

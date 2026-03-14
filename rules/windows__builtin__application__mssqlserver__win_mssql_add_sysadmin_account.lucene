@@ -1,0 +1,1 @@
+winlog.channel:Application AND (winlog.provider_name:*MSSQL* AND event.code:33205 AND (winlog.event_data.Data:*object_name\:sysadmin* AND winlog.event_data.Data:*statement\:alter\ server\ role\ \[sysadmin\]\ add\ member\ *))

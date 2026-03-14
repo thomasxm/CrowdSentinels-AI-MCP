@@ -1,0 +1,1 @@
+any where (registry.path:"*System\\CurrentControlSet\\Services\\VSS*" and process.executable:"*esentutl.exe") and (not registry.path:"*System\\CurrentControlSet\\Services\\VSS\\Start*")

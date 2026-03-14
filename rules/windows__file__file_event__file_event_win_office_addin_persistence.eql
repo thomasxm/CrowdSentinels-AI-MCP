@@ -1,0 +1,1 @@
+any where (file.path:"*\\Microsoft\\Word\\Startup\*" and file.path:"*.wll") or (file.path:"*\\Microsoft\\Excel\\Startup\*" and file.path:"*.xll") or (file.path:"*Microsoft\\Excel\\XLSTART\*" and file.path:"*.xlam") or (file.path:"*\\Microsoft\\Addins\*" and (file.path like~ ("*.xlam", "*.xla", "*.ppam")))

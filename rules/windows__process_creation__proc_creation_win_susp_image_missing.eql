@@ -1,0 +1,1 @@
+any where (not process.executable:"*\*") and (not (process.executable:"<sigma.types.SigmaNull object at 0x7f4b93141160>" or (process.executable like~ ("-", "")) or ((process.executable like~ ("System", "Registry", "MemCompression", "vmmem")) or (process.command_line like~ ("Registry", "MemCompression", "vmmem")))))

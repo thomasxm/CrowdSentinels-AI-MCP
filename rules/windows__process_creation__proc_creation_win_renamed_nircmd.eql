@@ -1,0 +1,1 @@
+any where process.pe.original_file_name:"NirCmd.exe" and (not (process.executable like~ ("*\\nircmd.exe", "*\\nircmdc.exe")))

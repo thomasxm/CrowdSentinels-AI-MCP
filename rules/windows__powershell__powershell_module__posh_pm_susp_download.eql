@@ -1,0 +1,1 @@
+any where winlog.event_data.ContextInfo:"*System.Net.WebClient*" and (winlog.event_data.ContextInfo like~ ("*.DownloadFile(*", "*.DownloadString(*"))

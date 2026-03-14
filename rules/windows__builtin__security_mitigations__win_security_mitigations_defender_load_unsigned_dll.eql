@@ -1,0 +1,1 @@
+any where (winlog.channel like~ ("Microsoft-Windows-Security-Mitigations/Kernel Mode", "Microsoft-Windows-Security-Mitigations/User Mode")) and ((event.code like~ ("11", "12")) and (winlog.event_data.ProcessPath like~ ("*\\MpCmdRun.exe", "*\\NisSrv.exe")))

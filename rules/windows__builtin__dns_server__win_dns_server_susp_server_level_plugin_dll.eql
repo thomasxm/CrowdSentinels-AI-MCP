@@ -1,0 +1,1 @@
+any where winlog.channel:"DNS Server" and (event.code like~ ("150", "770", "771"))

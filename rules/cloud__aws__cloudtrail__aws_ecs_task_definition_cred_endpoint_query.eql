@@ -1,0 +1,1 @@
+any where eventSource:"ecs.amazonaws.com" and (eventName like~ ("DescribeTaskDefinition", "RegisterTaskDefinition", "RunTask")) and requestParameters.containerDefinitions.command:"*$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI*"

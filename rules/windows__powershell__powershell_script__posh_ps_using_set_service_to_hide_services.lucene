@@ -1,0 +1,1 @@
+(powershell.file.script_block_text:*Set\-Service\ * AND powershell.file.script_block_text:*DCLCWPDTSD*) AND (powershell.file.script_block_text:(*\-SecurityDescriptorSddl\ * OR *\-sd\ *))

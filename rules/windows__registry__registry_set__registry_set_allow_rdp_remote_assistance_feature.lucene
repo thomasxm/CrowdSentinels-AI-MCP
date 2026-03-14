@@ -1,0 +1,1 @@
+registry.path:*System\\CurrentControlSet\\Control\\Terminal\ Server\\fAllowToGetHelp AND winlog.event_data.Details:DWORD\ \(0x00000001\)

@@ -1,0 +1,1 @@
+Image:*\/groups OR ((Image:(*\/cat OR *\/ed OR *\/head OR *\/less OR *\/more OR *\/nano OR *\/tail OR *\/vi OR *\/vim)) AND CommandLine:*\/etc\/group*)

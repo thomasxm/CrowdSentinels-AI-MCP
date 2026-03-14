@@ -1,0 +1,1 @@
+any where (type:"EXECVE" and a0:"*iptables" and a1:"-t" and a2:"nat") and ("--to-ports 42" or "--to-ports 43")

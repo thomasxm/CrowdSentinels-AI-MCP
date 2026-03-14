@@ -1,0 +1,1 @@
+any where process.command_line like~ ("*[System.Net.WebRequest]::create*", "*curl *", "*Invoke-RestMethod*", "*Invoke-WebRequest*", "* irm *", "*iwr *", "*Resume-BitsTransfer*", "*Start-BitsTransfer*", "*wget *", "*WinHttp.WinHttpRequest*")

@@ -1,0 +1,1 @@
+any where (process.executable:"*\\ScriptRunner.exe" or process.pe.original_file_name:"ScriptRunner.exe") and process.command_line:"* -appvscript *"

@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-Windows\ Defender\/Operational AND (event.code:5007 AND winlog.event_data.NewValue:*\\Microsoft\\Windows\ Defender\\Exclusions*)

@@ -1,0 +1,1 @@
+any where "unexpected internal error" or "unknown or unsupported key type" or "invalid certificate signing key" or "invalid elliptic curve value" or "incorrect signature" or "error in libcrypto" or "unexpected bytes remain after decoding" or "fatal: buffer_get_string: bad string" or "Local: crc32 compensation attack" or "bad client public DH value" or "Corrupted MAC on input"

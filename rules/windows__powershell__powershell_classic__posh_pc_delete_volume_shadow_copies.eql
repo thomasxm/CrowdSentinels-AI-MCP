@@ -1,0 +1,1 @@
+any where (winlog.event_data.Data:"*Get-WmiObject*" and winlog.event_data.Data:"*Win32_ShadowCopy*") and (winlog.event_data.Data like~ ("*Delete()*", "*Remove-WmiObject*"))

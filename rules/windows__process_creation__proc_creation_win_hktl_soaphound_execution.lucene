@@ -1,0 +1,1 @@
+(process.command_line:(*\ \-\-buildcache\ * OR *\ \-\-bhdump\ * OR *\ \-\-certdump\ * OR *\ \-\-dnsdump\ *)) AND (process.command_line:(*\ \-c\ * OR *\ \-\-cachefilename\ * OR *\ \-o\ * OR *\ \-\-outputdirectory*))

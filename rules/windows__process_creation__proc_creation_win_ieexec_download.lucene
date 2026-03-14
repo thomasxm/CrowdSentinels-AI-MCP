@@ -1,0 +1,1 @@
+(process.executable:*\\IEExec.exe OR process.pe.original_file_name:IEExec.exe) AND (process.command_line:(*http\:\/\/* OR *https\:\/\/*))

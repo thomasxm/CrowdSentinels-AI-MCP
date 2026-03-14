@@ -1,0 +1,1 @@
+any where (registry.path like~ ("*\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\ShowSuperHidden", "*\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\Hidden")) and winlog.event_data.Details:"DWORD (0x00000000)"

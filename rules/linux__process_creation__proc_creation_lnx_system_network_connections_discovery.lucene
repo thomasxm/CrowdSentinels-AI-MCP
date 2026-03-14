@@ -1,0 +1,1 @@
+(Image:(*\/who OR *\/w OR *\/last OR *\/lsof OR *\/netstat)) AND (NOT (ParentCommandLine:*\/usr\/bin\/landscape\-sysinfo* AND Image:*\/who))

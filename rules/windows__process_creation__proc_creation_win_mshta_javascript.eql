@@ -1,0 +1,1 @@
+any where (process.executable:"*\\mshta.exe" or process.pe.original_file_name:"MSHTA.EXE") and process.command_line:"*javascript*"

@@ -1,0 +1,1 @@
+process.executable:*\\csi.exe AND (process.parent.executable:(*\\powershell.exe OR *\\pwsh.exe OR *\\powershell_ise.exe)) AND process.pe.original_file_name:csi.exe

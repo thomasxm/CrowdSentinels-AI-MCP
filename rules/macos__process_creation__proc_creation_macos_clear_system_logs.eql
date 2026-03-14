@@ -1,0 +1,1 @@
+any where (Image like~ ("*/rm", "*/unlink", "*/shred")) and (CommandLine:"*/var/log*" or (CommandLine:"*/Users/*" and CommandLine:"*/Library/Logs/*"))

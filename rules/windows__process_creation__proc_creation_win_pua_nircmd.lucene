@@ -1,0 +1,1 @@
+((process.executable:*\\NirCmd.exe OR process.pe.original_file_name:NirCmd.exe) OR (process.command_line:(*\ execmd\ * OR *.exe\ script\ * OR *.exe\ shexec\ * OR *\ runinteractive\ *))) OR ((process.command_line:(*\ exec\ * OR *\ exec2\ *)) AND (process.command_line:(*\ show\ * OR *\ hide\ *)))

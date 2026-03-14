@@ -1,0 +1,1 @@
+any where process.command_line:"*\\calc.exe *" or (process.executable:"*\\calc.exe" and (not (process.executable like~ ("*:\\Windows\\System32\*", "*:\\Windows\\SysWOW64\*", "*:\\Windows\\WinSxS\*"))))

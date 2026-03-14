@@ -1,0 +1,1 @@
+any where file.path:"*C:\\Debuggers\\dbghelp.dll*" and (process.executable like~ ("*\\vmmap.exe", "*\\vmmap64.exe")) and file.code_signature.signed:"true"

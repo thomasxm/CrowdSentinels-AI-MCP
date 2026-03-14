@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-Bits\-Client\/Operational AND (event.code:16403 AND (winlog.event_data.LocalName:(*\\Desktop\* OR *C\:\\Users\\Public\* OR *C\:\\PerfLogs\*)))

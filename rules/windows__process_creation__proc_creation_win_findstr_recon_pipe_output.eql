@@ -1,0 +1,1 @@
+any where (process.command_line like~ ("*ipconfig*|*find*", "*net*|*find*", "*netstat*|*find*", "*ping*|*find*", "*systeminfo*|*find*", "*tasklist*|*find*", "*whoami*|*find*")) and (not (process.command_line:"*cmd.exe /c TASKLIST /V |*" and process.command_line:"*FIND /I*" and process.command_line:"*\\xampp\*" and process.command_line:"*\\catalina_start.bat*"))

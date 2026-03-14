@@ -1,0 +1,1 @@
+any where (process.executable:"*\\certoc.exe" or process.pe.original_file_name:"CertOC.exe") and process.command_line:"SigmaRegularExpression(regexp=SigmaString(['://[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}']), flags=set())" and process.command_line:"*-GetCACAPS*"

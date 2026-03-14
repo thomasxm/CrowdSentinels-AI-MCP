@@ -1,0 +1,1 @@
+any where process.executable:"*\\outlook.exe" and file.path:"*\\outlvba.dll"

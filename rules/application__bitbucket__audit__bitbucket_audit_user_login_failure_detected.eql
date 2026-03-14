@@ -1,0 +1,1 @@
+any where auditType.category:"Authentication" and auditType.action:"User login failed"

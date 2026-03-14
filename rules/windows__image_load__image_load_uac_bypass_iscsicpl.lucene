@@ -1,0 +1,1 @@
+(process.executable:C\:\\Windows\\SysWOW64\\iscsicpl.exe AND file.path:*\\iscsiexe.dll) AND (NOT (file.path:*C\:\\Windows\* AND file.path:*iscsiexe.dll*))

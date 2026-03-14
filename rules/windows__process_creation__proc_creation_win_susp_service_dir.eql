@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\Users\\Public\*", "*\\$Recycle.bin*", "*\\Users\\All Users\*", "*\\Users\\Default\*", "*\\Users\\Contacts\*", "*\\Users\\Searches\*", "*C:\\Perflogs\*", "*\\config\\systemprofile\*", "*\\Windows\\Fonts\*", "*\\Windows\\IME\*", "*\\Windows\\addins\*")) and (process.parent.executable like~ ("*\\services.exe", "*\\svchost.exe"))

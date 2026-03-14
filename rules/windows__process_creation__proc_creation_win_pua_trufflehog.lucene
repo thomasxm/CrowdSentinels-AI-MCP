@@ -1,0 +1,1 @@
+process.executable:*\\trufflehog.exe OR ((process.command_line:(*\ docker\ \-\-image\ * OR *\ Git\ * OR *\ GitHub\ * OR *\ Jira\ * OR *\ Slack\ * OR *\ Confluence\ * OR *\ SharePoint\ * OR *\ s3\ * OR *\ gcs\ *)) AND process.command_line:*\ \-\-results\=verified*)

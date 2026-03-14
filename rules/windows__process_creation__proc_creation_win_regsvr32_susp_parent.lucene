@@ -1,0 +1,1 @@
+((process.parent.executable:(*\\cmd.exe OR *\\cscript.exe OR *\\mshta.exe OR *\\powershell_ise.exe OR *\\powershell.exe OR *\\pwsh.exe OR *\\wscript.exe)) AND process.executable:*\\regsvr32.exe) AND (NOT (process.parent.executable:C\:\\Windows\\System32\\cmd.exe AND process.command_line:*\ \/s\ C\:\\Windows\\System32\\RpcProxy\\RpcProxy.dll))

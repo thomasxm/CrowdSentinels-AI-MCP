@@ -1,0 +1,1 @@
+winlog.channel:Application AND (winlog.provider_name:*MSSQL* AND event.code:33205 AND (winlog.event_data.Data:(*statement\:ALTER\ SERVER\ AUDIT* OR *statement\:DROP\ SERVER\ AUDIT*)))

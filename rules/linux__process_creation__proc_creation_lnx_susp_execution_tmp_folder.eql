@@ -1,0 +1,1 @@
+any where Image:"/tmp/*" and (not Image:"*/usr/bin/nextcloud")

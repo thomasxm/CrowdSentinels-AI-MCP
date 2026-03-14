@@ -1,0 +1,1 @@
+(process.pe.description:WMI\ Commandline\ Utility OR process.pe.original_file_name:wmic.exe OR process.executable:*\\WMIC.exe) AND (process.command_line:(*LOGICALDISK\ get\ Name,Size,FreeSpace* OR *os\ get\ Caption,OSArchitecture,Version*))

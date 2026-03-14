@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-AppxPackaging\/Operational AND (event.code:157 AND winlog.event_data.subjectName:CN\=Foresee\ Consulting\ Inc.,\ O\=Foresee\ Consulting\ Inc.,\ L\=North\ York,\ S\=Ontario,\ C\=CA,\ SERIALNUMBER\=1004913\-1,\ OID.1.3.6.1.4.1.311.60.2.1.3\=CA,\ OID.2.5.4.15\=Private\ Organization)

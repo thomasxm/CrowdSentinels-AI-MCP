@@ -1,0 +1,1 @@
+any where process.pe.original_file_name:"megasync.exe" and (not process.executable:"*\\megasync.exe")

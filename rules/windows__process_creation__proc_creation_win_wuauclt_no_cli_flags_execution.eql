@@ -1,0 +1,1 @@
+any where (process.executable:"*\\Wuauclt.exe" or process.pe.original_file_name:"Wuauclt.exe") and (process.command_line like~ ("*Wuauclt", "*Wuauclt.exe"))

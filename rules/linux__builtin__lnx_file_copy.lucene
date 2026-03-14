@@ -1,0 +1,1 @@
+(*scp\ * OR *rsync\ * OR *sftp\ *) AND (*@* OR *\:*)

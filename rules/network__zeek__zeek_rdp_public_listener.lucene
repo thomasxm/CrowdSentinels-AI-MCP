@@ -1,0 +1,1 @@
+NOT (id.orig_h:\:\:1\/128 OR id.orig_h:10.0.0.0\/8 OR id.orig_h:127.0.0.0\/8 OR id.orig_h:172.16.0.0\/12 OR id.orig_h:192.168.0.0\/16 OR id.orig_h:169.254.0.0\/16 OR id.orig_h:2620\:83\:8000\:\:\/48 OR id.orig_h:fc00\:\:\/7 OR id.orig_h:fe80\:\:\/10)

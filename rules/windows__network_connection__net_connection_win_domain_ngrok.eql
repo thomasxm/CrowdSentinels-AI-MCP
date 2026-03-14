@@ -1,0 +1,1 @@
+any where network.direction:"true" and (destination.domain like~ ("*.ngrok-free.app", "*.ngrok-free.dev", "*.ngrok.app", "*.ngrok.dev", "*.ngrok.io"))

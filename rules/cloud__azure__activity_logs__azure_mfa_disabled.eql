@@ -1,0 +1,1 @@
+any where eventSource:"AzureActiveDirectory" and eventName:"Disable Strong Authentication." and status:"success"

@@ -1,0 +1,1 @@
+any where ((process.executable:"*\\NirCmd.exe" or process.pe.original_file_name:"NirCmd.exe") or (process.command_line like~ ("* execmd *", "*.exe script *", "*.exe shexec *", "* runinteractive *"))) or ((process.command_line like~ ("* exec *", "* exec2 *")) and (process.command_line like~ ("* show *", "* hide *")))

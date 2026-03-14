@@ -1,0 +1,1 @@
+any where winlog.channel:"Microsoft-Windows-CodeIntegrity/Operational" and ((event.code like~ ("3082", "3083")) and (not (winlog.event_data.FileNameBuffer like~ ("system32\\drivers\\vsock.sys", "System32\\drivers\\vmci.sys"))))

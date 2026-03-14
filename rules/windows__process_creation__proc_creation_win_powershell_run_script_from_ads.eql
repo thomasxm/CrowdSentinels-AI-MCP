@@ -1,0 +1,1 @@
+any where (process.parent.executable like~ ("*\\powershell.exe", "*\\pwsh.exe")) and (process.executable like~ ("*\\powershell.exe", "*\\pwsh.exe")) and (process.command_line:"*Get-Content*" and process.command_line:"*-Stream*")

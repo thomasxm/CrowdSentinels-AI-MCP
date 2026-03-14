@@ -1,0 +1,1 @@
+file.path:C\:\\Windows\\System32\\config* AND (file.path:(*\\Hotfixinfo.txt OR *\\netiostate.txt OR *\\sysportslog.txt OR *\\VmSwitchLog.evtx))

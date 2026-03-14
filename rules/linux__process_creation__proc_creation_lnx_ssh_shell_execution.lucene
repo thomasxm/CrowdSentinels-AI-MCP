@@ -1,0 +1,1 @@
+(Image:*\/ssh AND (CommandLine:(*ProxyCommand\=;* OR *permitlocalcommand\=yes* OR *localhost*))) AND (CommandLine:(*\/bin\/bash* OR *\/bin\/dash* OR *\/bin\/fish* OR *\/bin\/sh* OR *\/bin\/zsh* OR *sh\ 0\<\&2\ 1\>\&2* OR *sh\ 1\>\&2\ 0\<\&2*))

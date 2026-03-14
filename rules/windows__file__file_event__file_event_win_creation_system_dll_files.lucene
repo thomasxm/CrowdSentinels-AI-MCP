@@ -1,0 +1,1 @@
+(file.path:(*\\secur32.dll OR *\\tdh.dll)) AND (NOT (file.path:(*C\:\\$WINDOWS.\~BT\* OR *C\:\\$WinREAgent\* OR *C\:\\Windows\\SoftwareDistribution\* OR *C\:\\Windows\\System32\* OR *C\:\\Windows\\SysWOW64\* OR *C\:\\Windows\\WinSxS\* OR *C\:\\Windows\\uus\*)))

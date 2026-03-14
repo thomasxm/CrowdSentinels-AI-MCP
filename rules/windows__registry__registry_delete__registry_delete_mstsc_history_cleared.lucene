@@ -1,0 +1,1 @@
+(winlog.event_data.EventType:DeleteValue AND registry.path:*\\Microsoft\\Terminal\ Server\ Client\\Default\\MRU*) OR (winlog.event_data.EventType:DeleteKey AND registry.path:*\\Microsoft\\Terminal\ Server\ Client\\Servers\*)

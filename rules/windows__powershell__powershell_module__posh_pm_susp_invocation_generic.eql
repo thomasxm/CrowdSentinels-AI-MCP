@@ -1,0 +1,1 @@
+any where (winlog.event_data.ContextInfo like~ ("* -enc *", "* -EncodedCommand *", "* -ec *")) and (winlog.event_data.ContextInfo like~ ("* -w hidden *", "* -window hidden *", "* -windowstyle hidden *", "* -w 1 *")) and (winlog.event_data.ContextInfo like~ ("* -noni *", "* -noninteractive *"))

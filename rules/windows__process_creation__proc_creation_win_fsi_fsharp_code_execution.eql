@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\fsi.exe", "*\\fsianycpu.exe")) or (process.pe.original_file_name like~ ("fsi.exe", "fsianycpu.exe"))

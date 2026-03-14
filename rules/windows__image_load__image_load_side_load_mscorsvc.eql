@@ -1,0 +1,1 @@
+any where file.path:"*\\mscorsvc.dll" and (not (file.path like~ ("C:\\Windows\\Microsoft.NET\\Framework\*", "C:\\Windows\\Microsoft.NET\\Framework64\*", "C:\\Windows\\Microsoft.NET\\FrameworkArm\*", "C:\\Windows\\Microsoft.NET\\FrameworkArm64\*", "C:\\Windows\\WinSxS\*")))

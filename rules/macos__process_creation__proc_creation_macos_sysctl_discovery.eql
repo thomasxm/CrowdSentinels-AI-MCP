@@ -1,0 +1,1 @@
+any where (Image:"*/sysctl" or CommandLine:"*sysctl*") and (CommandLine like~ ("*hw.*", "*kern.*", "*machdep.*"))

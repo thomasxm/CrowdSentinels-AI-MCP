@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*Add\-Content\ $profile* AND (powershell.file.script_block_text:(*\-Value\ \"IEX\ * OR *\-Value\ \"Invoke\-Expression* OR *\-Value\ \"Invoke\-WebRequest* OR *\-Value\ \"Start\-Process* OR *\-Value\ 'IEX\ * OR *\-Value\ 'Invoke\-Expression* OR *\-Value\ 'Invoke\-WebRequest* OR *\-Value\ 'Start\-Process*))

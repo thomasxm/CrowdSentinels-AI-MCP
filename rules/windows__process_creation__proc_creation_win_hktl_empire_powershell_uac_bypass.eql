@@ -1,0 +1,1 @@
+any where process.command_line like~ ("* -NoP -NonI -w Hidden -c $x=$((gp HKCU:Software\\Microsoft\\Windows Update).Update)*", "* -NoP -NonI -c $x=$((gp HKCU:Software\\Microsoft\\Windows Update).Update);*")

@@ -1,0 +1,1 @@
+Image:*ruby* AND (CommandLine:*\ \-e* AND CommandLine:*rsocket* AND CommandLine:*TCPSocket*) AND (CommandLine:(*\ ash* OR *\ bash* OR *\ bsh* OR *\ csh* OR *\ ksh* OR *\ pdksh* OR *\ sh* OR *\ tcsh*))

@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\csi.exe", "*\\rcsi.exe")) or (process.pe.original_file_name like~ ("csi.exe", "rcsi.exe"))) and process.pe.company:"Microsoft Corporation"

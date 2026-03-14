@@ -1,0 +1,1 @@
+(file.path:(*А* OR *В* OR *Е* OR *К* OR *М* OR *Н* OR *О* OR *Р* OR *С* OR *Т* OR *Х* OR *Ѕ* OR *І* OR *Ј* OR *Ү* OR *Ӏ* OR *Ԍ* OR *Ԛ* OR *Ԝ* OR *Α* OR *Β* OR *Ε* OR *Ζ* OR *Η* OR *Ι* OR *Κ* OR *Μ* OR *Ν* OR *Ο* OR *Ρ* OR *Τ* OR *Υ* OR *Χ*)) OR (file.path:(*а* OR *е* OR *о* OR *р* OR *с* OR *х* OR *ѕ* OR *і* OR *ӏ* OR *ј* OR *һ* OR *ԁ* OR *ԛ* OR *ԝ* OR *ο*))

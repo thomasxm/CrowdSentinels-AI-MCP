@@ -1,0 +1,1 @@
+any where (registry.path like~ ("*\\Microsoft\\Windows\\CurrentVersion\\AppModelUnlock*", "*\\Policies\\Microsoft\\Windows\\Appx\*")) and (registry.path like~ ("*\\AllowAllTrustedApps", "*\\AllowDevelopmentWithoutDevLicense")) and winlog.event_data.Details:"DWORD (0x00000001)"

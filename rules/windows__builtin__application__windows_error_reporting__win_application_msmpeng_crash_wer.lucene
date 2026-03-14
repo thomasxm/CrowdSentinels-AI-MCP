@@ -1,0 +1,1 @@
+winlog.channel:Application AND (winlog.provider_name:Windows\ Error\ Reporting AND event.code:1001 AND (winlog.event_data.Data:*MsMpEng.exe* AND winlog.event_data.Data:*mpengine.dll*))

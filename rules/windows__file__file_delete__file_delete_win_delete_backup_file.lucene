@@ -1,0 +1,1 @@
+(process.executable:(*\\cmd.exe OR *\\powershell.exe OR *\\pwsh.exe OR *\\wt.exe OR *\\rundll32.exe OR *\\regsvr32.exe)) AND (file.path:(*.VHD OR *.bac OR *.bak OR *.wbcat OR *.bkf OR *.set OR *.win OR *.dsk))

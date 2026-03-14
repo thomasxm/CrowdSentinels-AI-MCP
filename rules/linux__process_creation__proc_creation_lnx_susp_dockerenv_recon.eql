@@ -1,0 +1,1 @@
+any where (Image like~ ("*/cat", "*/dir", "*/find", "*/ls", "*/stat", "*/test", "*grep")) and CommandLine:"*.dockerenv"

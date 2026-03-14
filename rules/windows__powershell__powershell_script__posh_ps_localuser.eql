@@ -1,0 +1,1 @@
+any where powershell.file.script_block_text like~ ("*Disable-LocalUser*", "*Enable-LocalUser*", "*Get-LocalUser*", "*Set-LocalUser*", "*New-LocalUser*", "*Rename-LocalUser*", "*Remove-LocalUser*")

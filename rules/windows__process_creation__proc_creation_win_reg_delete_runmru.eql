@@ -1,0 +1,1 @@
+any where (process.executable:"*\\reg.exe" or process.pe.original_file_name:"reg.exe") and (process.command_line:"* del*" and process.command_line:"*\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\RunMRU*")

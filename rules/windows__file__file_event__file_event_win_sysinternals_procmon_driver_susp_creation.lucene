@@ -1,0 +1,1 @@
+(file.path:*\\procmon* AND file.path:*.sys) AND (NOT (process.executable:(*\\procmon.exe OR *\\procmon64.exe)))

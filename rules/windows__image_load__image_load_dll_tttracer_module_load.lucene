@@ -1,0 +1,1 @@
+file.path:(*\\ttdrecord.dll OR *\\ttdwriter.dll OR *\\ttdloader.dll)

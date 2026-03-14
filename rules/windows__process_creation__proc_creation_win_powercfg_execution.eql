@@ -1,0 +1,1 @@
+any where (process.executable:"*\\powercfg.exe" or process.pe.original_file_name:"PowerCfg.exe") and ((process.command_line:"*/setacvalueindex *" and process.command_line:"*SCHEME_CURRENT*" and process.command_line:"*SUB_VIDEO*" and process.command_line:"*VIDEOCONLOCK*") or (process.command_line:"*-change *" and process.command_line:"*-standby-timeout-*"))

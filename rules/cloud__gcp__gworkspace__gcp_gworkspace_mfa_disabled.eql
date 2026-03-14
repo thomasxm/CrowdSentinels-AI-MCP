@@ -1,0 +1,1 @@
+any where (eventService:"admin.googleapis.com" and (eventName like~ ("ENFORCE_STRONG_AUTHENTICATION", "ALLOW_STRONG_AUTHENTICATION"))) and new_value:"false"

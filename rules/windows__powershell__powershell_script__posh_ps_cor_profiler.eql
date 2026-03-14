@@ -1,0 +1,1 @@
+any where powershell.file.script_block_text:"*$env:COR_ENABLE_PROFILING*" and powershell.file.script_block_text:"*$env:COR_PROFILER*" and powershell.file.script_block_text:"*$env:COR_PROFILER_PATH*"

@@ -1,0 +1,1 @@
+any where eventSource:"iam.amazonaws.com" and eventName:"DeleteSAMLProvider" and status:"success"

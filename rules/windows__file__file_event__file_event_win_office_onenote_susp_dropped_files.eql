@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\onenote.exe", "*\\onenotem.exe", "*\\onenoteim.exe")) and file.path:"*\\AppData\\Local\\Temp\\OneNote\*" and (file.path like~ ("*.bat", "*.chm", "*.cmd", "*.dll", "*.exe", "*.hta", "*.htm", "*.html", "*.js", "*.lnk", "*.ps1", "*.vbe", "*.vbs", "*.wsf"))

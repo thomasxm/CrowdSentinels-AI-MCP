@@ -1,0 +1,1 @@
+Image:*\/esxcli AND (CommandLine:*system* AND CommandLine:*syslog* AND CommandLine:*config*) AND CommandLine:*\ set*

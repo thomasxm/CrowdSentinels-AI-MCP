@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and (event.code:"5136" and winlog.event_data.ObjectClass:"groupPolicyContainer" and (winlog.event_data.ObjectDN like~ ("CN={31B2F340-016D-11D2-945F-00C04FB984F9},CN=POLICIES,CN=SYSTEM*", "CN={6AC1786C-016F-11D2-945F-00C04FB984F9},CN=POLICIES,CN=SYSTEM*")))

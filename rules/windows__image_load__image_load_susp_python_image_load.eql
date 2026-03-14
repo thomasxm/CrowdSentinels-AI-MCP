@@ -1,0 +1,1 @@
+any where file.pe.description:"Python Core" and (not (process.executable:"*Python*" or (process.executable like~ ("C:\\Program Files\*", "C:\\Program Files (x86)\*", "C:\\ProgramData\\Anaconda3\*")))) and (not process.executable:"<sigma.types.SigmaNull object at 0x7feab75f9160>")

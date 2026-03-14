@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*set* AND powershell.file.script_block_text:*\&\&* AND powershell.file.script_block_text:*mshta* AND powershell.file.script_block_text:*vbscript\:createobject* AND powershell.file.script_block_text:*.run* AND powershell.file.script_block_text:*\(window.close\)*

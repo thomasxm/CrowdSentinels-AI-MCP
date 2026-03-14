@@ -1,0 +1,1 @@
+((process.executable:(*\\gpg.exe OR *\\gpg2.exe)) OR process.pe.original_file_name:gpg.exe OR process.pe.description:GnuPG’s\ OpenPGP\ tool) AND (NOT (process.executable:(*\:\\Program\ Files\ \(x86\)\\GNU\\GnuPG\\bin\* OR *\:\\Program\ Files\ \(x86\)\\GnuPG\ VS\-Desktop\* OR *\:\\Program\ Files\ \(x86\)\\GnuPG\\bin\* OR *\:\\Program\ Files\ \(x86\)\\Gpg4win\\bin\*)))

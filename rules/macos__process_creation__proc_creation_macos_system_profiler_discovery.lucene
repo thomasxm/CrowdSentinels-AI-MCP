@@ -1,0 +1,1 @@
+(Image:*\/system_profiler OR CommandLine:*system_profiler*) AND (CommandLine:(*SPApplicationsDataType* OR *SPHardwareDataType* OR *SPNetworkDataType* OR *SPUSBDataType*))

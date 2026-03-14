@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*$env\:COR_ENABLE_PROFILING* AND powershell.file.script_block_text:*$env\:COR_PROFILER* AND powershell.file.script_block_text:*$env\:COR_PROFILER_PATH*

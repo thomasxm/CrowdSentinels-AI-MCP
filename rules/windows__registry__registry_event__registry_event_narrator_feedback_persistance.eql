@@ -1,0 +1,1 @@
+any where (winlog.event_data.EventType:"DeleteValue" and registry.path:"*\\AppXypsaf9f1qserqevf0sws76dx4k9a5206\\Shell\\open\\command\\DelegateExecute") or registry.path:"*\\AppXypsaf9f1qserqevf0sws76dx4k9a5206\\Shell\\open\\command\\(Default)"

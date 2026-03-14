@@ -1,0 +1,1 @@
+file.path:C\:\\Windows\\System32\\consent.exe.@* AND file.path:*\\comctl32.dll

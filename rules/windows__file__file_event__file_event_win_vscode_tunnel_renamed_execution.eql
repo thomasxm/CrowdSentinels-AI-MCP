@@ -1,0 +1,1 @@
+any where file.path:"*\\code_tunnel.json" and (not (process.executable like~ ("*\\code-tunnel.exe", "*\\code.exe")))

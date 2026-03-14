@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\WinRAR.exe", "*\\Rar.exe")) and file.path:"*\\Start Menu\\Programs\\Startup\*"

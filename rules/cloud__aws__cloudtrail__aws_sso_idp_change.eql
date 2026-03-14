@@ -1,0 +1,1 @@
+any where (eventSource like~ ("sso-directory.amazonaws.com", "sso.amazonaws.com")) and (eventName like~ ("AssociateDirectory", "DisableExternalIdPConfigurationForDirectory", "DisassociateDirectory", "EnableExternalIdPConfigurationForDirectory"))

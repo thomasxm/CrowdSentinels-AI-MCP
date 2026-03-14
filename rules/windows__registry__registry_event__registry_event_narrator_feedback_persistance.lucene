@@ -1,0 +1,1 @@
+(winlog.event_data.EventType:DeleteValue AND registry.path:*\\AppXypsaf9f1qserqevf0sws76dx4k9a5206\\Shell\\open\\command\\DelegateExecute) OR registry.path:*\\AppXypsaf9f1qserqevf0sws76dx4k9a5206\\Shell\\open\\command\\\(Default\)

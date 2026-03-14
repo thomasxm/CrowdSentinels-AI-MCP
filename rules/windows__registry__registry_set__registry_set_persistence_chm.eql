@@ -1,0 +1,1 @@
+any where registry.path like~ ("*\\Software\\Microsoft\\HtmlHelp Author\\Location*", "*\\Software\\WOW6432Node\\Microsoft\\HtmlHelp Author\\Location*")

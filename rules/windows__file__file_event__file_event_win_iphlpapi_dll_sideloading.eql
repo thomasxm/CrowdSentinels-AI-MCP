@@ -1,0 +1,1 @@
+any where file.path:"*iphlpapi.dll*" and file.path:"*\\AppData\\Local\\Microsoft*"

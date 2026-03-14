@@ -1,0 +1,1 @@
+((file.path:(*\\AppData\\Local\\Temp\* OR *\\Users\\Public\* OR *\\Windows\\Temp\* OR *\:\\Temp\*)) AND (file.path:(*.one OR *.onepkg))) AND (NOT (process.executable:*\:\\Program\ Files\\Microsoft\ Office\* AND process.executable:*\\ONENOTE.EXE))

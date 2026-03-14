@@ -1,0 +1,1 @@
+any where (file.path:"C:\\Users\*" and file.path:"*\\AppData\\Local\\Temp\\OskSupport.dll") or (process.executable:"C:\\Windows\\system32\\DllHost.exe" and file.path:"C:\\Program Files\\Windows Media Player\\osk.exe")

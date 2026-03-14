@@ -1,0 +1,1 @@
+any where powershell.file.script_block_text:"SigmaRegularExpression(regexp=SigmaString(['(Copy-Item|cpi) .{2,128} -Destination .{1,32}\\\\Windows\\\\(System32|SysWOW64)']), flags=set())"

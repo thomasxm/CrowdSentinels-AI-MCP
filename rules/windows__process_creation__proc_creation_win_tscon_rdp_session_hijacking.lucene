@@ -1,0 +1,1 @@
+(process.executable:*\\tscon.exe OR process.pe.original_file_name:tscon.exe) AND (winlog.event_data.IntegrityLevel:(System OR S\-1\-16\-16384))

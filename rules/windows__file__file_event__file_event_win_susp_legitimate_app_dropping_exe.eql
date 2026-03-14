@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\eqnedt32.exe", "*\\wordpad.exe", "*\\wordview.exe", "*\\certutil.exe", "*\\certoc.exe", "*\\CertReq.exe", "*\\Desktopimgdownldr.exe", "*\\esentutl.exe", "*\\mshta.exe", "*\\AcroRd32.exe", "*\\RdrCEF.exe", "*\\hh.exe", "*\\finger.exe")) and (file.path like~ ("*.exe", "*.dll", "*.ocx"))

@@ -1,0 +1,1 @@
+(powershell.file.script_block_text:*Get\-ADComputer\ * AND powershell.file.script_block_text:*\ \-Filter\ \**) AND (powershell.file.script_block_text:(*\ \|\ Select\ * OR *Out\-File* OR *Set\-Content* OR *Add\-Content*))

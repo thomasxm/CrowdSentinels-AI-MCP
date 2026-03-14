@@ -1,0 +1,1 @@
+(powershell.file.script_block_text:(*Get\-WmiObject* OR *gwmi* OR *Get\-CimInstance* OR *gcim*)) AND powershell.file.script_block_text:*Win32_ShadowCopy* AND (powershell.file.script_block_text:(*.Delete\(\)* OR *Remove\-WmiObject* OR *rwmi* OR *Remove\-CimInstance* OR *rcim*))

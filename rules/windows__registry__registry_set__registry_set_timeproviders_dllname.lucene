@@ -1,0 +1,1 @@
+(registry.path:*\\Services\\W32Time\\TimeProviders* AND registry.path:*\\DllName) AND (NOT (winlog.event_data.Details:(%SystemRoot%\\System32\\vmictimeprovider.dll OR %systemroot%\\system32\\w32time.dll OR C\:\\Windows\\SYSTEM32\\w32time.DLL)))

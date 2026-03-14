@@ -1,0 +1,1 @@
+registry.path:*\\Software\\Policies\\Microsoft\\Windows\\System\\Scripts* AND (registry.path:(*\\Startup* OR *\\Shutdown* OR *\\Logon* OR *\\Logoff*)) AND (NOT winlog.event_data.Details:\(Empty\))

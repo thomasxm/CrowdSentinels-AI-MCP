@@ -1,0 +1,1 @@
+any where (process.command_line:"*/generic:Microsoft_Windows_Shell_ZipFolder:filename=*" and process.command_line:"*.zip*" and process.command_line:"*/pass:*" and process.command_line:"*/user:*") or (process.command_line:"*/delete*" and process.command_line:"*Microsoft_Windows_Shell_ZipFolder:filename=*" and process.command_line:"*.zip*")

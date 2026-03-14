@@ -1,0 +1,1 @@
+process.executable:C\:\\Program\ Files\\WindowsApps\\Microsoft.DesktopAppInstaller_* AND process.executable:*\\AppInstaller.exe

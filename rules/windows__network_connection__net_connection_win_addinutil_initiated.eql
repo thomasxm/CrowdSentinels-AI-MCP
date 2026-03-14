@@ -1,0 +1,1 @@
+any where network.direction:"true" and process.executable:"*\\addinutil.exe"

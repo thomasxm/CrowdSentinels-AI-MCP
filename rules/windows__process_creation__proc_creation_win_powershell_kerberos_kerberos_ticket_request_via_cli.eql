@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\powershell.exe", "*\\pwsh.exe")) or (process.pe.original_file_name like~ ("powershell.exe", "pwsh.dll"))) and (process.command_line:"*System.IdentityModel.Tokens.KerberosRequestorSecurityToken*" and process.command_line:"*.GetRequest()*")

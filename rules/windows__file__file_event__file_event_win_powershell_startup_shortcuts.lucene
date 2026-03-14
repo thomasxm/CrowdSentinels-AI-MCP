@@ -1,0 +1,1 @@
+(process.executable:(*\\powershell.exe OR *\\pwsh.exe)) AND file.path:*\\start\ menu\\programs\\startup\* AND file.path:*.lnk

@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\taskmgr.exe" and (not (process.executable like~ ("*:\\Windows\\System32\\mmc.exe", "*:\\Windows\\System32\\resmon.exe", "*:\\Windows\\System32\\Taskmgr.exe")))

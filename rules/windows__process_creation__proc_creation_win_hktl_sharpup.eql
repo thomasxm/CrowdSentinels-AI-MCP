@@ -1,0 +1,1 @@
+any where process.executable:"*\\SharpUp.exe" or process.pe.description:"SharpUp" or (process.command_line like~ ("*HijackablePaths*", "*UnquotedServicePath*", "*ProcessDLLHijack*", "*ModifiableServiceBinaries*", "*ModifiableScheduledTask*", "*DomainGPPPassword*", "*CachedGPPPassword*"))

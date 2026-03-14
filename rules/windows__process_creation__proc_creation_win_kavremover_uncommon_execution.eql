@@ -1,0 +1,1 @@
+any where process.command_line:"* run run-cmd *" and (not (process.parent.executable like~ ("*\\cleanapi.exe", "*\\kavremover.exe")))

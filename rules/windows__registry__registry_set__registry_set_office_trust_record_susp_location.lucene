@@ -1,0 +1,1 @@
+registry.path:*\\Security\\Trusted\ Documents\\TrustRecords* AND (registry.path:(*\/AppData\/Local\/Microsoft\/Windows\/INetCache\/* OR *\/AppData\/Local\/Temp\/* OR *\/PerfLogs\/* OR *C\:\/Users\/Public\/* OR *file\:\/\/\/D\:\/* OR *file\:\/\/\/E\:\/*))

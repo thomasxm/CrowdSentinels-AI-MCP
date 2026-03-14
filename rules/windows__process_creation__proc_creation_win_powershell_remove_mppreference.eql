@@ -1,0 +1,1 @@
+any where process.command_line:"*Remove-MpPreference*" and (process.command_line like~ ("*-ControlledFolderAccessProtectedFolders *", "*-AttackSurfaceReductionRules_Ids *", "*-AttackSurfaceReductionRules_Actions *", "*-CheckForSignaturesBeforeRunningScan *"))

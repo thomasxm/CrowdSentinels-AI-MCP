@@ -1,0 +1,1 @@
+(process.executable:(*\\powershell.exe OR *\\pwsh.exe)) AND (file.path:(*\\WindowsPowerShell\\Modules\* OR *\\PowerShell\\7\\Modules\*))

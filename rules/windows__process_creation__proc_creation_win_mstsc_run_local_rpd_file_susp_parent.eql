@@ -1,0 +1,1 @@
+any where (process.parent.executable like~ ("*\\brave.exe", "*\\CCleanerBrowser.exe", "*\\chrome.exe", "*\\chromium.exe", "*\\firefox.exe", "*\\iexplore.exe", "*\\microsoftedge.exe", "*\\msedge.exe", "*\\opera.exe", "*\\vivaldi.exe", "*\\whale.exe", "*\\outlook.exe")) and (process.executable:"*\\mstsc.exe" or process.pe.original_file_name:"mstsc.exe")

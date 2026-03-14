@@ -1,0 +1,1 @@
+any where (process.executable:"*\\print.exe" and process.command_line:"print*" and (process.command_line:"*/D*" and process.command_line:"*.exe*")) and (not process.command_line:"*print.exe*")

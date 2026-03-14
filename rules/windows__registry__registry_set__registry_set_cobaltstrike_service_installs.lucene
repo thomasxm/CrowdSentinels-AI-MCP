@@ -1,0 +1,1 @@
+(registry.path:*\\System\\CurrentControlSet\\Services* OR (registry.path:*\\System\\ControlSet* AND registry.path:*\\Services*)) AND ((winlog.event_data.Details:*ADMIN$* AND winlog.event_data.Details:*.exe*) OR (winlog.event_data.Details:*%COMSPEC%* AND winlog.event_data.Details:*start* AND winlog.event_data.Details:*powershell*))

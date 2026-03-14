@@ -1,0 +1,1 @@
+winlog.event_data.Hashes:*IMPHASH\=D41FA95D4642DC981F10DE36F4DC8CD7* OR (file.path:(*\\WinRing0x64.sys OR *\\WinRing0.sys OR *\\WinRing0.dll OR *\\WinRing0x64.dll OR *\\winring00x64.sys))

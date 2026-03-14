@@ -1,0 +1,1 @@
+any where (winlog.channel like~ ("Microsoft-Windows-AppLocker/MSI and Script", "Microsoft-Windows-AppLocker/EXE and DLL", "Microsoft-Windows-AppLocker/Packaged app-Deployment", "Microsoft-Windows-AppLocker/Packaged app-Execution")) and (event.code like~ ("8004", "8007", "8022", "8025"))

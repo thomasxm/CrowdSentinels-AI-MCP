@@ -1,0 +1,1 @@
+any where winlog.event_data.TargetImage:"*\\lsass.exe" and (winlog.event_data.CallTrace:"*_ctypes.pyd+*" and winlog.event_data.CallTrace:"*:\\Windows\\System32\\KERNELBASE.dll+*" and winlog.event_data.CallTrace:"*:\\Windows\\SYSTEM32\\ntdll.dll+*") and (winlog.event_data.CallTrace like~ ("*python27.dll+*", "*python3*.dll+*")) and winlog.event_data.GrantedAccess:"0x1FFFFF"

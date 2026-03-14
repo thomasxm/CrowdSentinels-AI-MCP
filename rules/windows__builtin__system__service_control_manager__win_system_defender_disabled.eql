@@ -1,0 +1,1 @@
+any where winlog.channel:"System" and (event.code:"7036" and winlog.provider_name:"Service Control Manager" and (winlog.event_data.param1 like~ ("Windows Defender Antivirus Service", "Service antivirus Microsoft Defender")) and (winlog.event_data.param2 like~ ("stopped", "arrêté")))

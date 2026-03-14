@@ -1,0 +1,1 @@
+any where Image:"*/curl" and (CommandLine like~ ("* -A *", "* --user-agent *"))

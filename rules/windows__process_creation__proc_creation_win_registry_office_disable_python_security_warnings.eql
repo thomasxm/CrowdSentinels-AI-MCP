@@ -1,0 +1,1 @@
+any where (process.command_line:"*\\Microsoft\\Office\*" and process.command_line:"*\\Excel\\Security*" and process.command_line:"*PythonFunctionWarnings*") and process.command_line:"* 0*"

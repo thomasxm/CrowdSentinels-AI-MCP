@@ -1,0 +1,1 @@
+ParentImage:\/tmp\/* AND (Image:(*\/bash OR *\/csh OR *\/dash OR *\/fish OR *\/ksh OR *\/sh OR *\/zsh))

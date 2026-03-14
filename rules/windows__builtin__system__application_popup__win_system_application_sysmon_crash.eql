@@ -1,0 +1,1 @@
+any where winlog.channel:"System" and (winlog.provider_name:"Application Popup" and event.code:"26" and (winlog.event_data.Caption like~ ("sysmon64.exe - Application Error", "sysmon.exe - Application Error")))

@@ -1,0 +1,1 @@
+(process.executable:*\\svchost.exe AND network.direction:true AND source.port:3389) AND (destination.ip:127.0.0.0\/8 OR destination.ip:\:\:1\/128)

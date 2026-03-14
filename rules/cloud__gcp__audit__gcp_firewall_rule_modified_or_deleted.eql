@@ -1,0 +1,1 @@
+any where gcp.audit.method_name like~ ("v*.Compute.Firewalls.Delete", "v*.Compute.Firewalls.Patch", "v*.Compute.Firewalls.Update", "v*.Compute.Firewalls.Insert")

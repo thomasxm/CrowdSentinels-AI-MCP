@@ -1,0 +1,1 @@
+any where (process.executable:"*\\MSPUB.exe" or process.pe.original_file_name:"MSPUB.exe") and (process.command_line like~ ("*ftp://*", "*http://*", "*https://*"))

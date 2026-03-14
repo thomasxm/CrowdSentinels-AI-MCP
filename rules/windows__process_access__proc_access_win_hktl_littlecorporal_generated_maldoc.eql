@@ -1,0 +1,1 @@
+any where process.executable:"*\\winword.exe" and (winlog.event_data.CallTrace:"*:\\Windows\\Microsoft.NET\\Framework64\\v2.*" and winlog.event_data.CallTrace:"*UNKNOWN*")

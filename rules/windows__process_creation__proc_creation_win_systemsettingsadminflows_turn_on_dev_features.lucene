@@ -1,0 +1,1 @@
+(process.executable:*\\SystemSettingsAdminFlows.exe OR process.pe.original_file_name:SystemSettingsAdminFlows.EXE) AND process.command_line:*TurnOnDeveloperFeatures* AND (process.command_line:(*DeveloperUnlock* OR *EnableSideloading*))

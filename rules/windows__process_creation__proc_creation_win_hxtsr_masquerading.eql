@@ -1,0 +1,1 @@
+any where process.executable:"*\\hxtsr.exe" and (not (process.executable:"*:\\program files\\windowsapps\\microsoft.windowscommunicationsapps_*" and process.executable:"*\\hxtsr.exe"))

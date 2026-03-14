@@ -1,0 +1,1 @@
+any where process.executable:"*\\SafetyKatz.exe" or process.pe.original_file_name:"SafetyKatz.exe" or process.pe.description:"SafetyKatz"

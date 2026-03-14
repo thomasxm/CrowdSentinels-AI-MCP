@@ -1,0 +1,1 @@
+any where process.executable:"*\\csexec.exe" or process.pe.description:"csexec"

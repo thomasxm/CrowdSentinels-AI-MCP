@@ -1,0 +1,1 @@
+any where (network.direction:"true" and (destination.domain like~ ("*api.dropboxapi.com", "*content.dropboxapi.com"))) and (not process.executable:"*\\Dropbox*")

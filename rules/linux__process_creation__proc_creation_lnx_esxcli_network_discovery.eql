@@ -1,0 +1,1 @@
+any where (Image:"*/esxcli" and CommandLine:"*network*") and (CommandLine like~ ("* get*", "* list*"))

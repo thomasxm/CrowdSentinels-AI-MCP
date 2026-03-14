@@ -1,0 +1,1 @@
+any where process.executable:"*\\iox.exe" or (process.command_line like~ ("*.exe fwd -l *", "*.exe fwd -r *", "*.exe proxy -l *", "*.exe proxy -r *")) or (winlog.event_data.Hashes like~ ("*MD5=9DB2D314DD3F704A02051EF5EA210993*", "*SHA1=039130337E28A6623ECF9A0A3DA7D92C5964D8DD*", "*SHA256=C6CF82919B809967D9D90EA73772A8AA1C1EB3BC59252D977500F64F1A0D6731*"))

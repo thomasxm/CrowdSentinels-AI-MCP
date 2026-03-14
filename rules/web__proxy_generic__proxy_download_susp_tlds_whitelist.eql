@@ -1,0 +1,1 @@
+any where (c-uri-extension like~ ("exe", "vbs", "bat", "rar", "ps1", "doc", "docm", "xls", "xlsm", "pptm", "rtf", "hta", "dll", "ws", "wsf", "sct", "zip")) and (not (cs-host like~ ("*.com", "*.org", "*.net", "*.edu", "*.gov", "*.uk", "*.ca", "*.de", "*.jp", "*.fr", "*.au", "*.us", "*.ch", "*.it", "*.nl", "*.se", "*.no", "*.es")))

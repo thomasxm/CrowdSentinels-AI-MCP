@@ -1,0 +1,1 @@
+any where (process.pe.original_file_name:"CIPHER.EXE" or process.executable:"*\\cipher.exe") and process.command_line:"* /w:*"

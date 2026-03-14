@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-AppXDeploymentServer\/Operational AND (event.code:401 AND winlog.event_data.ErrorCode:0x80073cff)

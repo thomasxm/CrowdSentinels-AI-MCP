@@ -1,0 +1,1 @@
+any where (process.parent.executable:"*\\servers\\Stable-*" and process.parent.executable:"*\\server\\node.exe" and process.parent.command_line:"*.vscode-server*") and (((process.executable like~ ("*\\powershell.exe", "*\\pwsh.exe")) and process.command_line:"*\\terminal\\browser\\media\\shellIntegration.ps1*") or (process.executable like~ ("*\\wsl.exe", "*\\bash.exe")))

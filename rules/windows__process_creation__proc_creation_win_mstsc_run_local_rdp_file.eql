@@ -1,0 +1,1 @@
+any where ((process.executable:"*\\mstsc.exe" or process.pe.original_file_name:"mstsc.exe") and (process.command_line like~ ("*.rdp", "*.rdp\""))) and (not (process.parent.executable:"C:\\Windows\\System32\\lxss\\wslhost.exe" and process.command_line:"*C:\\ProgramData\\Microsoft\\WSL\\wslg.rdp*"))

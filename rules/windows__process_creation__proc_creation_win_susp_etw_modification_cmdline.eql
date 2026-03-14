@@ -1,0 +1,1 @@
+any where process.command_line like~ ("*COMPlus_ETWEnabled*", "*COMPlus_ETWFlags*")

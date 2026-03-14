@@ -1,0 +1,1 @@
+any where (process.command_line like~ ("*iex *", "*Invoke-Expression *", "*Invoke-Command *", "*icm *")) and (process.command_line like~ ("*cat *", "*get-content *", "*type *")) and process.command_line:"* -raw*"

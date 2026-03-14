@@ -1,0 +1,1 @@
+any where (process.executable:"*\\node.exe" or process.pe.original_file_name:"node.exe" or process.pe.product:"Node.js") and process.command_line:"*.js*"

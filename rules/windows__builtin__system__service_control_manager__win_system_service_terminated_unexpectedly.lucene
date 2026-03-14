@@ -1,0 +1,1 @@
+winlog.channel:System AND ((winlog.provider_name:Service\ Control\ Manager AND event.code:7034) AND (winlog.event_data.param1:*Message\ Queuing* OR (winlog.event_data.Binary:(*4d0053004d005100* OR *6d0073006d007100*))))

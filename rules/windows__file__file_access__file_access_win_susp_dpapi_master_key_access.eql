@@ -1,0 +1,1 @@
+any where (file.path like~ ("*\\Microsoft\\Protect\\S-1-5-18\*", "*\\Microsoft\\Protect\\S-1-5-21-*")) and (not (process.executable like~ ("C:\\Program Files\*", "C:\\Program Files (x86)\*", "C:\\Windows\\system32\*", "C:\\Windows\\SysWOW64\*")))

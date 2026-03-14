@@ -1,0 +1,1 @@
+any where file.path:"*.evtx" and (not (file.path:"C:\\Windows\\System32\\winevt\\Logs\*" or (file.path:"C:\\ProgramData\\Microsoft\\Windows\\Containers\\BaseImages\*" and file.path:"*\\Windows\\System32\\winevt\\Logs\\")))

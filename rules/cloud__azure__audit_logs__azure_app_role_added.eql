@@ -1,0 +1,1 @@
+any where targetResources.type:"Service Principal" and (properties.message like~ ("Add member to role", "Add eligible member to role", "Add scoped member to role"))

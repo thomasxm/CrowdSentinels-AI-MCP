@@ -1,0 +1,1 @@
+any where (file.path like~ ("*.iso.lnk", "*.img.lnk", "*.vhd.lnk", "*.vhdx.lnk")) and file.path:"*\\Microsoft\\Windows\\Recent\*"

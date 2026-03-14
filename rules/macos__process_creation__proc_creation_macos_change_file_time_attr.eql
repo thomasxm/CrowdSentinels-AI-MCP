@@ -1,0 +1,1 @@
+any where Image:"*/touch" and (CommandLine like~ ("*-t*", "*-acmr*", "*-d*", "*-r*"))

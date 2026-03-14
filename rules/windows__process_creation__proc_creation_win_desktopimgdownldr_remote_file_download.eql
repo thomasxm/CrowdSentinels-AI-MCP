@@ -1,0 +1,1 @@
+any where process.executable:"*\\desktopimgdownldr.exe" and process.parent.executable:"*\\desktopimgdownldr.exe" and process.command_line:"*/lockscreenurl:http*"

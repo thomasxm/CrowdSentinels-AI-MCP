@@ -1,0 +1,1 @@
+any where ((file.path:"*\\AppData\\Local\\Temp\*" and file.path:"*.zip\*") and file.path:"*.iso") or (file.path:"*\\AppData\\Local\\Microsoft\\Windows\\INetCache\\Content.Outlook\*" and file.path:"*.iso")

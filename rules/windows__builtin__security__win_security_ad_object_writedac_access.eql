@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and (event.code:"4662" and winlog.event_data.ObjectServer:"DS" and winlog.event_data.AccessMask:"0x40000" and (winlog.event_data.ObjectType like~ ("19195a5b-6da0-11d0-afd3-00c04fd930c9", "domainDNS")))

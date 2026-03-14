@@ -1,0 +1,1 @@
+any where ((process.pe.original_file_name:"diskshadow.exe" or process.executable:"*\\diskshadow.exe") and process.command_line like~ ("*-s *", "*/s *", "*–s *", "*—s *", "*―s *")) and (not process.command_line:"*.txt*")

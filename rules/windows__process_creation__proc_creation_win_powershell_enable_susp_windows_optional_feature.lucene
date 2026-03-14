@@ -1,0 +1,1 @@
+(process.command_line:*Enable\-WindowsOptionalFeature* AND process.command_line:*\-Online* AND process.command_line:*\-FeatureName*) AND (process.command_line:(*TelnetServer* OR *Internet\-Explorer\-Optional\-amd64* OR *TFTP* OR *SMB1Protocol* OR *Client\-ProjFS* OR *Microsoft\-Windows\-Subsystem\-Linux*))

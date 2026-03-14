@@ -1,0 +1,1 @@
+any where (file.path like~ ("*\\roboform.dll", "*\\roboform-x64.dll")) and (not ((process.executable like~ (" C:\\Program Files (x86)\\Siber Systems\\AI RoboForm\*", " C:\\Program Files\\Siber Systems\\AI RoboForm\*")) and (process.executable like~ ("*\\robotaskbaricon.exe", "*\\robotaskbaricon-x64.exe"))))

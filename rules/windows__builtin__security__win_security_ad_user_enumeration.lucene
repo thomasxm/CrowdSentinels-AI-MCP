@@ -1,0 +1,1 @@
+winlog.channel:Security AND ((event.code:4662 AND winlog.event_data.ObjectType:*bf967aba\-0de6\-11d0\-a285\-00aa003049e2* AND (winlog.event_data.AccessMask:(*1? OR *3? OR *4? OR *7? OR *9? OR *B? OR *D? OR *F?))) AND (NOT (user.name:(*$ OR MSOL_*))))

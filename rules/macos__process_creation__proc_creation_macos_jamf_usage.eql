@@ -1,0 +1,1 @@
+any where Image:"*/jamf" and (CommandLine like~ ("*createAccount*", "*manage*", "*removeFramework*", "*removeMdmProfile*", "*resetPassword*", "*setComputerName*"))

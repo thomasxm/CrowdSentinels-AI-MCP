@@ -1,0 +1,1 @@
+(Image:(*\/service OR *\/systemctl OR *\/chkconfig)) AND (CommandLine:(*stop* OR *disable*))

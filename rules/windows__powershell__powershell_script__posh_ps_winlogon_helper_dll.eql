@@ -1,0 +1,1 @@
+any where powershell.file.script_block_text:"*CurrentVersion\\Winlogon*" and (powershell.file.script_block_text like~ ("*Set-ItemProperty*", "*New-Item*"))

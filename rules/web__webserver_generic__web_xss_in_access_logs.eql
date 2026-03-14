@@ -1,0 +1,1 @@
+any where cs-method:"GET" and ("=<script>" or "=%3Cscript%3E" or "=%253Cscript%253E" or "<iframe " or "%3Ciframe " or "<svg " or "%3Csvg " or "document.cookie" or "document.domain" or " onerror=" or " onresize=" or " onload=\"" or "onmouseover=" or "${alert" or "javascript:alert" or "javascript%3Aalert") and (not sc-status:404)

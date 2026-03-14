@@ -1,0 +1,1 @@
+any where CategoryValue:"Administrative" and ResourceProviderValue:"Microsoft.ADHybridHealthService" and ResourceId:"*AdFederationService*" and OperationNameValue:"Microsoft.ADHybridHealthService/services/servicemembers/action"

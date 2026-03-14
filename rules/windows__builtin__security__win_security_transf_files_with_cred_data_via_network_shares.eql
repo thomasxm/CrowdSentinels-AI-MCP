@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and (event.code:"5145" and ((winlog.event_data.RelativeTargetName like~ ("*\\mimidrv*", "*\\lsass*", "*\\windows\\minidump\*", "*\\hiberfil*", "*\\sqldmpr*")) or (winlog.event_data.RelativeTargetName like~ ("Windows\\NTDS\\ntds.dit", "Windows\\System32\\config\\SAM", "Windows\\System32\\config\\SECURITY", "Windows\\System32\\config\\SYSTEM"))))

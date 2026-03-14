@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and (event.code:"4697" and service.name:"HybridConnectionManager" and winlog.event_data.ServiceFileName:"*HybridConnectionManager*")

@@ -1,0 +1,1 @@
+any where (Image:"*/esxcli" and CommandLine:"*vsan*") and (CommandLine like~ ("* get*", "* list*"))

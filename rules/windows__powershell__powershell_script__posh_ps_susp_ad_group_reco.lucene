@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*get\-ADPrincipalGroupMembership* OR (powershell.file.script_block_text:*get\-aduser* AND powershell.file.script_block_text:*\-f\ * AND powershell.file.script_block_text:*\-pr\ * AND powershell.file.script_block_text:*DoesNotRequirePreAuth*)

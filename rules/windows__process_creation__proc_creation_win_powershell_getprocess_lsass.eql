@@ -1,0 +1,1 @@
+any where process.command_line like~ ("*Get-Process lsas*", "*ps lsas*", "*gps lsas*")

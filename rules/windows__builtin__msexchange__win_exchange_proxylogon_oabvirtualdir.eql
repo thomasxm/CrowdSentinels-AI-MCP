@@ -1,0 +1,1 @@
+any where winlog.channel:"MSExchange Management" and (("OabVirtualDirectory" and " -ExternalUrl ") and ("eval(request" or "http://f/<script" or "\"unsafe\"};" or "function Page_Load()"))

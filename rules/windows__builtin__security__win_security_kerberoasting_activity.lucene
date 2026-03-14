@@ -1,0 +1,1 @@
+winlog.channel:Security AND ((event.code:4769 AND winlog.event_data.Status:0x0 AND winlog.event_data.TicketEncryptionType:0x17) AND (NOT ((service.name:(*krbtgt OR *$)) OR winlog.event_data.TargetUserName:*$@*)))

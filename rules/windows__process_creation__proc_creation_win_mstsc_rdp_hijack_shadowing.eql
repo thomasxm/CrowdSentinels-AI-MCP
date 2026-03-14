@@ -1,0 +1,1 @@
+any where process.command_line:"*noconsentprompt*" and process.command_line:"*shadow:*"

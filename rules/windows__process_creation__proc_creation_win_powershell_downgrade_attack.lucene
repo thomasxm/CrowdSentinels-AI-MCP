@@ -1,0 +1,1 @@
+process.executable:*\\powershell.exe AND (process.command_line:(*\ \-version\ 2\ * OR *\ \-versio\ 2\ * OR *\ \-versi\ 2\ * OR *\ \-vers\ 2\ * OR *\ \-ver\ 2\ * OR *\ \-ve\ 2\ * OR *\ \-v\ 2\ *))

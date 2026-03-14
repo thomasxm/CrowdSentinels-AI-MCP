@@ -1,0 +1,1 @@
+any where process.executable:"*\\remote.exe" or process.pe.original_file_name:"remote.exe"

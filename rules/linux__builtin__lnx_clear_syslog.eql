@@ -1,0 +1,1 @@
+any where ("rm /var/log/syslog" or "rm -r /var/log/syslog" or "rm -f /var/log/syslog" or "rm -rf /var/log/syslog" or "mv /var/log/syslog" or " >/var/log/syslog" or " > /var/log/syslog") and (not "/syslog.")

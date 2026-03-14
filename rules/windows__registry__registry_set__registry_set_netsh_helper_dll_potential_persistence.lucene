@@ -1,0 +1,1 @@
+(registry.path:*\\SOFTWARE\\Microsoft\\NetSh* AND winlog.event_data.Details:*.dll*) AND (NOT (process.executable:C\:\\Windows\\System32\\poqexec.exe AND (winlog.event_data.Details:(ipmontr.dll OR iasmontr.dll OR ippromon.dll))))

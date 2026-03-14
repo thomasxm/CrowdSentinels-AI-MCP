@@ -1,0 +1,1 @@
+(file.path:(*\\Andrew.dmp OR *\\Coredump.dmp OR *\\lsass.dmp OR *\\lsass.rar OR *\\lsass.zip OR *\\NotLSASS.zip OR *\\PPLBlade.dmp OR *\\rustive.dmp)) OR (file.path:(*\\lsass_2* OR *\\lsassdmp* OR *\\lsassdump*)) OR (file.path:*\\lsass* AND file.path:*.dmp*) OR (file.path:*SQLDmpr* AND file.path:*.mdmp) OR ((file.path:(*\\nanodump* OR *\\proc_*)) AND file.path:*.dmp)

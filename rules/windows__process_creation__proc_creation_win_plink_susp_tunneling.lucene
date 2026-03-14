@@ -1,0 +1,1 @@
+(process.executable:*\\plink.exe AND process.command_line:*\:127.0.0.1\:3389*) OR ((process.executable:*\\plink.exe AND process.command_line:*\:3389*) AND (process.command_line:(*\ \-P\ 443* OR *\ \-P\ 22*)))

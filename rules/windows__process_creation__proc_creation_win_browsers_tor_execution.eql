@@ -1,0 +1,1 @@
+any where process.pe.description:"Tor Browser" or process.pe.product:"Tor Browser" or (process.executable like~ ("*\\tor.exe", "*\\Tor Browser\\Browser\\firefox.exe"))

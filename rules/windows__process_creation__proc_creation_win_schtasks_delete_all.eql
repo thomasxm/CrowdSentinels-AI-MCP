@@ -1,0 +1,1 @@
+any where process.executable:"*\\schtasks.exe" and (process.command_line:"* /delete *" and process.command_line:"*/tn \**" and process.command_line:"* /f*")

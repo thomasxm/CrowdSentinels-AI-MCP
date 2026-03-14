@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\excel.exe", "*\\mspub.exe", "*\\onenote.exe", "*\\onenoteim.exe", "*\\outlook.exe", "*\\powerpnt.exe", "*\\winword.exe")) and (file.path like~ ("*\\VBE7.DLL", "*\\VBEUI.DLL", "*\\VBE7INTL.DLL"))

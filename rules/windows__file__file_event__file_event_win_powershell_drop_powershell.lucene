@@ -1,0 +1,1 @@
+((process.executable:(*\\powershell.exe OR *\\pwsh.exe)) AND file.path:*.ps1) AND (NOT (file.path:*__PSScriptPolicyTest_* OR (file.path:C\:\\Users\* AND file.path:*\\AppData\\Local\\Temp\*) OR file.path:C\:\\Windows\\Temp\*))

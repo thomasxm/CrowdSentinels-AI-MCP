@@ -1,0 +1,1 @@
+any where (file.path like~ ("*.cpl", "*.hta", "*.iso", "*.rdp", "*.svg", "*.vba", "*.vbe", "*.vbs")) and ((file.path like~ ("*\\AppData\\Local\\Packages\\Microsoft.Outlook_*", "*\\AppData\\Local\\Microsoft\\Olk\\Attachments\*")) or (file.path:"*\\AppData\\Local\\Microsoft\\Windows\*" and file.path:"*\\Content.Outlook\*"))

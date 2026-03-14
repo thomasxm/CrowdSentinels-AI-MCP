@@ -1,0 +1,1 @@
+winlog.channel:Security AND ((event.code:4768 AND winlog.event_data.TargetUserName:*$ AND winlog.event_data.CertThumbprint:*) AND (NOT (source.ip:\:\:1 OR winlog.event_data.CertThumbprint:"")))

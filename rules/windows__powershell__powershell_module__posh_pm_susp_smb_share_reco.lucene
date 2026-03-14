@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*get\-smbshare* OR winlog.event_data.ContextInfo:*get\-smbshare*

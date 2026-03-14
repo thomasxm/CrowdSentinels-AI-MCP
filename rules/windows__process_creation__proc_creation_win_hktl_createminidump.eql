@@ -1,0 +1,1 @@
+any where process.executable:"*\\CreateMiniDump.exe" or winlog.event_data.Hashes:"*IMPHASH=4a07f944a83e8a7c2525efa35dd30e2f*"

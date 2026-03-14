@@ -1,0 +1,1 @@
+((process.executable:(*\\rar.exe OR *\\winrar.exe)) OR process.pe.description:Command\ line\ RAR) AND (process.command_line:(*.dmp* OR *.dump* OR *.hdmp*))

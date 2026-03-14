@@ -1,0 +1,1 @@
+file.path:(*\:\\$Recycle.Bin.exe OR *\:\\Documents\ and\ Settings.exe OR *\:\\MSOCache.exe OR *\:\\PerfLogs.exe OR *\:\\Recovery.exe OR *.bat.exe OR *.sys.exe)

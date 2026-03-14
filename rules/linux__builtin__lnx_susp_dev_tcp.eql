@@ -1,0 +1,1 @@
+any where "cat </dev/tcp/" or "exec 3<>/dev/tcp/" or "echo >/dev/tcp/" or "bash -i >& /dev/tcp/" or "sh -i >& /dev/udp/" or "0<&196;exec 196<>/dev/tcp/" or "exec 5<>/dev/tcp/" or "(sh)0>/dev/tcp/" or "bash -c 'bash -i >& /dev/tcp/" or "echo -e '#!/bin/bash\\nbash -i >& /dev/tcp/"

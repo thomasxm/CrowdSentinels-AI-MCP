@@ -1,0 +1,1 @@
+ParentImage:*\/java AND (CommandLine:(*\/bin\/sh* OR *bash* OR *dash* OR *ksh* OR *zsh* OR *csh* OR *fish* OR *curl* OR *wget* OR *python*))

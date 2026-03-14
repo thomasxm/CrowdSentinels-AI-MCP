@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\explorer.exe" and process.executable:"*\\notepad.exe" and (process.command_line like~ ("*password*.txt", "*password*.csv", "*password*.doc", "*password*.xls"))

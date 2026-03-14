@@ -1,0 +1,1 @@
+any where (process.executable:":\\Program Files*" and process.executable:"*\\Microsoft Visual Studio\*" and process.executable:"*\\dump64.exe") and (process.pe.original_file_name:"procdump" or (process.command_line like~ ("* -ma *", "* -mp *")))

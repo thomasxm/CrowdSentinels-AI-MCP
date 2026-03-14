@@ -1,0 +1,1 @@
+any where (process.executable:"*\\dsquery.exe" or process.pe.original_file_name:"dsquery.exe") and process.command_line:"*trustedDomain*"

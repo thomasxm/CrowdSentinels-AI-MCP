@@ -1,0 +1,1 @@
+any where (registry.path:"*Classes\\ActivatableClasses\\Package\\Microsoft.*" and registry.path:"*\\DebugPath") or (registry.path:"*\\Software\\Microsoft\\Windows\\CurrentVersion\\PackagedAppXDebug\\Microsoft.*" and registry.path:"*\\(Default)")

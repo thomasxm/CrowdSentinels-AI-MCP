@@ -1,0 +1,1 @@
+any where (process.pe.original_file_name:"HH.exe" or process.executable:"*\\hh.exe") and process.command_line:"*.chm*"

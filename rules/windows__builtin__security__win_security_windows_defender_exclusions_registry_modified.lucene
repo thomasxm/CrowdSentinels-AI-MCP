@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:4657 AND winlog.event_data.ObjectName:*\\Microsoft\\Windows\ Defender\\Exclusions\*)

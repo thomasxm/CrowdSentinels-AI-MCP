@@ -1,0 +1,1 @@
+any where process.executable:"*\\msdt.exe" and file.path:"*\\sdiageng.dll"

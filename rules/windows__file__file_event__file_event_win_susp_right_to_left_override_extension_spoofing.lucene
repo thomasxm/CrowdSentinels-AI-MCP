@@ -1,0 +1,1 @@
+(file.path:(*\\u202e* OR *\[U\+202E\]*)) AND (file.path:(*3pm.* OR *4pm.* OR *cod.* OR *fdp.* OR *ftr.* OR *gepj.* OR *gnp.* OR *gpj.* OR *ism.* OR *lmth.* OR *nls.* OR *piz.* OR *slx.* OR *tdo.* OR *vsc.* OR *vwm.* OR *xcod.* OR *xslx.* OR *xtpp.*))

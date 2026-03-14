@@ -1,0 +1,1 @@
+any where Image:"*/sysadminctl" and (CommandLine:"* -addUser *" and CommandLine:"* -admin *")

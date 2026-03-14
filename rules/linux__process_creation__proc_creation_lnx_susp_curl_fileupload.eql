@@ -1,0 +1,1 @@
+any where (Image:"*/curl" and ((CommandLine like~ ("* --form*", "* --upload-file *", "* --data *", "* --data-*")) or CommandLine regex~ "\s-[FTd]\s")) and (not (CommandLine like~ ("*://localhost*", "*://127.0.0.1*")))

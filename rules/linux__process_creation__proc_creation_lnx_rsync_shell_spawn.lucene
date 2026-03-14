@@ -1,0 +1,1 @@
+((ParentImage:(*\/rsync OR *\/rsyncd)) AND (Image:(*\/ash OR *\/bash OR *\/csh OR *\/dash OR *\/ksh OR *\/sh OR *\/tcsh OR *\/zsh))) AND (NOT CommandLine:*\ \-e\ *)

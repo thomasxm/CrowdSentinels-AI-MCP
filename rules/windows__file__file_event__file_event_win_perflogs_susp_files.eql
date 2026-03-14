@@ -1,0 +1,1 @@
+any where file.path:"C:\\PerfLogs\*" and (file.path like~ ("*.7z", "*.bat", "*.bin", "*.chm", "*.dll", "*.exe", "*.hta", "*.lnk", "*.ps1", "*.psm1", "*.py", "*.scr", "*.sys", "*.vbe", "*.vbs", "*.zip"))

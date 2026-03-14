@@ -1,0 +1,1 @@
+any where process.command_line:"*\\SYSVOL\*" and process.command_line:"*\\policies\*"

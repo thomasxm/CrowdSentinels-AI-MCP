@@ -1,0 +1,1 @@
+any where (process.executable:"*\\cmdl32.exe" or process.pe.original_file_name:"CMDL32.EXE") and (process.command_line:"*/vpn*" and process.command_line:"*/lan*")

@@ -1,0 +1,1 @@
+any where (process.executable:"*\\DXCap.exe" or process.pe.original_file_name:"DXCap.exe") and process.command_line:"* -c *"

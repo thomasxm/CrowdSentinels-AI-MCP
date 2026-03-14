@@ -1,0 +1,1 @@
+winlog.event_data.Data:*EngineVersion\=2.* AND (NOT winlog.event_data.Data:*HostVersion\=2.*)

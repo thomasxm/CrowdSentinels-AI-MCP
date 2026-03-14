@@ -1,0 +1,1 @@
+winlog.channel:System AND ((winlog.provider_name:Service\ Control\ Manager AND (event.code:(7045 OR 7036))) AND ((winlog.event_data.ServiceName:(*cachedump* OR *DumpSvc* OR *gsecdump* OR *pwdump* OR *UACBypassedService* OR *WCE\ SERVICE* OR *WCESERVICE* OR *winexesvc*)) OR winlog.event_data.ImagePath:*bypass*))

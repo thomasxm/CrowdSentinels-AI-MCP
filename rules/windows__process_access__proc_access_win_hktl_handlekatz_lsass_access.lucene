@@ -1,0 +1,1 @@
+winlog.event_data.TargetImage:*\\lsass.exe AND winlog.event_data.GrantedAccess:0x1440 AND winlog.event_data.CallTrace:C\:\\Windows\\System32\\ntdll.dll\+* AND winlog.event_data.CallTrace:*\|UNKNOWN\(* AND winlog.event_data.CallTrace:*\)

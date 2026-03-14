@@ -1,0 +1,1 @@
+Image:*\/openssl AND (CommandLine:*\/Volumes\/* AND CommandLine:*enc* AND CommandLine:*\-base64* AND CommandLine:*\ \-d\ *)

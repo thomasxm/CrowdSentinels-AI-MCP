@@ -1,0 +1,1 @@
+any where auditType.category:"Global administration" and auditType.action:"SSH settings changed"

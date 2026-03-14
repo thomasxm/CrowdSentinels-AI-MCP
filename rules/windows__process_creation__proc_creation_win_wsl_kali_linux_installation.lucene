@@ -1,0 +1,1 @@
+(process.executable:*\\wsl.exe OR process.pe.original_file_name:wsl) AND (process.command_line:(*\ \-\-install\ * OR *\ \-i\ *)) AND process.command_line:*kali*

@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and (event.code:"6416" and (winlog.event_data.ClassName:"DiskDrive" or winlog.event_data.DeviceDescription:"USB Mass Storage Device"))

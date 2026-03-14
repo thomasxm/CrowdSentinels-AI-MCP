@@ -1,0 +1,1 @@
+any where process.pe.original_file_name:"ftp.exe" and (not process.executable:"*\\ftp.exe")

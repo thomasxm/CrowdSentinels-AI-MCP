@@ -1,0 +1,1 @@
+any where (process.pe.original_file_name:"wmic.exe" or process.executable:"*\\WMIC.exe") and (process.command_line:"* service get *" and process.command_line:"*name,displayname,pathname,startmode*")

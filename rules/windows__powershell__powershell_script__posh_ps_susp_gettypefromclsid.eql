@@ -1,0 +1,1 @@
+any where powershell.file.script_block_text:"*::GetTypeFromCLSID(*" and powershell.file.script_block_text:"*.ShellExecute(*"

@@ -1,0 +1,1 @@
+file.path:C\:\\Windows\\System32\\config\\systemprofile\\AppData\\Local\\CrashDumps\* AND file.path:*lsass.exe.* AND file.path:*.dmp

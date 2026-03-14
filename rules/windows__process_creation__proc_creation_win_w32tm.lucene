@@ -1,0 +1,1 @@
+(process.executable:*\\w32tm.exe OR process.pe.original_file_name:w32time.dll) AND (process.command_line:*\/stripchart* AND process.command_line:*\/computer\:* AND process.command_line:*\/period\:* AND process.command_line:*\/dataonly* AND process.command_line:*\/samples\:*)

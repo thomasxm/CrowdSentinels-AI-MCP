@@ -1,0 +1,1 @@
+registry.path:*\\Microsoft\\Windows\ Defender\\Threats\\ThreatSeverityDefaultAction\* AND (registry.path:(*\\1 OR *\\2 OR *\\4 OR *\\5)) AND (winlog.event_data.Details:(DWORD\ \(0x00000006\) OR DWORD\ \(0x00000009\)))

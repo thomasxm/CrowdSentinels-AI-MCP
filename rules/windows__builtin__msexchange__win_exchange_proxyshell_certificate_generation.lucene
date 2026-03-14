@@ -1,0 +1,1 @@
+winlog.channel:MSExchange\ Management AND ((*New\-ExchangeCertificate* AND *\ \-GenerateRequest* AND *\ \-BinaryEncoded* AND *\ \-RequestFile*) AND (*\\localhost\\C$* OR *\\127.0.0.1\\C$* OR *C\:\\inetpub* OR *.aspx*))

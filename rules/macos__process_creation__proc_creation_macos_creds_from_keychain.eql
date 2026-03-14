@@ -1,0 +1,1 @@
+any where (Image:"/usr/bin/security" and (CommandLine like~ ("*find-certificate*", "* export *"))) or (CommandLine like~ ("* dump-keychain *", "* login-keychain *"))

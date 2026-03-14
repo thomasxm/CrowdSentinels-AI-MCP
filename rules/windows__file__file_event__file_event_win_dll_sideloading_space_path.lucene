@@ -1,0 +1,1 @@
+(file.path:(C\:\\Windows\ \* OR C\:\\Program\ Files\ \* OR C\:\\Program\ Files\ \(x86\)\ \*)) AND file.path:*.dll

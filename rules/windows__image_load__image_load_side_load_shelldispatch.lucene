@@ -1,0 +1,1 @@
+file.path:*\\ShellDispatch.dll AND (NOT ((file.path:*\:\\Users\* AND file.path:*\\AppData\\Local\\Temp\*) OR file.path:*\:\\Windows\\Temp\*))

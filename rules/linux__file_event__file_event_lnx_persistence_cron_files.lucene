@@ -1,0 +1,1 @@
+(TargetFilename:(\/etc\/cron.d\/* OR \/etc\/cron.daily\/* OR \/etc\/cron.hourly\/* OR \/etc\/cron.monthly\/* OR \/etc\/cron.weekly\/* OR \/var\/spool\/cron\/crontabs\/*)) OR (TargetFilename:(*\/etc\/cron.allow* OR *\/etc\/cron.deny* OR *\/etc\/crontab*))

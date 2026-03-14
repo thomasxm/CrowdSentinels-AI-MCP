@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-TaskScheduler\/Operational AND (event.code:129 AND (winlog.event_data.Path:(*C\:\\Windows\\Temp\* OR *\\AppData\\Local\\Temp\* OR *\\Desktop\* OR *\\Downloads\* OR *\\Users\\Public\* OR *C\:\\Temp\*)))

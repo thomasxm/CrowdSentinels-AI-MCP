@@ -1,0 +1,1 @@
+any where registry.path:"*\\Outlook\\Security\\Level" and winlog.event_data.Details:"*0x00000001*"

@@ -1,0 +1,1 @@
+process.executable:*\\servers\\Stable\-* AND process.executable:*\\server\\node.exe AND file.path:*\\.vscode\-server\\data\\User\\History\*

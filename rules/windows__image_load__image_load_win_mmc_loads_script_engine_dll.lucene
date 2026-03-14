@@ -1,0 +1,1 @@
+process.executable:*\\mmc.exe AND (file.path:(*\\vbscript.dll OR *\\jscript.dll OR *\\jscript9.dll))

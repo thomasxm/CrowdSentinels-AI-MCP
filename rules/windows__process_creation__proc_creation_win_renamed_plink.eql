@@ -1,0 +1,1 @@
+any where (process.pe.original_file_name:"Plink" or (process.command_line:"* -l forward*" and process.command_line:"* -P *" and process.command_line:"* -R *")) and (not process.executable:"*\\plink.exe")

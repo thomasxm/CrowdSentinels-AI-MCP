@@ -1,0 +1,1 @@
+any where eventSource:"iam.amazonaws.com" and (eventName like~ ("GetLoginProfile", "CreateLoginProfile")) and userAgent:"*S3 Browser*"

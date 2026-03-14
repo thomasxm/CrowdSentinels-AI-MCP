@@ -1,0 +1,1 @@
+(process.pe.original_file_name:wmic.exe OR process.executable:*\\WMIC.exe) AND ((process.command_line:*\ service\ * AND process.command_line:*\ call\ *) AND (process.command_line:(*stopservice* OR *startservice*)))

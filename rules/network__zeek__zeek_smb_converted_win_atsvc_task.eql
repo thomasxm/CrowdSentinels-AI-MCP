@@ -1,0 +1,1 @@
+any where path:"\\\*\\IPC$" and name:"atsvc"

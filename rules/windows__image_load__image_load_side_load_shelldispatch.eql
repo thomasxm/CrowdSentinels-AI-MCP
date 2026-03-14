@@ -1,0 +1,1 @@
+any where file.path:"*\\ShellDispatch.dll" and (not ((file.path:"*:\\Users\*" and file.path:"*\\AppData\\Local\\Temp\*") or file.path:"*:\\Windows\\Temp\*"))

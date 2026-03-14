@@ -1,0 +1,1 @@
+any where (process.parent.executable:"*\\gup.exe" and process.executable:"*\\explorer.exe") and (not ((process.executable:"*\\explorer.exe" and process.command_line:"*\\Notepad++\\notepad++.exe*") or process.parent.executable:"*\\Notepad++\\updater\*" or process.command_line:"<sigma.types.SigmaNull object at 0x7f587e5b5160>"))

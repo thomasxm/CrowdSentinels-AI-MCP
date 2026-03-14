@@ -1,0 +1,1 @@
+any where (process.pe.original_file_name:"whoami.exe" or process.executable:"*\\whoami.exe") and (user.name like~ ("*AUTHORI*", "*AUTORI*", "*TrustedInstaller*"))

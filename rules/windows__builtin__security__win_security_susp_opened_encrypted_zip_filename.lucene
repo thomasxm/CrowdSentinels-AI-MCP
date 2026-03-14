@@ -1,0 +1,1 @@
+winlog.channel:Security AND ((event.code:5379 AND winlog.event_data.TargetName:*Microsoft_Windows_Shell_ZipFolder\:filename*) AND (winlog.event_data.TargetName:(*invoice* OR *new\ order* OR *rechnung* OR *factura* OR *delivery* OR *purchase* OR *order* OR *payment*)))

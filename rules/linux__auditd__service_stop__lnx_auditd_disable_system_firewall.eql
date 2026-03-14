@@ -1,0 +1,1 @@
+any where type:"SERVICE_STOP" and (unit like~ ("firewalld", "iptables", "ufw"))

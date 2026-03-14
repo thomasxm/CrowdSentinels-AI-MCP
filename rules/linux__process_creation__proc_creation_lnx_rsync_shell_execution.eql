@@ -1,0 +1,1 @@
+any where ((Image like~ ("*/rsync", "*/rsyncd")) and CommandLine:"* -e *") and (CommandLine like~ ("*/ash *", "*/bash *", "*/dash *", "*/csh *", "*/sh *", "*/zsh *", "*/tcsh *", "*/ksh *", "*'ash *", "*'bash *", "*'dash *", "*'csh *", "*'sh *", "*'zsh *", "*'tcsh *", "*'ksh *"))

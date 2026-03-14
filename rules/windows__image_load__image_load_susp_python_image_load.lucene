@@ -1,0 +1,1 @@
+file.pe.description:Python\ Core AND (NOT (process.executable:*Python* OR (process.executable:(C\:\\Program\ Files\* OR C\:\\Program\ Files\ \(x86\)\* OR C\:\\ProgramData\\Anaconda3\*)))) AND (NOT process.executable:\<sigma.types.SigmaNull\ object\ at\ 0x7f90646b1160\>)

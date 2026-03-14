@@ -1,0 +1,1 @@
+process.executable:*\\Runscripthelper.exe AND process.command_line:*surfacecheck*

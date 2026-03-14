@@ -1,0 +1,1 @@
+any where eventtype like~ ("group.privilege.grant", "user.account.privilege.grant")

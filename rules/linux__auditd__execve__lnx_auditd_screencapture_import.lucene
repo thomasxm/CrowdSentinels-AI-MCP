@@ -1,0 +1,1 @@
+(type:EXECVE AND a0:import) AND ((a1:\-window AND a2:root AND (a3:(*.png OR *.jpg OR *.jpeg))) OR (a1:(*.png OR *.jpg OR *.jpeg)))

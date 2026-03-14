@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\powershell_ise.exe", "*\\powershell.exe", "*\\pwsh.exe")) or (process.pe.original_file_name like~ ("PowerShell_ISE.EXE", "PowerShell.EXE", "pwsh.dll"))) and ((process.command_line:"*new-object*" and process.command_line:"*net.webclient).*" and process.command_line:"*download*") and (process.command_line like~ ("*string(*", "*file(*")))

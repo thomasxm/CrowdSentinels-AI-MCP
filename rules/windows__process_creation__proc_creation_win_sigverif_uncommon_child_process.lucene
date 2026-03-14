@@ -1,0 +1,1 @@
+process.parent.executable:*\\sigverif.exe AND (NOT (process.executable:(C\:\\Windows\\System32\\WerFault.exe OR C\:\\Windows\\SysWOW64\\WerFault.exe)))

@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*FromBase64String* AND powershell.file.script_block_text:*MemoryStream* AND powershell.file.script_block_text:*H4sI*

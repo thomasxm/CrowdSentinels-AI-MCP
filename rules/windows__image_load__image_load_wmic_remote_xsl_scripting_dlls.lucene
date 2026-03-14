@@ -1,0 +1,1 @@
+process.executable:*\\wmic.exe AND (file.path:(*\\jscript.dll OR *\\vbscript.dll))

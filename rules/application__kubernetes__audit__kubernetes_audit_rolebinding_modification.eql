@@ -1,0 +1,1 @@
+any where objectRef.apiGroup:"rbac.authorization.k8s.io" and (objectRef.resource like~ ("clusterrolebindings", "rolebindings")) and (verb like~ ("create", "delete", "patch", "replace", "update"))

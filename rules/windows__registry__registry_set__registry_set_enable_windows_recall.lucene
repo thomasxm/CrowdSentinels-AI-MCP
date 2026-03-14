@@ -1,0 +1,1 @@
+registry.path:*\\Software\\Policies\\Microsoft\\Windows\\WindowsAI\\DisableAIDataAnalysis AND winlog.event_data.Details:DWORD\ \(0x00000000\)

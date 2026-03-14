@@ -1,0 +1,1 @@
+process.command_line:*\ run\ run\-cmd\ * AND (NOT (process.parent.executable:(*\\cleanapi.exe OR *\\kavremover.exe)))

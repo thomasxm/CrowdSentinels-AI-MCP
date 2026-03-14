@@ -1,0 +1,1 @@
+((Image:(*\/rvim OR *\/vim OR *\/vimdiff)) AND (CommandLine:(*\ \-\-cmd* OR *\ \-c\ *))) AND (CommandLine:(*\:\!\/* OR *\:lua\ * OR *\:py\ * OR *\/bin\/bash* OR *\/bin\/dash* OR *\/bin\/fish* OR *\/bin\/sh* OR *\/bin\/zsh*))

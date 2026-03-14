@@ -1,0 +1,1 @@
+registry.path:*System\\CurrentControlSet\\Control\\Lsa\\NoLMHash AND winlog.event_data.Details:DWORD\ \(0x00000000\)

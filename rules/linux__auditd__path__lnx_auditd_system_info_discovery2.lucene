@@ -1,0 +1,1 @@
+type:PATH AND (name:(\/sys\/class\/dmi\/id\/bios_version OR \/sys\/class\/dmi\/id\/product_name OR \/sys\/class\/dmi\/id\/chassis_vendor OR \/proc\/scsi\/scsi OR \/proc\/ide\/hd0\/model OR \/proc\/version OR \/etc\/*version OR \/etc\/*release OR \/etc\/issue))

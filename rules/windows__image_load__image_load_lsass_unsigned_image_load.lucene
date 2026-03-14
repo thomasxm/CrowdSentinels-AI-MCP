@@ -1,0 +1,1 @@
+process.executable:*\\lsass.exe AND file.code_signature.signed:false

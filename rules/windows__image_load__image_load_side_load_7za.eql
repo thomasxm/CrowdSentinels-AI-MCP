@@ -1,0 +1,1 @@
+any where file.path:"*\\7za.dll" and (not ((process.executable like~ ("C:\\Program Files (x86)\*", "C:\\Program Files\*")) and (file.path like~ ("C:\\Program Files (x86)\*", "C:\\Program Files\*"))))

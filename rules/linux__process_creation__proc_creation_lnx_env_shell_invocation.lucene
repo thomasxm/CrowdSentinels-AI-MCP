@@ -1,0 +1,1 @@
+Image:*\/env AND (CommandLine:(*\/bin\/bash OR *\/bin\/dash OR *\/bin\/fish OR *\/bin\/sh OR *\/bin\/zsh))

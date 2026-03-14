@@ -1,0 +1,1 @@
+any where (process.parent.command_line:"*\\svchost.exe*" and process.parent.command_line:"*termsvcs*") and (not ((process.executable like~ ("*\\rdpclip.exe", "*:\\Windows\\System32\\csrss.exe", "*:\\Windows\\System32\\wininit.exe", "*:\\Windows\\System32\\winlogon.exe")) or process.executable:"<sigma.types.SigmaNull object at 0x7f491fc74ec0>"))

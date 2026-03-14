@@ -1,0 +1,1 @@
+any where (c-uri like~ ("*/flash_install.php*", "*/install_flash_player.exe")) and (not cs-host:"*.adobe.com")

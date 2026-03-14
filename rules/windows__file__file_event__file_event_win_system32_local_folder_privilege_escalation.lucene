@@ -1,0 +1,1 @@
+(file.path:(C\:\\Windows\\System32\\logonUI.exe.local* OR C\:\\Windows\\System32\\werFault.exe.local* OR C\:\\Windows\\System32\\consent.exe.local* OR C\:\\Windows\\System32\\narrator.exe.local* OR C\:\\Windows\\System32\\wermgr.exe.local*)) AND file.path:*\\comctl32.dll

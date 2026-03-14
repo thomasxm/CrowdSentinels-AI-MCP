@@ -1,0 +1,1 @@
+(process.executable:*\\rundll32.exe OR process.pe.original_file_name:RUNDLL32.EXE OR process.command_line:*rundll32*) AND process.command_line:*advpack* AND ((process.command_line:*#\+* AND process.command_line:*12*) OR process.command_line:*#\-*)

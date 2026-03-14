@@ -1,0 +1,1 @@
+any where (registry.path:"*\\Word\\Security\\AllowDDE" and (winlog.event_data.Details like~ ("DWORD (0x00000001)", "DWORD (0x00000002)"))) or ((registry.path like~ ("*\\Excel\\Security\\DisableDDEServerLaunch", "*\\Excel\\Security\\DisableDDEServerLookup")) and winlog.event_data.Details:"DWORD (0x00000000)")

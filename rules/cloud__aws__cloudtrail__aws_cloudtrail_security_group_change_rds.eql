@@ -1,0 +1,1 @@
+any where eventSource:"rds.amazonaws.com" and (eventName like~ ("AuthorizeDBSecurityGroupIngress", "CreateDBSecurityGroup", "DeleteDBSecurityGroup", "RevokeDBSecurityGroupIngress"))

@@ -1,0 +1,1 @@
+(process.executable:(*\:\\Windows\\system32\\taskmgr.exe OR *\:\\Windows\\SysWOW64\\taskmgr.exe)) AND (file.path:*\\AppData\\Local\\Temp\* AND file.path:*\\lsass* AND file.path:*.DMP*)

@@ -1,0 +1,1 @@
+any where winlog.channel:"Microsoft-Windows-Windows Firewall With Advanced Security/Firewall" and ((event.code like~ ("2004", "2071", "2097")) and winlog.event_data.Action:"3" and winlog.event_data.ModifyingApplication:"*:\\Windows\\System32\\wbem\\WmiPrvSE.exe")

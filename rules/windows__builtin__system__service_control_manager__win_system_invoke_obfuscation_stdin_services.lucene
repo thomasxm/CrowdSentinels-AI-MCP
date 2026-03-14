@@ -1,0 +1,1 @@
+winlog.channel:System AND ((winlog.provider_name:Service\ Control\ Manager AND event.code:7045 AND (winlog.event_data.ImagePath:*cmd* AND winlog.event_data.ImagePath:*powershell*) AND (winlog.event_data.ImagePath:(*\/c* OR *\/r*))) AND (winlog.event_data.ImagePath:*noexit* OR (winlog.event_data.ImagePath:*input* AND winlog.event_data.ImagePath:*$*)))

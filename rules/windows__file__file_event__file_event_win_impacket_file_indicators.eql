@@ -1,0 +1,1 @@
+any where file.path:"SigmaRegularExpression(regexp=SigmaString(['\\\\sessionresume_[a-zA-Z]{8}$']), flags=set())"

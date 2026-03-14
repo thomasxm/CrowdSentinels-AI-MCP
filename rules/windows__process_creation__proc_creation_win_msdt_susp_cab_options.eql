@@ -1,0 +1,1 @@
+any where (process.executable:"*\\msdt.exe" or process.pe.original_file_name:"msdt.exe") and process.command_line like~ ("* -cab *", "* /cab *", "* –cab *", "* —cab *", "* ―cab *")

@@ -1,0 +1,1 @@
+any where Status:"Success" and (userAgent like~ ("*BAV2ROPC*", "*CBAinPROD*", "*CBAinTAR*"))

@@ -1,0 +1,1 @@
+process.command_line:*esentutl* AND process.command_line:*\ \/p*

@@ -1,0 +1,1 @@
+(type:EXECVE AND a0:xwd) AND ((a1:\-root AND a2:\-out AND a3:*.xwd) OR (a1:\-out AND a2:*.xwd))

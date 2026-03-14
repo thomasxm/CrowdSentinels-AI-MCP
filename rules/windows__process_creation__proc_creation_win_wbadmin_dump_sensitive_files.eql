@@ -1,0 +1,1 @@
+any where (process.executable:"*\\wbadmin.exe" or process.pe.original_file_name:"WBADMIN.EXE") and (process.command_line like~ ("*start*", "*backup*")) and (process.command_line like~ ("*\\config\\SAM*", "*\\config\\SECURITY*", "*\\config\\SYSTEM*", "*\\Windows\\NTDS\\NTDS.dit*"))

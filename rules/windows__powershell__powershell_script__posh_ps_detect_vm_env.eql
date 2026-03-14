@@ -1,0 +1,1 @@
+any where (powershell.file.script_block_text like~ ("*Get-WmiObject*", "*gwmi*")) and (powershell.file.script_block_text like~ ("*MSAcpi_ThermalZoneTemperature*", "*Win32_ComputerSystem*"))

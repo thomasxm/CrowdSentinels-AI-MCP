@@ -1,0 +1,1 @@
+any where Image:"*/esxcli" and (CommandLine:"*system*" and CommandLine:"*syslog*" and CommandLine:"*config*") and CommandLine:"* set*"

@@ -1,0 +1,1 @@
+any where registry.path:"*\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\PromptOnSecureDesktop*" and winlog.event_data.Details:"DWORD (0x00000000)"

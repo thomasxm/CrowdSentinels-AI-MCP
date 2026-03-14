@@ -1,0 +1,1 @@
+any where process.executable:"*\\Doppelganger.exe" or (winlog.event_data.Hashes like~ ("*IMPHASH=AB94D5217896ADCD765A06B2D52F0AEB*", "*IMPHASH=65F0EA61156EE0C2A35421926F0C7F78*"))

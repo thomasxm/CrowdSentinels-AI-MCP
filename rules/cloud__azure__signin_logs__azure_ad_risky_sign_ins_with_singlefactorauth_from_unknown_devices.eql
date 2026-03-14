@@ -1,0 +1,1 @@
+any where (Status:"Success" and AuthenticationRequirement:"singleFactorAuthentication" and RiskState:"atRisk") and (DeviceDetail.trusttype=="" or (?DeviceDetail.trusttype == null))

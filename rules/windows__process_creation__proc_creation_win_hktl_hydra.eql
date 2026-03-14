@@ -1,0 +1,1 @@
+any where (process.command_line:"*-u *" and process.command_line:"*-p *") and (process.command_line like~ ("*^USER^*", "*^PASS^*"))

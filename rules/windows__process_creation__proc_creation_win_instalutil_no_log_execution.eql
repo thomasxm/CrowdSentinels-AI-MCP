@@ -1,0 +1,1 @@
+any where process.executable:"*\\InstallUtil.exe" and process.executable:"*Microsoft.NET\\Framework*" and (process.command_line:"*/logfile= *" and process.command_line:"*/LogToConsole=false*")

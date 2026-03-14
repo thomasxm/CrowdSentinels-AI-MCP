@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:4611 AND winlog.event_data.LogonProcessName:User32LogonProcesss)

@@ -1,0 +1,1 @@
+((process.executable:*\\tracker.exe OR process.pe.description:Tracker) AND (process.command_line:(*\ \/d\ * OR *\ \/c\ *))) AND (NOT (process.command_line:*\ \/ERRORREPORT\:PROMPT\ * OR (process.parent.executable:(*\\Msbuild\\Current\\Bin\\MSBuild.exe OR *\\Msbuild\\Current\\Bin\\amd64\\MSBuild.exe))))

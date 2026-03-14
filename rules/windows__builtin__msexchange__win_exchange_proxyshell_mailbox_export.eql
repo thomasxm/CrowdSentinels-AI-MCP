@@ -1,0 +1,1 @@
+any where winlog.channel:"MSExchange Management" and ((("New-MailboxExportRequest" and " -Mailbox ") and ("-FilePath \"\\" or ".aspx")) or ("New-ManagementRoleAssignment" and " -Role \"Mailbox Import Export\"" and " -User "))

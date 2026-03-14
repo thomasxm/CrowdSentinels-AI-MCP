@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and (event.code:"4697" and (winlog.event_data.ServiceFileName:"*new-object*" and winlog.event_data.ServiceFileName:"*text.encoding]::ascii*" and winlog.event_data.ServiceFileName:"*readtoend*") and (winlog.event_data.ServiceFileName like~ ("*system.io.compression.deflatestream*", "*system.io.streamreader*")))

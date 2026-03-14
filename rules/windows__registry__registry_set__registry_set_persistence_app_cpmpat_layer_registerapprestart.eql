@@ -1,0 +1,1 @@
+any where registry.path:"*\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Layers\*" and winlog.event_data.Details:"*REGISTERAPPRESTART*"

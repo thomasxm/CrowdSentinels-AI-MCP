@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\powershell.exe", "*\\pwsh.exe")) and (process.command_line:"*Add-PSSnapin*" and process.command_line:"*Get-Recipient*" and process.command_line:"*-ExpandProperty*" and process.command_line:"*EmailAddresses*" and process.command_line:"*SmtpAddress*" and process.command_line:"*-hidetableheaders*")

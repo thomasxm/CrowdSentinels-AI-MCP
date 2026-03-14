@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\net.exe", "*\\net1.exe")) and process.command_line:"*time*") or (process.executable:"*\\w32tm.exe" and process.command_line:"*tz*")

@@ -1,0 +1,1 @@
+any where (process.executable:"*\\msdt.exe" or process.pe.original_file_name:"msdt.exe") and (process.command_line:"*IT_BrowseForFile=*" or (process.command_line:"* PCWDiagnostic*" and process.command_line like~ ("* -af *", "* /af *", "* –af *", "* —af *", "* ―af *")))

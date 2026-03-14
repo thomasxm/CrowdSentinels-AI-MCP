@@ -1,0 +1,1 @@
+any where (Operation:"UserLoggedIn" and ApplicationId:"9ba1a5c7-f17a-4de9-a1f1-6178c8d51223" and ResultStatus:"Success" and RequestType:"Cmsi:Cmsi") and (not ObjectId:"0000000a-0000-0000-c000-000000000000")

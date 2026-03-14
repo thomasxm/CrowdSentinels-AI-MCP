@@ -1,0 +1,1 @@
+any where (Image:"*/systemctl" and CommandLine:"* mask*") and (CommandLine like~ ("*suspend.target*", "*hibernate.target*", "*hybrid-sleep.target*"))

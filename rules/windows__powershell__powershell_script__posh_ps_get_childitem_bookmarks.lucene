@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*Get\-ChildItem* AND powershell.file.script_block_text:*\ \-Recurse\ * AND powershell.file.script_block_text:*\ \-Path\ * AND powershell.file.script_block_text:*\ \-Filter\ Bookmarks* AND powershell.file.script_block_text:*\ \-ErrorAction\ SilentlyContinue* AND powershell.file.script_block_text:*\ \-Force*

@@ -1,0 +1,1 @@
+process.executable:*\\splwow64.exe AND process.command_line:*splwow64.exe

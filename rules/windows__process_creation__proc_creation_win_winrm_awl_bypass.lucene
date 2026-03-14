@@ -1,0 +1,1 @@
+process.command_line:*winrm* AND ((process.command_line:(*format\:pretty* OR *format\:\"pretty\"* OR *format\:\"text\"* OR *format\:text*)) AND (NOT (process.executable:(C\:\\Windows\\System32\* OR C\:\\Windows\\SysWOW64\*))))

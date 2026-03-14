@@ -1,0 +1,1 @@
+any where (registry.path:"*HKU\*" and registry.path:"*Classes\\CLSID\*" and registry.path:"*\\TreatAs*") and (not process.executable:"C:\\WINDOWS\\system32\\svchost.exe")

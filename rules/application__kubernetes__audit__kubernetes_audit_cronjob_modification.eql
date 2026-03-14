@@ -1,0 +1,1 @@
+any where objectRef.apiGroup:"batch" and (objectRef.resource like~ ("cronjobs", "jobs")) and (verb like~ ("create", "delete", "patch", "replace", "update"))

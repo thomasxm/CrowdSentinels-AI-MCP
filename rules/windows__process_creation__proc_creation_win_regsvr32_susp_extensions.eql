@@ -1,0 +1,1 @@
+any where (process.executable:"*\\regsvr32.exe" or process.pe.original_file_name:"REGSVR32.EXE") and (process.command_line like~ ("*.bin", "*.bmp", "*.cr2", "*.dat", "*.eps", "*.gif", "*.ico", "*.jpeg", "*.jpg", "*.log", "*.nef", "*.orf", "*.png", "*.raw", "*.rtf", "*.sr2", "*.temp", "*.tif", "*.tiff", "*.tmp", "*.txt"))

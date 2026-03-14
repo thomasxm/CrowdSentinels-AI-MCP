@@ -1,0 +1,1 @@
+any where process.command_line:"*e=Access&*" and process.command_line:"*y=Guest&*" and process.command_line:"*&p=*" and process.command_line:"*&c=*" and process.command_line:"*&k=*"

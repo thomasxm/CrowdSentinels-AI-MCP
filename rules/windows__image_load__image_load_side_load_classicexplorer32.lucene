@@ -1,0 +1,1 @@
+file.path:*\\ClassicExplorer32.dll AND (NOT file.path:C\:\\Program\ Files\\Classic\ Shell\*)

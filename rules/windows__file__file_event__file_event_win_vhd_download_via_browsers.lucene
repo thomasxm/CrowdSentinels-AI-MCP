@@ -1,0 +1,1 @@
+(process.executable:(*\\brave.exe OR *\\chrome.exe OR *\\firefox.exe OR *\\iexplore.exe OR *\\maxthon.exe OR *\\MicrosoftEdge.exe OR *\\msedge.exe OR *\\msedgewebview2.exe OR *\\opera.exe OR *\\safari.exe OR *\\seamonkey.exe OR *\\vivaldi.exe OR *\\whale.exe)) AND file.path:*.vhd*

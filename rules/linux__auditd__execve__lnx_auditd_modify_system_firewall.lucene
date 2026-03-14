@@ -1,0 +1,1 @@
+(type:EXECVE AND a0:iptables AND a1:*DROP*) OR (type:EXECVE AND a0:firewall\-cmd AND a1:*remove*) OR (type:EXECVE AND a0:ufw AND a1:*delete*) OR (type:EXECVE AND a0:nft AND (a1:(*delete* OR *flush*)))

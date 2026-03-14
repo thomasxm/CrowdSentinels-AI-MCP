@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*New\-Object* AND powershell.file.script_block_text:*IO.FileStream* AND powershell.file.script_block_text:*\\.\*

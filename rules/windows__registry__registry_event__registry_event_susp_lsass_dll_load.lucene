@@ -1,0 +1,1 @@
+(registry.path:(*\\CurrentControlSet\\Services\\NTDS\\DirectoryServiceExtPt* OR *\\CurrentControlSet\\Services\\NTDS\\LsaDbExtPt*)) AND (NOT (process.executable:C\:\\Windows\\system32\\lsass.exe AND (winlog.event_data.Details:(%%systemroot%%\\system32\\ntdsa.dll OR %%systemroot%%\\system32\\lsadb.dll))))

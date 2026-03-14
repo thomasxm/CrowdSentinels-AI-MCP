@@ -1,0 +1,1 @@
+(CommandLine:*echo\ 1\ \>* AND CommandLine:*\/sys\/kernel\/debug\/tracing\/events\/kprobes\/*) AND (CommandLine:(*\/myprobe\/enable* OR *\/myretprobe\/enable*))

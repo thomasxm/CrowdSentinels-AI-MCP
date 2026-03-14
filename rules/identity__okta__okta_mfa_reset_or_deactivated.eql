@@ -1,0 +1,1 @@
+any where eventtype like~ ("user.mfa.factor.deactivate", "user.mfa.factor.reset_all")

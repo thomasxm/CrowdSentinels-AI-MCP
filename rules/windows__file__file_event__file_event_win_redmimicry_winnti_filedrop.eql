@@ -1,0 +1,1 @@
+any where file.path like~ ("*\\gthread-3.6.dll", "*\\sigcmm-2.4.dll", "*\\Windows\\Temp\\tmp.bat")

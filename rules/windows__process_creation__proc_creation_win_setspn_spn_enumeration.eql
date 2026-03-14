@@ -1,0 +1,1 @@
+any where (process.executable:"*\\setspn.exe" or process.pe.original_file_name:"setspn.exe" or (process.pe.description:"*Query or reset the computer*" and process.pe.description:"*SPN attribute*")) and (process.command_line like~ ("* -q *", "* /q *"))

@@ -1,0 +1,1 @@
+any where process.executable:"*\\Inveigh.exe" or (process.pe.original_file_name like~ ("\\Inveigh.exe", "\\Inveigh.dll")) or process.pe.description:"Inveigh" or (process.command_line like~ ("* -SpooferIP*", "* -ReplyToIPs *", "* -ReplyToDomains *", "* -ReplyToMACs *", "* -SnifferIP*"))

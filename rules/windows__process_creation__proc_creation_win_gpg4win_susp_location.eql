@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\gpg.exe", "*\\gpg2.exe")) or process.pe.product:"GNU Privacy Guard (GnuPG)" or process.pe.description:"GnuPG’s OpenPGP tool") and process.command_line:"*-passphrase*" and (process.command_line like~ ("*:\\PerfLogs\*", "*:\\Temp\*", "*:\\Users\\Public\*", "*:\\Windows\\Temp\*", "*\\AppData\\Local\\Temp\*", "*\\AppData\\Roaming\*"))

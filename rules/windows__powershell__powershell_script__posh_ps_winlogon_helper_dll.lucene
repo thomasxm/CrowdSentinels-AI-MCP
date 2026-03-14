@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*CurrentVersion\\Winlogon* AND (powershell.file.script_block_text:(*Set\-ItemProperty* OR *New\-Item*))

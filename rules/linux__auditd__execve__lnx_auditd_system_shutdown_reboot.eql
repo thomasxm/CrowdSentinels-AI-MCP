@@ -1,0 +1,1 @@
+any where type:"EXECVE" and (("shutdown" or "reboot" or "halt" or "poweroff") or (("init" or "telinit") and (0 or 6)))

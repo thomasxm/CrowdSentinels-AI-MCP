@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*:\\RECYCLER\*", "*:\\SystemVolumeInformation\*")) or (process.executable like~ ("C:\\Windows\\Tasks\*", "C:\\Windows\\debug\*", "C:\\Windows\\fonts\*", "C:\\Windows\\help\*", "C:\\Windows\\drivers\*", "C:\\Windows\\addins\*", "C:\\Windows\\cursors\*", "C:\\Windows\\system32\\tasks\*"))

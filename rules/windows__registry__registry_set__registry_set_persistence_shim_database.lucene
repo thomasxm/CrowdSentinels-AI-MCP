@@ -1,0 +1,1 @@
+(registry.path:(*\\SOFTWARE\\Microsoft\\Windows\ NT\\CurrentVersion\\AppCompatFlags\\InstalledSDB\* OR *\\SOFTWARE\\Microsoft\\Windows\ NT\\CurrentVersion\\AppCompatFlags\\Custom\*)) AND (NOT (winlog.event_data.Details:("" OR \(Empty\) OR \<sigma.types.SigmaNull\ object\ at\ 0x7f09bd9a9160\>)))

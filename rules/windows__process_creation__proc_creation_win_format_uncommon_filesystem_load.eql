@@ -1,0 +1,1 @@
+any where (process.executable:"*\\format.com" and process.command_line:"*/fs:*") and (not (process.command_line like~ ("*/fs:exFAT*", "*/fs:FAT*", "*/fs:NTFS*", "*/fs:ReFS*", "*/fs:UDF*")))

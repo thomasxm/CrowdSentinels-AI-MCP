@@ -1,0 +1,1 @@
+any where (process.executable:"*\\cmstp.exe" or process.pe.original_file_name:"CMSTP.EXE") and (process.command_line like~ ("*/s*", "*-s*", "*/au*", "*-au*", "*/ni*", "*-ni*"))

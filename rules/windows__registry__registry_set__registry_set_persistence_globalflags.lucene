@@ -1,0 +1,1 @@
+(registry.path:*\\Microsoft\\Windows\ NT\\CurrentVersion\* AND registry.path:*\\Image\ File\ Execution\ Options\* AND registry.path:*\\GlobalFlag*) OR ((registry.path:*\\Microsoft\\Windows\ NT\\CurrentVersion\* AND registry.path:*\\SilentProcessExit\*) AND (registry.path:(*\\ReportingMode* OR *\\MonitorProcess*)))

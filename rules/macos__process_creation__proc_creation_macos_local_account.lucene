@@ -1,0 +1,1 @@
+(Image:*\/dscl AND (CommandLine:*list* AND CommandLine:*\/users*)) OR (Image:*\/dscacheutil AND (CommandLine:*\-q* AND CommandLine:*user*)) OR CommandLine:*'x\:0\:'* OR (Image:*\/cat AND (CommandLine:(*\/etc\/passwd* OR *\/etc\/sudoers*))) OR Image:*\/id OR (Image:*\/lsof AND CommandLine:*\-u*)

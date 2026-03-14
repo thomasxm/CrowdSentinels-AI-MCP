@@ -1,0 +1,1 @@
+any where (process.executable:"*\\certutil.exe" or process.pe.original_file_name:"CertUtil.exe") and (process.command_line like~ ("*-decode *", "*/decode *", "*–decode *", "*—decode *", "*―decode *") or process.command_line like~ ("*-decodehex *", "*/decodehex *", "*–decodehex *", "*—decodehex *", "*―decodehex *"))

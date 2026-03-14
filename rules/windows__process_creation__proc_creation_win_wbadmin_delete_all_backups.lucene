@@ -1,0 +1,1 @@
+(process.executable:*\\wbadmin.exe OR process.pe.original_file_name:WBADMIN.EXE) AND ((process.command_line:*delete* AND process.command_line:*backup*) AND process.command_line:*keepVersions\:0*)

@@ -1,0 +1,1 @@
+any where (process.executable:"*\\dtrace.exe" and process.command_line:"*lkd(0)*") or (process.command_line:"*syscall:::return*" and process.command_line:"*lkd(*")

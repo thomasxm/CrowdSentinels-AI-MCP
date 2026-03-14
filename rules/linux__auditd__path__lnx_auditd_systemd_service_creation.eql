@@ -1,0 +1,1 @@
+any where (type:"PATH" and nametype:"CREATE") and ((name like~ ("/usr/lib/systemd/system/*", "/etc/systemd/system/*")) or name:"*/.config/systemd/user/*")

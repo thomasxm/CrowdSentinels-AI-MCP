@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*Invoke\-DNSExfiltrator* OR (powershell.file.script_block_text:*\ \-i\ * AND powershell.file.script_block_text:*\ \-d\ * AND powershell.file.script_block_text:*\ \-p\ * AND powershell.file.script_block_text:*\ \-doh\ * AND powershell.file.script_block_text:*\ \-t\ *)

@@ -1,0 +1,1 @@
+(process.executable:\:\\Program\ Files* AND process.executable:*\\Microsoft\ Visual\ Studio\* AND process.executable:*\\dump64.exe) AND (process.pe.original_file_name:procdump OR (process.command_line:(*\ \-ma\ * OR *\ \-mp\ *)))

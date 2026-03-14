@@ -1,0 +1,1 @@
+any where (process.executable:"*\\tscon.exe" or process.pe.original_file_name:"tscon.exe") and (winlog.event_data.IntegrityLevel like~ ("System", "S-1-16-16384"))

@@ -1,0 +1,1 @@
+any where process.command_line:"* -t msi-install *" and process.command_line:"* -i http*"

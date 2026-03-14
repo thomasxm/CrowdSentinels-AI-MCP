@@ -1,0 +1,1 @@
+any where process.pe.original_file_name:"sdelete.exe" and (not (process.executable like~ ("*\\sdelete.exe", "*\\sdelete64.exe")))

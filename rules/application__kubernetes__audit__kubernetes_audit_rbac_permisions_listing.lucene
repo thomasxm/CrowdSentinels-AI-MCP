@@ -1,0 +1,1 @@
+verb:create AND apiGroup:authorization.k8s.io AND objectRef.resource:selfsubjectrulesreviews

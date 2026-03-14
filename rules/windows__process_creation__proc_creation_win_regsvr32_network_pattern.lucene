@@ -1,0 +1,1 @@
+(process.executable:*\\regsvr32.exe OR process.pe.original_file_name:REGSVR32.EXE) AND (process.command_line:(*\ \/i* OR *\ \-i*)) AND (process.command_line:(*ftp* OR *http*))

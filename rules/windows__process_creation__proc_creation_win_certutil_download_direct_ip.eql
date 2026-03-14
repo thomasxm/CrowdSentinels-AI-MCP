@@ -1,0 +1,1 @@
+any where ((process.executable:"*\\certutil.exe" or process.pe.original_file_name:"CertUtil.exe") and (process.command_line like~ ("*urlcache *", "*verifyctl *", "*URL *")) and (process.command_line like~ ("*://1*", "*://2*", "*://3*", "*://4*", "*://5*", "*://6*", "*://7*", "*://8*", "*://9*"))) and (not process.command_line:"*://7-*")

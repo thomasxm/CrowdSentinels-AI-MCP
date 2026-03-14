@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-AppXDeploymentServer\/Operational AND ((event.code:(400 OR 401)) AND winlog.event_data.PackageFullName:*3669e262\-ec02\-4e9d\-bcb4\-3d008b4afac9*)

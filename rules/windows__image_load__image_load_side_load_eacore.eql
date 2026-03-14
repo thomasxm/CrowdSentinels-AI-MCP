@@ -1,0 +1,1 @@
+any where file.path:"*\\EACore.dll" and (not ((process.executable:"*C:\\Program Files\\Electronic Arts\\EA Desktop\*" and process.executable:"*\\EACoreServer.exe*") and file.path:"C:\\Program Files\\Electronic Arts\\EA Desktop\*"))

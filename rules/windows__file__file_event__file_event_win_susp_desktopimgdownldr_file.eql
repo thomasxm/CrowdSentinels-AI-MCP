@@ -1,0 +1,1 @@
+any where (process.executable:"*\\svchost.exe" and file.path:"*\\Personalization\\LockScreenImage\*") and (not file.path:"*C:\\Windows\*") and (not (file.path like~ ("*.jpg*", "*.jpeg*", "*.png*")))

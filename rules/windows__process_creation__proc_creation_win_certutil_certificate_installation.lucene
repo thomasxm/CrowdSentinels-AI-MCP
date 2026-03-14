@@ -1,0 +1,1 @@
+(process.executable:*\\certutil.exe OR process.pe.original_file_name:CertUtil.exe) AND process.command_line:(*\-addstore* OR *\/addstore* OR *–addstore* OR *—addstore* OR *―addstore*) AND process.command_line:*root*

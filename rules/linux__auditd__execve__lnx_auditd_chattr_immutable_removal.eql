@@ -1,0 +1,1 @@
+any where type:"EXECVE" and a0:"*chattr*" and a1:"*-i*"

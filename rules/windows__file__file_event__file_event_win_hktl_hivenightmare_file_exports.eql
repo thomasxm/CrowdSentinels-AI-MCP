@@ -1,0 +1,1 @@
+any where (file.path like~ ("*\\hive_sam_*", "*\\SAM-2021-*", "*\\SAM-2022-*", "*\\SAM-2023-*", "*\\SAM-haxx*", "*\\Sam.save*")) or file.path:"C:\\windows\\temp\\sam"

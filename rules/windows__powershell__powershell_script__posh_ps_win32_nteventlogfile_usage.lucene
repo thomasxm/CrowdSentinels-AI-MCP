@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*Win32_NTEventlogFile* AND (powershell.file.script_block_text:(*.BackupEventlog\(* OR *.ChangeSecurityPermissions\(* OR *.ChangeSecurityPermissionsEx\(* OR *.ClearEventLog\(* OR *.Delete\(* OR *.DeleteEx\(* OR *.Rename\(* OR *.TakeOwnerShip\(* OR *.TakeOwnerShipEx\(*))

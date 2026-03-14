@@ -1,0 +1,1 @@
+(file.path:(*.AAA OR *.ZZZ)) AND (NOT file.path:*\\Wireshark\\radius\\dictionary.alcatel\-lucent.aaa)

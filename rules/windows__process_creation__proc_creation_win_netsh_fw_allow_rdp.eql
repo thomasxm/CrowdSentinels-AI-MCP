@@ -1,0 +1,1 @@
+any where (process.executable:"*\\netsh.exe" or process.pe.original_file_name:"netsh.exe") and ((process.command_line:"*firewall *" and process.command_line:"*add *" and process.command_line:"*tcp *" and process.command_line:"*3389*") and (process.command_line like~ ("*portopening*", "*allow*")))

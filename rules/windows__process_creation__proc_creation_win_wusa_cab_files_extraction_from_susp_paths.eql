@@ -1,0 +1,1 @@
+any where (process.executable:"*\\wusa.exe" and process.command_line:"*/extract:*") and (process.command_line like~ ("*:\\PerfLogs\*", "*:\\Users\\Public\*", "*:\\Windows\\Temp\*", "*\\Appdata\\Local\\Temp\*"))

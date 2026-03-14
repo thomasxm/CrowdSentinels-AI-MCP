@@ -1,0 +1,1 @@
+any where auditType.category:"Users and groups" and (auditType.action like~ ("User permissions export failed", "User permissions export started", "User permissions exported"))

@@ -1,0 +1,1 @@
+(process.executable:*\\VMwareXferlogs.exe AND file.path:*\\glib\-2.0.dll) AND (NOT file.path:C\:\\Program\ Files\\VMware\*)

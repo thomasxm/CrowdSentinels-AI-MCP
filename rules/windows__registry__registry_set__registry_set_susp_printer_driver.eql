@@ -1,0 +1,1 @@
+any where ((registry.path:"*\\Control\\Print\\Environments\\Windows x64\\Drivers*" and registry.path:"*\\Manufacturer*") and winlog.event_data.Details:"(Empty)") and (not (registry.path:"*\\CutePDF Writer v4.0\*" or (registry.path like~ ("*\\VNC Printer (PS)\*", "*\\VNC Printer (UD)\*")) or registry.path:"*\\Version-3\\PDF24\*"))

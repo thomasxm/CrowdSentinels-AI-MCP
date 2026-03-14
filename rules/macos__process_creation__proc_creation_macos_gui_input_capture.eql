@@ -1,0 +1,1 @@
+any where Image:"*/osascript" and (CommandLine:"*-e*" and CommandLine:"*display*" and CommandLine:"*dialog*" and CommandLine:"*answer*") and (CommandLine like~ ("*admin*", "*administrator*", "*authenticate*", "*authentication*", "*credentials*", "*pass*", "*password*", "*unlock*"))

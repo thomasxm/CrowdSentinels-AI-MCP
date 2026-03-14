@@ -1,0 +1,1 @@
+process.executable:*\\cmd.exe AND (file.path:*\\Users\* AND file.path:*\\Desktop\*) AND file.path:*.txt

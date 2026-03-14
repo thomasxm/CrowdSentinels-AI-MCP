@@ -1,0 +1,1 @@
+any where process.executable:"C:\\WINDOWS\\system32\\WerFault.exe" and (file.path like~ ("*\\lsass*", "*lsass.exe*"))

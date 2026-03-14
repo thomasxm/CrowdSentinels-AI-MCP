@@ -1,0 +1,1 @@
+any where ((winlog.event_data.IntegrityLevel like~ ("High", "System", "S-1-16-16384", "S-1-16-12288")) and process.executable:"C:\\Windows\\System32\\ComputerDefaults.exe") and (not (process.parent.executable like~ ("*:\\Windows\\System32*", "*:\\Program Files*")))

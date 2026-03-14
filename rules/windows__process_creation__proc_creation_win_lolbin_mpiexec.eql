@@ -1,0 +1,1 @@
+any where (process.executable:"*\\mpiexec.exe" or winlog.event_data.Hashes:"*IMPHASH=d8b52ef6aaa3a81501bdfff9dbb96217*") and (process.command_line like~ ("* /n 1 *", "* -n 1 *"))

@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-Sysmon\/Operational AND event.code:27

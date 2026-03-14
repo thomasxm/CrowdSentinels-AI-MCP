@@ -1,0 +1,1 @@
+any where (registry.path like~ ("*\\Sophos Endpoint Defense\\TamperProtection\\Config\\SAVEnabled*", "*\\Sophos Endpoint Defense\\TamperProtection\\Config\\SEDEnabled*", "*\\Sophos\\SAVService\\TamperProtection\\Enabled*")) and winlog.event_data.Details:"DWORD (0x00000000)"

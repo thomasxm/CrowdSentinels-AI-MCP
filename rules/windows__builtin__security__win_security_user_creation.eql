@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and event.code:"4720"

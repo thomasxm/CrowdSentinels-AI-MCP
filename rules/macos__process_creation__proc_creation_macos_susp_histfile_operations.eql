@@ -1,0 +1,1 @@
+any where CommandLine like~ ("*.bash_history*", "*.zsh_history*", "*.zhistory*", "*.history*", "*.sh_history*", "*fish_history*")

@@ -1,0 +1,1 @@
+any where (process.executable:"*\\dsacls.exe" or process.pe.original_file_name:"DSACLS.EXE") and process.command_line:"* /G *" and (process.command_line like~ ("*GR*", "*GE*", "*GW*", "*GA*", "*WP*", "*WD*"))

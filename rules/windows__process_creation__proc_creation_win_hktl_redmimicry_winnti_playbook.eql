@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\rundll32.exe", "*\\cmd.exe")) and (process.command_line like~ ("*gthread-3.6.dll*", "*\\Windows\\Temp\\tmp.bat*", "*sigcmm-2.4.dll*"))

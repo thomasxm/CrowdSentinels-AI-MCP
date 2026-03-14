@@ -1,0 +1,1 @@
+any where (process.executable:"*\\bcp.exe" or process.pe.original_file_name:"BCP.exe") and (process.command_line like~ ("* out *", "* queryout *"))

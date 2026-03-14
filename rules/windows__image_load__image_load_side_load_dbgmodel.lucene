@@ -1,0 +1,1 @@
+file.path:*\\dbgmodel.dll AND (NOT (file.path:(C\:\\Windows\\System32\* OR C\:\\Windows\\SysWOW64\* OR C\:\\Windows\\WinSxS\*))) AND (NOT (file.path:C\:\\Program\ Files\\WindowsApps\\Microsoft.WinDbg_* OR (file.path:(C\:\\Program\ Files\ \(x86\)\\Windows\ Kits\* OR C\:\\Program\ Files\\Windows\ Kits\*))))

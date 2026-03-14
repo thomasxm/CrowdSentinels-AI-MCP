@@ -1,0 +1,1 @@
+any where process.executable:"*\\runonce.exe" and process.parent.executable:"*\\rundll32.exe" and (process.parent.command_line:"*setupapi.dll*" and process.parent.command_line:"*InstallHinfSection*")

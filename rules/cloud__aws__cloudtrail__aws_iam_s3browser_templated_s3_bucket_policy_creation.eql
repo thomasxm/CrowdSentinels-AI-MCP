@@ -1,0 +1,1 @@
+any where eventSource:"iam.amazonaws.com" and eventName:"PutUserPolicy" and userAgent:"*S3 Browser*" and (requestParameters:"*\"arn:aws:s3:::<YOUR-BUCKET-NAME>/*\"*" and requestParameters:"*\"s3:GetObject\"*" and requestParameters:"*\"Allow\"*")

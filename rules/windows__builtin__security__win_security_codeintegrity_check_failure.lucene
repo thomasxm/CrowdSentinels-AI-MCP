@@ -1,0 +1,1 @@
+winlog.channel:Security AND ((event.code:(5038 OR 6281)) AND (NOT ((winlog.event_data.param1:(*\\CSFalconServiceUninstallTool_* OR *\\Program\ Files\\CrowdStrike\* OR *\\System32\\drivers\\CrowdStrike\* OR *\\Windows\\System32\\ScriptControl64_*)) OR winlog.event_data.param1:*\\Program\ Files\\Sophos\*)))

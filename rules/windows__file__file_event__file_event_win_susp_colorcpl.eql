@@ -1,0 +1,1 @@
+any where process.executable:"*\\colorcpl.exe" and (not (file.path like~ ("*.icm", "*.gmmp", "*.cdmp", "*.camp")))

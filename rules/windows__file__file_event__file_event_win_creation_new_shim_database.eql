@@ -1,0 +1,1 @@
+any where file.path like~ ("*:\\Windows\\apppatch\\Custom\*", "*:\\Windows\\apppatch\\CustomSDB\*")

@@ -1,0 +1,1 @@
+any where winlog.channel:"Microsoft-Windows-LSA/Operational" and ((event.code:"300" and winlog.event_data.TargetUserSid:"S-1-5-21-*" and (winlog.event_data.SidList like~ ("*S-1-5-32-544*", "*-500}*", "*-518}*", "*-519}*"))) and (not (winlog.event_data.TargetUserSid like~ ("*-500", "*-518", "*-519"))))

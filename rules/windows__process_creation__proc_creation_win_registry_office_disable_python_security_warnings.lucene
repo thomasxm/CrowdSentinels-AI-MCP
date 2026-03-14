@@ -1,0 +1,1 @@
+(process.command_line:*\\Microsoft\\Office\* AND process.command_line:*\\Excel\\Security* AND process.command_line:*PythonFunctionWarnings*) AND process.command_line:*\ 0*

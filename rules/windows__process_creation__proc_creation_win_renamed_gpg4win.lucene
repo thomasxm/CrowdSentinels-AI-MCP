@@ -1,0 +1,1 @@
+process.pe.original_file_name:gpg.exe AND (NOT (process.executable:(*\\gpg.exe OR *\\gpg2.exe)))

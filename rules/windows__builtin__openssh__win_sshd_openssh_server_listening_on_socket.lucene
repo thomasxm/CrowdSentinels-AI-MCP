@@ -1,0 +1,1 @@
+winlog.channel:OpenSSH\/Operational AND (event.code:4 AND winlog.event_data.process:sshd AND winlog.event_data.payload:Server\ listening\ on\ *)

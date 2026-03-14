@@ -1,0 +1,1 @@
+any where ParentImage:"*/TeamViewer_Service" and Image:"*/TeamViewer_Desktop" and CommandLine:"*/TeamViewer_Desktop --IPCport 5939 --Module 1"

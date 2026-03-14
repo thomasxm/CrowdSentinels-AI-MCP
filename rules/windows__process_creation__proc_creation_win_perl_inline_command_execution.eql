@@ -1,0 +1,1 @@
+any where (process.executable:"*\\perl.exe" or process.pe.original_file_name:"perl.exe") and process.command_line:"* -e*"

@@ -1,0 +1,1 @@
+any where process.executable:"*\\SharpEvtMute.exe" or process.pe.description:"SharpEvtMute" or (process.command_line like~ ("*--Filter \"rule *", "*--Encoded --Filter \\\"*"))

@@ -1,0 +1,1 @@
+process.executable:*\\cmstp.exe AND (file.path:(*\\PerfLogs\* OR *\\ProgramData\* OR *\\Users\* OR *\\Windows\\Temp\* OR *C\:\\Temp\*)) AND (file.path:(*.dll OR *.ocx))

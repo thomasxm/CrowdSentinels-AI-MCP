@@ -1,0 +1,1 @@
+(file.path:(*WsmPty.xsl OR *WsmTxt.xsl)) AND (NOT (file.path:(C\:\\Windows\\System32\* OR C\:\\Windows\\SysWOW64\*)))

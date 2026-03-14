@@ -1,0 +1,1 @@
+winlog.channel:Security AND ((event.code:4697 AND (winlog.event_data.ServiceFileName:*cmd* AND winlog.event_data.ServiceFileName:*powershell*)) AND (winlog.event_data.ServiceFileName:(*$\{input\}* OR *noexit*)) AND (winlog.event_data.ServiceFileName:(*\ \/c\ * OR *\ \/r\ *)))

@@ -1,0 +1,1 @@
+any where type:"execve" and a0:"cp" and a1:"/bin/sh" and a2:"*/crond"

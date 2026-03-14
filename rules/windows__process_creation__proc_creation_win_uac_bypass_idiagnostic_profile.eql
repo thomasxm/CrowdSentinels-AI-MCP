@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\DllHost.exe" and process.parent.command_line:"* /Processid:{12C21EA7-2EB8-4B55-9249-AC243DA8C666}*" and (winlog.event_data.IntegrityLevel like~ ("High", "System", "S-1-16-16384", "S-1-16-12288"))

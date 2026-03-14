@@ -1,0 +1,1 @@
+file.path:*\\code_tunnel.json AND (NOT (process.executable:(*\\code\-tunnel.exe OR *\\code.exe)))

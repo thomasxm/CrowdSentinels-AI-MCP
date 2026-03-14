@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-Bits\-Client\/Operational AND (event.code:16403 AND (NOT (winlog.event_data.RemoteName:(*.azureedge.net\/* OR *.com\/* OR *.sfx.ms\/* OR *download.mozilla.org\/* OR *cdn.onenote.net\/* OR *cdn.office.net\/*))))

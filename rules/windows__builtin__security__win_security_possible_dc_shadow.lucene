@@ -1,0 +1,1 @@
+winlog.channel:Security AND ((event.code:4742 AND winlog.event_data.ServicePrincipalNames:*GC\/*) OR (event.code:5136 AND winlog.event_data.AttributeLDAPDisplayName:servicePrincipalName AND winlog.event_data.AttributeValue:GC\/*))

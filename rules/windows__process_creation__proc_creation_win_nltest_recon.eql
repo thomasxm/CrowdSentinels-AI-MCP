@@ -1,0 +1,1 @@
+any where (process.executable:"*\\nltest.exe" or process.pe.original_file_name:"nltestrk.exe") and ((process.command_line:"*server*" and process.command_line:"*query*") or (process.command_line like~ ("*/user*", "*all_trusts*", "*dclist:*", "*dnsgetdc:*", "*domain_trusts*", "*dsgetdc:*", "*parentdomain*", "*trusted_domains*")))

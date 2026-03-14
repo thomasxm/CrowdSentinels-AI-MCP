@@ -1,0 +1,1 @@
+any where ((Image like~ ("*/rvim", "*/vim", "*/vimdiff")) and (CommandLine like~ ("* --cmd*", "* -c *"))) and (CommandLine like~ ("*:!/*", "*:lua *", "*:py *", "*/bin/bash*", "*/bin/dash*", "*/bin/fish*", "*/bin/sh*", "*/bin/zsh*"))

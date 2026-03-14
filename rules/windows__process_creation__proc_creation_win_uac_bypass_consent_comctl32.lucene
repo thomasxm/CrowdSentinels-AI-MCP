@@ -1,0 +1,1 @@
+process.parent.executable:*\\consent.exe AND process.executable:*\\werfault.exe AND (winlog.event_data.IntegrityLevel:(High OR System OR S\-1\-16\-16384 OR S\-1\-16\-12288))

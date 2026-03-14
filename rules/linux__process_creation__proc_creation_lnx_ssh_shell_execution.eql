@@ -1,0 +1,1 @@
+any where (Image:"*/ssh" and (CommandLine like~ ("*ProxyCommand=;*", "*permitlocalcommand=yes*", "*localhost*"))) and (CommandLine like~ ("*/bin/bash*", "*/bin/dash*", "*/bin/fish*", "*/bin/sh*", "*/bin/zsh*", "*sh 0<&2 1>&2*", "*sh 1>&2 0<&2*"))

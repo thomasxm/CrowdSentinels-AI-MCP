@@ -1,0 +1,1 @@
+any where process.executable:"*\\svchost.exe" and (not ((process.executable like~ ("C:\\Windows\\System32\\svchost.exe", "C:\\Windows\\SysWOW64\\svchost.exe")) or process.pe.original_file_name:"svchost.exe"))

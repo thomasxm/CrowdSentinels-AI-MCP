@@ -1,0 +1,1 @@
+(process.executable:*\\pwsh.exe OR process.pe.original_file_name:pwsh.dll) AND (process.command_line:*Set\-Service\ * AND process.command_line:*DCLCWPDTSD*) AND (process.command_line:(*\-SecurityDescriptorSddl\ * OR *\-sd\ *))

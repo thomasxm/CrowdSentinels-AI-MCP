@@ -1,0 +1,1 @@
+process.command_line:*\:3389* AND (process.command_line:(*\ \-L\ * OR *\ \-P\ * OR *\ \-R\ * OR *\ \-pw\ * OR *\ \-ssh\ *))

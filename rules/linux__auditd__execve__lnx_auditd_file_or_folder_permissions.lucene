@@ -1,0 +1,1 @@
+type:EXECVE AND (a0:(*chmod* OR *chown*))

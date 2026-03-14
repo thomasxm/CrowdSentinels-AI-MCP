@@ -1,0 +1,1 @@
+Image:*\/ls AND (CommandLine:(*\ \/ OR *\ \/\ *)) AND CommandLine:/(?:\s-[^-\s]{0,20}i|\s--inode\s)/ AND CommandLine:/(?:\s-[^-\s]{0,20}d|\s--directory\s)/

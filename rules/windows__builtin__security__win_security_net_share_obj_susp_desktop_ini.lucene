@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:5145 AND winlog.event_data.ObjectType:File AND winlog.event_data.RelativeTargetName:*\\desktop.ini AND (winlog.event_data.AccessList:(*WriteData* OR *DELETE* OR *WriteDAC* OR *AppendData* OR *AddSubdirectory*)))

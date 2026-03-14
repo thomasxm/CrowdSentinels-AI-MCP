@@ -1,0 +1,1 @@
+any where registry.path like~ ("*\\Services\\DHCPServer\\Parameters\\CalloutDlls", "*\\Services\\DHCPServer\\Parameters\\CalloutEnabled")

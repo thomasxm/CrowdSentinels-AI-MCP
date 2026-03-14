@@ -1,0 +1,1 @@
+(process.executable:(*\\rundll32.exe OR *\\cmd.exe)) AND (process.command_line:(*gthread\-3.6.dll* OR *\\Windows\\Temp\\tmp.bat* OR *sigcmm\-2.4.dll*))

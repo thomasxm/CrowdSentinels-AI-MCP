@@ -1,0 +1,1 @@
+process.command_line:*\\CurrentVersion\\Image\ File\ Execution\ Options\* AND (process.command_line:(*sethc.exe* OR *utilman.exe* OR *osk.exe* OR *magnify.exe* OR *narrator.exe* OR *displayswitch.exe* OR *atbroker.exe* OR *HelpPane.exe*))

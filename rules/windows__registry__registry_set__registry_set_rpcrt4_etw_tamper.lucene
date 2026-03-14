@@ -1,0 +1,1 @@
+registry.path:*\\Microsoft\\Windows\ NT\\Rpc\\ExtErrorInformation AND (winlog.event_data.Details:(DWORD\ \(0x00000000\) OR DWORD\ \(0x00000002\)))

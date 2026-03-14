@@ -1,0 +1,1 @@
+winlog.channel:System AND (winlog.provider_name:Service\ Control\ Manager AND event.code:7045 AND (winlog.event_data.ImagePath:*rundll32.exe* AND winlog.event_data.ImagePath:*shell32.dll* AND winlog.event_data.ImagePath:*shellexec_rundll* AND winlog.event_data.ImagePath:*powershell*))

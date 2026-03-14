@@ -1,0 +1,1 @@
+(winlog.event_data.Data:*Get\-WmiObject* AND winlog.event_data.Data:*Win32_ShadowCopy*) AND (winlog.event_data.Data:(*Delete\(\)* OR *Remove\-WmiObject*))

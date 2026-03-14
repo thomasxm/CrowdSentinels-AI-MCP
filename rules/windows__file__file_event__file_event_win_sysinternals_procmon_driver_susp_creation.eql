@@ -1,0 +1,1 @@
+any where (file.path:"*\\procmon*" and file.path:"*.sys") and (not (process.executable like~ ("*\\procmon.exe", "*\\procmon64.exe")))

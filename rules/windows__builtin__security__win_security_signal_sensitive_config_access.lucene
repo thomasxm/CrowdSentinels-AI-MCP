@@ -1,0 +1,1 @@
+winlog.channel:Security AND ((event.code:4663 AND winlog.event_data.ObjectType:File AND winlog.event_data.ObjectName:*\\AppData\\Roaming\\Signal\* AND (winlog.event_data.ObjectName:(*\\config.json OR *\\db.sqlite))) AND (NOT (process.executable:(*\\signal\-portable.exe OR *\\signal.exe))))

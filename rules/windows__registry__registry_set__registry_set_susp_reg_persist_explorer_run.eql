@@ -1,0 +1,1 @@
+any where registry.path:"*\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Run" and (winlog.event_data.Details like~ ("*:\\$Recycle.bin\*", "*:\\ProgramData\*", "*:\\Temp\*", "*:\\Users\\Default\*", "*:\\Users\\Public\*", "*:\\Windows\\Temp\*", "*\\AppData\\Local\\Temp\*"))

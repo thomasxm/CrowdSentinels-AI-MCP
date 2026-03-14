@@ -1,0 +1,1 @@
+any where process.command_line like~ ("*Compress-Archive -Path*-DestinationPath $env:TEMP*", "*Compress-Archive -Path*-DestinationPath*\\AppData\\Local\\Temp\*", "*Compress-Archive -Path*-DestinationPath*:\\Windows\\Temp\*")

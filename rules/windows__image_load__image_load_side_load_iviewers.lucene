@@ -1,0 +1,1 @@
+file.path:*\\iviewers.dll AND (NOT (file.path:(C\:\\Program\ Files\ \(x86\)\\Windows\ Kits\* OR C\:\\Program\ Files\\Windows\ Kits\*)))

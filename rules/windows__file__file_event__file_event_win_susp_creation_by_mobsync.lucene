@@ -1,0 +1,1 @@
+process.executable:*\\mobsync.exe AND (file.path:(*.dll OR *.exe))

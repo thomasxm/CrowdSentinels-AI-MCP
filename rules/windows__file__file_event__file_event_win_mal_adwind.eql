@@ -1,0 +1,1 @@
+any where (file.path:"*\\AppData\\Roaming\\Oracle\\bin\\java*" and file.path:"*.exe*") or (file.path:"*\\Retrive*" and file.path:"*.vbs*")

@@ -1,0 +1,1 @@
+any where Image:"*/cp" and CommandLine:"*/tmp/*" and (CommandLine like~ ("*passwd*", "*shadow*"))

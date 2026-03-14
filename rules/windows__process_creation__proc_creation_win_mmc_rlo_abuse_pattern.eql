@@ -1,0 +1,1 @@
+any where (process.executable:"*\\mmc.exe" or process.pe.original_file_name:"MMC.exe") and (process.command_line like~ ("*cod.msc*", "*fdp.msc*", "*ftr.msc*", "*lmth.msc*", "*slx.msc*", "*tdo.msc*", "*xcod.msc*", "*xslx.msc*", "*xtpp.msc*"))

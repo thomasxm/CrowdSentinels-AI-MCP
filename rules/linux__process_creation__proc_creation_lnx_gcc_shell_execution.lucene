@@ -1,0 +1,1 @@
+((Image:(*\/c89 OR *\/c99 OR *\/gcc)) AND CommandLine:*\-wrapper*) AND (CommandLine:(*\/bin\/bash,\-s* OR *\/bin\/dash,\-s* OR *\/bin\/fish,\-s* OR *\/bin\/sh,\-s* OR *\/bin\/zsh,\-s*))

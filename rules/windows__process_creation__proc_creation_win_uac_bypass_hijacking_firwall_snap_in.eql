@@ -1,0 +1,1 @@
+any where (process.parent.executable:"*\\mmc.exe" and process.parent.command_line:"*WF.msc*") and (not process.executable:"*\\WerFault.exe")

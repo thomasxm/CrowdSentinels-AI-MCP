@@ -1,0 +1,1 @@
+file.path:*.evtx AND (NOT (file.path:C\:\\Windows\\System32\\winevt\\Logs\* OR (file.path:C\:\\ProgramData\\Microsoft\\Windows\\Containers\\BaseImages\* AND file.path:*\\Windows\\System32\\winevt\\Logs\\)))

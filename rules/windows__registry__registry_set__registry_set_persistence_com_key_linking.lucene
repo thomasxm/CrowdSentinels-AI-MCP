@@ -1,0 +1,1 @@
+(registry.path:*HKU\* AND registry.path:*Classes\\CLSID\* AND registry.path:*\\TreatAs*) AND (NOT process.executable:C\:\\WINDOWS\\system32\\svchost.exe)

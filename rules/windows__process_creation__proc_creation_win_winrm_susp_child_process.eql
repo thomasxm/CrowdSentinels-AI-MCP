@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\wsmprovhost.exe" and (process.executable like~ ("*\\cmd.exe", "*\\sh.exe", "*\\bash.exe", "*\\powershell.exe", "*\\pwsh.exe", "*\\wsl.exe", "*\\schtasks.exe", "*\\certutil.exe", "*\\whoami.exe", "*\\bitsadmin.exe"))

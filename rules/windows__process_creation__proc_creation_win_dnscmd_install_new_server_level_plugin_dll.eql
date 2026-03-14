@@ -1,0 +1,1 @@
+any where process.executable:"*\\dnscmd.exe" and (process.command_line:"*/config*" and process.command_line:"*/serverlevelplugindll*")

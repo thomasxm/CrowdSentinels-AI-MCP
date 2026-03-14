@@ -1,0 +1,1 @@
+any where (process.executable:"*\\winget.exe" or process.pe.original_file_name:"winget.exe") and (process.command_line:"*source *" and process.command_line:"*add *") and process.command_line:"SigmaRegularExpression(regexp=SigmaString(['://\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}']), flags=set())"

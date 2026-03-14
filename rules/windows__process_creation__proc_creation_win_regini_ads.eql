@@ -1,0 +1,1 @@
+any where (process.executable:"*\\regini.exe" or process.pe.original_file_name:"REGINI.EXE") and process.command_line:"SigmaRegularExpression(regexp=SigmaString([':[^ \\\\]']), flags=set())"

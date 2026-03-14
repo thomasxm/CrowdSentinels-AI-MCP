@@ -1,0 +1,1 @@
+process.executable:*\\BaaUpdate.exe AND file.path:*.dll AND (file.path:(*\:\\Perflogs\* OR *\:\\Users\\Default\* OR *\:\\Users\\Public\* OR *\:\\Windows\\Temp\* OR *\\AppData\\Local\\Temp\* OR *\\AppData\\Roaming\* OR *\\Contacts\* OR *\\Favorites\* OR *\\Favourites\* OR *\\Links\* OR *\\Music\* OR *\\Pictures\* OR *\\ProgramData\* OR *\\Temporary\ Internet* OR *\\Videos\*))

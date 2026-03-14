@@ -1,0 +1,1 @@
+(file.path:C\:\\Users\* AND file.path:*\\AppData\* AND (file.path:(*.bat OR *.cmd OR *.cpl OR *.dll OR *.exe OR *.hta OR *.iso OR *.lnk OR *.msi OR *.ps1 OR *.psm1 OR *.scr OR *.vbe OR *.vbs))) AND (NOT (file.path:C\:\\Users\* AND (file.path:(*\\AppData\\Local\* OR *\\AppData\\LocalLow\* OR *\\AppData\\Roaming\*))))

@@ -1,0 +1,1 @@
+any where (registry.path:"*\\SOFTWARE\*" and registry.path:"*\\Microsoft\\Office\*" and registry.path:"*\\Common\\Security*") and registry.path:"*\\MacroRuntimeScanScope" and winlog.event_data.Details:"DWORD (0x00000000)"

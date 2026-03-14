@@ -1,0 +1,1 @@
+any where winlog.channel:"Microsoft-Windows-TaskScheduler/Operational" and (event.code:"129" and (winlog.event_data.Path like~ ("*\\calc.exe", "*\\cscript.exe", "*\\mshta.exe", "*\\mspaint.exe", "*\\notepad.exe", "*\\regsvr32.exe", "*\\wscript.exe")))

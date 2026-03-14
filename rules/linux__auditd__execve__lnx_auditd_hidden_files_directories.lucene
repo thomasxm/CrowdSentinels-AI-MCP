@@ -1,0 +1,1 @@
+(type:EXECVE AND (a0:(mkdir OR nano OR touch OR vi OR vim))) AND (a1:/(^|\\/)\.[^.\\/]/ OR a2:/(^|\\/)\.[^.\\/]/)

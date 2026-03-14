@@ -1,0 +1,1 @@
+any where (registry.path like~ ("*\\SOFTWARE\\Microsoft\\Windows\\Windows Error Reporting\\LocalDumps\\DumpType*", "*\\SOFTWARE\\Microsoft\\Windows\\Windows Error Reporting\\LocalDumps\\lsass.exe\\DumpType*")) and winlog.event_data.Details:"DWORD (0x00000002)"

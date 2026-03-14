@@ -1,0 +1,1 @@
+(type:SYSCALL AND SYSCALL:sysinfo) AND (NOT exe:*\/bin\/splunkd)

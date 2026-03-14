@@ -1,0 +1,1 @@
+any where file.path:"*\\Windows\\Start Menu\\Programs\\Startup\*" and (file.path like~ ("*.bat", "*.cmd", "*.dll", "*.hta", "*.jar", "*.js", "*.jse", "*.msi", "*.ps1", "*.psd1", "*.psm1", "*.scr", "*.url", "*.vba", "*.vbe", "*.vbs", "*.wsf"))

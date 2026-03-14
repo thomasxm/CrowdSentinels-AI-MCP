@@ -1,0 +1,1 @@
+winlog.channel:Security AND ((event.code:5145 AND winlog.event_data.ShareName:*C$ AND winlog.event_data.AccessMask:0x2) AND (NOT user.name:*$) AND (NOT source.ip:\:\:1))

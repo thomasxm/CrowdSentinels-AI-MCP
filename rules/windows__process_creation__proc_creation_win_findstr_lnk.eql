@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\find.exe", "*\\findstr.exe")) or (process.pe.original_file_name like~ ("FIND.EXE", "FINDSTR.EXE"))) and (process.command_line like~ ("*.lnk", "*.lnk\"", "*.lnk'"))

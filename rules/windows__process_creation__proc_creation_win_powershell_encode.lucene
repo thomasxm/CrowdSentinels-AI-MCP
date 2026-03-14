@@ -1,0 +1,1 @@
+((process.executable:(*\\powershell.exe OR *\\pwsh.exe)) AND (process.command_line:(*\ \-e\ * OR *\ \-en\ * OR *\ \-enc\ * OR *\ \-enco* OR *\ \-ec\ *))) AND (NOT (process.command_line:*\ \-Encoding\ * OR (process.parent.executable:(*C\:\\Packages\\Plugins\\Microsoft.GuestConfiguration.ConfigurationforWindows\* OR *\\gc_worker.exe*))))

@@ -1,0 +1,1 @@
+any where (file.path like~ ("*.AAA", "*.ZZZ")) and (not file.path:"*\\Wireshark\\radius\\dictionary.alcatel-lucent.aaa")

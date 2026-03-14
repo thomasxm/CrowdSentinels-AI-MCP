@@ -1,0 +1,1 @@
+any where (ParentImage like~ ("*Microsoft Word*", "*Microsoft Excel*", "*Microsoft PowerPoint*", "*Microsoft OneNote*")) and (Image like~ ("*/bash", "*/curl", "*/dash", "*/fish", "*/osacompile", "*/osascript", "*/sh", "*/zsh", "*/python", "*/python3", "*/wget"))

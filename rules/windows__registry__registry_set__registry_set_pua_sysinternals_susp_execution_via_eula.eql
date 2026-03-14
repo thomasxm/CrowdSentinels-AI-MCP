@@ -1,0 +1,1 @@
+any where (registry.path like~ ("*\\Active Directory Explorer*", "*\\Handle*", "*\\LiveKd*", "*\\Process Explorer*", "*\\ProcDump*", "*\\PsExec*", "*\\PsLoglist*", "*\\PsPasswd*", "*\\SDelete*", "*\\Sysinternals*")) and registry.path:"*\\EulaAccepted"

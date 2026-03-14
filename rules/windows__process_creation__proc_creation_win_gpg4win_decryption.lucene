@@ -1,0 +1,1 @@
+((process.executable:(*\\gpg.exe OR *\\gpg2.exe)) OR process.pe.description:GnuPG’s\ OpenPGP\ tool) AND (process.command_line:*\ \-d\ * AND process.command_line:*passphrase*)

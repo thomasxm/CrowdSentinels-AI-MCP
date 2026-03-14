@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\WmiPrvSE.exe" and ((process.executable like~ ("*\\powershell.exe", "*\\pwsh.exe")) or (process.pe.original_file_name like~ ("PowerShell.EXE", "pwsh.dll")))

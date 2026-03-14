@@ -1,0 +1,1 @@
+any where (registry.path like~ ("*\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\InstalledSDB\*", "*\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Custom\*")) and (not (winlog.event_data.Details like~ ("", "(Empty)", "<sigma.types.SigmaNull object at 0x7fe581071160>")))

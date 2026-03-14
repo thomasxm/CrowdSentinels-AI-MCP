@@ -1,0 +1,1 @@
+any where registry.path:"*Software\\Microsoft\\Office\*" and registry.path:"*\\Excel\\Options" and winlog.event_data.Details:"/R *" and winlog.event_data.Details:"*.xll"

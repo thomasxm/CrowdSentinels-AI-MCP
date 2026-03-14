@@ -1,0 +1,1 @@
+process.executable:*\\python.exe AND process.command_line:*adidnsdump*

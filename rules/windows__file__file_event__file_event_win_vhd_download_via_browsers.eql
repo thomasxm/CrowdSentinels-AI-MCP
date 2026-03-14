@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\brave.exe", "*\\chrome.exe", "*\\firefox.exe", "*\\iexplore.exe", "*\\maxthon.exe", "*\\MicrosoftEdge.exe", "*\\msedge.exe", "*\\msedgewebview2.exe", "*\\opera.exe", "*\\safari.exe", "*\\seamonkey.exe", "*\\vivaldi.exe", "*\\whale.exe")) and file.path:"*.vhd*"

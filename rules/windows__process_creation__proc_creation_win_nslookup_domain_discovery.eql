@@ -1,0 +1,1 @@
+any where process.command_line:"*nslookup*" and process.command_line:"*_ldap._tcp.dc._msdcs.*"

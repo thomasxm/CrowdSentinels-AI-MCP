@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and ((event.code:"4769" and winlog.event_data.TicketOptions:"0x40810000" and winlog.event_data.TicketEncryptionType:"0x17") and (not service.name:"*$"))

@@ -1,0 +1,1 @@
+any where winlog.channel:"System" and ((winlog.provider_name:"Service Control Manager" and event.code:"7045") and (winlog.event_data.ImagePath like~ ("SigmaRegularExpression(regexp=SigmaString(['^[Cc]:\\\\[Pp]rogram[Dd]ata\\\\.{1,9}\\.exe']), flags=set())", "SigmaRegularExpression(regexp=SigmaString(['^[Cc]:\\\\.{1,9}\\.exe']), flags=set())")))

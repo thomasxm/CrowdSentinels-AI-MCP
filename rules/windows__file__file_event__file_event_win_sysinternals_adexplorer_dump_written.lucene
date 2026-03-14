@@ -1,0 +1,1 @@
+(process.executable:(*\\ADExp.exe OR *\\ADExplorer.exe OR *\\ADExplorer64.exe OR *\\ADExplorer64a.exe)) AND file.path:*.dat

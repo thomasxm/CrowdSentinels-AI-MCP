@@ -1,0 +1,1 @@
+any where winlog.channel:"System" and (winlog.provider_name:"Microsoft-Windows-CertificationAuthority" and event.code:"53")

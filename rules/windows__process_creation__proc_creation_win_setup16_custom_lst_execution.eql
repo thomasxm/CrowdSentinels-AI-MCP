@@ -1,0 +1,1 @@
+any where (process.parent.executable:"C:\\Windows\\SysWOW64\\setup16.exe" and process.parent.command_line:"* -m *") and (not process.executable:"C:\\~MSSETUP.T\*")

@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*foreach* AND powershell.file.script_block_text:*Get\-ChildItem* AND powershell.file.script_block_text:*\-Path\ * AND powershell.file.script_block_text:*\-ErrorAction\ * AND powershell.file.script_block_text:*SilentlyContinue* AND powershell.file.script_block_text:*Out\-File\ * AND powershell.file.script_block_text:*\-append*

@@ -1,0 +1,1 @@
+any where (eventtype:"policy.evaluate_sign_on" and target.displayname:"Okta Admin Console") and (debugcontext.debugdata.behaviors:"*POSITIVE*" or debugcontext.debugdata.logonlysecuritydata:"*POSITIVE*")

@@ -1,0 +1,1 @@
+any where (CommandLine:"*-ufw-init*" and CommandLine:"*force-stop*") or (CommandLine:"*ufw*" and CommandLine:"*disable*")

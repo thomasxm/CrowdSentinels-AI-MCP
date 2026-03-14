@@ -1,0 +1,1 @@
+(process.executable:*\\wsudo.exe OR process.pe.original_file_name:wsudo.exe OR process.pe.description:Windows\ sudo\ utility OR process.parent.executable:*\\wsudo\-bridge.exe) OR (process.command_line:(*\-u\ System* OR *\-uSystem* OR *\-u\ TrustedInstaller* OR *\-uTrustedInstaller* OR *\ \-\-ti\ *))

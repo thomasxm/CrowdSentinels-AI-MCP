@@ -1,0 +1,1 @@
+(process.executable:*\\cmd.exe* OR process.pe.original_file_name:Cmd.EXE) AND (process.command_line:*\ net\ use\ http* AND process.command_line:*\&\ start\ \/b\ * AND process.command_line:*\\DavWWWRoot\*) AND (process.command_line:(*.exe\ * OR *.dll\ * OR *.bat\ * OR *.vbs\ * OR *.ps1\ *))

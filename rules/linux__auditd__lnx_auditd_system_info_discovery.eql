@@ -1,0 +1,1 @@
+any where (type:"PATH" and (name like~ ("/etc/lsb-release", "/etc/redhat-release", "/etc/issue"))) or (type:"EXECVE" and (a0 like~ ("uname", "uptime", "lsmod", "hostname", "env"))) or (type:"EXECVE" and a0:"grep" and (a1 like~ ("*vbox*", "*vm*", "*xen*", "*virtio*", "*hv*"))) or (type:"EXECVE" and a0:"kmod" and a1:"list")

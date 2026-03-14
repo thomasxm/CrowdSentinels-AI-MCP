@@ -1,0 +1,1 @@
+any where eventService:"admin.googleapis.com" and eventName:"REMOVE_PRIVILEGE"

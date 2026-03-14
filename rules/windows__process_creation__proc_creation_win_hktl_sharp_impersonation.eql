@@ -1,0 +1,1 @@
+any where (process.executable:"*\\SharpImpersonation.exe" or process.pe.original_file_name:"SharpImpersonation.exe") or ((process.command_line:"* user:*" and process.command_line:"* binary:*") or (process.command_line:"* user:*" and process.command_line:"* shellcode:*") or (process.command_line like~ ("* technique:CreateProcessAsUserW*", "* technique:ImpersonateLoggedOnuser*")))

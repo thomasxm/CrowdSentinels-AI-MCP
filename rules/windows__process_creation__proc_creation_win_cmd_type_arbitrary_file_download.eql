@@ -1,0 +1,1 @@
+any where (process.command_line:"*type *" and process.command_line:"* > \\*") or (process.command_line:"*type \\*" and process.command_line:"* > *")

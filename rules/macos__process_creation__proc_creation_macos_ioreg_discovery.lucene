@@ -1,0 +1,1 @@
+(Image:*\/ioreg OR CommandLine:*ioreg*) AND (CommandLine:(*\-l* OR *\-c*)) AND (CommandLine:(*AppleAHCIDiskDriver* OR *IOPlatformExpertDevice* OR *Oracle* OR *Parallels* OR *USB\ Vendor\ Name* OR *VirtualBox* OR *VMware*))

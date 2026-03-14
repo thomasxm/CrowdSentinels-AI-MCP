@@ -1,0 +1,1 @@
+any where (registry.path:"*\\Control\\Keyboard Layouts\*" and registry.path:"*Ime File*") and (not winlog.event_data.Details:"*.ime")

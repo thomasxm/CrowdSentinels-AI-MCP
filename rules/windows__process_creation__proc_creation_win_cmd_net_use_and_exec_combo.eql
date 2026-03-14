@@ -1,0 +1,1 @@
+any where (process.executable:"*\\cmd.exe*" or process.pe.original_file_name:"Cmd.EXE") and (process.command_line:"* net use http*" and process.command_line:"*& start /b *" and process.command_line:"*\\DavWWWRoot\*") and (process.command_line like~ ("*.exe *", "*.dll *", "*.bat *", "*.vbs *", "*.ps1 *"))

@@ -1,0 +1,1 @@
+any where eventSource:"ec2.amazonaws.com" and eventName:"ModifySnapshotAttribute"

@@ -1,0 +1,1 @@
+any where ((process.pe.original_file_name like~ ("PowerShell.EXE", "pwsh.dll")) or (process.executable like~ ("*\\powershell.exe", "*\\pwsh.exe"))) and (process.command_line:"* Net.Sockets.TCPClient*" and process.command_line:"*.GetStream(*" and process.command_line:"*.Write(*")

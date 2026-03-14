@@ -1,0 +1,1 @@
+Image:*\/cp AND CommandLine:*\/tmp\/* AND (CommandLine:(*passwd* OR *shadow*))

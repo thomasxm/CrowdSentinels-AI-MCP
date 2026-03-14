@@ -1,0 +1,1 @@
+any where process.command_line:"*ms-appinstaller://?source=*" and process.command_line:"*http*"

@@ -1,0 +1,1 @@
+(process.pe.original_file_name:wmic.exe OR process.executable:*\\WMIC.exe) AND process.command_line:*\ qfe*

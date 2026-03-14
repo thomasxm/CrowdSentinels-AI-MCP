@@ -1,0 +1,1 @@
+any where (process.command_line like~ ("*copy procdump*", "*move procdump*")) or ((process.command_line:"*copy *" and process.command_line:"*.dmp *") and (process.command_line like~ ("*2.dmp*", "*lsass*", "*out.dmp*"))) or (process.command_line like~ ("*copy lsass.exe_*", "*move lsass.exe_*"))

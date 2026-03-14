@@ -1,0 +1,1 @@
+any where winlog.event_data.EventType:"DeleteValue" and registry.path:"*\\Microsoft\\Windows\\WindowsAI\\DisableAIDataAnalysis"

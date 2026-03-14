@@ -1,0 +1,1 @@
+any where eventSource:"guardduty.amazonaws.com" and (eventName:"DeleteDetector" or (eventName:"UpdateDetector" and requestParameters.enable:"false")) and (errorCode:"Success" or (?errorCode == null))

@@ -1,0 +1,1 @@
+file.path:(*\\Microsoft.PowerShell_profile.ps1 OR *\\PowerShell\\profile.ps1 OR *\\Program\ Files\\PowerShell\\7\-preview\\profile.ps1 OR *\\Program\ Files\\PowerShell\\7\\profile.ps1 OR *\\Windows\\System32\\WindowsPowerShell\\v1.0\\profile.ps1 OR *\\WindowsPowerShell\\profile.ps1)

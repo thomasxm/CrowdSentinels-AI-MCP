@@ -1,0 +1,1 @@
+any where file.path:"*:\\Users\\Public\*" and (file.path like~ ("*.bat", "*.dll", "*.exe", "*.hta", "*.js", "*.ps1", "*.vbe", "*.vbs"))

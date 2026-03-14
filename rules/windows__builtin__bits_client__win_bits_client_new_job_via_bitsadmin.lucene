@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-Bits\-Client\/Operational AND (event.code:3 AND winlog.event_data.processPath:*\\bitsadmin.exe)

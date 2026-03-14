@@ -1,0 +1,1 @@
+CommandLine:*osascript* AND CommandLine:*\ \-e\ * AND CommandLine:*clipboard*

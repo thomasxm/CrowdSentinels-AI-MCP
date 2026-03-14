@@ -1,0 +1,1 @@
+(process.executable:*\\mpiexec.exe OR winlog.event_data.Hashes:*IMPHASH\=d8b52ef6aaa3a81501bdfff9dbb96217*) AND (process.command_line:(*\ \/n\ 1\ * OR *\ \-n\ 1\ *))

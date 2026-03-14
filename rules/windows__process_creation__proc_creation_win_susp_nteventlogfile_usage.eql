@@ -1,0 +1,1 @@
+any where process.command_line:"*Win32_NTEventlogFile*" and (process.command_line like~ ("*.BackupEventlog(*", "*.ChangeSecurityPermissions(*", "*.ChangeSecurityPermissionsEx(*", "*.ClearEventLog(*", "*.Delete(*", "*.DeleteEx(*", "*.Rename(*", "*.TakeOwnerShip(*", "*.TakeOwnerShipEx(*"))

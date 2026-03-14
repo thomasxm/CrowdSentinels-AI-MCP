@@ -1,0 +1,1 @@
+any where cs-uri-query like~ ("*=C:/Users*", "*=C:/Program%20Files*", "*=C:/Windows*", "*=C%3A%5CUsers*", "*=C%3A%5CProgram%20Files*", "*=C%3A%5CWindows*")

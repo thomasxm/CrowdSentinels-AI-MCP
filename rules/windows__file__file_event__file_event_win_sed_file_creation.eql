@@ -1,0 +1,1 @@
+any where (file.path like~ ("*:\\ProgramData\*", "*:\\Temp\*", "*:\\Windows\\System32\\Tasks\*", "*:\\Windows\\Tasks\*", "*:\\Windows\\Temp\*", "*\\AppData\\Local\\Temp\*")) and file.path:"*.sed"

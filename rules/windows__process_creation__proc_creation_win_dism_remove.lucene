@@ -1,0 +1,1 @@
+(process.executable:*\\DismHost.exe AND (process.parent.command_line:*\/Online* AND process.parent.command_line:*\/Disable\-Feature*)) OR (process.executable:*\\Dism.exe AND (process.command_line:*\/Online* AND process.command_line:*\/Disable\-Feature*))

@@ -1,0 +1,1 @@
+any where (process.executable:"*\\powershell.exe" or process.pe.original_file_name:"PowerShell.EXE") and ((process.command_line:"*Set-Service*" and process.command_line:"*-StartupType*") and (process.command_line like~ ("*Disabled*", "*Manual*")))

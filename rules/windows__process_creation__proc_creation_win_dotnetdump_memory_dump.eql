@@ -1,0 +1,1 @@
+any where (process.executable:"*\\dotnet-dump.exe" or process.pe.original_file_name:"dotnet-dump.dll") and process.command_line:"*collect*"

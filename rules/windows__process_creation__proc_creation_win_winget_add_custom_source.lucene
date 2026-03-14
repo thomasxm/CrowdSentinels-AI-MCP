@@ -1,0 +1,1 @@
+(process.executable:*\\winget.exe OR process.pe.original_file_name:winget.exe) AND (process.command_line:*source\ * AND process.command_line:*add\ *)

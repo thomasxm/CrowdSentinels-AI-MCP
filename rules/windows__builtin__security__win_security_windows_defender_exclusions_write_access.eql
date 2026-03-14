@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and ((winlog.event_data.AccessList like~ ("*%%4417*", "*%%4418*")) and (event.code like~ ("4656", "4663")) and winlog.event_data.ObjectName:"*\\Microsoft\\Windows Defender\\Exclusions\*")

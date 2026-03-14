@@ -1,0 +1,1 @@
+winlog.channel:System AND (event.code:7045 AND winlog.event_data.ServiceName:KrbSCM)

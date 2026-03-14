@@ -1,0 +1,1 @@
+any where process.command_line:"*\\CurrentVersion\\Image File Execution Options\*" and (process.command_line like~ ("*sethc.exe*", "*utilman.exe*", "*osk.exe*", "*magnify.exe*", "*narrator.exe*", "*displayswitch.exe*", "*atbroker.exe*", "*HelpPane.exe*"))

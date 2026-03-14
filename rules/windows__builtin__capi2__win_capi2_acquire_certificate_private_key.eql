@@ -1,0 +1,1 @@
+any where winlog.channel:"Microsoft-Windows-CAPI2/Operational" and event.code:"70"

@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*Invoke\-CimMethod\ * AND powershell.file.script_block_text:*\-ClassName\ * AND powershell.file.script_block_text:*Win32_Product\ * AND powershell.file.script_block_text:*\-MethodName\ * AND powershell.file.script_block_text:*.msi*

@@ -1,0 +1,1 @@
+any where ((process.executable:"*\\csvde.exe" or process.pe.original_file_name:"csvde.exe") and process.command_line:"* -f*") and (not process.command_line:"* -i*")

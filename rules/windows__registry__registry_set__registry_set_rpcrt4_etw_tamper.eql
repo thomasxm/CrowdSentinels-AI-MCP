@@ -1,0 +1,1 @@
+any where registry.path:"*\\Microsoft\\Windows NT\\Rpc\\ExtErrorInformation" and (winlog.event_data.Details like~ ("DWORD (0x00000000)", "DWORD (0x00000002)"))

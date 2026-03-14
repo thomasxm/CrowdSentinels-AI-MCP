@@ -1,0 +1,1 @@
+process.command_line:*ShellExec_RunDLL* AND (process.command_line:(*\\Desktop\* OR *\\Temp\* OR *\\Users\\Public\* OR *comspec* OR *iex* OR *Invoke\-* OR *msiexec* OR *odbcconf* OR *regsvr32*))

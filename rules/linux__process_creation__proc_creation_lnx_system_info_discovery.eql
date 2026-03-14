@@ -1,0 +1,1 @@
+any where Image like~ ("*/uname", "*/hostname", "*/uptime", "*/lspci", "*/dmidecode", "*/lscpu", "*/lsmod")

@@ -1,0 +1,1 @@
+any where (type:"EXECVE" and a0:"xwd") and ((a1:"-root" and a2:"-out" and a3:"*.xwd") or (a1:"-out" and a2:"*.xwd"))

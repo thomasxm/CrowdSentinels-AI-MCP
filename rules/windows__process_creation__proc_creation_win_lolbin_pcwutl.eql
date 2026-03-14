@@ -1,0 +1,1 @@
+any where (process.executable:"*\\rundll32.exe" or process.pe.original_file_name:"RUNDLL32.EXE") and (process.command_line:"*pcwutl*" and process.command_line:"*LaunchApplication*")

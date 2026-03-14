@@ -1,0 +1,1 @@
+(process.executable:(*\\onenote.exe OR *\\onenotem.exe OR *\\onenoteim.exe)) AND file.path:*\\AppData\\Local\\Temp\\OneNote\* AND (file.path:(*.bat OR *.chm OR *.cmd OR *.dll OR *.exe OR *.hta OR *.htm OR *.html OR *.js OR *.lnk OR *.ps1 OR *.vbe OR *.vbs OR *.wsf))

@@ -1,0 +1,1 @@
+(file.path:*C\:\\Debuggers\\dbghelp.dll* AND (process.executable:(*\\vmmap.exe OR *\\vmmap64.exe))) AND (NOT file.code_signature.signed:true)

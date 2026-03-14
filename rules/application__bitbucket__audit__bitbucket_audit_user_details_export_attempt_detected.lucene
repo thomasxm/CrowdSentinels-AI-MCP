@@ -1,0 +1,1 @@
+auditType.category:Users\ and\ groups AND (auditType.action:(User\ permissions\ export\ failed OR User\ permissions\ export\ started OR User\ permissions\ exported))

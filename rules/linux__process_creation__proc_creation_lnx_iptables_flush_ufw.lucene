@@ -1,0 +1,1 @@
+(Image:(*\/iptables OR *\/xtables\-legacy\-multi OR *\/iptables\-legacy\-multi OR *\/ip6tables OR *\/ip6tables\-legacy\-multi)) AND (CommandLine:(*\-F* OR *\-Z* OR *\-X*)) AND (CommandLine:(*ufw\-logging\-deny* OR *ufw\-logging\-allow* OR *ufw6\-logging\-deny* OR *ufw6\-logging\-allow*))

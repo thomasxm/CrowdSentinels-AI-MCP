@@ -1,0 +1,1 @@
+process.executable:*\\TacticalAgent\\tacticalrmm.exe* AND (process.command_line:*\-\-api* AND process.command_line:*\-\-auth* AND process.command_line:*\-\-client\-id* AND process.command_line:*\-\-site\-id* AND process.command_line:*\-\-agent\-type*)

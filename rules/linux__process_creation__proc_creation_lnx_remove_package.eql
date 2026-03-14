@@ -1,0 +1,1 @@
+any where (Image:"*/yum" and (CommandLine like~ ("*erase*", "*remove*"))) or ((Image like~ ("*/apt", "*/apt-get")) and (CommandLine like~ ("*remove*", "*purge*"))) or (Image:"*/dpkg" and (CommandLine like~ ("*--remove *", "* -r *"))) or (Image:"*/rpm" and CommandLine:"* -e *")

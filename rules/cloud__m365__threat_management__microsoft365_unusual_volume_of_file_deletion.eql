@@ -1,0 +1,1 @@
+any where eventSource:"SecurityComplianceCenter" and eventName:"Unusual volume of file deletion" and status:"success"

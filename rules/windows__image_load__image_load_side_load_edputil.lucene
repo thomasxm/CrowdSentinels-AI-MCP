@@ -1,0 +1,1 @@
+file.path:*\\edputil.dll AND (NOT (file.path:(C\:\\Windows\\System32\* OR C\:\\Windows\\SysWOW64\* OR C\\Windows\\WinSxS\*)))

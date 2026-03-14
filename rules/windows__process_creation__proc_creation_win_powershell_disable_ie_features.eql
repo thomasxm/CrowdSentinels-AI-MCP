@@ -1,0 +1,1 @@
+any where (process.command_line:"* -name IEHarden *" and process.command_line:"* -value 0 *") or (process.command_line:"* -name DEPOff *" and process.command_line:"* -value 1 *") or (process.command_line:"* -name DisableFirstRunCustomize *" and process.command_line:"* -value 2 *")

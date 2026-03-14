@@ -1,0 +1,1 @@
+any where ((process.parent.executable like~ ("*\\WmiPrvSE.exe", "*\\svchost.exe", "*\\dllhost.exe")) and (process.executable like~ ("*\\wab.exe", "*\\wabmig.exe"))) or (process.parent.executable like~ ("*\\wab.exe", "*\\wabmig.exe"))

@@ -1,0 +1,1 @@
+(file.path:(*\\TeamViewer\\RemotePrinting\\tvprint.db OR *\\TeamViewer\\TVNetwork.log)) OR (file.path:*\\TeamViewer* AND file.path:*_Logfile.log*)

@@ -1,0 +1,1 @@
+any where (file.path like~ ("C:\\Windows\\System32\\logonUI.exe.local*", "C:\\Windows\\System32\\werFault.exe.local*", "C:\\Windows\\System32\\consent.exe.local*", "C:\\Windows\\System32\\narrator.exe.local*", "C:\\Windows\\System32\\wermgr.exe.local*")) and file.path:"*\\comctl32.dll"

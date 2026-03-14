@@ -1,0 +1,1 @@
+(process.parent.executable:*C\:\\Users\* AND process.parent.executable:*\\AppData\\Local\\Temp\* AND process.parent.executable:*\\DismHost.exe*) AND (winlog.event_data.IntegrityLevel:(High OR System OR S\-1\-16\-16384 OR S\-1\-16\-12288))

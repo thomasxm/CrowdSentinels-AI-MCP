@@ -1,0 +1,1 @@
+any where winlog.channel:"System" and ((event.code like~ ("1031", "1032", "1034")) and winlog.provider_name:"Microsoft-Windows-DHCP-Server")

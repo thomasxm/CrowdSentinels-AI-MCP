@@ -1,0 +1,1 @@
+(endpoint:spoolss AND operation:RpcAddMonitor) OR (endpoint:spoolss AND operation:RpcAddPrintProcessor) OR (endpoint:IRemoteWinspool AND operation:RpcAsyncAddMonitor) OR (endpoint:IRemoteWinspool AND operation:RpcAsyncAddPrintProcessor) OR (endpoint:ISecLogon AND operation:SeclCreateProcessWithLogonW) OR (endpoint:ISecLogon AND operation:SeclCreateProcessWithLogonExW)

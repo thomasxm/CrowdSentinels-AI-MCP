@@ -1,0 +1,1 @@
+any where "ActionController::InvalidAuthenticityToken" or "ActionController::InvalidCrossOriginRequest" or "ActionController::MethodNotAllowed" or "ActionController::BadRequest" or "ActionController::ParameterMissing"

@@ -1,0 +1,1 @@
+any where (process.parent.executable:"*\\setres.exe" and process.executable:"*\\choice*") and (not (process.executable like~ ("*C:\\Windows\\System32\\choice.exe", "*C:\\Windows\\SysWOW64\\choice.exe")))

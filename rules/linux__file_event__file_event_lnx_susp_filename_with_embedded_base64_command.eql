@@ -1,0 +1,1 @@
+any where TargetFilename like~ ("*{echo*", "*{base64,-d}*")

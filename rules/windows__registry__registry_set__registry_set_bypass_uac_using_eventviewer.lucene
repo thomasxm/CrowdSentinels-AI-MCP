@@ -1,0 +1,1 @@
+registry.path:*_Classes\\mscfile\\shell\\open\\command\\\(Default\) AND (NOT winlog.event_data.Details:%SystemRoot%\\system32\\mmc.exe\ \"%1\"\ %*)

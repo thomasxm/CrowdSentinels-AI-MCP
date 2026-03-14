@@ -1,0 +1,1 @@
+any where process.command_line like~ ("*OjpGcm9tQmFzZTY0U3RyaW5n*", "*o6RnJvbUJhc2U2NFN0cmluZ*", "*6OkZyb21CYXNlNjRTdHJpbm*") or (process.command_line like~ ("*OgA6AEYAcgBvAG0AQgBhAHMAZQA2ADQAUwB0AHIAaQBuAGcA*", "*oAOgBGAHIAbwBtAEIAYQBzAGUANgA0AFMAdAByAGkAbgBnA*", "*6ADoARgByAG8AbQBCAGEAcwBlADYANABTAHQAcgBpAG4AZw*"))

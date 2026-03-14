@@ -1,0 +1,1 @@
+powershell.file.script_block_text:(*Compress\-Archive\ \-Path*\-DestinationPath\ $env\:TEMP* OR *Compress\-Archive\ \-Path*\-DestinationPath*\\AppData\\Local\\Temp\* OR *Compress\-Archive\ \-Path*\-DestinationPath*\:\\Windows\\Temp\*)

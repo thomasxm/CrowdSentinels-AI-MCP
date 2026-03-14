@@ -1,0 +1,1 @@
+(registry.path:(*\\Active\ Directory\ Explorer* OR *\\Handle* OR *\\LiveKd* OR *\\Process\ Explorer* OR *\\ProcDump* OR *\\PsExec* OR *\\PsLoglist* OR *\\PsPasswd* OR *\\SDelete* OR *\\Sysinternals*)) AND registry.path:*\\EulaAccepted

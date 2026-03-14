@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:5156 AND (destination.port:(5985 OR 5986)) AND winlog.event_data.LayerRTID:44)

@@ -1,0 +1,1 @@
+any where process.executable:"*\\regedit.exe" and (process.parent.executable like~ ("*\\TrustedInstaller.exe", "*\\ProcessHacker.exe"))

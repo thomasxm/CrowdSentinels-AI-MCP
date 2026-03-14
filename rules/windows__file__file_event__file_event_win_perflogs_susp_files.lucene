@@ -1,0 +1,1 @@
+file.path:C\:\\PerfLogs\* AND (file.path:(*.7z OR *.bat OR *.bin OR *.chm OR *.dll OR *.exe OR *.hta OR *.lnk OR *.ps1 OR *.psm1 OR *.py OR *.scr OR *.sys OR *.vbe OR *.vbs OR *.zip))

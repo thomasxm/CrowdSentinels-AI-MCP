@@ -1,0 +1,1 @@
+process.executable:*\\notepad.exe AND (NOT destination.port:9100)

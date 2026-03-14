@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and (event.code:"4697" and (winlog.event_data.ServiceFileName:"*set*" and winlog.event_data.ServiceFileName:"*&&*") and (winlog.event_data.ServiceFileName like~ ("*environment*", "*invoke*", "*${input)*")))

@@ -1,0 +1,1 @@
+CommandLine:(*.bash_history* OR *.zsh_history* OR *.zhistory* OR *.history* OR *.sh_history* OR *fish_history*)

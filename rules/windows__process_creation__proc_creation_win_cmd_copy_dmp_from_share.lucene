@@ -1,0 +1,1 @@
+(process.executable:*\\cmd.exe OR process.pe.original_file_name:Cmd.Exe) AND ((process.command_line:*copy\ * AND process.command_line:*\ \\*) AND (process.command_line:(*.dmp* OR *.dump* OR *.hdmp*)))

@@ -1,0 +1,1 @@
+any where (file.path like~ ("*\\WerFault.exe", "*\\wer.dll")) and (not (file.path like~ ("C:\\Windows\\SoftwareDistribution\*", "C:\\Windows\\System32\*", "C:\\Windows\\SysWOW64\*", "C:\\Windows\\WinSxS\*", "C:\\Windows\\UUS\\arm64\*")))

@@ -1,0 +1,1 @@
+type:EXECVE AND (a0:(hostname OR id OR last OR uname OR users OR w OR who OR whoami))

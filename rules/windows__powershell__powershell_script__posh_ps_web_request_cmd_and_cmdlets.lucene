@@ -1,0 +1,1 @@
+(powershell.file.script_block_text:(*\[System.Net.WebRequest\]\:\:create* OR *curl\ * OR *Invoke\-RestMethod* OR *Invoke\-WebRequest* OR *\ irm\ * OR *iwr\ * OR *Resume\-BitsTransfer* OR *Start\-BitsTransfer* OR *wget\ * OR *WinHttp.WinHttpRequest*)) AND (NOT winlog.event_data.Path:C\:\\Packages\\Plugins\\Microsoft.GuestConfiguration.ConfigurationforWindows\*)

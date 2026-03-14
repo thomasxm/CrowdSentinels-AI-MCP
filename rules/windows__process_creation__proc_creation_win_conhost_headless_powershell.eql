@@ -1,0 +1,1 @@
+any where (process.executable:"*\\conhost.exe" or process.pe.original_file_name:"CONHOST.EXE") and (process.command_line:"*--headless*" and process.command_line:"*powershell*")

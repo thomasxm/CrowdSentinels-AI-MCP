@@ -1,0 +1,1 @@
+any where (Image:"*/dscl" and (CommandLine:"*list*" and CommandLine:"*/users*")) or (Image:"*/dscacheutil" and (CommandLine:"*-q*" and CommandLine:"*user*")) or CommandLine:"*'x:0:'*" or (Image:"*/cat" and (CommandLine like~ ("*/etc/passwd*", "*/etc/sudoers*"))) or Image:"*/id" or (Image:"*/lsof" and CommandLine:"*-u*")

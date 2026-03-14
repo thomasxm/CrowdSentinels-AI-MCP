@@ -1,0 +1,1 @@
+process.executable:*\\coregen.exe AND (NOT (file.path:(C\:\\Program\ Files\ \(x86\)\\Microsoft\ Silverlight\* OR C\:\\Program\ Files\\Microsoft\ Silverlight\* OR C\:\\Windows\\System32\* OR C\:\\Windows\\SysWOW64\*)))

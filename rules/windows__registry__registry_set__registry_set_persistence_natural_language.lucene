@@ -1,0 +1,1 @@
+registry.path:*\\SYSTEM\\CurrentControlSet\\Control\\ContentIndex\\Language\* AND (registry.path:(*\\StemmerDLLPathOverride* OR *\\WBDLLPathOverride* OR *\\StemmerClass* OR *\\WBreakerClass*))

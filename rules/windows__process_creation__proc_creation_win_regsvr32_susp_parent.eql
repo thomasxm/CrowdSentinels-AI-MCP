@@ -1,0 +1,1 @@
+any where ((process.parent.executable like~ ("*\\cmd.exe", "*\\cscript.exe", "*\\mshta.exe", "*\\powershell_ise.exe", "*\\powershell.exe", "*\\pwsh.exe", "*\\wscript.exe")) and process.executable:"*\\regsvr32.exe") and (not (process.parent.executable:"C:\\Windows\\System32\\cmd.exe" and process.command_line:"* /s C:\\Windows\\System32\\RpcProxy\\RpcProxy.dll"))

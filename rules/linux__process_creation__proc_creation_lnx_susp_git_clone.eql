@@ -1,0 +1,1 @@
+any where (Image:"*/git" and CommandLine:"* clone *") and (CommandLine like~ ("*exploit*", "*Vulns*", "*vulnerability*", "*RCE*", "*RemoteCodeExecution*", "*Invoke-*", "*CVE-*", "*poc-*", "*ProofOfConcept*", "*proxyshell*", "*log4shell*", "*eternalblue*", "*eternal-blue*", "*MS17-*"))

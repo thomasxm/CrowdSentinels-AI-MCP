@@ -1,0 +1,1 @@
+any where process.parent.executable like~ ("*\\bginfo.exe", "*\\bginfo64.exe")

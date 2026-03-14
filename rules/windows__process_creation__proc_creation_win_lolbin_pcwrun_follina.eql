@@ -1,0 +1,1 @@
+any where process.executable:"*\\pcwrun.exe" and process.command_line:"*../*"

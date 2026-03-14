@@ -1,0 +1,1 @@
+(powershell.file.script_block_text:(*Get\-Service\ * OR *Get\-ChildItem\ * OR *Get\-Process\ *)) AND powershell.file.script_block_text:*\>\ $env\:TEMP\*

@@ -1,0 +1,1 @@
+any where (process.command_line like~ ("*find *", "*find.exe*", "*findstr*", "*select-string *", "*strings*")) and (process.command_line like~ ("*eyJ0eXAiOi*", "*eyJhbGciOi*", "* eyJ0eX*", "* \"eyJ0eX\"*", "* 'eyJ0eX'*", "* eyJhbG*", "* \"eyJhbG\"*", "* 'eyJhbG'*"))

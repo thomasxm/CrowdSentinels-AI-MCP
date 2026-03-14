@@ -1,0 +1,1 @@
+any where process.command_line:"*-NoExit -Command [Console]::OutputEncoding=[Text.UTF8Encoding]::UTF8*"

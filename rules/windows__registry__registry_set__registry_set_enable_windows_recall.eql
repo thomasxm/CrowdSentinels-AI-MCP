@@ -1,0 +1,1 @@
+any where registry.path:"*\\Software\\Policies\\Microsoft\\Windows\\WindowsAI\\DisableAIDataAnalysis" and winlog.event_data.Details:"DWORD (0x00000000)"

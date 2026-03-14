@@ -1,0 +1,1 @@
+process.executable:*\\SharpSuccessor.exe OR process.pe.original_file_name:SharpSuccessor.exe OR process.command_line:*SharpSuccessor* OR (process.command_line:*\ add\ * AND process.command_line:*\ \/impersonate* AND process.command_line:*\ \/path* AND process.command_line:*\ \/account* AND process.command_line:*\ \/name*)

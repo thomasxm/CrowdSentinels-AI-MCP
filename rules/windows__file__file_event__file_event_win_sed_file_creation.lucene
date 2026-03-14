@@ -1,0 +1,1 @@
+(file.path:(*\:\\ProgramData\* OR *\:\\Temp\* OR *\:\\Windows\\System32\\Tasks\* OR *\:\\Windows\\Tasks\* OR *\:\\Windows\\Temp\* OR *\\AppData\\Local\\Temp\*)) AND file.path:*.sed

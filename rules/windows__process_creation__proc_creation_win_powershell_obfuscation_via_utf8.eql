@@ -1,0 +1,1 @@
+any where process.command_line like~ ("*[char]0x*", "*(WCHAR)0x*")

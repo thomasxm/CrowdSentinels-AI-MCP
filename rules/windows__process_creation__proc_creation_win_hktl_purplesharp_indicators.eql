@@ -1,0 +1,1 @@
+any where (process.executable:"*\\purplesharp*" or process.pe.original_file_name:"PurpleSharp.exe") or (process.command_line like~ ("*xyz123456.exe*", "*PurpleSharp*"))

@@ -1,0 +1,1 @@
+(file.path:(*ntds_capi_* OR *ntds_legacy_* OR *ntds_unknown_*)) AND (file.path:(*.cer OR *.key OR *.pfx OR *.pvk))

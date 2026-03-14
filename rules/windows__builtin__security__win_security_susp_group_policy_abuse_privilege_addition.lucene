@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:5136 AND winlog.event_data.AttributeLDAPDisplayName:gPCMachineExtensionNames AND (winlog.event_data.AttributeValue:(*827D319E\-6EAC\-11D2\-A4EA\-00C04F79F83A* OR *803E14A0\-B4FB\-11D0\-A0D0\-00A0C90F574B*)))

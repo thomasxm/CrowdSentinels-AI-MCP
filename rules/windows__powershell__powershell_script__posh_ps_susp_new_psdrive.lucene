@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*New\-PSDrive* AND powershell.file.script_block_text:*\-psprovider\ * AND powershell.file.script_block_text:*filesystem* AND powershell.file.script_block_text:*\-root\ * AND powershell.file.script_block_text:*\\* AND powershell.file.script_block_text:*$*

@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\powershell.exe", "*\\pwsh.exe")) or (process.pe.original_file_name like~ ("PowerShell.EXE", "pwsh.dll"))) and ((process.command_line:"*Get-ADComputer *" and process.command_line:"* -Filter \**") and (process.command_line like~ ("* > *", "* | Select *", "*Out-File*", "*Set-Content*", "*Add-Content*")))

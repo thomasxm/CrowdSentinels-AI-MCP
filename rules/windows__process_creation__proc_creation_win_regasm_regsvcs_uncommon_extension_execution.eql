@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\Regsvcs.exe", "*\\Regasm.exe")) or (process.pe.original_file_name like~ ("RegSvcs.exe", "RegAsm.exe"))) and (process.command_line like~ ("*.dat*", "*.gif*", "*.jpeg*", "*.jpg*", "*.png*", "*.txt*"))

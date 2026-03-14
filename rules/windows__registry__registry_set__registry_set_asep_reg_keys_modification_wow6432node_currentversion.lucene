@@ -1,0 +1,1 @@
+(registry.path:*\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\ NT\\CurrentVersion* AND (registry.path:(*\\Windows\\Appinit_Dlls* OR *\\Image\ File\ Execution\ Options* OR *\\Drivers32*))) AND (NOT (winlog.event_data.Details:(\(Empty\) OR \<sigma.types.SigmaNull\ object\ at\ 0x7f20169b1010\> OR *\\Microsoft\\Windows\ NT\\CurrentVersion\\Image\ File\ Execution\ Options)))

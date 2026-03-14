@@ -1,0 +1,1 @@
+any where process.executable:"*\\SharpSuccessor.exe" or process.pe.original_file_name:"SharpSuccessor.exe" or process.command_line:"*SharpSuccessor*" or (process.command_line:"* add *" and process.command_line:"* /impersonate*" and process.command_line:"* /path*" and process.command_line:"* /account*" and process.command_line:"* /name*")

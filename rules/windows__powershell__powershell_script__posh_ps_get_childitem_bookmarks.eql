@@ -1,0 +1,1 @@
+any where powershell.file.script_block_text:"*Get-ChildItem*" and powershell.file.script_block_text:"* -Recurse *" and powershell.file.script_block_text:"* -Path *" and powershell.file.script_block_text:"* -Filter Bookmarks*" and powershell.file.script_block_text:"* -ErrorAction SilentlyContinue*" and powershell.file.script_block_text:"* -Force*"

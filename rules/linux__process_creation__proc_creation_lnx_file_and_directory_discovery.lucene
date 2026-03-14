@@ -1,0 +1,1 @@
+(Image:*\/file AND CommandLine:/(.){200,}/) OR (Image:*\/ls AND CommandLine:*\-R*) OR Image:*\/find OR Image:*\/tree OR Image:*\/findmnt OR Image:*\/mlocate

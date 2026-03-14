@@ -1,0 +1,1 @@
+any where (process.executable:"*\\AccCheckConsole.exe" or process.pe.original_file_name:"AccCheckConsole.exe") and (process.command_line like~ ("* -hwnd*", "* -process *", "* -window *"))

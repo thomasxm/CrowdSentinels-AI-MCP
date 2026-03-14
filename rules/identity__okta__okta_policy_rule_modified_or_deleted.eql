@@ -1,0 +1,1 @@
+any where eventtype like~ ("policy.rule.update", "policy.rule.delete")

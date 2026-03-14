@@ -1,0 +1,1 @@
+(Image:*\/git AND CommandLine:*\ clone\ *) AND (CommandLine:(*exploit* OR *Vulns* OR *vulnerability* OR *RCE* OR *RemoteCodeExecution* OR *Invoke\-* OR *CVE\-* OR *poc\-* OR *ProofOfConcept* OR *proxyshell* OR *log4shell* OR *eternalblue* OR *eternal\-blue* OR *MS17\-*))

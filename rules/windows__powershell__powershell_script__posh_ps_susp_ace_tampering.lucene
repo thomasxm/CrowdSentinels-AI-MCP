@@ -1,0 +1,1 @@
+(powershell.file.script_block_text:*win32_Trustee* AND powershell.file.script_block_text:*win32_Ace* AND powershell.file.script_block_text:*.AccessMask* AND powershell.file.script_block_text:*.AceType* AND powershell.file.script_block_text:*.SetSecurityDescriptor*) AND (powershell.file.script_block_text:(*\\Lsa\\JD* OR *\\Lsa\\Skew1* OR *\\Lsa\\Data* OR *\\Lsa\\GBG*))

@@ -1,0 +1,1 @@
+(process.parent.executable:*\\gup.exe AND process.executable:*\\explorer.exe) AND (NOT ((process.executable:*\\explorer.exe AND process.command_line:*\\Notepad\+\+\\notepad\+\+.exe*) OR process.parent.executable:*\\Notepad\+\+\\updater\* OR process.command_line:\<sigma.types.SigmaNull\ object\ at\ 0x7f16cbf41160\>))

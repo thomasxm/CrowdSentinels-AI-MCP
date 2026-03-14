@@ -1,0 +1,1 @@
+any where (process.executable:"*\\bitsadmin.exe" or process.pe.original_file_name:"bitsadmin.exe") and (process.command_line like~ ("* /transfer *", "* /create *", "* /addfile *")) and (process.command_line like~ ("*%AppData%*", "*%temp%*", "*%tmp%*", "*\\AppData\\Local\*", "*C:\\Windows\\Temp\*"))

@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and (event.code:"4656" and process.executable:"*\\lsass.exe" and winlog.event_data.AccessMask:"0x705" and winlog.event_data.ObjectType:"SAM_DOMAIN")

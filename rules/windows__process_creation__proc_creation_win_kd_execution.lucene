@@ -1,0 +1,1 @@
+process.executable:*\\kd.exe OR process.pe.original_file_name:kd.exe

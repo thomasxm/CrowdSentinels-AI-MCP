@@ -1,0 +1,1 @@
+file.path:*.scr AND (NOT ((process.executable:(*\\Kindle.exe OR *\\Bin\\ccSvcHst.exe)) OR (process.executable:*\\TiWorker.exe AND file.path:*\\uwfservicingscr.scr)))

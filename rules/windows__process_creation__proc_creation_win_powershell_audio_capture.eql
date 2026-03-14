@@ -1,0 +1,1 @@
+any where process.command_line like~ ("*WindowsAudioDevice-Powershell-Cmdlet*", "*Toggle-AudioDevice*", "*Get-AudioDevice *", "*Set-AudioDevice *", "*Write-AudioDevice *")

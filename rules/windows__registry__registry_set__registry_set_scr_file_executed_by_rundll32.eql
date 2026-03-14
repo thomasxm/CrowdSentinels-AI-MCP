@@ -1,0 +1,1 @@
+any where process.executable:"*\\rundll32.exe" and (registry.path:"*\\Control Panel\\Desktop\\SCRNSAVE.EXE*" and winlog.event_data.Details:"*.scr") and (not (winlog.event_data.Details like~ ("*C:\\Windows\\System32\*", "*C:\\Windows\\SysWOW64\*")))

@@ -1,0 +1,1 @@
+any where (process.command_line:"* tunnel *" and process.command_line:"* run *") and (process.command_line like~ ("*-config *", "*-credentials-contents *", "*-credentials-file *", "*-token *"))

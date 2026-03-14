@@ -1,0 +1,1 @@
+any where gcp.audit.method_name like~ ("storage.buckets.delete", "storage.buckets.insert", "storage.buckets.update", "storage.buckets.patch")

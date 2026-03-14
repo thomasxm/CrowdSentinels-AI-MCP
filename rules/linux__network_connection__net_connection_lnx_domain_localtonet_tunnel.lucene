@@ -1,0 +1,1 @@
+(DestinationHostname:(*.localto.net OR *.localtonet.com)) AND Initiated:true

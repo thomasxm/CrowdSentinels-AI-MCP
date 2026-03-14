@@ -1,0 +1,1 @@
+(powershell.file.script_block_text:(*Import\-Module\ * OR *ipmo\ *)) AND powershell.file.script_block_text:*Microsoft.ActiveDirectory.Management.dll*

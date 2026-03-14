@@ -1,0 +1,1 @@
+(((Image:(*\/apt OR *\/apt\-get)) AND CommandLine:*install*) OR (Image:*\/yum AND (CommandLine:(*localinstall* OR *install*))) OR (Image:*\/rpm AND CommandLine:*\-i*) OR (Image:*\/dpkg AND (CommandLine:(*\-\-install* OR *\-i*)))) AND (CommandLine:(*nmap* OR *\ nc* OR *netcat* OR *wireshark* OR *tshark* OR *openconnect* OR *proxychains*))

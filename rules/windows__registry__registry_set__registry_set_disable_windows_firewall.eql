@@ -1,0 +1,1 @@
+any where (registry.path like~ ("*\\SOFTWARE\\Policies\\Microsoft\\WindowsFirewall\\StandardProfile\\EnableFirewall", "*\\SOFTWARE\\Policies\\Microsoft\\WindowsFirewall\\DomainProfile\\EnableFirewall")) and winlog.event_data.Details:"DWORD (0x00000000)"

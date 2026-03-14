@@ -1,0 +1,1 @@
+any where process.executable:"*\\VisualUiaVerifyNative.exe" or process.pe.original_file_name:"VisualUiaVerifyNative.exe"

@@ -1,0 +1,1 @@
+registry.path:*\\Control\\CI\* AND registry.path:*\\HVCIDisallowedImages*

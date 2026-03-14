@@ -1,0 +1,1 @@
+any where Image:"*/usermod" and (CommandLine like~ ("*-aG root*", "*-aG sudoers*"))

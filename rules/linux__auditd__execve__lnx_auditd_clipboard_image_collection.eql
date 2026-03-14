@@ -1,0 +1,1 @@
+any where type:"EXECVE" and a0:"xclip" and (a1 like~ ("-selection", "-sel")) and (a2 like~ ("clipboard", "clip")) and a3:"-t" and a4:"image/*" and a5:"-o"

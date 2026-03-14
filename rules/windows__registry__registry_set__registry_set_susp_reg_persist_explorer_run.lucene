@@ -1,0 +1,1 @@
+registry.path:*\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Run AND (winlog.event_data.Details:(*\:\\$Recycle.bin\* OR *\:\\ProgramData\* OR *\:\\Temp\* OR *\:\\Users\\Default\* OR *\:\\Users\\Public\* OR *\:\\Windows\\Temp\* OR *\\AppData\\Local\\Temp\*))

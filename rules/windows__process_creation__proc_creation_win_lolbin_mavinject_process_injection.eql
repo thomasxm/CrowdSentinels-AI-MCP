@@ -1,0 +1,1 @@
+any where process.command_line:"* /INJECTRUNNING *" and (not process.parent.executable:"C:\\Windows\\System32\\AppVClient.exe")

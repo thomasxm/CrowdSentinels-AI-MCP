@@ -1,0 +1,1 @@
+(CommandLine:(*\/curl* OR *\/wget*)) AND (CommandLine:(*\/tmp\/* OR *\/dev\/shm\/*)) AND CommandLine:*sh\ \-c*

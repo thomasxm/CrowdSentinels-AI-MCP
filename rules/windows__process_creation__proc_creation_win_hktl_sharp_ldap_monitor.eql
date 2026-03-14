@@ -1,0 +1,1 @@
+any where (process.executable:"*\\SharpLDAPmonitor.exe" or process.pe.original_file_name:"SharpLDAPmonitor.exe") or (process.command_line:"*/user:*" and process.command_line:"*/pass:*" and process.command_line:"*/dcip:*")

@@ -1,0 +1,1 @@
+any where (process.pe.product:"SQLite" or (process.executable like~ ("*\\sqlite.exe", "*\\sqlite3.exe"))) and (process.command_line like~ ("*\\User Data\*", "*\\Opera Software\*", "*\\ChromiumViewer\*")) and (process.command_line like~ ("*Login Data*", "*Cookies*", "*Web Data*", "*History*", "*Bookmarks*"))

@@ -1,0 +1,1 @@
+any where ((process.executable:"*\\wbadmin.exe" or process.pe.original_file_name:"WBADMIN.EXE") and (process.command_line:"*delete *" and process.command_line:"*backup*")) and (not process.command_line:"*keepVersions:0*")

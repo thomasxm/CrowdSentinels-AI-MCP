@@ -1,0 +1,1 @@
+type:SYSCALL AND (exe:(*\/telnet OR *\/nmap OR *\/netcat OR *\/nc OR *\/ncat OR *\/nc.openbsd)) AND key:network_connect_4

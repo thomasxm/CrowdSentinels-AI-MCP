@@ -1,0 +1,1 @@
+process.executable:*\\mstsc.exe AND file.path:*\\Microsoft\\Windows\\Start\ Menu\\Programs\\Startup\*

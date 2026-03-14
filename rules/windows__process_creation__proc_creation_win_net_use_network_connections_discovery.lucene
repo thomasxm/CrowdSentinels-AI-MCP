@@ -1,0 +1,1 @@
+((process.executable:(*\\net.exe OR *\\net1.exe)) OR (process.pe.original_file_name:(net.exe OR net1.exe))) AND ((process.command_line:(*\ use OR *\ sessions)) OR (process.command_line:(*\ use\ * OR *\ sessions\ *)))

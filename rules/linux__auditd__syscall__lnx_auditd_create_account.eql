@@ -1,0 +1,1 @@
+any where (type:"SYSCALL" and exe:"*/useradd") or type:"ADD_USER"

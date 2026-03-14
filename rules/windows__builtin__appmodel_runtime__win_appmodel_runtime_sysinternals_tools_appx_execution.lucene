@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-AppModel\-Runtime\/Admin AND (event.code:201 AND (winlog.event_data.ImageName:(procdump.exe OR psloglist.exe OR psexec.exe OR livekd.exe OR ADExplorer.exe)))

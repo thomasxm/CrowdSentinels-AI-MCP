@@ -1,0 +1,1 @@
+any where process.executable:"*\\OpenWith.exe" and process.command_line:"*/c*"

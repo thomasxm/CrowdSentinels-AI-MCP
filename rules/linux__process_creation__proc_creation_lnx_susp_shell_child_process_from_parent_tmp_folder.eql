@@ -1,0 +1,1 @@
+any where ParentImage:"/tmp/*" and (Image like~ ("*/bash", "*/csh", "*/dash", "*/fish", "*/ksh", "*/sh", "*/zsh"))

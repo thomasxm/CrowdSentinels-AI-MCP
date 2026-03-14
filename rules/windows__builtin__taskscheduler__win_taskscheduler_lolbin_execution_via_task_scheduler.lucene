@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-TaskScheduler\/Operational AND (event.code:129 AND (winlog.event_data.Path:(*\\calc.exe OR *\\cscript.exe OR *\\mshta.exe OR *\\mspaint.exe OR *\\notepad.exe OR *\\regsvr32.exe OR *\\wscript.exe)))

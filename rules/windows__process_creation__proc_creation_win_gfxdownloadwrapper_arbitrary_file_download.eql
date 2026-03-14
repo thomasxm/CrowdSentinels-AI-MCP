@@ -1,0 +1,1 @@
+any where (process.executable:"*\\GfxDownloadWrapper.exe" and (process.command_line like~ ("*http://*", "*https://*"))) and (not process.command_line:"*https://gameplayapi.intel.com/*")

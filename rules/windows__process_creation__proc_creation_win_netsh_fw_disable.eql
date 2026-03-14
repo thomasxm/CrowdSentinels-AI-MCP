@@ -1,0 +1,1 @@
+any where (process.executable:"*\\netsh.exe" or process.pe.original_file_name:"netsh.exe") and ((process.command_line:"*firewall*" and process.command_line:"*set*" and process.command_line:"*opmode*" and process.command_line:"*disable*") or (process.command_line:"*advfirewall*" and process.command_line:"*set*" and process.command_line:"*state*" and process.command_line:"*off*"))

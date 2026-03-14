@@ -1,0 +1,1 @@
+process.executable:*\\QuickAssist.exe AND dns.question.name:*remoteassistance.support.services.microsoft.com

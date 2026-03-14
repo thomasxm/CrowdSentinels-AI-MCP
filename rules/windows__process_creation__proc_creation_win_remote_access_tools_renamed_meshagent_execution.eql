@@ -1,0 +1,1 @@
+any where (process.command_line:"*--meshServiceName*" or process.pe.original_file_name:"*meshagent*") and (not process.executable:"*\\meshagent.exe")

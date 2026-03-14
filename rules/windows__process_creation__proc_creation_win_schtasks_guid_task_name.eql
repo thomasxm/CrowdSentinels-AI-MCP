@@ -1,0 +1,1 @@
+any where (process.executable:"*\\schtasks.exe" and process.command_line:"*/Create *") and (process.command_line like~ ("*/TN \"{*", "*/TN '{*", "*/TN {*")) and (process.command_line like~ ("*}\"*", "*}'*", "*} *"))

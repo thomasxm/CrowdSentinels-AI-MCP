@@ -1,0 +1,1 @@
+(registry.path:(*\\Keyboard\ Layout\\Preload\* OR *\\Keyboard\ Layout\\Substitutes\*)) AND (winlog.event_data.Details:(*00000429* OR *00050429* OR *0000042a*))

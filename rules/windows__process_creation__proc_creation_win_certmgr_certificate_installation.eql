@@ -1,0 +1,1 @@
+any where (process.executable:"*\\CertMgr.exe" or process.pe.original_file_name:"CERTMGT.EXE") and (process.command_line:"*/add*" and process.command_line:"*root*")

@@ -1,0 +1,1 @@
+any where Image:"*/xattr" and (CommandLine:"*-d*" and CommandLine:"*com.apple.quarantine*")

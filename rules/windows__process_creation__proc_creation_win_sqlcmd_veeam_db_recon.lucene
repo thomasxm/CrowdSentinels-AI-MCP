@@ -1,0 +1,1 @@
+(process.executable:*\\sqlcmd.exe AND (process.command_line:*VeeamBackup* AND process.command_line:*From\ *)) AND (process.command_line:(*BackupRepositories* OR *Backups* OR *Credentials* OR *HostCreds* OR *SmbFileShares* OR *Ssh_creds* OR *VSphereInfo*))

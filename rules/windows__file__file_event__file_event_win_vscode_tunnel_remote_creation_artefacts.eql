@@ -1,0 +1,1 @@
+any where process.executable:"*\\servers\\Stable-*" and process.executable:"*\\server\\node.exe" and file.path:"*\\.vscode-server\\data\\User\\History\*"

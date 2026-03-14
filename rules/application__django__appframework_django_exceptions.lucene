@@ -1,0 +1,1 @@
+*SuspiciousOperation* OR *DisallowedHost* OR *DisallowedModelAdminLookup* OR *DisallowedModelAdminToField* OR *DisallowedRedirect* OR *InvalidSessionKey* OR *RequestDataTooBig* OR *SuspiciousFileOperation* OR *SuspiciousMultipartForm* OR *SuspiciousSession* OR *TooManyFieldsSent* OR *PermissionDenied*

@@ -1,0 +1,1 @@
+process.executable:*\\svchost.exe AND file.path:SigmaRegularExpression\(regexp\=SigmaString\(\['\\\\Windows\\\\System32\\\\\[a\-zA\-Z0\-9\]\{8\}\\.tmp$'\]\),\ flags\=set\(\)\)

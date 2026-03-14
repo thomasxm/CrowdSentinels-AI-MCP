@@ -1,0 +1,1 @@
+any where ((process.executable:"*\\sdbinst.exe" or process.pe.original_file_name:"sdbinst.exe") and process.command_line:"*.sdb*") and (not (process.parent.executable:"*\\msiexec.exe" and (process.command_line like~ ("*:\\Program Files (x86)\\IIS Express\\iisexpressshim.sdb*", "*:\\Program Files\\IIS Express\\iisexpressshim.sdb*"))))

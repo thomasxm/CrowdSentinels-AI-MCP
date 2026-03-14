@@ -1,0 +1,1 @@
+file.path:*\\Microsoft\\Windows\\Start\ Menu\\Programs\\StartUp* AND (NOT ((process.executable:(C\:\\Windows\\System32\\wuauclt.exe OR C\:\\Windows\\uus\\ARM64\\wuaucltcore.exe)) OR (file.path:(C\:\\$WINDOWS.\~BT\\NewOS\* OR C\:\\$WinREAgent\\Scratch\\Mount\*)))) AND (NOT (process.executable:*\\ONENOTE.EXE AND file.path:*\\Send\ to\ OneNote.lnk))

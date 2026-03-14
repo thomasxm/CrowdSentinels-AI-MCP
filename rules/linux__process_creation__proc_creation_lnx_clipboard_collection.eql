@@ -1,0 +1,1 @@
+any where Image:"*xclip*" and (CommandLine:"*-sel*" and CommandLine:"*clip*" and CommandLine:"*-o*")

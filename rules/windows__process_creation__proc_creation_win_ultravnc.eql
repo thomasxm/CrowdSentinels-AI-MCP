@@ -1,0 +1,1 @@
+any where process.pe.description:"VNCViewer" or process.pe.product:"UltraVNC VNCViewer" or process.pe.company:"UltraVNC" or process.pe.original_file_name:"VNCViewer.exe"

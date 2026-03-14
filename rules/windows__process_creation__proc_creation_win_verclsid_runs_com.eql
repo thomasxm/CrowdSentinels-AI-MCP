@@ -1,0 +1,1 @@
+any where ((process.executable:"*\\verclsid.exe" or process.pe.original_file_name:"verclsid.exe") and (process.command_line:"*/S*" and process.command_line:"*/C*")) and (not (process.parent.executable:"*C:\\Windows\\System32\\RuntimeBroker.exe" and (process.command_line:"*verclsid.exe\" /S /C {*" and process.command_line:"*} /I {*")))

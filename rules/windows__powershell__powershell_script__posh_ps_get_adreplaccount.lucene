@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*Get\-ADReplAccount* AND powershell.file.script_block_text:*\-All\ * AND powershell.file.script_block_text:*\-Server\ *

@@ -1,0 +1,1 @@
+any where (process.executable:"*\\createdump.exe" or process.pe.original_file_name:"FX_VER_INTERNALNAME_STR") and (process.command_line like~ ("* -u *", "* --full *", "* -f *", "* --name *", "*.dmp *"))

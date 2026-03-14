@@ -1,0 +1,1 @@
+any where "DataError" or "IntegrityError" or "ProgrammingError" or "OperationalError"

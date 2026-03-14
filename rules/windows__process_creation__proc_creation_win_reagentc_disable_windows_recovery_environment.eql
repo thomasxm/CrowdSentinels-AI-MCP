@@ -1,0 +1,1 @@
+any where (process.executable:"*\\reagentc.exe" or process.pe.original_file_name:"reagentc.exe") and process.command_line like~ ("*-disable*", "*/disable*", "*–disable*", "*—disable*", "*―disable*")

@@ -1,0 +1,1 @@
+file.path:(*\\Inveigh\-Log.txt OR *\\Inveigh\-Cleartext.txt OR *\\Inveigh\-NTLMv1Users.txt OR *\\Inveigh\-NTLMv2Users.txt OR *\\Inveigh\-NTLMv1.txt OR *\\Inveigh\-NTLMv2.txt OR *\\Inveigh\-FormInput.txt OR *\\Inveigh.dll OR *\\Inveigh.exe OR *\\Inveigh.ps1 OR *\\Inveigh\-Relay.ps1)

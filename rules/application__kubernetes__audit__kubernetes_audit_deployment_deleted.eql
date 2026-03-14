@@ -1,0 +1,1 @@
+any where verb:"delete" and objectRef.resource:"deployments"

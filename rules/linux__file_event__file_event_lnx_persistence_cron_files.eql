@@ -1,0 +1,1 @@
+any where (TargetFilename like~ ("/etc/cron.d/*", "/etc/cron.daily/*", "/etc/cron.hourly/*", "/etc/cron.monthly/*", "/etc/cron.weekly/*", "/var/spool/cron/crontabs/*")) or (TargetFilename like~ ("*/etc/cron.allow*", "*/etc/cron.deny*", "*/etc/crontab*"))

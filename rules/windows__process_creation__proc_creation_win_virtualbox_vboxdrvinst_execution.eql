@@ -1,0 +1,1 @@
+any where process.executable:"*\\VBoxDrvInst.exe" and (process.command_line:"*driver*" and process.command_line:"*executeinf*")

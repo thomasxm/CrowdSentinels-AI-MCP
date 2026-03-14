@@ -1,0 +1,1 @@
+any where (process.executable:"*\\cscript.exe" or process.pe.original_file_name:"cscript.exe") and (process.command_line:"*winrm*" and process.command_line:"*invoke Create wmicimv2/Win32_*" and process.command_line:"*-r:http*")

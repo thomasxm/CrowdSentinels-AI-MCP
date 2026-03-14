@@ -1,0 +1,1 @@
+Image:*\/dseditgroup AND (CommandLine:*\ \-o\ edit\ * AND CommandLine:*\ \-a\ * AND CommandLine:*\ \-t\ user* AND CommandLine:*admin*)

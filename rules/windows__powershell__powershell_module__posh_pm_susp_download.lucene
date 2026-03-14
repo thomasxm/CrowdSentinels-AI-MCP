@@ -1,0 +1,1 @@
+winlog.event_data.ContextInfo:*System.Net.WebClient* AND (winlog.event_data.ContextInfo:(*.DownloadFile\(* OR *.DownloadString\(*))

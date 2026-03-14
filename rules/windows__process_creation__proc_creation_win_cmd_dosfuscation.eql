@@ -1,0 +1,1 @@
+any where process.command_line like~ ("*^^*", "*^|^*", "*,;,*", "*;;;;*", "*;; ;;*", "*(,(,*", "*%COMSPEC:~*", "* c^m^d*", "*^c^m^d*", "* c^md*", "* cm^d*", "*^cm^d*", "* s^et *", "* s^e^t *", "* se^t *")

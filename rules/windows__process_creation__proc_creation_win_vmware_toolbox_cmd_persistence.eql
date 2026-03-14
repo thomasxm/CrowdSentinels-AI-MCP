@@ -1,0 +1,1 @@
+any where (process.executable:"*\\VMwareToolBoxCmd.exe" or process.pe.original_file_name:"toolbox-cmd.exe") and (process.command_line:"* script *" and process.command_line:"* set *")

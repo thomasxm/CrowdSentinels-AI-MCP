@@ -1,0 +1,1 @@
+any where (process.executable:"*\\MSOHTMED.exe" or process.pe.original_file_name:"MsoHtmEd.exe") and (process.command_line like~ ("*ftp://*", "*http://*", "*https://*"))

@@ -1,0 +1,1 @@
+any where (process.executable:"*\\w32tm.exe" or process.pe.original_file_name:"w32time.dll") and (process.command_line:"*/stripchart*" and process.command_line:"*/computer:*" and process.command_line:"*/period:*" and process.command_line:"*/dataonly*" and process.command_line:"*/samples:*")

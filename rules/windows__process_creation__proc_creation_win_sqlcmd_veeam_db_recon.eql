@@ -1,0 +1,1 @@
+any where (process.executable:"*\\sqlcmd.exe" and (process.command_line:"*VeeamBackup*" and process.command_line:"*From *")) and (process.command_line like~ ("*BackupRepositories*", "*Backups*", "*Credentials*", "*HostCreds*", "*SmbFileShares*", "*Ssh_creds*", "*VSphereInfo*"))

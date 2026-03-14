@@ -1,0 +1,1 @@
+any where (powershell.file.script_block_text:"*powershell*" and powershell.file.script_block_text:"*WindowStyle*" and powershell.file.script_block_text:"*Hidden*") and (not (powershell.file.script_block_text:"*:\\Program Files\\Amazon\\WorkSpacesConfig\\Scripts\*" and powershell.file.script_block_text:"*$PSScriptRoot\\Module\\WorkspaceScriptModule\\WorkspaceScriptModule*"))

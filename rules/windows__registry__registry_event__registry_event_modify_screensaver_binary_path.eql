@@ -1,0 +1,1 @@
+any where registry.path:"*\\Control Panel\\Desktop\\SCRNSAVE.EXE" and (not (process.executable like~ ("*\\rundll32.exe", "*\\explorer.exe")))

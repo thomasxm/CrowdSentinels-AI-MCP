@@ -1,0 +1,1 @@
+any where gcp.audit.method_name like~ ("cloudsql.instances.create", "cloudsql.instances.delete", "cloudsql.users.update", "cloudsql.users.delete")

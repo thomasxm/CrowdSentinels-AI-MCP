@@ -1,0 +1,1 @@
+any where (type:"EXECVE" and a0:"cat") and (a1 like~ ("*.jpg", "*.png")) and a2:"*.zip"

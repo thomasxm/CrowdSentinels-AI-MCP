@@ -1,0 +1,1 @@
+any where winlog.event_data.ContextInfo:"*Compress-Archive -Path*-DestinationPath $env:TEMP*" and winlog.event_data.ContextInfo:"*Compress-Archive -Path*-DestinationPath*\\AppData\\Local\\Temp\*" and winlog.event_data.ContextInfo:"*Compress-Archive -Path*-DestinationPath*:\\Windows\\Temp\*"

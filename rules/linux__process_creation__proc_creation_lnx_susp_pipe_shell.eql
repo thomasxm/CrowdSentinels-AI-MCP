@@ -1,0 +1,1 @@
+any where (CommandLine like~ ("sh -c *", "bash -c *")) and ((CommandLine like~ ("*| bash *", "*| sh *", "*|bash *", "*|sh *")) or (CommandLine like~ ("*| bash", "*| sh", "*|bash", "* |sh")))

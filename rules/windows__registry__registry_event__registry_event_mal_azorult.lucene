@@ -1,0 +1,1 @@
+(event.code:(12 OR 13)) AND registry.path:*SYSTEM\* AND registry.path:*\\services\\localNETService

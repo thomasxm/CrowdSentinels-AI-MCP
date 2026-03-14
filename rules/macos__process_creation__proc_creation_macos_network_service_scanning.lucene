@@ -1,0 +1,1 @@
+((Image:(*\/nc OR *\/netcat)) AND (NOT CommandLine:*l*)) OR (Image:(*\/nmap OR *\/telnet))

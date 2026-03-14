@@ -1,0 +1,1 @@
+any where (Image like~ ("*/iptables", "*/xtables-legacy-multi", "*/iptables-legacy-multi", "*/ip6tables", "*/ip6tables-legacy-multi")) and (CommandLine like~ ("*-F*", "*-Z*", "*-X*")) and (CommandLine like~ ("*ufw-logging-deny*", "*ufw-logging-allow*", "*ufw6-logging-deny*", "*ufw6-logging-allow*"))

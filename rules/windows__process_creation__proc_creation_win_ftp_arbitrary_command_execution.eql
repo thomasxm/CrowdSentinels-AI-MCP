@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\ftp.exe" or ((process.executable:"*\\ftp.exe" or process.pe.original_file_name:"ftp.exe") and process.command_line like~ ("*-s:*", "*/s:*", "*–s:*", "*—s:*", "*―s:*"))

@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and ((event.code:"5447" and winlog.event_data.FilterName:"*RonPolicy*") or (event.code:"5449" and winlog.event_data.ProviderContextName:"*RonPolicy*"))

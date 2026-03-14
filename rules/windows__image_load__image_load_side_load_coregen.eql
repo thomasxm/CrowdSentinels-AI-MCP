@@ -1,0 +1,1 @@
+any where process.executable:"*\\coregen.exe" and (not (file.path like~ ("C:\\Program Files (x86)\\Microsoft Silverlight\*", "C:\\Program Files\\Microsoft Silverlight\*", "C:\\Windows\\System32\*", "C:\\Windows\\SysWOW64\*")))

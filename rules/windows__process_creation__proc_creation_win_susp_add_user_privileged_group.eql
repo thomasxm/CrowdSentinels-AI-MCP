@@ -1,0 +1,1 @@
+any where ((process.command_line:"*localgroup *" and process.command_line:"* /add*") or (process.command_line:"*Add-LocalGroupMember *" and process.command_line:"* -Group *")) and (process.command_line like~ ("*Group Policy Creator Owners*", "*Schema Admins*"))

@@ -1,0 +1,1 @@
+any where process.executable:"*\\SysmonEOP.exe" or (winlog.event_data.Hashes like~ ("*IMPHASH=22F4089EB8ABA31E1BB162C6D9BF72E5*", "*IMPHASH=5123FA4C4384D431CD0D893EEB49BBEC*"))

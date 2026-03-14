@@ -1,0 +1,1 @@
+any where file.path:"*\\amsi.dll" and (process.executable like~ ("*\\ExtExport.exe", "*\\odbcconf.exe", "*\\rundll32.exe"))

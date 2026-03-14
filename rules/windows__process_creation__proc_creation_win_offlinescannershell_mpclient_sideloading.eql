@@ -1,0 +1,1 @@
+any where (process.executable:"*\\OfflineScannerShell.exe" or process.pe.original_file_name:"OfflineScannerShell.exe") and (not (process.working_directory like~ ("C:\\Program Files\\Windows Defender\\Offline\\", "", "<sigma.types.SigmaNull object at 0x7ff5c2d8d160>")))

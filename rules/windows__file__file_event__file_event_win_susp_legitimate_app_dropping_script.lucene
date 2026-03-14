@@ -1,0 +1,1 @@
+(process.executable:(*\\eqnedt32.exe OR *\\wordpad.exe OR *\\wordview.exe OR *\\certutil.exe OR *\\certoc.exe OR *\\CertReq.exe OR *\\Desktopimgdownldr.exe OR *\\esentutl.exe OR *\\mshta.exe OR *\\AcroRd32.exe OR *\\RdrCEF.exe OR *\\hh.exe OR *\\finger.exe)) AND (file.path:(*.ps1 OR *.bat OR *.vbs OR *.scf OR *.wsf OR *.wsh))

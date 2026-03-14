@@ -1,0 +1,1 @@
+powershell.file.script_block_text:SigmaRegularExpression\(regexp\=SigmaString\(\['cmd.\{0,5\}\(',\ \<SpecialChars.WILDCARD_SINGLE\:\ 2\>,\ '\:\/c\|\/r\).\+clip\(',\ \<SpecialChars.WILDCARD_SINGLE\:\ 2\>,\ '\:\\.exe\)',\ \<SpecialChars.WILDCARD_SINGLE\:\ 2\>,\ '.\{0,4\}\&\&.\+clipboard\]\:\:\\\(\\s\\\\\"\\\{\\d\\\}.\+\-f.\+\"'\]\),\ flags\=set\(\)\)

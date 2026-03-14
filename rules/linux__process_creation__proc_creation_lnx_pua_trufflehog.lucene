@@ -1,0 +1,1 @@
+Image:*\/trufflehog OR ((CommandLine:(*\ docker\ \-\-image\ * OR *\ Git\ * OR *\ GitHub\ * OR *\ Jira\ * OR *\ Slack\ * OR *\ Confluence\ * OR *\ SharePoint\ * OR *\ s3\ * OR *\ gcs\ *)) AND CommandLine:*\ \-\-results\=verified*)

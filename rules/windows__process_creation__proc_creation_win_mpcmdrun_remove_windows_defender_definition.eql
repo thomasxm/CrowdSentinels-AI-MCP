@@ -1,0 +1,1 @@
+any where (process.executable:"*\\MpCmdRun.exe" or process.pe.original_file_name:"MpCmdRun.exe") and (process.command_line:"* -RemoveDefinitions*" and process.command_line:"* -All*")

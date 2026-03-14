@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-Windows\ Firewall\ With\ Advanced\ Security\/Firewall AND (event.code:(2032 OR 2060))

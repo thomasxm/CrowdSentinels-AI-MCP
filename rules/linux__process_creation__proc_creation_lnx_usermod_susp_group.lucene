@@ -1,0 +1,1 @@
+Image:*\/usermod AND (CommandLine:(*\-aG\ root* OR *\-aG\ sudoers*))

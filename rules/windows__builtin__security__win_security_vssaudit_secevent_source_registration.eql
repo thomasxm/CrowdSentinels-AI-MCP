@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and (winlog.event_data.AuditSourceName:"VSSAudit" and (event.code like~ ("4904", "4905")))

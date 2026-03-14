@@ -1,0 +1,1 @@
+any where process.executable:"*\\cmstp.exe" and (file.path like~ ("*\\PerfLogs\*", "*\\ProgramData\*", "*\\Users\*", "*\\Windows\\Temp\*", "*C:\\Temp\*")) and (file.path like~ ("*.dll", "*.ocx"))

@@ -1,0 +1,1 @@
+((process.executable:(*\\ADExp.exe OR *\\ADExplorer.exe OR *\\ADExplorer64.exe OR *\\ADExplorer64a.exe)) OR process.pe.original_file_name:AdExp OR process.pe.description:Active\ Directory\ Editor OR process.pe.product:Sysinternals\ ADExplorer) AND process.command_line:*snapshot*

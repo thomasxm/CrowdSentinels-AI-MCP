@@ -1,0 +1,1 @@
+any where ActivityDetails:"Sign-ins" and (ClientApp like~ ("Other client", "IMAP", "POP3", "MAPI", "SMTP", "Exchange ActiveSync", "Exchange Web Services")) and Username:"UPN"

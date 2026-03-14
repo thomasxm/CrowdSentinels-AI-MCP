@@ -1,0 +1,1 @@
+any where process.command_line:"*New-MailboxExportRequest*" and process.command_line:"* -Mailbox *" and process.command_line:"* -FilePath \\*"

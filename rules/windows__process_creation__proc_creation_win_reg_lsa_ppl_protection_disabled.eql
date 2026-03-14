@@ -1,0 +1,1 @@
+any where (process.executable:"*\\reg.exe" or process.pe.original_file_name:"reg.exe") and (process.command_line:"*SYSTEM\\CurrentControlSet\\Control\\Lsa*" and (process.command_line:"* add *" and process.command_line:"* /d 0*" and process.command_line:"* /v RunAsPPL *"))

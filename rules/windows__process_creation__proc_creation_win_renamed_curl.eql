@@ -1,0 +1,1 @@
+any where (process.pe.original_file_name:"curl.exe" or process.pe.description:"The curl executable") and (not process.executable:"*\\curl*")

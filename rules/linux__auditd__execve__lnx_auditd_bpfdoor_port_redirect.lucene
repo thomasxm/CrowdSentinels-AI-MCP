@@ -1,0 +1,1 @@
+(type:EXECVE AND a0:*iptables AND a1:\-t AND a2:nat) AND (*\-\-to\-ports\ 42* OR *\-\-to\-ports\ 43*)

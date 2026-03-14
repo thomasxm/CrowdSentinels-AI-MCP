@@ -1,0 +1,1 @@
+(winlog.event_data.TargetImage:(*\\calc.exe OR *\\calculator.exe OR *\\mspaint.exe OR *\\notepad.exe OR *\\ping.exe OR *\\wordpad.exe OR *\\write.exe)) AND winlog.event_data.GrantedAccess:0x1FFFFF

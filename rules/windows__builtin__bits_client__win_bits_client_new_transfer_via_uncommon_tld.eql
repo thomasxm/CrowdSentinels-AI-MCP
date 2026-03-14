@@ -1,0 +1,1 @@
+any where winlog.channel:"Microsoft-Windows-Bits-Client/Operational" and (event.code:"16403" and (not (winlog.event_data.RemoteName like~ ("*.azureedge.net/*", "*.com/*", "*.sfx.ms/*", "*download.mozilla.org/*", "*cdn.onenote.net/*", "*cdn.office.net/*"))))

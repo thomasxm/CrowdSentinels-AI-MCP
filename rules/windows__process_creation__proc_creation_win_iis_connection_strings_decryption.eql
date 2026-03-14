@@ -1,0 +1,1 @@
+any where (process.executable:"*\\aspnet_regiis.exe" or process.pe.original_file_name:"aspnet_regiis.exe") and (process.command_line:"*connectionStrings*" and process.command_line:"* -pdf*")

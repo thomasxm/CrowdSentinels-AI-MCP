@@ -1,0 +1,1 @@
+any where winlog.event_data.CallTrace:"*cmlua.dll*"

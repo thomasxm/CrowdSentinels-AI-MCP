@@ -1,0 +1,1 @@
+Image:*\/nscurl AND (CommandLine:(*\-\-download\ * OR *\-\-download\-directory\ * OR *\-\-output\ * OR *\-dir\ * OR *\-dl\ * OR *\-ld* OR *\-o\ *))

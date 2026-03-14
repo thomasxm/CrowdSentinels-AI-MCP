@@ -1,0 +1,1 @@
+any where process.executable:"*\\DllHost.exe" and file.path:"C:\\Windows\\System32\*" and file.path:"*.dll"

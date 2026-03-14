@@ -1,0 +1,30 @@
+Traceback (most recent call last):
+  File "/home/kali/Desktop/elastic_mcp_bundle/sigma/./sigma-venv/bin/sigma", line 3, in <module>
+    from sigma.cli.main import main
+  File "/home/kali/Desktop/elastic_mcp_bundle/sigma/sigma-venv/lib/python3.13/site-packages/sigma/cli/main.py", line 32, in <module>
+    from .list import list_group
+  File "/home/kali/Desktop/elastic_mcp_bundle/sigma/sigma-venv/lib/python3.13/site-packages/sigma/cli/list.py", line 13, in <module>
+    plugins = InstalledSigmaPlugins.autodiscover()
+  File "/home/kali/Desktop/elastic_mcp_bundle/sigma/sigma-venv/lib/python3.13/site-packages/sigma/plugins.py", line 197, in autodiscover
+    backends = cls._discover_module_directories(sigma.backends, "backends", include_backends)
+  File "/home/kali/Desktop/elastic_mcp_bundle/sigma/sigma-venv/lib/python3.13/site-packages/sigma/plugins.py", line 91, in _discover_module_directories
+    imported_module = importlib.import_module(mod.name)
+  File "/usr/lib/python3.13/importlib/__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kali/Desktop/elastic_mcp_bundle/sigma/sigma-venv/lib/python3.13/site-packages/sigma/backends/elasticsearch/__init__.py", line 1, in <module>
+    from .elasticsearch_lucene import LuceneBackend
+  File "/home/kali/Desktop/elastic_mcp_bundle/sigma/sigma-venv/lib/python3.13/site-packages/sigma/backends/elasticsearch/elasticsearch_lucene.py", line 17, in <module>
+    from sigma.data.mitre_attack import mitre_attack_tactics, mitre_attack_techniques
+  File "/home/kali/Desktop/elastic_mcp_bundle/sigma/sigma-venv/lib/python3.13/site-packages/sigma/data/mitre_attack.py", line 16, in <module>
+    import diskcache
+  File "/home/kali/Desktop/elastic_mcp_bundle/sigma/sigma-venv/lib/python3.13/site-packages/diskcache/__init__.py", line 56, in <module>
+    from .djangocache import DjangoCache  # noqa
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1119, in get_code
+  File "<frozen importlib._bootstrap_external>", line 1218, in get_data
+KeyboardInterrupt

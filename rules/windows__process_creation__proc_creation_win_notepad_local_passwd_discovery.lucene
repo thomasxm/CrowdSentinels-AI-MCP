@@ -1,0 +1,1 @@
+process.parent.executable:*\\explorer.exe AND process.executable:*\\notepad.exe AND (process.command_line:(*password*.txt OR *password*.csv OR *password*.doc OR *password*.xls))

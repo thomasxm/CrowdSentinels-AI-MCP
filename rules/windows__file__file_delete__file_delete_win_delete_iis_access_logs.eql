@@ -1,0 +1,1 @@
+any where file.path:"*\\inetpub\\logs\\LogFiles\*" and file.path:"*.log"

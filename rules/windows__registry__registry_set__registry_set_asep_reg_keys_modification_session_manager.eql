@@ -1,0 +1,1 @@
+any where registry.path:"*\\System\\CurrentControlSet\\Control\\Session Manager*" and (registry.path like~ ("*\\SetupExecute*", "*\\S0InitialCommand*", "*\\KnownDlls*", "*\\Execute*", "*\\BootExecute*", "*\\AppCertDlls*")) and (not winlog.event_data.Details:"(Empty)")

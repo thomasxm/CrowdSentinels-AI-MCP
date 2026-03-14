@@ -1,0 +1,1 @@
+any where eventService:"admin.googleapis.com" and (eventName like~ ("REMOVE_APPLICATION", "REMOVE_APPLICATION_FROM_WHITELIST"))

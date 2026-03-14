@@ -1,0 +1,1 @@
+any where eventSource:"route53.amazonaws.com" and eventName:"DisableDomainTransferLock"

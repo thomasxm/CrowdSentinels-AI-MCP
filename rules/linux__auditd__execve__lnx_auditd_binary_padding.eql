@@ -1,0 +1,1 @@
+any where type:"EXECVE" and (("truncate" and "-s") or (("dd" and "if=") and (not "of=")))

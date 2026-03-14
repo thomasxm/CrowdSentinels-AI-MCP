@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\SndVol.exe" and (not (process.executable:"*\\rundll32.exe" and process.command_line:"* shell32.dll,Control_RunDLL *"))

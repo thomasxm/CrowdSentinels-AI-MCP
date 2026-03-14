@@ -1,0 +1,1 @@
+any where process.executable:"*\\QuickAssist.exe" and dns.question.name:"*remoteassistance.support.services.microsoft.com"

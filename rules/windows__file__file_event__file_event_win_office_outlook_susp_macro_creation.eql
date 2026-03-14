@@ -1,0 +1,1 @@
+any where file.path:"*\\Microsoft\\Outlook\\VbaProject.OTM" and (not process.executable:"*\\outlook.exe")

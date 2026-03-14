@@ -1,0 +1,1 @@
+registry.path:*\\Microsoft\\Security\ Center\\UACDisableNotify* AND winlog.event_data.Details:DWORD\ \(0x00000001\)

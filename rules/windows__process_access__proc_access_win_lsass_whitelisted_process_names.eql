@@ -1,0 +1,1 @@
+any where winlog.event_data.TargetImage:"*\\lsass.exe" and (process.executable like~ ("*\\TrolleyExpress.exe", "*\\ProcessDump.exe", "*\\dump64.exe")) and (winlog.event_data.GrantedAccess like~ ("*10", "*30", "*50", "*70", "*90", "*B0", "*D0", "*F0", "*18", "*38", "*58", "*78", "*98", "*B8", "*D8", "*F8", "*1A", "*3A", "*5A", "*7A", "*9A", "*BA", "*DA", "*FA", "*0x14C2", "*FF"))

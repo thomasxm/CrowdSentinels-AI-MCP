@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and ((event.code:"4662" and winlog.event_data.ObjectType:"*bf967aba-0de6-11d0-a285-00aa003049e2*" and (winlog.event_data.AccessMask like~ ("*1?", "*3?", "*4?", "*7?", "*9?", "*B?", "*D?", "*F?"))) and (not (user.name like~ ("*$", "MSOL_*"))))

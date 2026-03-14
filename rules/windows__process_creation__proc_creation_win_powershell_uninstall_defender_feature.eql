@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\powershell_ise.exe", "*\\powershell.exe", "*\\pwsh.exe")) or (process.pe.original_file_name like~ ("PowerShell_ISE.EXE", "PowerShell.EXE", "pwsh.dll"))) and (process.command_line like~ ("*Uninstall-WindowsFeature*", "*Remove-WindowsFeature*")) and process.command_line:"*Windows-Defender*"

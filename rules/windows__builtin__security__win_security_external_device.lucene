@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:6416 AND (winlog.event_data.ClassName:DiskDrive OR winlog.event_data.DeviceDescription:USB\ Mass\ Storage\ Device))

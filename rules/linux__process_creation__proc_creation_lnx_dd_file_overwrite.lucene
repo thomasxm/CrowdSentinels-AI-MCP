@@ -1,0 +1,1 @@
+(Image:(\/bin\/dd OR \/usr\/bin\/dd)) AND CommandLine:*of\=* AND (CommandLine:(*if\=\/dev\/zero* OR *if\=\/dev\/null*))

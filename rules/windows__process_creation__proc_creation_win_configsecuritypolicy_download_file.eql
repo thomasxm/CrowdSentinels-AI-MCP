@@ -1,0 +1,1 @@
+any where (process.command_line:"*ConfigSecurityPolicy.exe*" or process.executable:"*\\ConfigSecurityPolicy.exe" or process.pe.original_file_name:"ConfigSecurityPolicy.exe") and (process.command_line like~ ("*ftp://*", "*http://*", "*https://*"))

@@ -1,0 +1,1 @@
+(powershell.file.script_block_text:(*Invoke\-WebRequest* OR *Invoke\-RestMethod* OR *\ irm\ * OR *iwr\ *)) AND powershell.file.script_block_text:*\-UserAgent\ *

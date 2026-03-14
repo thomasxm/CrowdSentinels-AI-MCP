@@ -1,0 +1,1 @@
+file.path:*\\HEVD.sys OR (winlog.event_data.Hashes:(*IMPHASH\=f26d0b110873a1c7d8c4f08fbeab89c5* OR *IMPHASH\=c46ea2e651fd5f7f716c8867c6d13594*))

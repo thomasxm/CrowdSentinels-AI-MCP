@@ -1,0 +1,1 @@
+any where ((process.parent.executable like~ ("*\\powershell.exe", "*\\pwsh.exe")) and process.executable:"*\\powershell.exe" and process.command_line:"* -nologo -windowstyle minimized -file *") and (process.command_line like~ ("*\\AppData\\Local\\Temp\*", "*\\Windows\\Temp\*"))

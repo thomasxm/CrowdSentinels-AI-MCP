@@ -1,0 +1,1 @@
+any where registry.path:"*\\Services\\LanmanServer\\Parameters\*" and (registry.path like~ ("*\\AutoShareWks", "*\\AutoShareServer")) and winlog.event_data.Details:"DWORD (0x00000000)"

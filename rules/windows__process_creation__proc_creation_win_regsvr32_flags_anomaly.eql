@@ -1,0 +1,1 @@
+any where (process.executable:"*\\regsvr32.exe" and process.command_line like~ ("* -i:*", "* /i:*", "* –i:*", "* —i:*", "* ―i:*")) and (not process.command_line like~ ("* -n *", "* /n *", "* –n *", "* —n *", "* ―n *"))

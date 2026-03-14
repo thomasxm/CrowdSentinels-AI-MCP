@@ -1,0 +1,1 @@
+any where process.pe.original_file_name:"gpg.exe" and (not (process.executable like~ ("*\\gpg.exe", "*\\gpg2.exe")))

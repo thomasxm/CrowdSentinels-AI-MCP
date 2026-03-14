@@ -1,0 +1,1 @@
+process.executable:*\\devtoolslauncher.exe AND process.command_line:*LaunchForDeploy*

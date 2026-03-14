@@ -1,0 +1,1 @@
+any where (process.executable:"*\\wsl.exe" or process.pe.original_file_name:"wsl") and (process.command_line like~ ("* --install *", "* -i *")) and process.command_line:"*kali*"

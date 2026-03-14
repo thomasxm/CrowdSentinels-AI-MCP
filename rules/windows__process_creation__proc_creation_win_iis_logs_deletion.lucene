@@ -1,0 +1,1 @@
+((process.executable:(*\\cmd.exe OR *\\powershell_ise.exe OR *\\powershell.exe OR *\\pwsh.exe)) OR (process.pe.original_file_name:(cmd.exe OR powershell.exe OR powershell_ise.exe OR pwsh.dll))) AND (process.command_line:(*del\ * OR *erase\ * OR *rm\ * OR *remove\-item\ * OR *rmdir\ *)) AND process.command_line:*\\inetpub\\logs\*

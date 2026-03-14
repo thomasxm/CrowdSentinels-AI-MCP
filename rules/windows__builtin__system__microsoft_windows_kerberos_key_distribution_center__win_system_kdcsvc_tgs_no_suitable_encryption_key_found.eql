@@ -1,0 +1,1 @@
+any where winlog.channel:"System" and ((winlog.provider_name like~ ("Kerberos-Key-Distribution-Center", "Microsoft-Windows-Kerberos-Key-Distribution-Center")) and (event.code like~ ("16", "27")))

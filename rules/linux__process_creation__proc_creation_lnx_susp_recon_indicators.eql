@@ -1,0 +1,1 @@
+any where CommandLine like~ ("* -name .htpasswd*", "* -perm -4000 *")

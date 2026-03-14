@@ -1,0 +1,1 @@
+any where Image:"*/sudo" and (CommandLine like~ ("* --chroot *", "*sudo -R *"))

@@ -1,0 +1,1 @@
+(type:PATH AND name:*\/.*) AND (NOT (name:(*\/.cache\/* OR *\/.config\/* OR *\/.pyenv\/* OR *\/.rustup\/toolchains*)))

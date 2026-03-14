@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\Serv-U.exe" and (process.executable like~ ("*\\cmd.exe", "*\\powershell.exe", "*\\pwsh.exe", "*\\wscript.exe", "*\\cscript.exe", "*\\sh.exe", "*\\bash.exe", "*\\schtasks.exe", "*\\regsvr32.exe", "*\\wmic.exe", "*\\mshta.exe", "*\\rundll32.exe", "*\\msiexec.exe", "*\\forfiles.exe", "*\\scriptrunner.exe"))

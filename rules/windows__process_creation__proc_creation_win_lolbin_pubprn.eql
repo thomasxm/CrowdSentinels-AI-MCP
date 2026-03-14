@@ -1,0 +1,1 @@
+any where process.command_line:"*\\pubprn.vbs*" and process.command_line:"*script:*"

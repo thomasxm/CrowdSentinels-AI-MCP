@@ -1,0 +1,1 @@
+any where winlog.channel:"Application" and (event.code:"524" and winlog.provider_name:"Microsoft-Windows-Backup")

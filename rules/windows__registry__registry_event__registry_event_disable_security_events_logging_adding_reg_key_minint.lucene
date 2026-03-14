@@ -1,0 +1,1 @@
+(registry.path:HKLM\\SYSTEM\\CurrentControlSet\\Control\\MiniNt AND winlog.event_data.EventType:CreateKey) OR winlog.event_data.NewName:HKLM\\SYSTEM\\CurrentControlSet\\Control\\MiniNt

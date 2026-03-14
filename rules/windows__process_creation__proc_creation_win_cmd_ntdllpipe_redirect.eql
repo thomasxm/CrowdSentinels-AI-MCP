@@ -1,0 +1,1 @@
+any where process.command_line like~ ("*type %windir%\\system32\\ntdll.dll*", "*type %systemroot%\\system32\\ntdll.dll*", "*type c:\\windows\\system32\\ntdll.dll*", "*\\ntdll.dll > \\.\\pipe\*")

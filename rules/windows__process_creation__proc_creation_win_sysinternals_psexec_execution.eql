@@ -1,0 +1,1 @@
+any where process.executable:"*\\psexec.exe" or process.pe.original_file_name:"psexec.c"

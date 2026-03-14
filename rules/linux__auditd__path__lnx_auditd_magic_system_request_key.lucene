@@ -1,0 +1,1 @@
+type:PATH AND (name:(*\/sysrq OR *\/sysctl.conf OR *\/sysrq\-trigger))

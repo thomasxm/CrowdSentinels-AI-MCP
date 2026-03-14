@@ -1,0 +1,1 @@
+process.executable:*\\colorcpl.exe AND (NOT (file.path:(*.icm OR *.gmmp OR *.cdmp OR *.camp)))

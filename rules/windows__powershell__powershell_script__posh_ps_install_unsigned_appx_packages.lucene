@@ -1,0 +1,1 @@
+(powershell.file.script_block_text:(*Add\-AppPackage\ * OR *Add\-AppxPackage\ *)) AND powershell.file.script_block_text:*\ \-AllowUnsigned*

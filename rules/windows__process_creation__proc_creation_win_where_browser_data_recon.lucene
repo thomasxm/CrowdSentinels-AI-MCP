@@ -1,0 +1,1 @@
+(process.executable:*\\where.exe OR process.pe.original_file_name:where.exe) AND (process.command_line:(*places.sqlite* OR *cookies.sqlite* OR *formhistory.sqlite* OR *logins.json* OR *key4.db* OR *key3.db* OR *sessionstore.jsonlz4* OR *History* OR *Bookmarks* OR *Cookies* OR *Login\ Data*))

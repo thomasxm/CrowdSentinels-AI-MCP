@@ -1,0 +1,1 @@
+file.path:*\\AVKkid.dll AND (NOT ((process.executable:(*C\:\\Program\ Files\ \(x86\)\\G\ DATA\* OR *C\:\\Program\ Files\\G\ DATA\*)) AND process.executable:*\\AVKKid.exe AND (file.path:(C\:\\Program\ Files\ \(x86\)\\G\ DATA\* OR C\:\\Program\ Files\\G\ DATA\*))))

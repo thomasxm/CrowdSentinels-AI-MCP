@@ -1,0 +1,1 @@
+process.executable:*\\sftp.exe AND (process.command_line:(*\ \-D\ ..* OR *\ \-D\ C\:\*))

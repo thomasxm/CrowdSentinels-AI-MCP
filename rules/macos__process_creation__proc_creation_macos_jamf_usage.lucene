@@ -1,0 +1,1 @@
+Image:*\/jamf AND (CommandLine:(*createAccount* OR *manage* OR *removeFramework* OR *removeMdmProfile* OR *resetPassword* OR *setComputerName*))

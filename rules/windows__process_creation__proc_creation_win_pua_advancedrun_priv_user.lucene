@@ -1,0 +1,1 @@
+(process.command_line:(*\/EXEFilename* OR *\/CommandLine*)) AND ((process.command_line:(*\ \/RunAs\ 8\ * OR *\ \/RunAs\ 4\ * OR *\ \/RunAs\ 10\ * OR *\ \/RunAs\ 11\ *)) OR (process.command_line:(*\/RunAs\ 8 OR *\/RunAs\ 4 OR *\/RunAs\ 10 OR *\/RunAs\ 11)))

@@ -1,0 +1,1 @@
+any where file.path:"*\\ntds.dit" and ((process.parent.executable like~ ("*\\cscript.exe", "*\\httpd.exe", "*\\nginx.exe", "*\\php-cgi.exe", "*\\powershell.exe", "*\\pwsh.exe", "*\\w3wp.exe", "*\\wscript.exe")) or (process.parent.executable like~ ("*\\apache*", "*\\tomcat*", "*\\AppData\*", "*\\Temp\*", "*\\Public\*", "*\\PerfLogs\*")))

@@ -1,0 +1,1 @@
+any where winlog.event_data.Hashes:"*MD5=09D278F9DE118EF09163C6140255C690*" or process.command_line:"*Dumpert.dll*"

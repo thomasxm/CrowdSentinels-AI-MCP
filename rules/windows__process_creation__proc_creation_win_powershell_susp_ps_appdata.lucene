@@ -1,0 +1,1 @@
+(process.command_line:(*powershell.exe* OR *\\powershell* OR *\\pwsh* OR *pwsh.exe*)) AND ((process.command_line:*\/c\ * AND process.command_line:*\\AppData\*) AND (process.command_line:(*Local\* OR *Roaming\*)))

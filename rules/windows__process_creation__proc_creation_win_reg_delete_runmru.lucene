@@ -1,0 +1,1 @@
+(process.executable:*\\reg.exe OR process.pe.original_file_name:reg.exe) AND (process.command_line:*\ del* AND process.command_line:*\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\RunMRU*)

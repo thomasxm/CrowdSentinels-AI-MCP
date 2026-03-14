@@ -1,0 +1,1 @@
+any where process.executable:"*\\scrcons.exe" and (file.path like~ ("*\\vbscript.dll", "*\\wbemdisp.dll", "*\\wshom.ocx", "*\\scrrun.dll"))

@@ -1,0 +1,1 @@
+TargetFilename:*\/etc\/profile.d\/* AND (TargetFilename:(*.csh OR *.sh))

@@ -1,0 +1,1 @@
+any where (process.parent.executable:"*\\stordiag.exe" and (process.executable like~ ("*\\schtasks.exe", "*\\systeminfo.exe", "*\\fltmc.exe"))) and (not (process.parent.executable like~ ("c:\\windows\\system32\*", "c:\\windows\\syswow64\*")))

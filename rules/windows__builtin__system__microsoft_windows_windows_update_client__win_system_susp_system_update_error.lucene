@@ -1,0 +1,1 @@
+winlog.channel:System AND (winlog.provider_name:Microsoft\-Windows\-WindowsUpdateClient AND (event.code:(16 OR 20 OR 24 OR 213 OR 217)))

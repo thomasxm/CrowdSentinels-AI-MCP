@@ -1,0 +1,1 @@
+any where properties.message like~ ("Delete device", "Delete device configuration", "Update device", "Update device configuration")

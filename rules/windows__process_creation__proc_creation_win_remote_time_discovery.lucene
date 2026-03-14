@@ -1,0 +1,1 @@
+((process.executable:(*\\net.exe OR *\\net1.exe)) AND process.command_line:*time*) OR (process.executable:*\\w32tm.exe AND process.command_line:*tz*)

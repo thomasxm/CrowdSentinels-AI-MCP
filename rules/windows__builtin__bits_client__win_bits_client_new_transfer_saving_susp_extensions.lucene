@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-Bits\-Client\/Operational AND ((event.code:16403 AND (winlog.event_data.LocalName:(*.bat OR *.dll OR *.exe OR *.hta OR *.ps1 OR *.psd1 OR *.sh OR *.vbe OR *.vbs))) AND (NOT (winlog.event_data.LocalName:*\\AppData\* AND winlog.event_data.RemoteName:*.com*)))

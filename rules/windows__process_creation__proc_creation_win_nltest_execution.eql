@@ -1,0 +1,1 @@
+any where process.executable:"*\\nltest.exe" or process.pe.original_file_name:"nltestrk.exe"

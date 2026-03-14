@@ -1,0 +1,1 @@
+process.command_line:*\/factory,\{75dff2b7\-6936\-4c06\-a8bb\-676a7b00b24b\}* OR (process.command_line:*explorer.exe* AND process.command_line:(*\ \-root,* OR *\ \/root,* OR *\ –root,* OR *\ —root,* OR *\ ―root,*))

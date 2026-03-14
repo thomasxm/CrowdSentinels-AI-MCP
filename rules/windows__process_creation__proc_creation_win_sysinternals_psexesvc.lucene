@@ -1,0 +1,1 @@
+process.executable:C\:\\Windows\\PSEXESVC.exe OR process.pe.original_file_name:psexesvc.exe

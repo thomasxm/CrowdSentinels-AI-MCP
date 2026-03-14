@@ -1,0 +1,1 @@
+(process.executable:*\\advanced_port_scanner* OR process.pe.original_file_name:*advanced_port_scanner* OR process.pe.description:*Advanced\ Port\ Scanner*) OR (process.command_line:*\/portable* AND process.command_line:*\/lng*)

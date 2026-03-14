@@ -1,0 +1,1 @@
+any where (process.executable:"*\\wmic.exe" or process.pe.original_file_name:"wmic.exe" or (winlog.event_data.Hashes like~ ("*IMPHASH=1B1A3F43BF37B5BFE60751F2EE2F326E*", "*IMPHASH=37777A96245A3C74EB217308F3546F4C*", "*IMPHASH=9D87C9D67CE724033C0B40CC4CA1B206*"))) and (process.command_line:"*format:*" and process.command_line:"*http*")

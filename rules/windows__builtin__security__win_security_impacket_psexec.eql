@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and (event.code:"5145" and winlog.event_data.ShareName:"\\\*\\IPC$" and (winlog.event_data.RelativeTargetName like~ ("*RemCom_stdin*", "*RemCom_stdout*", "*RemCom_stderr*")))

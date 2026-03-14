@@ -1,0 +1,1 @@
+any where file.path:"*\\libvlc.dll" and (not (file.path like~ ("C:\\Program Files (x86)\\VideoLAN\\VLC\*", "C:\\Program Files\\VideoLAN\\VLC\*")))

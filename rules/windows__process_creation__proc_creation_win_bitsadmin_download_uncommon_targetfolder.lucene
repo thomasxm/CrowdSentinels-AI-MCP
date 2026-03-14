@@ -1,0 +1,1 @@
+(process.executable:*\\bitsadmin.exe OR process.pe.original_file_name:bitsadmin.exe) AND (process.command_line:(*\ \/transfer\ * OR *\ \/create\ * OR *\ \/addfile\ *)) AND (process.command_line:(*%AppData%* OR *%temp%* OR *%tmp%* OR *\\AppData\\Local\* OR *C\:\\Windows\\Temp\*))

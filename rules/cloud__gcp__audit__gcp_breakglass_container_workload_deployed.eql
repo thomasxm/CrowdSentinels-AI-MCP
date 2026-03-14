@@ -1,0 +1,1 @@
+any where (data.protoPayload.resource.type:"k8s_cluster" and (data.protoPayload.logName like~ ("cloudaudit.googleapis.com/activity", "cloudaudit.googleapis.com%2Factivity")) and data.protoPayload.methodName:"io.k8s.core.v1.pods.create") and "image-policy.k8s.io/break-glass"

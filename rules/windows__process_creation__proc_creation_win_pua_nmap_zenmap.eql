@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\nmap.exe", "*\\zennmap.exe")) or (process.pe.original_file_name like~ ("nmap.exe", "zennmap.exe"))

@@ -1,0 +1,1 @@
+any where process.executable:"*\\sqldumper.exe" and (process.command_line like~ ("*0x0110*", "*0x01100:40*"))

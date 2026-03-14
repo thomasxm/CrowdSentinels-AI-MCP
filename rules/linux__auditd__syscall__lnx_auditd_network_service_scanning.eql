@@ -1,0 +1,1 @@
+any where type:"SYSCALL" and (exe like~ ("*/telnet", "*/nmap", "*/netcat", "*/nc", "*/ncat", "*/nc.openbsd")) and key:"network_connect_4"

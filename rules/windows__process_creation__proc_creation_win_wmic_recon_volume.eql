@@ -1,0 +1,1 @@
+any where (process.executable:"*\\WMIC.exe" or process.pe.original_file_name:"wmic.exe") and ((process.command_line like~ ("* volumename*", "* logicaldisk*")) or (process.command_line:"*path*" and process.command_line:"*win32_logicaldisk*") or (process.command_line:"* volume*" and process.command_line:"* list *"))

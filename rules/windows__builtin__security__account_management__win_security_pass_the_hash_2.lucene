@@ -1,0 +1,1 @@
+winlog.channel:Security AND (((event.code:4624 AND user.id:S\-1\-0\-0 AND winlog.event_data.LogonType:3 AND winlog.event_data.LogonProcessName:NtLmSsp AND winlog.event_data.KeyLength:0) OR (event.code:4624 AND winlog.event_data.LogonType:9 AND winlog.event_data.LogonProcessName:seclogo)) AND (NOT winlog.event_data.TargetUserName:ANONYMOUS\ LOGON))

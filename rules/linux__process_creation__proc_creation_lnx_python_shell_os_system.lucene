@@ -1,0 +1,1 @@
+((Image:(*\/python OR *\/python2 OR *\/python3)) OR (Image:(*\/python2.* OR *\/python3.*))) AND ((CommandLine:*\ \-c\ * AND CommandLine:*os.system\(*) AND (CommandLine:(*\/bin\/bash* OR *\/bin\/dash* OR *\/bin\/fish* OR *\/bin\/sh* OR *\/bin\/zsh*)))

@@ -1,0 +1,1 @@
+(powershell.file.script_block_text:(*get\-localgroup\ * OR *get\-localgroupmember\ *)) OR ((powershell.file.script_block_text:(*get\-wmiobject\ * OR *gwmi\ * OR *get\-ciminstance\ * OR *gcim\ *)) AND powershell.file.script_block_text:*win32_group*)

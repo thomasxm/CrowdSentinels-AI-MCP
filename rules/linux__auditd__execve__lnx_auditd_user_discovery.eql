@@ -1,0 +1,1 @@
+any where type:"EXECVE" and (a0 like~ ("hostname", "id", "last", "uname", "users", "w", "who", "whoami"))

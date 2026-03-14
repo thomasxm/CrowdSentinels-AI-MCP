@@ -1,0 +1,1 @@
+winlog.event_data.TargetImage:*\\lsass.exe AND process.executable:*dump* AND (winlog.event_data.GrantedAccess:(*10 OR *30 OR *50 OR *70 OR *90 OR *B0 OR *D0 OR *F0 OR *18 OR *38 OR *58 OR *78 OR *98 OR *B8 OR *D8 OR *F8 OR *1A OR *3A OR *5A OR *7A OR *9A OR *BA OR *DA OR *FA OR *0x14C2 OR *FF))

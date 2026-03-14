@@ -1,0 +1,1 @@
+any where Image:"*/bash" and (CommandLine:"*tail*" and CommandLine:"*-c*") and (CommandLine:"*base64*" and CommandLine:"*-d*" and CommandLine:"*>*") and (CommandLine like~ ("*.avif*", "*.gif*", "*.jfif*", "*.jpeg*", "*.jpg*", "*.pjp*", "*.pjpeg*", "*.png*", "*.svg*", "*.webp*"))

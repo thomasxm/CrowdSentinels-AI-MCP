@@ -1,0 +1,1 @@
+any where (process.command_line:"*taskkill *" and process.command_line:"*RaccineSettings.exe*") or (process.command_line:"*reg.exe*" and process.command_line:"*delete*" and process.command_line:"*Raccine Tray*") or (process.command_line:"*schtasks*" and process.command_line:"*/DELETE*" and process.command_line:"*Raccine Rules Updater*")

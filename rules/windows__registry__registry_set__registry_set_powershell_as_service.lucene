@@ -1,0 +1,1 @@
+registry.path:*\\Services\* AND registry.path:*\\ImagePath AND (winlog.event_data.Details:(*powershell* OR *pwsh*))

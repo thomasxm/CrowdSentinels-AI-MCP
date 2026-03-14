@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:4656 AND process.executable:*\\lsass.exe AND winlog.event_data.AccessMask:0x705 AND winlog.event_data.ObjectType:SAM_DOMAIN)

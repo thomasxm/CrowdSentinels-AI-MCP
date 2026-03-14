@@ -1,0 +1,1 @@
+any where (process.executable:"*\\protocolhandler.exe" or process.pe.original_file_name:"ProtocolHandler.exe") and (process.command_line like~ ("*ftp://*", "*http://*", "*https://*"))

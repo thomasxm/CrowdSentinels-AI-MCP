@@ -1,0 +1,1 @@
+any where ((path:"*\\*" and path:"*\\IPC$*") and (name like~ ("*-stdin", "*-stdout", "*-stderr"))) and (not name:"PSEXESVC*")

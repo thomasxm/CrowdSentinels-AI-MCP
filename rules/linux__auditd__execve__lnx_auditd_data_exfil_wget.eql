@@ -1,0 +1,1 @@
+any where type:"EXECVE" and a0:"wget" and a1:"--post-file=*"

@@ -1,0 +1,1 @@
+any where registry.path:"*Software\\Classes\\exefile\\shell\\runas\\command\\isolatedCommand" or (registry.path:"*Software\\Classes\\Folder\\shell\\open\\command\\SymbolicLinkValue" and winlog.event_data.Details:"SigmaRegularExpression(regexp=SigmaString(['-1[0-9]{3}\\\\Software\\\\Classes\\\\']), flags=set())")

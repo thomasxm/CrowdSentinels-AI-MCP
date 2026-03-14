@@ -1,0 +1,1 @@
+winlog.channel:System AND (event.code:7036 AND winlog.provider_name:Service\ Control\ Manager AND (winlog.event_data.param1:(Windows\ Defender\ Antivirus\ Service OR Service\ antivirus\ Microsoft\ Defender)) AND (winlog.event_data.param2:(stopped OR arrêté)))

@@ -1,0 +1,1 @@
+(type:PATH AND (name:(\/etc\/lsb\-release OR \/etc\/redhat\-release OR \/etc\/issue))) OR (type:EXECVE AND (a0:(uname OR uptime OR lsmod OR hostname OR env))) OR (type:EXECVE AND a0:grep AND (a1:(*vbox* OR *vm* OR *xen* OR *virtio* OR *hv*))) OR (type:EXECVE AND a0:kmod AND a1:list)

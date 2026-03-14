@@ -1,0 +1,1 @@
+any where process.executable:"*\\sysprep.exe" and process.command_line:"*\\AppData\*"

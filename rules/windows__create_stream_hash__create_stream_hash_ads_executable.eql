@@ -1,0 +1,1 @@
+any where winlog.event_data.Hash:"*IMPHASH=*" and (not winlog.event_data.Hash:"*IMPHASH=00000000000000000000000000000000*")

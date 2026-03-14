@@ -1,0 +1,1 @@
+(process.command_line:*\-u\ * AND process.command_line:*\-p\ *) AND (process.command_line:(*\^USER\^* OR *\^PASS\^*))

@@ -1,0 +1,1 @@
+process.executable:*\\winget.exe AND registry.path:\\REGISTRY\\A\* AND registry.path:*\\LocalState\\admin_settings

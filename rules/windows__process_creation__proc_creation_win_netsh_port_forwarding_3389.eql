@@ -1,0 +1,1 @@
+any where (process.executable:"*\\netsh.exe" or process.pe.original_file_name:"netsh.exe") and (process.command_line:"* i*" and process.command_line:"* p*" and process.command_line:"*=3389*" and process.command_line:"* c*")

@@ -1,0 +1,1 @@
+any where registry.path:"*\\Services\*" and registry.path:"*\\ImagePath" and (winlog.event_data.Details like~ ("*powershell*", "*pwsh*"))

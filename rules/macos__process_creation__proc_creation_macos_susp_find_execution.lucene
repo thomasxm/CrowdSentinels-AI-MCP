@@ -1,0 +1,1 @@
+Image:*\/find AND (CommandLine:(*\-perm\ \-4000* OR *\-perm\ \-2000* OR *\-perm\ 0777* OR *\-perm\ \-222* OR *\-perm\ \-o\ w* OR *\-perm\ \-o\ x* OR *\-perm\ \-u\=s* OR *\-perm\ \-g\=s*))

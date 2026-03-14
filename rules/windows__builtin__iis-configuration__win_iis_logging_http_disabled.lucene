@@ -1,0 +1,1 @@
+event.code:29 AND winlog.event_data.Configuration:\/system.webServer\/httpLogging\/@dontLog AND winlog.event_data.NewValue:true

@@ -1,0 +1,1 @@
+any where (process.executable:"*\\fxssvc.exe" and file.path:"*ualapi.dll") and (not file.path:"C:\\Windows\\WinSxS\*")

@@ -1,0 +1,1 @@
+any where process.command_line:"*Set-MpPreference*" and (process.command_line like~ ("*-LowThreatDefaultAction*", "*-ModerateThreatDefaultAction*", "*-HighThreatDefaultAction*", "*-SevereThreatDefaultAction*", "*-ltdefac *", "*-mtdefac *", "*-htdefac *", "*-stdefac *")) and (process.command_line like~ ("*Allow*", "*6*", "*NoAction*", "*9*"))

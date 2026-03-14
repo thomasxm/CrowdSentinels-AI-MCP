@@ -1,0 +1,1 @@
+registry.path:*\\SOFTWARE\\Microsoft\\Windows\ NT\\CurrentVersion\\AppCompatFlags\\Custom\* AND (registry.path:(*\\csrss.exe OR *\\dllhost.exe OR *\\explorer.exe OR *\\RuntimeBroker.exe OR *\\services.exe OR *\\sihost.exe OR *\\svchost.exe OR *\\taskhostw.exe OR *\\winlogon.exe OR *\\WmiPrvSe.exe))

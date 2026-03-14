@@ -1,0 +1,1 @@
+winlog.channel:Security AND ((event.code:4624 AND winlog.event_data.LogonType:3 AND winlog.event_data.AuthenticationPackageName:Kerberos AND source.ip:127.0.0.1 AND winlog.event_data.TargetUserSid:S\-1\-5\-21\-* AND winlog.event_data.TargetUserSid:*\-500) AND (NOT source.port:0))

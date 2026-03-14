@@ -1,0 +1,1 @@
+Image:*\/chmod AND (CommandLine:(*\/tmp\/* OR *\/.Library\/* OR *\/etc\/* OR *\/opt\/*))

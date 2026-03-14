@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:5156 AND ((source.port:3389 AND (destination.ip:(127.* OR \:\:1))) OR (destination.port:3389 AND (source.ip:(127.* OR \:\:1)))) AND (NOT (winlog.event_data.FilterOrigin:AppContainer\ Loopback OR (process.executable:(*\\thor.exe OR *\\thor64.exe)))))

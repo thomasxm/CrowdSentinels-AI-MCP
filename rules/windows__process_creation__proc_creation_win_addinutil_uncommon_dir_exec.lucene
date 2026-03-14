@@ -1,0 +1,1 @@
+(process.executable:*\\addinutil.exe OR process.pe.original_file_name:AddInUtil.exe) AND (NOT (process.executable:(*\:\\Windows\\Microsoft.NET\\Framework\* OR *\:\\Windows\\Microsoft.NET\\Framework64\* OR *\:\\Windows\\Microsoft.NET\\FrameworkArm\* OR *\:\\Windows\\Microsoft.NET\\FrameworkArm64\* OR *\:\\Windows\\WinSxS\*)))

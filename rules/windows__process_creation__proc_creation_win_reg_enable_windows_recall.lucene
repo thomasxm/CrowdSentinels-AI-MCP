@@ -1,0 +1,1 @@
+(process.executable:*\\reg.exe OR process.pe.original_file_name:reg.exe) AND (process.command_line:*Microsoft\\Windows\\WindowsAI* AND process.command_line:*DisableAIDataAnalysis*) AND ((process.command_line:(*add* OR *0*)) OR process.command_line:*delete*)

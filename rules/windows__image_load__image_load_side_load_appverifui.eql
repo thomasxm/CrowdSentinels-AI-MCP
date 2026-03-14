@@ -1,0 +1,1 @@
+any where file.path:"*\\appverifUI.dll" and (not ((process.executable like~ ("C:\\Windows\\SysWOW64\\appverif.exe", "C:\\Windows\\System32\\appverif.exe")) and (file.path like~ ("C:\\Windows\\System32\*", "C:\\Windows\\SysWOW64\*", "C:\\Windows\\WinSxS\*"))))

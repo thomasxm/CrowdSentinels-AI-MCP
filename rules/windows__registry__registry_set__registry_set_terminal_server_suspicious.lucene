@@ -1,0 +1,1 @@
+(registry.path:(*\\fDenyTSConnections OR *\\fSingleSessionPerUser OR *\\UserAuthentication)) AND winlog.event_data.Details:DWORD\ \(0x00000000\)

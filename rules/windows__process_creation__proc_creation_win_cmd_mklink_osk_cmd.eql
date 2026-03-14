@@ -1,0 +1,1 @@
+any where (process.executable:"*\\cmd.exe" or process.pe.original_file_name:"Cmd.Exe") and (process.command_line:"*mklink*" and process.command_line:"*\\osk.exe*" and process.command_line:"*\\cmd.exe*")

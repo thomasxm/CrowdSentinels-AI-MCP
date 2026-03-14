@@ -1,0 +1,1 @@
+registry.path:*\\SOFTWARE\\Microsoft\\Windows\ NT\\CurrentVersion\\AppCompatFlags\\Layers\* AND winlog.event_data.Details:*REGISTERAPPRESTART*

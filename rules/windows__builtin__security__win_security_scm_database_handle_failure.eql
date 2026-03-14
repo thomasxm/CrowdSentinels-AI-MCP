@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and ((event.code:"4656" and winlog.event_data.ObjectType:"SC_MANAGER OBJECT" and winlog.event_data.ObjectName:"ServicesActive" and winlog.event_data.AccessMask:"0xf003f") and (not winlog.logon.id:"0x3e4"))

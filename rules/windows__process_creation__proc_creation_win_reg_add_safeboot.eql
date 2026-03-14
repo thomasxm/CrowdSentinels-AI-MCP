@@ -1,0 +1,1 @@
+any where (process.executable:"*\\reg.exe" or process.pe.original_file_name:"reg.exe") and process.command_line:"*\\SYSTEM\\CurrentControlSet\\Control\\SafeBoot*" and (process.command_line like~ ("* copy *", "* add *"))

@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*New\-Object* AND powershell.file.script_block_text:*\-ComObject* AND powershell.file.script_block_text:*MsXml2.* AND powershell.file.script_block_text:*XmlHttp*

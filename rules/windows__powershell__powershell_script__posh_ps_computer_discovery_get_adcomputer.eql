@@ -1,0 +1,1 @@
+any where (powershell.file.script_block_text:"*Get-ADComputer *" and powershell.file.script_block_text:"* -Filter \**") and (powershell.file.script_block_text like~ ("* | Select *", "*Out-File*", "*Set-Content*", "*Add-Content*"))

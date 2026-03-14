@@ -1,0 +1,1 @@
+any where (process.pe.original_file_name:"MpCmdRun.exe" or process.executable:"*\\MpCmdRun.exe" or process.command_line:"*MpCmdRun.exe*" or process.pe.description:"Microsoft Malware Protection Command Line Utility") and (process.command_line:"*DownloadFile*" and process.command_line:"*url*")

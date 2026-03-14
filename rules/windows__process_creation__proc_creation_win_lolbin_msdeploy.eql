@@ -1,0 +1,1 @@
+any where (process.command_line:"*verb:sync*" and process.command_line:"*-source:RunCommand*" and process.command_line:"*-dest:runCommand*") and process.executable:"*\\msdeploy.exe"

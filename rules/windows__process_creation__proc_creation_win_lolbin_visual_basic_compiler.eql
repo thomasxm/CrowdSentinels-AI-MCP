@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\vbc.exe" and process.executable:"*\\cvtres.exe"

@@ -1,0 +1,1 @@
+any where (process.executable:"*\\advanced_port_scanner*" or process.pe.original_file_name:"*advanced_port_scanner*" or process.pe.description:"*Advanced Port Scanner*") or (process.command_line:"*/portable*" and process.command_line:"*/lng*")

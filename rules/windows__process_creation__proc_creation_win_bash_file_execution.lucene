@@ -1,0 +1,1 @@
+((process.executable:(*\:\\Windows\\System32\\bash.exe OR *\:\\Windows\\SysWOW64\\bash.exe)) OR process.pe.original_file_name:Bash.exe) AND (NOT ((process.command_line:(*bash.exe\ \-* OR *bash\ \-*)) OR process.command_line:\<sigma.types.SigmaNull\ object\ at\ 0x7fc27a25d010\> OR process.command_line:"" OR (process.command_line:(bash.exe OR bash))))

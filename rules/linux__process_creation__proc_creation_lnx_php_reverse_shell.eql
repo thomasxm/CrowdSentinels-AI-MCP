@@ -1,0 +1,1 @@
+any where Image:"*/php*" and (CommandLine:"* -r *" and CommandLine:"*fsockopen*") and (CommandLine like~ ("*ash*", "*bash*", "*bsh*", "*csh*", "*ksh*", "*pdksh*", "*sh*", "*tcsh*", "*zsh*"))

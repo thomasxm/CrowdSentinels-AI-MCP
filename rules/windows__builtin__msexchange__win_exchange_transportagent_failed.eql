@@ -1,0 +1,1 @@
+any where winlog.channel:"MSExchange Management" and (event.code:"6" and winlog.event_data.Data:"*Install-TransportAgent*")

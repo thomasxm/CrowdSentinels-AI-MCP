@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-Windows\ Defender\/Operational AND (event.code:(1006 OR 1015 OR 1116 OR 1117))

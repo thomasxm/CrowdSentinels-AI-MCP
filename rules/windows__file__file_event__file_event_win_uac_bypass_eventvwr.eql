@@ -1,0 +1,1 @@
+any where (file.path like~ ("*\\Microsoft\\Event Viewer\\RecentViews", "*\\Microsoft\\EventV~1\\RecentViews")) and (not (process.executable like~ ("C:\\Windows\\System32\*", "C:\\Windows\\SysWOW64\*")))

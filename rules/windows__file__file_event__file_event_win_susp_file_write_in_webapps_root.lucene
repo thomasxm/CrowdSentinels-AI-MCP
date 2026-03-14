@@ -1,0 +1,1 @@
+(process.executable:(*\\dotnet.exe OR *\\w3wp.exe OR *\\java.exe)) AND (file.path:(*\\apache* OR *\\tomcat*)) AND file.path:*\\webapps\\ROOT\* AND file.path:*.jsp

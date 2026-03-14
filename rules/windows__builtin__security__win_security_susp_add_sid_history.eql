@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and ((event.code like~ ("4765", "4766")) or (event.code:"4738" and (not (winlog.event_data.SidHistory like~ ("-", "%%1793"))) and (not winlog.event_data.SidHistory:"<sigma.types.SigmaNull object at 0x7fa969afcd70>")))

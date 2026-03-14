@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-Diagnosis\-Scripted\/Operational AND (event.code:101 AND winlog.event_data.PackagePath:*\\*)

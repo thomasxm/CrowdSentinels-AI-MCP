@@ -1,0 +1,1 @@
+winlog.channel:Application AND (winlog.provider_name:Microsoft\-Windows\-SoftwareRestrictionPolicies AND (event.code:(865 OR 866 OR 867 OR 868 OR 882)))

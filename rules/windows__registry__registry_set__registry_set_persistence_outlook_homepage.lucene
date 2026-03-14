@@ -1,0 +1,1 @@
+(registry.path:*\\Software\\Microsoft\\Office\* AND registry.path:*\\Outlook\\WebView\*) AND registry.path:*\\URL

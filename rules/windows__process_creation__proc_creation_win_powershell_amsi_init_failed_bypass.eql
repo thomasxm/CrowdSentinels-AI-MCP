@@ -1,0 +1,1 @@
+any where (process.command_line:"*System.Management.Automation.AmsiUtils*" and process.command_line:"*amsiInitFailed*") or (process.command_line:"*[Ref].Assembly.GetType*" and process.command_line:"*SetValue($null,$true)*" and process.command_line:"*NonPublic,Static*")

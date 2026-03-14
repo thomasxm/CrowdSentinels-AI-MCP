@@ -1,0 +1,1 @@
+any where (process.executable:"*\\lodctr.exe" and process.pe.original_file_name:"LODCTR.EXE") and process.command_line like~ ("* -r*", "* /r*", "* –r*", "* —r*", "* ―r*")

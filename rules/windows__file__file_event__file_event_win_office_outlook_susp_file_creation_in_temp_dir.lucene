@@ -1,0 +1,1 @@
+(file.path:(*.cpl OR *.hta OR *.iso OR *.rdp OR *.svg OR *.vba OR *.vbe OR *.vbs)) AND ((file.path:(*\\AppData\\Local\\Packages\\Microsoft.Outlook_* OR *\\AppData\\Local\\Microsoft\\Olk\\Attachments\*)) OR (file.path:*\\AppData\\Local\\Microsoft\\Windows\* AND file.path:*\\Content.Outlook\*))

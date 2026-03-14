@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and ((event.code:"4732" and (winlog.event_data.TargetUserName:"Administr*" or winlog.event_data.TargetSid:"S-1-5-32-544")) and (not user.name:"*$"))

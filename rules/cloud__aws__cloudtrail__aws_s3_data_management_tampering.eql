@@ -1,0 +1,1 @@
+any where eventSource:"s3.amazonaws.com" and (eventName like~ ("PutBucketLogging", "PutBucketWebsite", "PutEncryptionConfiguration", "PutLifecycleConfiguration", "PutReplicationConfiguration", "ReplicateObject", "RestoreObject"))

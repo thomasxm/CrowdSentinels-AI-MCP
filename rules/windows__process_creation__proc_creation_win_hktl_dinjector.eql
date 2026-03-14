@@ -1,0 +1,1 @@
+any where process.command_line:"* /am51*" and process.command_line:"* /password*"

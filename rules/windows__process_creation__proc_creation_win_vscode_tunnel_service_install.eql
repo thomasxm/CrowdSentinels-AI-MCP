@@ -1,0 +1,1 @@
+any where process.command_line:"*tunnel *" and process.command_line:"*service*" and process.command_line:"*internal-run*" and process.command_line:"*tunnel-service.log*"

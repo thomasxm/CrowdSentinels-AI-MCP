@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\rcedit-x64.exe", "*\\rcedit-x86.exe")) or process.pe.description:"Edit resources of exe" or process.pe.product:"rcedit") and process.command_line:"*--set-*" and (process.command_line like~ ("*OriginalFileName*", "*CompanyName*", "*FileDescription*", "*ProductName*", "*ProductVersion*", "*LegalCopyright*"))

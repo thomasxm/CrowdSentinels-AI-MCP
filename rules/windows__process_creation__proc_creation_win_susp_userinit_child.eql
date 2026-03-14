@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\userinit.exe" and (not (process.command_line:"*\\netlogon\*" or (process.executable:"*\\explorer.exe" or process.pe.original_file_name:"explorer.exe" or process.command_line:"C:\\Windows\\Explorer.EXE") or process.executable:"<sigma.types.SigmaNull object at 0x7fab94831160>"))

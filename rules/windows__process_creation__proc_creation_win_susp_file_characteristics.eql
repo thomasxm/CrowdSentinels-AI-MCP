@@ -1,0 +1,1 @@
+any where ((process.pe.description:"\?" and process.pe.file_version:"\?") or (process.pe.description:"\?" and process.pe.product:"\?") or (process.pe.description:"\?" and process.pe.company:"\?")) and process.executable:"*\\Downloads\*"

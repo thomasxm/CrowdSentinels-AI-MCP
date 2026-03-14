@@ -1,0 +1,1 @@
+any where ((process.executable:"*\\reg.exe" or process.pe.original_file_name:"reg.exe") and (process.command_line like~ ("*\\Control\\WMI\\Autologger\\DefenderApiLogger\\Start*", "*\\Control\\WMI\\Autologger\\DefenderAuditLogger\\Start*")) and (process.command_line:"*add*" and process.command_line:"*0*")) and (not process.command_line:"*0x00000001*")

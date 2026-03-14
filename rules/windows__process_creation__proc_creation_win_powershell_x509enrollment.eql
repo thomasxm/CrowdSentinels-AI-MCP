@@ -1,0 +1,1 @@
+any where process.command_line like~ ("*X509Enrollment.CBinaryConverter*", "*884e2002-217d-11da-b2a4-000e7bbb2b09*")

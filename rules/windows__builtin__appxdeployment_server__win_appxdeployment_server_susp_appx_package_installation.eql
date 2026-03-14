@@ -1,0 +1,1 @@
+any where winlog.channel:"Microsoft-Windows-AppXDeploymentServer/Operational" and (event.code:"401" and winlog.event_data.ErrorCode:"0x80073cff")

@@ -1,0 +1,1 @@
+any where process.command_line like~ ("* -n *", "* /n *", "* –n *", "* —n *", "* ―n *") and process.command_line:"*Nul*" and (process.command_line like~ ("* -f *", "* /f *", "* –f *", "* —f *", "* ―f *") or process.command_line like~ ("* -q *", "* /q *", "* –q *", "* —q *", "* ―q *")) and (process.command_line:"*ping*" and process.command_line:"*del *")

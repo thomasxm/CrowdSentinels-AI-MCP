@@ -1,0 +1,1 @@
+file.path:*\\MpSvc.dll AND (NOT (file.path:(C\:\\Program\ Files\\Windows\ Defender\* OR C\:\\ProgramData\\Microsoft\\Windows\ Defender\\Platform\* OR C\:\\Windows\\WinSxS\*)))

@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\excel.exe", "*\\mspub.exe", "*\\outlook.exe", "*\\onenote.exe", "*\\onenoteim.exe", "*\\powerpnt.exe", "*\\winword.exe")) and file.path:"*\\clr.dll*"

@@ -1,0 +1,1 @@
+powershell.file.script_block_text:(*if\(0\)\{\{\{0\}\}\}'\ \-f\ $\(0\ \-as\ \[char\]\)\ \+* OR *#\<NULL\>*)

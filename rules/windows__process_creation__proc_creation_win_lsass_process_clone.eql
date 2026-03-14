@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\Windows\\System32\\lsass.exe" and process.executable:"*\\Windows\\System32\\lsass.exe"

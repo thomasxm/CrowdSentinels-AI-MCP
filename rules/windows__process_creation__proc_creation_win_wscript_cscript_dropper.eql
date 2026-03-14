@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\wscript.exe", "*\\cscript.exe")) and (process.command_line like~ ("*:\\Temp\*", "*:\\Tmp\*", "*:\\Users\\Public\*", "*:\\Windows\\Temp\*", "*\\AppData\\Local\\Temp\*")) and (process.command_line like~ ("*.js*", "*.jse*", "*.vba*", "*.vbe*", "*.vbs*", "*.wsf*"))

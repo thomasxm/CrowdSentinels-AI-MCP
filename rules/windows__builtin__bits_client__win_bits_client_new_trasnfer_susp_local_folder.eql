@@ -1,0 +1,1 @@
+any where winlog.channel:"Microsoft-Windows-Bits-Client/Operational" and (event.code:"16403" and (winlog.event_data.LocalName like~ ("*\\Desktop\*", "*C:\\Users\\Public\*", "*C:\\PerfLogs\*")))

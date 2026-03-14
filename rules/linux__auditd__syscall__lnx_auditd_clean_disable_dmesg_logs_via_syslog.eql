@@ -1,0 +1,1 @@
+any where type:"SYSCALL" and SYSCALL:"syslog" and (a0 like~ (4, 5, 6))

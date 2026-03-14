@@ -1,0 +1,1 @@
+((Image:(*\/python OR *\/python2 OR *\/python3)) OR (Image:(*\/python2.* OR *\/python3.*))) AND (CommandLine:(*import\ pty* OR *from\ pty\ *)) AND CommandLine:*spawn*

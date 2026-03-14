@@ -1,0 +1,1 @@
+any where dns.question.name:"update.onelaunch.com" and process.executable:"*\\OneLaunch.exe"

@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*rundll32.exe* AND powershell.file.script_block_text:*shell32.dll* AND powershell.file.script_block_text:*shellexec_rundll* AND powershell.file.script_block_text:*powershell*

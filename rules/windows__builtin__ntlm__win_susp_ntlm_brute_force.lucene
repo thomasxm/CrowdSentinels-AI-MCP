@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-NTLM\/Operational AND (event.code:8004 AND (source.domain:(Rdesktop OR Remmina OR Freerdp OR Windows7 OR Windows8 OR Windows2012 OR Windows2016 OR Windows2019)))

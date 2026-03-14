@@ -1,0 +1,1 @@
+any where file.path:"*\\chrome_frame_helper.dll" and (not (file.path like~ ("C:\\Program Files\\Google\\Chrome\\Application\*", "C:\\Program Files (x86)\\Google\\Chrome\\Application\*"))) and (not file.path:"*\\AppData\\local\\Google\\Chrome\\Application\*")

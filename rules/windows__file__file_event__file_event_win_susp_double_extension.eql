@@ -1,0 +1,1 @@
+any where ((file.path like~ ("*.exe", "*.iso", "*.rar", "*.svg", "*.zip")) and (file.path like~ ("*.doc.*", "*.docx.*", "*.gif.*", "*.jpeg.*", "*.jpg.*", "*.mp3.*", "*.mp4.*", "*.pdf.*", "*.png.*", "*.ppt.*", "*.pptx.*", "*.rtf.*", "*.svg.*", "*.txt.*", "*.xls.*", "*.xlsx.*"))) or (file.path like~ ("*.rar.exe", "*.zip.exe"))

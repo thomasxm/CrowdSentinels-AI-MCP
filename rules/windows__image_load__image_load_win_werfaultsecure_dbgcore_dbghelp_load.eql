@@ -1,0 +1,1 @@
+any where process.executable:"*\\WerFaultSecure.exe" and (file.path like~ ("*\\dbgcore.dll", "*\\dbghelp.dll"))

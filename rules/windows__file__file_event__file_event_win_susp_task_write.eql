@@ -1,0 +1,1 @@
+any where file.path:"*\\Windows\\System32\\Tasks*" and (process.executable like~ ("*\\AppData\*", "*C:\\PerfLogs*", "*\\Windows\\System32\\config\\systemprofile*"))

@@ -1,0 +1,1 @@
+(process.executable:*\\w3wp.exe AND winlog.event_data.CommandLine:*MSExchange* AND (file.path:(*FrontEnd\\HttpProxy\* OR *\\inetpub\\wwwroot\\aspnet_client\*))) AND (file.path:(*.aspx OR *.asp OR *.ashx))

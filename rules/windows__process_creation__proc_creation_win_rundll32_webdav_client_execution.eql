@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\svchost.exe" and (process.executable:"*\\rundll32.exe" or process.pe.original_file_name:"RUNDLL32.EXE") and process.command_line:"*C:\\windows\\system32\\davclnt.dll,DavSetCookie*"

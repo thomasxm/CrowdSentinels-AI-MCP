@@ -1,0 +1,1 @@
+any where (process.command_line like~ ("*\\rundll32.exe", "*\\rundll32.exe\"", "*\\rundll32")) and (not (process.parent.executable like~ ("*\\AppData\\Local\*", "*\\Microsoft\\Edge\*")))

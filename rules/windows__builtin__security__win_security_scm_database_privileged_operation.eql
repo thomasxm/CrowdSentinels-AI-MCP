@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and ((event.code:"4674" and winlog.event_data.ObjectType:"SC_MANAGER OBJECT" and winlog.event_data.ObjectName:"servicesactive" and winlog.event_data.PrivilegeList:"SeTakeOwnershipPrivilege") and (not (winlog.logon.id:"0x3e4" and process.executable:"*:\\Windows\\System32\\services.exe")))

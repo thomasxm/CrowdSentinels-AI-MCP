@@ -1,0 +1,1 @@
+any where "Microsoft.DocumentDB/databaseAccounts/listKeys/action" or "Microsoft.Maps/accounts/listKeys/action" or "Microsoft.Media/mediaservices/listKeys/action" or "Microsoft.CognitiveServices/accounts/listKeys/action" or "Microsoft.Storage/storageAccounts/listKeys/action" or "Microsoft.Compute/snapshots/write" or "Microsoft.Network/networkSecurityGroups/write"

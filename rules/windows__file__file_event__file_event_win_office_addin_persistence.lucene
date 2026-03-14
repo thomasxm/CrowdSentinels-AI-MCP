@@ -1,0 +1,1 @@
+(file.path:*\\Microsoft\\Word\\Startup\* AND file.path:*.wll) OR (file.path:*\\Microsoft\\Excel\\Startup\* AND file.path:*.xll) OR (file.path:*Microsoft\\Excel\\XLSTART\* AND file.path:*.xlam) OR (file.path:*\\Microsoft\\Addins\* AND (file.path:(*.xlam OR *.xla OR *.ppam)))

@@ -1,0 +1,1 @@
+any where (file.path like~ ("*\\u202e*", "*[U+202E]*")) and (file.path like~ ("*3pm.*", "*4pm.*", "*cod.*", "*fdp.*", "*ftr.*", "*gepj.*", "*gnp.*", "*gpj.*", "*ism.*", "*lmth.*", "*nls.*", "*piz.*", "*slx.*", "*tdo.*", "*vsc.*", "*vwm.*", "*xcod.*", "*xslx.*", "*xtpp.*"))

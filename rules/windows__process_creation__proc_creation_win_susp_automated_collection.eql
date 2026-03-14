@@ -1,0 +1,1 @@
+any where (process.command_line like~ ("*.doc*", "*.docx*", "*.xls*", "*.xlsx*", "*.ppt*", "*.pptx*", "*.rtf*", "*.pdf*", "*.txt*")) and ((process.command_line:"*dir *" and process.command_line:"* /b *" and process.command_line:"* /s *") or (process.pe.original_file_name:"FINDSTR.EXE" and (process.command_line like~ ("* /e *", "* /si *"))))

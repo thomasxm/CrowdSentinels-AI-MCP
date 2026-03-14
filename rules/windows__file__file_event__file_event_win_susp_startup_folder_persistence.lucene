@@ -1,0 +1,1 @@
+file.path:*\\Windows\\Start\ Menu\\Programs\\Startup\* AND (file.path:(*.bat OR *.cmd OR *.dll OR *.hta OR *.jar OR *.js OR *.jse OR *.msi OR *.ps1 OR *.psd1 OR *.psm1 OR *.scr OR *.url OR *.vba OR *.vbe OR *.vbs OR *.wsf))

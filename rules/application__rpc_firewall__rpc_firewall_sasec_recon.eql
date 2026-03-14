@@ -1,0 +1,1 @@
+any where (EventLog:"RPCFW" and EventID:3 and InterfaceUuid:"378e52b0-c0a9-11cf-822d-00aa0051e40f") and (not (OpNum like~ (0, 1)))

@@ -1,0 +1,1 @@
+registry.path:*\\DisableHypervisorEnforcedPagingTranslation AND winlog.event_data.Details:DWORD\ \(0x00000001\)

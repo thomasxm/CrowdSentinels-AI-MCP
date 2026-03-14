@@ -1,0 +1,1 @@
+any where (process.executable:"*\\dism.exe" or process.pe.original_file_name:"DISM.EXE") and (process.command_line:"*WindowsPowerShellWebAccess*" and process.command_line:"*/online*" and process.command_line:"*/enable-feature*")

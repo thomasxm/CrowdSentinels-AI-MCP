@@ -1,0 +1,1 @@
+any where process.executable:"*\\powershell.exe" and (process.command_line:"*http://127.0.0.1*" and process.command_line:"*%{(IRM $_)}*" and process.command_line:"*Invoke*")

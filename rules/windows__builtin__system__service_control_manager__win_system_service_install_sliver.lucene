@@ -1,0 +1,1 @@
+winlog.channel:System AND ((winlog.provider_name:Service\ Control\ Manager AND event.code:7045) AND (winlog.event_data.ImagePath:SigmaRegularExpression\(regexp\=SigmaString\(\['\^\[a\-zA\-Z\]\:\\\\windows\\\\temp\\\\\[a\-zA\-Z0\-9\]\{10\}\\.exe'\]\),\ flags\=set\(\)\) OR (winlog.event_data.ServiceName:(Sliver OR Sliver\ implant))))

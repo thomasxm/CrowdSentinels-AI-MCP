@@ -1,0 +1,1 @@
+any where (process.executable:"*\\regsvr32.exe" or process.pe.original_file_name:"REGSVR32.EXE") and (not ((process.command_line like~ ("*.ax*", "*.cpl*", "*.dll*", "*.ocx*")) or process.command_line:"<sigma.types.SigmaNull object at 0x7f96d2c41160>" or process.command_line=="")) and (not (process.command_line like~ ("*.ppl*", "*.bav*")))

@@ -1,0 +1,1 @@
+winlog.channel:MSExchange\ Management AND *Install\-TransportAgent*

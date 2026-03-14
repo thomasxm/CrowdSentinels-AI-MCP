@@ -1,0 +1,1 @@
+(powershell.file.script_block_text:(*Get\-WmiObject* OR *gwmi*)) AND (powershell.file.script_block_text:(*MSAcpi_ThermalZoneTemperature* OR *Win32_ComputerSystem*))

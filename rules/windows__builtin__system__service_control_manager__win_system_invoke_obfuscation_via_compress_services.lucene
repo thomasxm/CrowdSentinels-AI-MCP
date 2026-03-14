@@ -1,0 +1,1 @@
+winlog.channel:System AND (winlog.provider_name:Service\ Control\ Manager AND event.code:7045 AND (winlog.event_data.ImagePath:*new\-object* AND winlog.event_data.ImagePath:*text.encoding\]\:\:ascii* AND winlog.event_data.ImagePath:*readtoend*) AND (winlog.event_data.ImagePath:(*\:system.io.compression.deflatestream* OR *system.io.streamreader*)))

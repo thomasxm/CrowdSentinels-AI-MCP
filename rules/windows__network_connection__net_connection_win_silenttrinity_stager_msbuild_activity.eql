@@ -1,0 +1,1 @@
+any where process.executable:"*\\msbuild.exe" and ((destination.port like~ (80, 443)) and network.direction:"true")

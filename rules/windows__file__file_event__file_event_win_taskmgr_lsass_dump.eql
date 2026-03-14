@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*:\\Windows\\system32\\taskmgr.exe", "*:\\Windows\\SysWOW64\\taskmgr.exe")) and (file.path:"*\\AppData\\Local\\Temp\*" and file.path:"*\\lsass*" and file.path:"*.DMP*")

@@ -1,0 +1,1 @@
+Image:*\/sudo AND (CommandLine:*\ tc\ * AND CommandLine:*\ enp0s3\ *) AND (CommandLine:(*\ qdisc\ * OR *\ filter\ *))

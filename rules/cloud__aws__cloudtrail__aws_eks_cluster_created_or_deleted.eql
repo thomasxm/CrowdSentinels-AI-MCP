@@ -1,0 +1,1 @@
+any where eventSource:"eks.amazonaws.com" and (eventName like~ ("CreateCluster", "DeleteCluster"))

@@ -1,0 +1,1 @@
+any where process.pe.product:"Sysinternals DebugView" and (not (process.pe.original_file_name:"Dbgview.exe" and process.executable:"*\\Dbgview.exe"))

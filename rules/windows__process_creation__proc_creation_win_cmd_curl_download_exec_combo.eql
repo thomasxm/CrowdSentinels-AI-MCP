@@ -1,0 +1,1 @@
+any where process.command_line like~ ("* -c *", "* /c *", "* –c *", "* —c *", "* ―c *") and (process.command_line:"*curl *" and process.command_line:"*http*" and process.command_line:"*-o*" and process.command_line:"*&*")

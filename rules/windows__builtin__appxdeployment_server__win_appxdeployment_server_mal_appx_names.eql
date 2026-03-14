@@ -1,0 +1,1 @@
+any where winlog.channel:"Microsoft-Windows-AppXDeploymentServer/Operational" and ((event.code like~ ("400", "401")) and winlog.event_data.PackageFullName:"*3669e262-ec02-4e9d-bcb4-3d008b4afac9*")

@@ -1,0 +1,1 @@
+any where powershell.file.script_block_text:"*Mount-DiskImage *" and powershell.file.script_block_text:"*-ImagePath *" and powershell.file.script_block_text:"*Get-Volume*" and powershell.file.script_block_text:"*.DriveLetter*" and powershell.file.script_block_text:"*invoke-item *" and powershell.file.script_block_text:"*):\*"

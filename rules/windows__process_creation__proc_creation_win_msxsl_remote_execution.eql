@@ -1,0 +1,1 @@
+any where process.executable:"*\\msxsl.exe" and process.command_line:"*http*"

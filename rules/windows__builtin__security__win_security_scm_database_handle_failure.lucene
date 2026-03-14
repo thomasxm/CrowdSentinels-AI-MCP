@@ -1,0 +1,1 @@
+winlog.channel:Security AND ((event.code:4656 AND winlog.event_data.ObjectType:SC_MANAGER\ OBJECT AND winlog.event_data.ObjectName:ServicesActive AND winlog.event_data.AccessMask:0xf003f) AND (NOT winlog.logon.id:0x3e4))

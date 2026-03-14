@@ -1,0 +1,1 @@
+any where eventtype like~ ("application.policy.sign_on.update", "application.policy.sign_on.rule.delete")

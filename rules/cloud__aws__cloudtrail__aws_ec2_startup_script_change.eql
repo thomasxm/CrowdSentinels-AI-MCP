@@ -1,0 +1,1 @@
+any where eventSource:"ec2.amazonaws.com" and requestParameters.attribute:"userData" and eventName:"ModifyInstanceAttribute"

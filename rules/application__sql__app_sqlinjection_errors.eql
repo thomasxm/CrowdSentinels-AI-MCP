@@ -1,0 +1,1 @@
+any where "quoted string not properly terminated" or "You have an error in your SQL syntax" or "Unclosed quotation mark" or "near \"*\": syntax error" or "SELECTs to the left and right of UNION do not have the same number of result columns"

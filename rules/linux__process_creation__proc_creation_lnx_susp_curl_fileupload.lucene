@@ -1,0 +1,1 @@
+(Image:*\/curl AND ((CommandLine:(*\ \-\-form* OR *\ \-\-upload\-file\ * OR *\ \-\-data\ * OR *\ \-\-data\-*)) OR CommandLine:/\s-[FTd]\s/)) AND (NOT (CommandLine:(*\:\/\/localhost* OR *\:\/\/127.0.0.1*)))

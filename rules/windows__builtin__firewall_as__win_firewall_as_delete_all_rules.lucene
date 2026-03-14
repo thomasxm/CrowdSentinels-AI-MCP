@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-Windows\ Firewall\ With\ Advanced\ Security\/Firewall AND ((event.code:(2033 OR 2059)) AND (NOT winlog.event_data.ModifyingApplication:*\:\\Windows\\System32\\svchost.exe) AND (NOT (winlog.event_data.ModifyingApplication:*\:\\ProgramData\\Microsoft\\Windows\ Defender\\Platform\* AND winlog.event_data.ModifyingApplication:*\\MsMpEng.exe*)))

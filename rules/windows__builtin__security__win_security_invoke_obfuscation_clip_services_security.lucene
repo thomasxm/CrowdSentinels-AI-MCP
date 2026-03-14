@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:4697 AND (winlog.event_data.ServiceFileName:*cmd* AND winlog.event_data.ServiceFileName:*\&\&* AND winlog.event_data.ServiceFileName:*clipboard\]\:\:*))

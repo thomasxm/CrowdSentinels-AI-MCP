@@ -1,0 +1,1 @@
+winlog.channel:Application AND (winlog.provider_name:MSSQLSERVER$AUDIT AND event.code:33205 AND (winlog.event_data.Data:(*statement\:TRUNCATE\ TABLE* OR *statement\:DROP\ TABLE* OR *statement\:DROP\ DATABASE*)))

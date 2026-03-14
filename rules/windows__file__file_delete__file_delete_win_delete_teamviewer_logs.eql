@@ -1,0 +1,1 @@
+any where (file.path:"*\\TeamViewer_*" and file.path:"*.log") and (not process.executable:"C:\\Windows\\system32\\svchost.exe")

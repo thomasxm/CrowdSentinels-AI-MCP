@@ -1,0 +1,1 @@
+any where (process.executable:"*\\reg.exe" and (process.command_line:"*add *" and process.command_line:"*SYSTEM\\CurrentControlSet\\Services\*" and process.command_line:"* ImagePath *")) and process.command_line like~ ("* -d *", "* /d *", "* –d *", "* —d *", "* ―d *")

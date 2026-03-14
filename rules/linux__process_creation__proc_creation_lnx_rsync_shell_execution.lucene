@@ -1,0 +1,1 @@
+((Image:(*\/rsync OR *\/rsyncd)) AND CommandLine:*\ \-e\ *) AND (CommandLine:(*\/ash\ * OR *\/bash\ * OR *\/dash\ * OR *\/csh\ * OR *\/sh\ * OR *\/zsh\ * OR *\/tcsh\ * OR *\/ksh\ * OR *'ash\ * OR *'bash\ * OR *'dash\ * OR *'csh\ * OR *'sh\ * OR *'zsh\ * OR *'tcsh\ * OR *'ksh\ *))

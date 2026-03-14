@@ -1,0 +1,1 @@
+(file.path:C\:\\Windows\\WinSxS\* AND file.path:*.exe) AND (NOT (process.executable:(C\:\\Windows\\Systems32\* OR C\:\\Windows\\SysWOW64\* OR C\:\\Windows\\WinSxS\*)))

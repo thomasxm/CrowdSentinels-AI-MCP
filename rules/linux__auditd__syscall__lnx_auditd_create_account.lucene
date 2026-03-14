@@ -1,0 +1,1 @@
+(type:SYSCALL AND exe:*\/useradd) OR type:ADD_USER

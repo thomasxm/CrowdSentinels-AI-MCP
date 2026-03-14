@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\services.exe" and (((process.command_line:"*/c*" and process.command_line:"*echo*" and process.command_line:"*\\pipe\*") and (process.command_line like~ ("*cmd*", "*%COMSPEC%*"))) or (process.command_line:"*rundll32*" and process.command_line:"*.dll,a*" and process.command_line:"*/p:*")) and (not process.command_line:"*MpCmdRun*")

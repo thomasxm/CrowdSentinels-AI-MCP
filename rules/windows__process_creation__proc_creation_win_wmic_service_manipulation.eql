@@ -1,0 +1,1 @@
+any where (process.pe.original_file_name:"wmic.exe" or process.executable:"*\\WMIC.exe") and ((process.command_line:"* service *" and process.command_line:"* call *") and (process.command_line like~ ("*stopservice*", "*startservice*")))

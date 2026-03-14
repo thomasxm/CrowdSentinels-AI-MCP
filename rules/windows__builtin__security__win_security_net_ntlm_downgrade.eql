@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and (event.code:"4657" and (winlog.event_data.ObjectName:"*\\REGISTRY\\MACHINE\\SYSTEM*" and winlog.event_data.ObjectName:"*ControlSet*" and winlog.event_data.ObjectName:"*\\Control\\Lsa*") and (winlog.event_data.ObjectValueName like~ ("LmCompatibilityLevel", "NtlmMinClientSec", "RestrictSendingNTLMTraffic")))

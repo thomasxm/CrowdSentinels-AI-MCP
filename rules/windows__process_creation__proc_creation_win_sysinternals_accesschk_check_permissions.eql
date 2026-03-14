@@ -1,0 +1,1 @@
+any where (process.pe.product:"*AccessChk" or process.pe.description:"*Reports effective permissions*" or (process.executable like~ ("*\\accesschk.exe", "*\\accesschk64.exe")) or process.pe.original_file_name:"accesschk.exe") and (process.command_line like~ ("*uwcqv *", "*kwsu *", "*qwsu *", "*uwdqs *"))

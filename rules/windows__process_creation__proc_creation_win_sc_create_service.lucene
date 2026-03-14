@@ -1,0 +1,1 @@
+(process.executable:*\\sc.exe AND (process.command_line:*create* AND process.command_line:*binPath*)) AND (NOT ((process.parent.executable:(C\:\\Program\ Files\ \(x86\)\\Dropbox\\Client\* OR C\:\\Program\ Files\\Dropbox\\Client\*)) AND process.parent.executable:*\\Dropbox.exe))

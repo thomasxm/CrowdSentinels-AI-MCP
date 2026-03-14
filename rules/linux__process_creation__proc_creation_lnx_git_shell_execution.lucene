@@ -1,0 +1,1 @@
+ParentImage:*\/git AND (ParentCommandLine:*\ \-p\ * AND ParentCommandLine:*help*) AND (CommandLine:(*bash\ 0\<\&1* OR *dash\ 0\<\&1* OR *sh\ 0\<\&1*))

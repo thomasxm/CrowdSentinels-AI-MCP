@@ -1,0 +1,1 @@
+(process.executable:(*\\powershell.exe OR *\\pwsh.exe)) AND file.path:*.bat

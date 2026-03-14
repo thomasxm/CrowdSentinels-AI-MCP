@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*invoke\-command\ * AND powershell.file.script_block_text:*\ \-ComputerName\ *

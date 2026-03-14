@@ -1,0 +1,1 @@
+any where ((file.path:"*\\inetpub\\wwwroot\*" and (file.path like~ ("*.ashx*", "*.asp*", "*.ph*", "*.soap*"))) or ((file.path like~ ("*\\www\*", "*\\htdocs\*", "*\\html\*")) and file.path:"*.ph*")) and (not ((file.path like~ ("*\\AppData\\Local\\Temp\*", "*\\Windows\\Temp\*")) or process.executable:"System" or file.path:"*\\xampp*"))

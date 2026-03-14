@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-CAPI2\/Operational AND event.code:70

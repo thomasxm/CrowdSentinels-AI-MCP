@@ -1,0 +1,1 @@
+any where (process.executable:"*\\DismHost.exe" and (process.parent.command_line:"*/Online*" and process.parent.command_line:"*/Disable-Feature*")) or (process.executable:"*\\Dism.exe" and (process.command_line:"*/Online*" and process.command_line:"*/Disable-Feature*"))

@@ -1,0 +1,1 @@
+any where process.parent.executable:"*\\vsjitdebugger.exe" and (not (process.executable like~ ("*\\vsimmersiveactivatehelper*.exe", "*\\devenv.exe")))

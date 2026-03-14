@@ -1,0 +1,1 @@
+any where (registry.path:"*\\SOFTWARE\\Microsoft\\NetSh*" and winlog.event_data.Details:"*.dll*") and (not (process.executable:"C:\\Windows\\System32\\poqexec.exe" and (winlog.event_data.Details like~ ("ipmontr.dll", "iasmontr.dll", "ippromon.dll"))))

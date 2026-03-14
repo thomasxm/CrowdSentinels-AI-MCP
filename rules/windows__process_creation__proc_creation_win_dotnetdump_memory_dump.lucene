@@ -1,0 +1,1 @@
+(process.executable:*\\dotnet\-dump.exe OR process.pe.original_file_name:dotnet\-dump.dll) AND process.command_line:*collect*

@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:4673 AND winlog.event_data.Service:LsaRegisterLogonProcess\(\) AND winlog.event_data.Keywords:0x8010000000000000)

@@ -1,0 +1,1 @@
+any where winlog.channel:"Application" and (winlog.provider_name:"MSSQLSERVER$AUDIT" and event.code:"33205" and (winlog.event_data.Data like~ ("*statement:TRUNCATE TABLE*", "*statement:DROP TABLE*", "*statement:DROP DATABASE*")))

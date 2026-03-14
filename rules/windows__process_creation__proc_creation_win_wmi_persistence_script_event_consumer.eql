@@ -1,0 +1,1 @@
+any where process.executable:"C:\\WINDOWS\\system32\\wbem\\scrcons.exe" and process.parent.executable:"C:\\Windows\\System32\\svchost.exe"

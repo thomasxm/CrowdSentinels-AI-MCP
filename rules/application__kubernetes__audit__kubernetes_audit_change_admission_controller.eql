@@ -1,0 +1,1 @@
+any where objectRef.apiGroup:"admissionregistration.k8s.io" and (objectRef.resource like~ ("mutatingwebhookconfigurations", "validatingwebhookconfigurations")) and (verb like~ ("create", "delete", "patch", "replace", "update"))

@@ -1,0 +1,1 @@
+(process.executable:*\\SharpLDAPmonitor.exe OR process.pe.original_file_name:SharpLDAPmonitor.exe) OR (process.command_line:*\/user\:* AND process.command_line:*\/pass\:* AND process.command_line:*\/dcip\:*)

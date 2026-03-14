@@ -1,0 +1,1 @@
+any where process.executable:"*\\tapinstall.exe" and (not ((process.executable like~ ("*:\\Program Files\\Avast Software\\SecureLine VPN\*", "*:\\Program Files (x86)\\Avast Software\\SecureLine VPN\*")) or process.executable:"*:\\Program Files\\OpenVPN Connect\\drivers\\tap\*" or process.executable:"*:\\Program Files (x86)\\Proton Technologies\\ProtonVPNTap\\installer\*"))

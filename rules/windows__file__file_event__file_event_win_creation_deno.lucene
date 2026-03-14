@@ -1,0 +1,1 @@
+(file.path:(*\\deno\\gen\* OR *\\deno\\remote\\https\*)) AND (file.path:*\:\\Users\* AND file.path:*\\AppData\*)

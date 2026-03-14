@@ -1,0 +1,1 @@
+any where (process.executable:"*\\bitsadmin.exe" or process.pe.original_file_name:"bitsadmin.exe") and (process.command_line:"* /transfer *" or ((process.command_line like~ ("* /create *", "* /addfile *")) and process.command_line:"*http*"))

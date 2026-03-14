@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*ls* AND powershell.file.script_block_text:*\ \-R* AND powershell.file.script_block_text:*select\-string\ * AND powershell.file.script_block_text:*\-Pattern\ *

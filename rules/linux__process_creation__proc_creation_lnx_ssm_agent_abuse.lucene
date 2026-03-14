@@ -1,0 +1,1 @@
+Image:*\/amazon\-ssm\-agent AND (CommandLine:*\-register\ * AND CommandLine:*\-code\ * AND CommandLine:*\-id\ * AND CommandLine:*\-region\ *)

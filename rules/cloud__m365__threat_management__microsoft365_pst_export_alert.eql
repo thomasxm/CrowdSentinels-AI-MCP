@@ -1,0 +1,1 @@
+any where eventSource:"SecurityComplianceCenter" and eventName:"eDiscovery search started or exported" and status:"success"

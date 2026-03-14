@@ -1,0 +1,1 @@
+any where (Image:"*/perl" and CommandLine:"* -e *") and ((CommandLine:"*fdopen(*" and CommandLine:"*::Socket::INET*") or (CommandLine:"*Socket*" and CommandLine:"*connect*" and CommandLine:"*open*" and CommandLine:"*exec*"))

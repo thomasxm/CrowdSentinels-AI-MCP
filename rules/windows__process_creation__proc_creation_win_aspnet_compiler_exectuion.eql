@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*:\\Windows\\Microsoft.NET\\Framework\*", "*:\\Windows\\Microsoft.NET\\Framework64\*", "*:\\Windows\\Microsoft.NET\\FrameworkArm\*", "*:\\Windows\\Microsoft.NET\\FrameworkArm64\*")) and process.executable:"*\\aspnet_compiler.exe"

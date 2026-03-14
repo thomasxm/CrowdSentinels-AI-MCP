@@ -1,0 +1,1 @@
+any where file.path:"*\\AppData\\Local\\Temp\\SAM-*" and file.path:"*.dmp*"

@@ -1,0 +1,1 @@
+any where c-useragent:"Microsoft BITS/*" and (cs-host like~ ("*1", "*2", "*3", "*4", "*5", "*6", "*7", "*8", "*9"))

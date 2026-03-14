@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-DNS\ Client\ Events\/Operational AND (event.code:3008 AND dns.question.name:*ufile.io*)

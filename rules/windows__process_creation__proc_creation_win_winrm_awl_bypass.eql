@@ -1,0 +1,1 @@
+any where process.command_line:"*winrm*" and ((process.command_line like~ ("*format:pretty*", "*format:\"pretty\"*", "*format:\"text\"*", "*format:text*")) and (not (process.executable like~ ("C:\\Windows\\System32\*", "C:\\Windows\\SysWOW64\*"))))

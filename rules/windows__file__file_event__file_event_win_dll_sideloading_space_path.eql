@@ -1,0 +1,1 @@
+any where (file.path like~ ("C:\\Windows \*", "C:\\Program Files \*", "C:\\Program Files (x86) \*")) and file.path:"*.dll"

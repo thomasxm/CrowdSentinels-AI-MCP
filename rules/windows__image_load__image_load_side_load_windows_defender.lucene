@@ -1,0 +1,1 @@
+(file.path:*\\mpclient.dll AND (process.executable:(*\\MpCmdRun.exe OR *\\NisSrv.exe))) AND (NOT (process.executable:(C\:\\Program\ Files\ \(x86\)\\Windows\ Defender\* OR C\:\\Program\ Files\\Microsoft\ Security\ Client\* OR C\:\\Program\ Files\\Windows\ Defender\* OR C\:\\ProgramData\\Microsoft\\Windows\ Defender\\Platform\* OR C\:\\Windows\\WinSxS\*)))

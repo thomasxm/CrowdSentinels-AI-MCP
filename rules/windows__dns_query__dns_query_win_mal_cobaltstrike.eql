@@ -1,0 +1,1 @@
+any where (dns.question.name like~ ("aaa.stage.*", "post.1*")) or dns.question.name:"*.stage.123456.*"

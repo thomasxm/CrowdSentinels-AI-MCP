@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-Windows\ Firewall\ With\ Advanced\ Security\/Firewall AND (((event.code:(2004 OR 2071 OR 2097)) AND (winlog.event_data.ApplicationPath:(*\:\\PerfLogs\* OR *\:\\Temp\* OR *\:\\Tmp\* OR *\:\\Users\\Public\* OR *\:\\Windows\\Tasks\* OR *\:\\Windows\\Temp\* OR *\\AppData\\Local\\Temp\*))) AND (NOT winlog.event_data.Action:2))

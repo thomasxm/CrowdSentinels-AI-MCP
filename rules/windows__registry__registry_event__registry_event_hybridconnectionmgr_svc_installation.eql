@@ -1,0 +1,1 @@
+any where registry.path:"*\\Services\\HybridConnectionManager*" or (winlog.event_data.EventType:"SetValue" and winlog.event_data.Details:"*Microsoft.HybridConnectionManager.Listener.exe*")

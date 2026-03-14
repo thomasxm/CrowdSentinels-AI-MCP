@@ -1,0 +1,1 @@
+(process.command_line:*new\-object* AND process.command_line:*text.encoding\]\:\:ascii*) AND (process.command_line:(*system.io.compression.deflatestream* OR *system.io.streamreader* OR *readtoend\(*))

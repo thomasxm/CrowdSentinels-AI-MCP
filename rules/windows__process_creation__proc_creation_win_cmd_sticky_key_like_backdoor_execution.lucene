@@ -1,0 +1,1 @@
+process.parent.executable:*\\winlogon.exe AND (process.executable:(*\\cmd.exe OR *\\cscript.exe OR *\\mshta.exe OR *\\powershell.exe OR *\\pwsh.exe OR *\\regsvr32.exe OR *\\rundll32.exe OR *\\wscript.exe OR *\\wt.exe)) AND (process.command_line:(*sethc.exe* OR *utilman.exe* OR *osk.exe* OR *Magnify.exe* OR *Narrator.exe* OR *DisplaySwitch.exe*))

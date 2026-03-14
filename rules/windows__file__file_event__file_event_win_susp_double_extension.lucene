@@ -1,0 +1,1 @@
+((file.path:(*.exe OR *.iso OR *.rar OR *.svg OR *.zip)) AND (file.path:(*.doc.* OR *.docx.* OR *.gif.* OR *.jpeg.* OR *.jpg.* OR *.mp3.* OR *.mp4.* OR *.pdf.* OR *.png.* OR *.ppt.* OR *.pptx.* OR *.rtf.* OR *.svg.* OR *.txt.* OR *.xls.* OR *.xlsx.*))) OR (file.path:(*.rar.exe OR *.zip.exe))

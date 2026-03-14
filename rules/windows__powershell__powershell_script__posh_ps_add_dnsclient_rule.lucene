@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*Add\-DnsClientNrptRule* AND powershell.file.script_block_text:*\-Namesp* AND powershell.file.script_block_text:*\-NameSe*

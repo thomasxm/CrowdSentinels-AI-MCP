@@ -1,0 +1,1 @@
+any where (process.pe.description:"*7-Zip*" or (process.executable like~ ("*\\7z.exe", "*\\7zr.exe", "*\\7za.exe")) or (process.pe.original_file_name like~ ("7z.exe", "7za.exe"))) and (process.command_line like~ ("*.dmp*", "*.dump*", "*.hdmp*"))

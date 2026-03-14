@@ -1,0 +1,1 @@
+(process.parent.executable:*\\mmc.exe AND process.parent.command_line:*WF.msc*) AND (NOT process.executable:*\\WerFault.exe)

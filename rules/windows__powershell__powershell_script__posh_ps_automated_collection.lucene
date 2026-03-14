@@ -1,0 +1,1 @@
+(powershell.file.script_block_text:(*.doc* OR *.docx* OR *.xls* OR *.xlsx* OR *.ppt* OR *.pptx* OR *.rtf* OR *.pdf* OR *.txt*)) AND (powershell.file.script_block_text:*Get\-ChildItem* AND powershell.file.script_block_text:*\ \-Recurse\ * AND powershell.file.script_block_text:*\ \-Include\ *)

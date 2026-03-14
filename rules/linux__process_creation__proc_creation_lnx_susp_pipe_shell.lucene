@@ -1,0 +1,1 @@
+(CommandLine:(sh\ \-c\ * OR bash\ \-c\ *)) AND ((CommandLine:(*\|\ bash\ * OR *\|\ sh\ * OR *\|bash\ * OR *\|sh\ *)) OR (CommandLine:(*\|\ bash OR *\|\ sh OR *\|bash OR *\ \|sh)))

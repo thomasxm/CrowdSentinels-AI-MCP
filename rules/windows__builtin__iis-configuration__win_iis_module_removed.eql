@@ -1,0 +1,1 @@
+any where event.code:"29" and winlog.event_data.Configuration:"*/system.webServer/modules/remove*"

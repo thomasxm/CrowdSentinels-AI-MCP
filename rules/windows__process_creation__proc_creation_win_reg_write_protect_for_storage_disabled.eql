@@ -1,0 +1,1 @@
+any where process.command_line:"*\\System\\CurrentControlSet\\Control*" and process.command_line:"*Write Protection*" and process.command_line:"*0*" and process.command_line:"*storage*"

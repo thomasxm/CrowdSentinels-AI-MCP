@@ -1,0 +1,1 @@
+(EventLog:RPCFW AND EventID:3 AND InterfaceUuid:86d35949\-83c9\-4044\-b424\-db363231fd0c) AND (NOT (OpNum:(1 OR 3 OR 4 OR 10 OR 11 OR 12 OR 13 OR 14 OR 15)))

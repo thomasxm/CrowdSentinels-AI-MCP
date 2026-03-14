@@ -1,0 +1,1 @@
+any where (process.pe.original_file_name like~ ("msteams.exe", "teams.exe")) and (not (process.executable like~ ("*\\msteams.exe", "*\\teams.exe")))

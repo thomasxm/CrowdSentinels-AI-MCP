@@ -1,0 +1,1 @@
+(file.path:*\\RjvPlatform.dll AND process.executable:\\SystemResetPlatform.exe) AND (NOT process.executable:C\:\\Windows\\System32\\SystemResetPlatform\*)

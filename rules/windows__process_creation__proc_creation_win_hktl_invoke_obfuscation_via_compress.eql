@@ -1,0 +1,1 @@
+any where (process.command_line:"*new-object*" and process.command_line:"*text.encoding]::ascii*") and (process.command_line like~ ("*system.io.compression.deflatestream*", "*system.io.streamreader*", "*readtoend(*"))

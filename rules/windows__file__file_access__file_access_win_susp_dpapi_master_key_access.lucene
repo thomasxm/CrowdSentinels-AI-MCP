@@ -1,0 +1,1 @@
+(file.path:(*\\Microsoft\\Protect\\S\-1\-5\-18\* OR *\\Microsoft\\Protect\\S\-1\-5\-21\-*)) AND (NOT (process.executable:(C\:\\Program\ Files\* OR C\:\\Program\ Files\ \(x86\)\* OR C\:\\Windows\\system32\* OR C\:\\Windows\\SysWOW64\*)))

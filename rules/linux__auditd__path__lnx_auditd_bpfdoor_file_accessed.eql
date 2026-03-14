@@ -1,0 +1,1 @@
+any where type:"PATH" and (name like~ ("/var/run/haldrund.pid", "/var/run/xinetd.lock", "/var/run/kdevrund.pid"))

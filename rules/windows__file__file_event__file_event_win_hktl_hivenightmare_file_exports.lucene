@@ -1,0 +1,1 @@
+(file.path:(*\\hive_sam_* OR *\\SAM\-2021\-* OR *\\SAM\-2022\-* OR *\\SAM\-2023\-* OR *\\SAM\-haxx* OR *\\Sam.save*)) OR file.path:C\:\\windows\\temp\\sam

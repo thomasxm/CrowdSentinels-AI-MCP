@@ -1,0 +1,1 @@
+process.executable:*\\AppData\\Local\\Apps\\2.0\* AND (file.code_signature.signed:false OR file.code_signature.status:Expired)

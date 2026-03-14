@@ -1,0 +1,1 @@
+any where process.executable:"*\\AppData\\Local\\Apps\\2.0\*" and (file.code_signature.signed:"false" or file.code_signature.status:"Expired")

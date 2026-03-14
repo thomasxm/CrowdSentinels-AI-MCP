@@ -1,0 +1,1 @@
+any where winlog.event_data.CallTrace:"SigmaRegularExpression(regexp=SigmaString(['^C:\\\\Windows\\\\SYSTEM32\\\\ntdll\\.dll\\+[a-z0-9]{4,6}\\|C:\\\\Windows\\\\System32\\\\KERNELBASE\\.dll\\+[a-z0-9]{4,6}\\|UNKNOWN\\([A-Z0-9]{16}\\)$']), flags=set())" and (winlog.event_data.GrantedAccess like~ ("0x1028", "0x1fffff"))

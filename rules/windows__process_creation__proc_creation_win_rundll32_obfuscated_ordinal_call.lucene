@@ -1,0 +1,1 @@
+(process.executable:*\\rundll32.exe OR process.pe.original_file_name:RUNDLL32.EXE OR process.command_line:*rundll32*) AND (process.command_line:(*#\+* OR *#\-* OR *#0* OR *#655* OR *#656*))

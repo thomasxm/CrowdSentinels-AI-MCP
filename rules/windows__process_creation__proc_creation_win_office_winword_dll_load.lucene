@@ -1,0 +1,1 @@
+(process.executable:*\\WINWORD.exe OR process.pe.original_file_name:WinWord.exe) AND (process.command_line:*\/l\ * AND process.command_line:*.dll*)

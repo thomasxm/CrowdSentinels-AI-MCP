@@ -1,0 +1,1 @@
+any where ((process.parent.executable like~ ("*\\wscript.exe", "*\\cscript.exe")) and (process.executable like~ ("*\\powershell.exe", "*\\pwsh.exe"))) and (not process.working_directory:"*\\Health Service State\*")

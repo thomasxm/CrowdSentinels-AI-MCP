@@ -1,0 +1,1 @@
+any where eventSource:"Exchange" and eventName:"Add-FederatedDomain" and status:"success"

@@ -1,0 +1,1 @@
+any where process.executable:"*\\DefenderCheck.exe" or process.pe.description:"DefenderCheck"

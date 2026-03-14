@@ -1,0 +1,1 @@
+(file.path:(*\\Microsoft\\Teams\\Cookies* OR *\\Microsoft\\Teams\\Local\ Storage\\leveldb*)) AND (NOT process.executable:*\\Microsoft\\Teams\\current\\Teams.exe)

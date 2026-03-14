@@ -1,0 +1,1 @@
+(winlog.event_data.State:Stopped OR *Sysmon\ config\ state\ changed*) AND (NOT winlog.event_data.State:Started)

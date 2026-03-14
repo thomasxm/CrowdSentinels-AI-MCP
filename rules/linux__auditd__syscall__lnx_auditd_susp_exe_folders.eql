@@ -1,0 +1,1 @@
+any where type:"SYSCALL" and (exe like~ ("/tmp/*", "/var/www/*", "/home/*/public_html/*", "/usr/local/apache2/*", "/usr/local/httpd/*", "/var/apache/*", "/srv/www/*", "/home/httpd/html/*", "/srv/http/*", "/usr/share/nginx/html/*", "/var/lib/pgsql/data/*", "/usr/local/mysql/data/*", "/var/lib/mysql/*", "/var/vsftpd/*", "/etc/bind/*", "/var/named/*"))

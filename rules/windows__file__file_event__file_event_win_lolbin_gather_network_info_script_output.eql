@@ -1,0 +1,1 @@
+any where file.path:"C:\\Windows\\System32\\config*" and (file.path like~ ("*\\Hotfixinfo.txt", "*\\netiostate.txt", "*\\sysportslog.txt", "*\\VmSwitchLog.evtx"))

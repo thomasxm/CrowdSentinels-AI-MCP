@@ -1,0 +1,1 @@
+process.executable:*\\scrcons.exe AND (file.path:(*\\vbscript.dll OR *\\wbemdisp.dll OR *\\wshom.ocx OR *\\scrrun.dll))

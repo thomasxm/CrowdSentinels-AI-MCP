@@ -1,0 +1,1 @@
+any where process.command_line:"*/factory,{75dff2b7-6936-4c06-a8bb-676a7b00b24b}*" or (process.command_line:"*explorer.exe*" and process.command_line like~ ("* -root,*", "* /root,*", "* –root,*", "* —root,*", "* ―root,*"))

@@ -1,0 +1,1 @@
+any where eventSource:"SecurityComplianceCenter" and eventName:"Potential ransomware activity" and status:"success"

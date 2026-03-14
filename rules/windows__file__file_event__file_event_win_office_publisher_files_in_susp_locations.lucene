@@ -1,0 +1,1 @@
+(file.path:(*\\AppData\\Local\\Temp\* OR *\\Users\\Public\* OR *\\Windows\\Temp\* OR *C\:\\Temp\*)) AND file.path:*.pub

@@ -1,0 +1,1 @@
+winlog.channel:System AND ((winlog.provider_name:Service\ Control\ Manager AND event.code:7045 AND (winlog.event_data.ImagePath:(*\\AppData\* OR *\\127.0.0.1* OR *\\localhost*))) AND (NOT (winlog.event_data.ServiceName:Zoom\ Sharing\ Service AND winlog.event_data.ImagePath:*\:\\Program\ Files\\Common\ Files\\Zoom\\Support\\CptService.exe*)))

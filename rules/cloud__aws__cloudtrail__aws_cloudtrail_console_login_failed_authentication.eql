@@ -1,0 +1,1 @@
+any where eventName:"ConsoleLogin" and errorMessage:"Failed authentication"

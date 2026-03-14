@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and (event.code:"5145" and (winlog.event_data.RelativeTargetName like~ ("*.bak", "*.dmp", "*.edb", "*.kirbi", "*.msg", "*.nsf", "*.nst", "*.oab", "*.ost", "*.pst", "*.rdp")))

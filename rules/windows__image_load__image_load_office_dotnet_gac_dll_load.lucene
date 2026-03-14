@@ -1,0 +1,1 @@
+(process.executable:(*\\excel.exe OR *\\mspub.exe OR *\\onenote.exe OR *\\onenoteim.exe OR *\\outlook.exe OR *\\powerpnt.exe OR *\\winword.exe)) AND file.path:C\:\\Windows\\Microsoft.NET\\assembly\\GAC_MSIL*

@@ -1,0 +1,1 @@
+any where (eventSource:"s3.amazonaws.com" and eventName:"ListBuckets") and (not userIdentity.type:"AssumedRole")

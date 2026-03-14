@@ -1,0 +1,1 @@
+process.parent.executable:*\\explorer.exe AND (process.executable:(*\\cmd.exe OR *\\cscript.exe OR *\\mshta.exe OR *\\powershell.exe OR *\\pwsh.exe OR *\\wscript.exe)) AND process.command_line:*\\DavWWWRoot\*

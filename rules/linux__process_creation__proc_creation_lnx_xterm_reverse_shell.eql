@@ -1,0 +1,1 @@
+any where Image:"*xterm*" and CommandLine:"*-display*" and CommandLine:"*:1"

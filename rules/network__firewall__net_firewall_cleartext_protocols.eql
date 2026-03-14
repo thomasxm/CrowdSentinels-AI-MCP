@@ -1,0 +1,1 @@
+any where (dst_port like~ (8080, 21, 80, 23, 50000, 1521, 27017, 3306, 1433, 11211, 15672, 5900, 5901, 5902, 5903, 5904)) and ((action like~ ("forward", "accept", 2)) or blocked:"false")

@@ -1,0 +1,1 @@
+any where winlog.channel:"System" and (winlog.provider_name:"Service Control Manager" and event.code:"7045" and (winlog.event_data.ImagePath:"*mshta*" and winlog.event_data.ImagePath:"*vbscript:createobject*"))

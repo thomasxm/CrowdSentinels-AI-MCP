@@ -1,0 +1,1 @@
+any where (process.executable:"*\\sc.exe" or process.pe.original_file_name:"sc.exe") and (process.command_line:"*sdset*" and process.command_line:"*D;*") and (process.command_line like~ ("*;IU*", "*;SU*", "*;BA*", "*;SY*", "*;WD*"))

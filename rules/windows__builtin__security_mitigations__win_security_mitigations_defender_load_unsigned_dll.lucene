@@ -1,0 +1,1 @@
+(winlog.channel:(Microsoft\-Windows\-Security\-Mitigations\/Kernel\ Mode OR Microsoft\-Windows\-Security\-Mitigations\/User\ Mode)) AND ((event.code:(11 OR 12)) AND (winlog.event_data.ProcessPath:(*\\MpCmdRun.exe OR *\\NisSrv.exe)))

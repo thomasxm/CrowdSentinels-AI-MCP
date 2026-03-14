@@ -1,0 +1,1 @@
+process.command_line:*set* AND process.command_line:*\&\&* AND process.command_line:*mshta* AND process.command_line:*vbscript\:createobject* AND process.command_line:*.run* AND process.command_line:*\(window.close\)*

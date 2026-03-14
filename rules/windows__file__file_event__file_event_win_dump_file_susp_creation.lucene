@@ -1,0 +1,1 @@
+(process.executable:(*\\cmd.exe OR *\\cscript.exe OR *\\mshta.exe OR *\\powershell.exe OR *\\pwsh.exe OR *\\wscript.exe)) AND (file.path:(*.dmp OR *.dump OR *.hdmp))

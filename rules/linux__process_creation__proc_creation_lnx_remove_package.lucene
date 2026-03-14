@@ -1,0 +1,1 @@
+(Image:*\/yum AND (CommandLine:(*erase* OR *remove*))) OR ((Image:(*\/apt OR *\/apt\-get)) AND (CommandLine:(*remove* OR *purge*))) OR (Image:*\/dpkg AND (CommandLine:(*\-\-remove\ * OR *\ \-r\ *))) OR (Image:*\/rpm AND CommandLine:*\ \-e\ *)

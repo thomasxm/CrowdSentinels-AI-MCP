@@ -1,0 +1,1 @@
+(process.command_line:(*\ \-ma\ * OR *\ \/ma\ * OR *\ –ma\ * OR *\ —ma\ * OR *\ ―ma\ *) OR process.command_line:(*\ \-mm\ * OR *\ \/mm\ * OR *\ –mm\ * OR *\ —mm\ * OR *\ ―mm\ *) OR process.command_line:(*\ \-mp\ * OR *\ \/mp\ * OR *\ –mp\ * OR *\ —mp\ * OR *\ ―mp\ *)) AND (process.command_line:(*\ ls* OR *\ keyiso* OR *\ samss*))

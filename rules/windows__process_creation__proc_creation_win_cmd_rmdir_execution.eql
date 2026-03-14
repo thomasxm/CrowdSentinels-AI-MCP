@@ -1,0 +1,1 @@
+any where (process.executable:"*\\cmd.exe" or process.pe.original_file_name:"Cmd.Exe") and process.command_line:"*rmdir*" and (process.command_line like~ ("*/s*", "*/q*"))

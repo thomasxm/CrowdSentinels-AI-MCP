@@ -1,0 +1,1 @@
+Image:*\/sudo AND (CommandLine:(*\ \-\-chroot\ * OR *sudo\ \-R\ *))

@@ -1,0 +1,1 @@
+any where registry.path:"*\\Microsoft\\Office\*" and registry.path:"*\\Excel\\Security\\PythonFunctionWarnings" and winlog.event_data.Details:"DWORD (0x00000001)"

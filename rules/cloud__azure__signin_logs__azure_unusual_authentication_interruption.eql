@@ -1,0 +1,1 @@
+any where (ResultType:50097 and ResultDescription:"Device authentication is required") or (ResultType:50155 and ResultDescription:"DeviceAuthenticationFailed") or (ResultType:50158 and ResultDescription:"ExternalSecurityChallenge - External security challenge was not satisfied")

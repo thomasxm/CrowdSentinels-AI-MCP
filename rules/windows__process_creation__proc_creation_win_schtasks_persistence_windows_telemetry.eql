@@ -1,0 +1,1 @@
+any where (process.executable:"*\\schtasks.exe" or process.pe.original_file_name:"schtasks.exe") and (process.command_line:"*run *" and process.command_line:"*\\Application Experience\\Microsoft Compatibility Appraiser*")

@@ -1,0 +1,1 @@
+any where winlog.channel:"System" and (event.code:"16" and winlog.provider_name:"Microsoft-Windows-Kernel-General" and (winlog.event_data.HiveName like~ ("*\\Temp\\SAM*", "*\\Temp\\SECURITY*")))

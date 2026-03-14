@@ -1,0 +1,1 @@
+any where process.executable:"*\\WerFault.exe" and winlog.event_data.TargetImage:"*\\lsass.exe" and winlog.event_data.GrantedAccess:"0x1FFFFF"

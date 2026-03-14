@@ -1,0 +1,1 @@
+(type:execve AND a0:zip) OR (type:execve AND a0:gzip AND a1:\-k) OR (type:execve AND a0:tar AND a1:*\-c*)

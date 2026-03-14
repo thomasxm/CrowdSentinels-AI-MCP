@@ -1,0 +1,1 @@
+(process.executable:*\\schtasks.exe OR process.pe.original_file_name:schtasks.exe) AND ((process.command_line:*\ \/create\ * AND process.command_line:*sshd.exe* AND process.command_line:*\-f*) OR (process.command_line:*\ \/create\ * AND process.command_line:*ssh.exe* AND process.command_line:*\-i*))

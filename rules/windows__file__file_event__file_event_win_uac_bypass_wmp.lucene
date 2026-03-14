@@ -1,0 +1,1 @@
+(file.path:C\:\\Users\* AND file.path:*\\AppData\\Local\\Temp\\OskSupport.dll) OR (process.executable:C\:\\Windows\\system32\\DllHost.exe AND file.path:C\:\\Program\ Files\\Windows\ Media\ Player\\osk.exe)

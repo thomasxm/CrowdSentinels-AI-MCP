@@ -1,0 +1,1 @@
+registry.path:*\\Outlook\\LoadMacroProviderOnBoot AND winlog.event_data.Details:*0x00000001*

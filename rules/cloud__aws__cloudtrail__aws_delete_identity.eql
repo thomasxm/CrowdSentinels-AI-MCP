@@ -1,0 +1,1 @@
+any where eventSource:"ses.amazonaws.com" and eventName:"DeleteIdentity"

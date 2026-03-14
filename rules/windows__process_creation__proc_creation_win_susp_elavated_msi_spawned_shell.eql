@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\cmd.exe", "*\\powershell.exe", "*\\pwsh.exe")) or (process.pe.original_file_name like~ ("Cmd.Exe", "PowerShell.EXE", "pwsh.dll"))) and ((process.parent.executable:"*\\Windows\\Installer\*" and process.parent.executable:"*msi*") and process.parent.executable:"*tmp")

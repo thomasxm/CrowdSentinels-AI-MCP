@@ -1,0 +1,1 @@
+any where ((process.pe.original_file_name like~ ("PowerShell.EXE", "pwsh.dll")) or (process.executable like~ ("*\\powershell.exe", "*\\pwsh.exe"))) and (process.command_line:"*Set-Acl *" and process.command_line:"*-AclObject *" and process.command_line:"*-Path *")

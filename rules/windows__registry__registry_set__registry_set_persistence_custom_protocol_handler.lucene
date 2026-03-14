@@ -1,0 +1,1 @@
+(registry.path:HKCR\* AND winlog.event_data.Details:URL\:*) AND (NOT (winlog.event_data.Details:URL\:ms\-* OR (process.executable:(C\:\\Program\ Files\ \(x86\)* OR C\:\\Program\ Files\* OR C\:\\Windows\\System32\* OR C\:\\Windows\\SysWOW64\*))))

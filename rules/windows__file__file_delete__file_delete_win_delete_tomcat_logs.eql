@@ -1,0 +1,1 @@
+any where (file.path:"*\\Tomcat*" and file.path:"*\\logs\*") and (file.path like~ ("*catalina.*", "*_access_log.*", "*localhost.*"))

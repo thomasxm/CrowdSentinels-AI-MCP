@@ -1,0 +1,1 @@
+any where (powershell.file.script_block_text like~ ("*[System.Net.WebRequest]::create*", "*curl *", "*Invoke-RestMethod*", "*Invoke-WebRequest*", "* irm *", "*iwr *", "*Resume-BitsTransfer*", "*Start-BitsTransfer*", "*wget *", "*WinHttp.WinHttpRequest*")) and (not winlog.event_data.Path:"C:\\Packages\\Plugins\\Microsoft.GuestConfiguration.ConfigurationforWindows\*")

@@ -1,0 +1,1 @@
+(request_type:TGS AND cipher:rc4\-hmac) AND (NOT service:$*)

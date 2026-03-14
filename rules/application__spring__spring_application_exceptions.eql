@@ -1,0 +1,1 @@
+any where "AccessDeniedException" or "CsrfException" or "InvalidCsrfTokenException" or "MissingCsrfTokenException" or "CookieTheftException" or "InvalidCookieException" or "RequestRejectedException"

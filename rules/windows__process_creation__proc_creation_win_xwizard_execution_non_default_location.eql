@@ -1,0 +1,1 @@
+any where (process.executable:"*\\xwizard.exe" or process.pe.original_file_name:"xwizard.exe") and (not (process.executable like~ ("C:\\Windows\\System32\*", "C:\\Windows\\SysWOW64\*", "C:\\Windows\\WinSxS\*")))

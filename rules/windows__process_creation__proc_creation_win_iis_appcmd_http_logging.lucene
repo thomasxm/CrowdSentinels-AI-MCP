@@ -1,0 +1,1 @@
+(process.executable:*\\appcmd.exe OR process.pe.original_file_name:appcmd.exe) AND (process.command_line:*set* AND process.command_line:*config* AND process.command_line:*section\:httplogging* AND process.command_line:*dontLog\:true*)

@@ -1,0 +1,1 @@
+*new\ user* AND (*GID\=0,* OR *UID\=0,* OR *GID\=10,* OR *GID\=27,*)

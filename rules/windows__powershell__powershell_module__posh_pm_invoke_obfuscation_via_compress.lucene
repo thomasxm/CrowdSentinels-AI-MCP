@@ -1,0 +1,1 @@
+(powershell.file.script_block_text:*new\-object* AND powershell.file.script_block_text:*text.encoding\]\:\:ascii*) AND (powershell.file.script_block_text:(*system.io.compression.deflatestream* OR *system.io.streamreader*)) AND powershell.file.script_block_text:*readtoend

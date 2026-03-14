@@ -1,0 +1,1 @@
+any where powershell.file.script_block_text like~ ("*.CreationTime =*", "*.LastWriteTime =*", "*.LastAccessTime =*", "*[IO.File]::SetCreationTime*", "*[IO.File]::SetLastAccessTime*", "*[IO.File]::SetLastWriteTime*")

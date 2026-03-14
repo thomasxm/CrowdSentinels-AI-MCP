@@ -1,0 +1,1 @@
+process.executable:*\\sqldumper.exe AND (process.command_line:(*0x0110* OR *0x01100\:40*))

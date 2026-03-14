@@ -1,0 +1,1 @@
+any where (process.executable:"*\\regsvr32.exe" or process.pe.original_file_name:"REGSVR32.EXE") and (process.command_line like~ ("* /i*", "* -i*")) and (process.command_line like~ ("*ftp*", "*http*"))

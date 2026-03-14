@@ -1,0 +1,1 @@
+winlog.channel:Microsoft\-Windows\-DriverFrameworks\-UserMode\/Operational AND (event.code:(2003 OR 2100 OR 2102))

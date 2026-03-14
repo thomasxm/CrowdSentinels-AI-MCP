@@ -1,0 +1,1 @@
+winlog.event_data.Data:*HostName\=ServerRemoteHost* AND winlog.event_data.Data:*wsmprovhost.exe*

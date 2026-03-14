@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and ((event.code:"4663" and (winlog.event_data.ObjectName like~ ("*\\Microsoft\\Teams\\Cookies*", "*\\Microsoft\\Teams\\Local Storage\\leveldb*"))) and (not process.executable:"*\\Microsoft\\Teams\\current\\Teams.exe*"))

@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\nc.exe", "*\\ncat.exe", "*\\netcat.exe")) or (process.command_line like~ ("* -lvp *", "* -lvnp*", "* -l -v -p *", "* -lv -p *", "* -l --proxy-type http *", "* -vnl --exec *", "* -vnl -e *", "* --lua-exec *", "* --sh-exec *"))

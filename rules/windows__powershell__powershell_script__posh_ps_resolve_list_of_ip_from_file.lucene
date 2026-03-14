@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*Get\-content\ * AND powershell.file.script_block_text:*foreach* AND powershell.file.script_block_text:*\[System.Net.Dns\]\:\:GetHostEntry* AND powershell.file.script_block_text:*Out\-File*

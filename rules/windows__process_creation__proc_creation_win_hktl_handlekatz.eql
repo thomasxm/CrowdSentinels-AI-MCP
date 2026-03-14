@@ -1,0 +1,1 @@
+any where (process.executable:"*\\loader.exe" and process.command_line:"*--pid:*") or (winlog.event_data.Hashes like~ ("*IMPHASH=38D9E015591BBFD4929E0D0F47FA0055*", "*IMPHASH=0E2216679CA6E1094D63322E3412D650*")) or ((process.command_line:"*--pid:*" and process.command_line:"*--outfile:*") and (process.command_line like~ ("*.dmp*", "*lsass*", "*.obf*", "*dump*")))

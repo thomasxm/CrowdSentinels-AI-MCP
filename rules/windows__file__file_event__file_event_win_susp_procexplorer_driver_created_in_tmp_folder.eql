@@ -1,0 +1,1 @@
+any where (file.path:"*\\AppData\\Local\\Temp\*" and file.path:"*PROCEXP152.sys") and (not (process.executable like~ ("*\\procexp64.exe*", "*\\procexp.exe*", "*\\procmon64.exe*", "*\\procmon.exe*")))

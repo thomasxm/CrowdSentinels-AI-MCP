@@ -1,0 +1,1 @@
+any where process.executable:"C:\\Windows\\PSEXESVC.exe" or process.pe.original_file_name:"psexesvc.exe"

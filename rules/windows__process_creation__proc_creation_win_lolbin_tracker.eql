@@ -1,0 +1,1 @@
+any where ((process.executable:"*\\tracker.exe" or process.pe.description:"Tracker") and (process.command_line like~ ("* /d *", "* /c *"))) and (not (process.command_line:"* /ERRORREPORT:PROMPT *" or (process.parent.executable like~ ("*\\Msbuild\\Current\\Bin\\MSBuild.exe", "*\\Msbuild\\Current\\Bin\\amd64\\MSBuild.exe"))))

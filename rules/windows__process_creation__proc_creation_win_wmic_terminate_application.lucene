@@ -1,0 +1,1 @@
+(process.executable:*\\WMIC.exe OR process.pe.original_file_name:wmic.exe) AND (process.command_line:*call* AND process.command_line:*terminate*)

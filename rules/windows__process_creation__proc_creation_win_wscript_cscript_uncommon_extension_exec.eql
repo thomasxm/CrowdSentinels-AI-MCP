@@ -1,0 +1,1 @@
+any where ((process.pe.original_file_name like~ ("wscript.exe", "cscript.exe")) or (process.executable like~ ("*\\wscript.exe", "*\\cscript.exe"))) and (process.command_line like~ ("*.csv*", "*.dat*", "*.doc*", "*.gif*", "*.jpeg*", "*.jpg*", "*.png*", "*.ppt*", "*.txt*", "*.xls*", "*.xml*"))

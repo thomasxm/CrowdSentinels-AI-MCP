@@ -1,0 +1,1 @@
+any where process.executable:"*\\excel.exe" and (file.path like~ ("*\\Desktop\*", "*\\Downloads\*", "*\\Perflogs\*", "*\\Temp\*", "*\\Users\\Public\*", "*\\Windows\\Tasks\*")) and file.path:"*.xll"

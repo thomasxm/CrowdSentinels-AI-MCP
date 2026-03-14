@@ -1,0 +1,1 @@
+process.executable:*\\DllHost.exe AND file.path:C\:\\Windows\\System32\* AND file.path:*.dll

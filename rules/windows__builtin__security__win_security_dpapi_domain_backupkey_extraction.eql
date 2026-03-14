@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and (event.code:"4662" and winlog.event_data.ObjectType:"SecretObject" and winlog.event_data.AccessMask:"0x2" and winlog.event_data.ObjectName:"*BCKUPKEY*")

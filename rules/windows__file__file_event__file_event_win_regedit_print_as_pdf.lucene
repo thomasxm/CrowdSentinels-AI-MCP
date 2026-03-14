@@ -1,0 +1,1 @@
+process.executable:*\\regedit.exe AND file.path:*.pdf

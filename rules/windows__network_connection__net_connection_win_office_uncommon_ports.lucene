@@ -1,0 +1,1 @@
+(network.direction:true AND (process.executable:(*\\excel.exe OR *\\outlook.exe OR *\\powerpnt.exe OR *\\winword.exe OR *\\wordview.exe))) AND (NOT ((destination.port:(53 OR 80 OR 139 OR 389 OR 443 OR 445 OR 3268)) OR (process.executable:*\:\\Program\ Files\\Microsoft\ Office\* AND process.executable:*\\OUTLOOK.EXE AND (destination.port:(143 OR 465 OR 587 OR 993 OR 995)))))

@@ -1,0 +1,1 @@
+((file.path:*\\AppData\\Local\\Temp\* AND file.path:*.zip\*) AND file.path:*.iso) OR (file.path:*\\AppData\\Local\\Microsoft\\Windows\\INetCache\\Content.Outlook\* AND file.path:*.iso)

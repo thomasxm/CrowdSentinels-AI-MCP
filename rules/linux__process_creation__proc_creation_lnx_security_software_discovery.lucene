@@ -1,0 +1,1 @@
+(Image:(*\/grep OR *\/egrep)) AND (CommandLine:(*nessusd* OR *td\-agent* OR *packetbeat* OR *filebeat* OR *auditbeat* OR *osqueryd* OR *cbagentd* OR *falcond*))

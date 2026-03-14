@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and (event.code:"4673" and winlog.event_data.Service:"LsaRegisterLogonProcess()" and winlog.event_data.Keywords:"0x8010000000000000")

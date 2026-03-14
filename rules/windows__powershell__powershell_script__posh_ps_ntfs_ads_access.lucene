@@ -1,0 +1,1 @@
+(powershell.file.script_block_text:(*set\-content* OR *add\-content*)) AND powershell.file.script_block_text:*\-stream*

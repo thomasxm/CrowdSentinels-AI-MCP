@@ -1,0 +1,1 @@
+winlog.channel:Security AND (event.code:4657 AND (winlog.event_data.ObjectName:*\\REGISTRY\\MACHINE\\SYSTEM* AND winlog.event_data.ObjectName:*ControlSet* AND winlog.event_data.ObjectName:*\\Control\\Lsa*) AND (winlog.event_data.ObjectValueName:(LmCompatibilityLevel OR NtlmMinClientSec OR RestrictSendingNTLMTraffic)))

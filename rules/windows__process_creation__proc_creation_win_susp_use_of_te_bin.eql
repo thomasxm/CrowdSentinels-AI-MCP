@@ -1,0 +1,1 @@
+any where process.executable:"*\\te.exe" or process.parent.executable:"*\\te.exe" or process.pe.original_file_name:"\\te.exe"

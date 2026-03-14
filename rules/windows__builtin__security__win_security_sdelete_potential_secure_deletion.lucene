@@ -1,0 +1,1 @@
+winlog.channel:Security AND ((event.code:(4656 OR 4663 OR 4658)) AND (winlog.event_data.ObjectName:(*.AAA OR *.ZZZ)))

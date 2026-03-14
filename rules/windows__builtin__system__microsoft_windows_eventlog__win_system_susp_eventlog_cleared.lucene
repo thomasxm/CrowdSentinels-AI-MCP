@@ -1,0 +1,1 @@
+winlog.channel:System AND (event.code:104 AND winlog.provider_name:Microsoft\-Windows\-Eventlog AND (winlog.channel:(Microsoft\-Windows\-PowerShell\/Operational OR Microsoft\-Windows\-Sysmon\/Operational OR PowerShellCore\/Operational OR Security OR System OR Windows\ PowerShell)))

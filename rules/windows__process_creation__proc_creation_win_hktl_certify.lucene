@@ -1,0 +1,1 @@
+(process.executable:*\\Certify.exe OR process.pe.original_file_name:Certify.exe OR process.pe.description:*Certify*) OR ((process.command_line:(*.exe\ cas\ * OR *.exe\ find\ * OR *.exe\ pkiobjects\ * OR *.exe\ request\ * OR *.exe\ download\ *)) AND (process.command_line:(*\ \/vulnerable* OR *\ \/template\:* OR *\ \/altname\:* OR *\ \/domain\:* OR *\ \/path\:* OR *\ \/ca\:*)))

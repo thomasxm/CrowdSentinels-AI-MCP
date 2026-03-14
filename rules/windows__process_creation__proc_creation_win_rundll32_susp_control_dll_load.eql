@@ -1,0 +1,1 @@
+any where (process.parent.executable:"*\\System32\\control.exe" and (process.executable:"*\\rundll32.exe" or process.pe.original_file_name:"RUNDLL32.EXE")) and (not process.command_line:"*Shell32.dll*")

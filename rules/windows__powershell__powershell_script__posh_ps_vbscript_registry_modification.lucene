@@ -1,0 +1,1 @@
+powershell.file.script_block_text:*CreateObject* AND powershell.file.script_block_text:*Wscript.shell* AND powershell.file.script_block_text:*.RegWrite*

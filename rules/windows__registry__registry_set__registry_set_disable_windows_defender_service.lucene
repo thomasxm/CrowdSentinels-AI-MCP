@@ -1,0 +1,1 @@
+registry.path:*\\Services\\WinDefend\\Start AND winlog.event_data.Details:DWORD\ \(0x00000004\)

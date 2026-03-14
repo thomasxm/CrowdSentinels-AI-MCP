@@ -1,0 +1,1 @@
+registry.path:*\\SOFTWARE\\MICROSOFT\\.NETFramework\\Security\\TrustManager\\PromptingLevel\* AND (registry.path:(*\\Internet OR *\\LocalIntranet OR *\\MyComputer OR *\\TrustedSites OR *\\UntrustedSites)) AND winlog.event_data.Details:Enabled

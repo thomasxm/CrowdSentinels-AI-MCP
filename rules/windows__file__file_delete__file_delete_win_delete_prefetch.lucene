@@ -1,0 +1,1 @@
+(file.path:*\:\\Windows\\Prefetch\* AND file.path:*.pf) AND (NOT (process.executable:*\:\\windows\\system32\\svchost.exe AND (user.name:(*AUTHORI* OR *AUTORI*))))

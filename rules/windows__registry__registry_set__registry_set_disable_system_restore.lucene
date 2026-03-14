@@ -1,0 +1,1 @@
+(registry.path:(*\\Policies\\Microsoft\\Windows\ NT\\SystemRestore* OR *\\Microsoft\\Windows\ NT\\CurrentVersion\\SystemRestore*)) AND (registry.path:(*DisableConfig OR *DisableSR)) AND winlog.event_data.Details:DWORD\ \(0x00000001\)

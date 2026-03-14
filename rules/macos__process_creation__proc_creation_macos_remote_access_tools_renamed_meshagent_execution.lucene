@@ -1,0 +1,1 @@
+(CommandLine:*\-\-meshServiceName* OR OriginalFileName:*meshagent*) AND (NOT (Image:(*\/meshagent OR *\/meshagent_osx64)))
