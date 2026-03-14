@@ -9,7 +9,7 @@
 
 [![PyPI](https://img.shields.io/pypi/v/crowdsentinel-mcp-server.svg)](https://pypi.org/project/crowdsentinel-mcp-server/)
 [![PyPI Downloads](https://img.shields.io/pypi/dm/crowdsentinel-mcp-server.svg)](https://pypi.org/project/crowdsentinel-mcp-server/)
-[![Python](https://img.shields.io/pypi/pyversions/crowdsentinel-mcp-server.svg)](https://pypi.org/project/crowdsentinel-mcp-server/)
+[![Python](https://img.shields.io/pypi/pyversions/crowdsentinel-mcp-server?cacheSeconds=3600)](https://pypi.org/project/crowdsentinel-mcp-server/)
 [![License](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](LICENSE)
 [![MCP](https://img.shields.io/badge/MCP-Compatible-purple.svg)](https://modelcontextprotocol.io/)
 [![Tools](https://img.shields.io/badge/MCP%20Tools-79-brightgreen.svg)](https://github.com/thomasxm/CrowdSentinels-AI-MCP)
