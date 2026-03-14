@@ -25,7 +25,6 @@ def create_search_client(engine_type: str) -> SearchClient:
     username = os.environ.get(f"{prefix}_USERNAME")
     password = os.environ.get(f"{prefix}_PASSWORD")
     api_key = os.environ.get(f"{prefix}_API_KEY")
-    verify_certs = os.environ.get("VERIFY_CERTS", "false").lower() == "true"
     timeout_str = os.environ.get("REQUEST_TIMEOUT")
     timeout = None
     if timeout_str:
@@ -33,14 +32,42 @@ def create_search_client(engine_type: str) -> SearchClient:
             timeout = float(timeout_str)
         except ValueError:
             pass  # Invalid value, use default timeout
-    
+
+    # TLS / certificate configuration
+    ca_certs = os.environ.get("ELASTICSEARCH_CA_CERT") or os.environ.get("CA_CERT")
+    client_cert = os.environ.get("ELASTICSEARCH_CLIENT_CERT") or os.environ.get("CLIENT_CERT")
+    client_key = os.environ.get("ELASTICSEARCH_CLIENT_KEY") or os.environ.get("CLIENT_KEY")
+
+    # VERIFY_CERTS: "true" = system CA bundle, "false" = skip, path = custom CA
+    verify_raw = os.environ.get("VERIFY_CERTS", "false").strip()
+    if verify_raw.lower() == "true":
+        verify_certs = True
+    elif verify_raw.lower() == "false":
+        verify_certs = False
+    else:
+        # Treat as file path to CA certificate
+        verify_certs = True
+        if not ca_certs:
+            ca_certs = verify_raw
+
+    # Elastic Cloud ID (alternative to hosts)
+    cloud_id = os.environ.get("ELASTICSEARCH_CLOUD_ID") or os.environ.get("CLOUD_ID")
+
+    # Bearer token auth (service tokens, etc.)
+    bearer_token = os.environ.get("ELASTICSEARCH_BEARER_TOKEN") or os.environ.get("BEARER_TOKEN")
+
     config = {
         "hosts": hosts,
         "username": username,
         "password": password,
         "api_key": api_key,
         "verify_certs": verify_certs,
-        "timeout": timeout
+        "timeout": timeout,
+        "ca_certs": ca_certs,
+        "client_cert": client_cert,
+        "client_key": client_key,
+        "cloud_id": cloud_id,
+        "bearer_token": bearer_token,
     }
     
     return SearchClient(config, engine_type)

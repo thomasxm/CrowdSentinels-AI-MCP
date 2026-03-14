@@ -449,20 +449,78 @@ Persistent IoC tracking across tools and sessions with FIFO storage
 ### Environment Variables
 
 ```bash
-# Connection (required)
-ELASTICSEARCH_HOSTS="https://localhost:9200"
-
-# Authentication — choose one:
-ELASTICSEARCH_API_KEY="your_api_key"        # Recommended
+# Connection (required — choose one)
+ELASTICSEARCH_HOSTS="https://localhost:9200"       # Self-hosted
 # OR
-ELASTICSEARCH_USERNAME="elastic"
+ELASTICSEARCH_CLOUD_ID="deployment:base64..."      # Elastic Cloud
+
+# Authentication — choose one (in priority order):
+ELASTICSEARCH_BEARER_TOKEN="service_token_here"    # Service/bearer token
+ELASTICSEARCH_API_KEY="your_api_key"               # API key (recommended)
+ELASTICSEARCH_USERNAME="elastic"                   # Basic auth
 ELASTICSEARCH_PASSWORD="your_password"
 
+# TLS / Certificate verification
+VERIFY_CERTS="true"                                # Verify against system CA bundle
+# VERIFY_CERTS="/path/to/ca.crt"                   # Verify against custom CA certificate
+# ELASTICSEARCH_CA_CERT="/path/to/ca.crt"          # Explicit CA certificate path
+# ELASTICSEARCH_CLIENT_CERT="/path/to/client.crt"  # Client certificate (mTLS)
+# ELASTICSEARCH_CLIENT_KEY="/path/to/client.key"   # Client private key (mTLS)
+
 # Options
-VERIFY_CERTS="false"                        # SSL certificate verification
-REQUEST_TIMEOUT="30"                        # Request timeout in seconds
-DISABLE_HIGH_RISK_OPERATIONS="true"         # Block all write operations
+REQUEST_TIMEOUT="30"                               # Request timeout in seconds
+DISABLE_HIGH_RISK_OPERATIONS="true"                # Block all write operations
 ```
+
+> **Security Warning:** Never use `VERIFY_CERTS="false"` or plain-text passwords in production. Use API keys or service tokens with TLS certificate verification enabled. For self-signed certificates, set `ELASTICSEARCH_CA_CERT` to your CA certificate path.
+
+### Production Configuration Examples
+
+<details>
+<summary><b>Elastic Cloud</b></summary>
+
+```bash
+ELASTICSEARCH_CLOUD_ID="my-deployment:dXMtY2VudHJhbC0x..."
+ELASTICSEARCH_API_KEY="your_cloud_api_key"
+VERIFY_CERTS="true"
+```
+</details>
+
+<details>
+<summary><b>Self-Hosted with Custom CA</b></summary>
+
+```bash
+ELASTICSEARCH_HOSTS="https://es-cluster.internal:9200"
+ELASTICSEARCH_API_KEY="your_api_key"
+ELASTICSEARCH_CA_CERT="/etc/elasticsearch/certs/ca.crt"
+VERIFY_CERTS="true"
+```
+</details>
+
+<details>
+<summary><b>Mutual TLS (mTLS)</b></summary>
+
+```bash
+ELASTICSEARCH_HOSTS="https://es-cluster.internal:9200"
+ELASTICSEARCH_CA_CERT="/etc/elasticsearch/certs/ca.crt"
+ELASTICSEARCH_CLIENT_CERT="/etc/elasticsearch/certs/client.crt"
+ELASTICSEARCH_CLIENT_KEY="/etc/elasticsearch/certs/client.key"
+VERIFY_CERTS="true"
+```
+</details>
+
+<details>
+<summary><b>Development / Testing (insecure)</b></summary>
+
+```bash
+ELASTICSEARCH_HOSTS="http://localhost:9200"
+ELASTICSEARCH_USERNAME="elastic"
+ELASTICSEARCH_PASSWORD="test123"
+VERIFY_CERTS="false"
+```
+
+> This configuration is **not suitable for production**. Use API keys with TLS in production environments.
+</details>
 
 ### Transport Modes
 

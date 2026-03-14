@@ -27,38 +27,66 @@ class SearchClientBase(ABC):
         api_key = config.get("api_key")
         verify_certs = config.get("verify_certs", False)
         timeout = config.get("timeout")
-        
+        ca_certs = config.get("ca_certs")
+        client_cert = config.get("client_cert")
+        client_key = config.get("client_key")
+        cloud_id = config.get("cloud_id")
+        bearer_token = config.get("bearer_token")
+
         # Disable insecure request warnings if verify_certs is False
         if not verify_certs:
             warnings.filterwarnings("ignore", message=".*verify_certs=False is insecure.*")
             warnings.filterwarnings("ignore", message=".*Unverified HTTPS request is being made to host.*")
-            
+
             try:
                 import urllib3
                 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
             except ImportError:
                 pass
-        
+
         # Initialize client based on engine type
         if engine_type == "elasticsearch":
             # Get auth parameters based on elasticsearch package version and authentication method
-            auth_params = self._get_elasticsearch_auth_params(username, password, api_key)
-            
+            auth_params = self._get_elasticsearch_auth_params(
+                username, password, api_key, bearer_token,
+            )
+
             es_kwargs = {
-                "hosts": hosts,
                 "verify_certs": verify_certs,
                 **auth_params
             }
+
+            # Cloud ID takes precedence over hosts
+            if cloud_id:
+                es_kwargs["cloud_id"] = cloud_id
+                self.logger.info(f"Elasticsearch client using Cloud ID")
+            else:
+                es_kwargs["hosts"] = hosts
+
+            # TLS certificate configuration
+            if ca_certs:
+                es_kwargs["ca_certs"] = ca_certs
+            if client_cert:
+                es_kwargs["client_cert"] = client_cert
+            if client_key:
+                es_kwargs["client_key"] = client_key
+
             if timeout is not None:
                 es_kwargs["request_timeout"] = timeout
             self.client = Elasticsearch(**es_kwargs)
-            self.logger.info(f"Elasticsearch client initialised with hosts: {hosts}")
+            self.logger.info(f"Elasticsearch client initialised with hosts: {cloud_id or hosts}")
         elif engine_type == "opensearch":
             os_kwargs = {
                 "hosts": hosts,
                 "http_auth": (username, password) if username and password else None,
                 "verify_certs": verify_certs
             }
+            if ca_certs:
+                os_kwargs["ca_certs"] = ca_certs
+            if client_cert:
+                os_kwargs["client_cert"] = client_cert
+            if client_key:
+                os_kwargs["client_key"] = client_key
             if timeout is not None:
                 os_kwargs["timeout"] = timeout
             self.client = OpenSearch(**os_kwargs)
@@ -73,26 +101,43 @@ class SearchClientBase(ABC):
             username=username,
             password=password,
             api_key=api_key,
+            bearer_token=bearer_token,
             verify_certs=verify_certs,
+            ca_certs=ca_certs,
+            client_cert=client_cert,
+            client_key=client_key,
             timeout=timeout,
         )
 
-    def _get_elasticsearch_auth_params(self, username: Optional[str], password: Optional[str], api_key: Optional[str]) -> Dict:
+    def _get_elasticsearch_auth_params(
+        self,
+        username: Optional[str],
+        password: Optional[str],
+        api_key: Optional[str],
+        bearer_token: Optional[str] = None,
+    ) -> Dict:
         """
         Get authentication parameters for Elasticsearch client based on package version.
-        
+
+        Priority: bearer_token > api_key > username/password
+
         Args:
             username: Username for authentication
             password: Password for authentication
             api_key: API key for authentication
-            
+            bearer_token: Bearer/service token for authentication
+
         Returns:
             Dictionary with appropriate auth parameters for the ES version
         """
+        # Bearer token takes highest precedence
+        if bearer_token:
+            return {"bearer_auth": bearer_token}
+
         # API key takes precedence over username/password
         if api_key:
             return {"api_key": api_key}
-            
+
         if not username or not password:
             return {}
             
@@ -115,22 +160,46 @@ class SearchClientBase(ABC):
             return {"basic_auth": (username, password)}
 
 class GeneralRestClient:
-    def __init__(self, base_url: Optional[str], username: Optional[str], password: Optional[str], api_key: Optional[str], verify_certs: bool, timeout: Optional[float] = None):
+    def __init__(
+        self,
+        base_url: Optional[str],
+        username: Optional[str],
+        password: Optional[str],
+        api_key: Optional[str],
+        verify_certs: bool,
+        timeout: Optional[float] = None,
+        bearer_token: Optional[str] = None,
+        ca_certs: Optional[str] = None,
+        client_cert: Optional[str] = None,
+        client_key: Optional[str] = None,
+    ):
         self.base_url = base_url.rstrip("/") if base_url else ""
         self.auth = (username, password) if username and password else None
         self.api_key = api_key
+        self.bearer_token = bearer_token
         self.verify_certs = verify_certs
+        self.ca_certs = ca_certs
+        self.client_cert = client_cert
+        self.client_key = client_key
         self.timeout = timeout
 
     def request(self, method, path, params=None, body=None):
         url = f"{self.base_url}/{path.lstrip('/')}"
         headers = {}
-        
-        # Add API key to Authorization header if provided
-        if self.api_key:
+
+        # Auth header priority: bearer token > API key > basic auth
+        if self.bearer_token:
+            headers["Authorization"] = f"Bearer {self.bearer_token}"
+        elif self.api_key:
             headers["Authorization"] = f"ApiKey {self.api_key}"
-        
-        client_kwargs = {"verify": self.verify_certs}
+
+        # TLS configuration: CA cert path or boolean
+        verify = self.ca_certs if self.ca_certs else self.verify_certs
+        client_kwargs = {"verify": verify}
+        if self.client_cert and self.client_key:
+            client_kwargs["cert"] = (self.client_cert, self.client_key)
+        elif self.client_cert:
+            client_kwargs["cert"] = self.client_cert
         if self.timeout is not None:
             client_kwargs["timeout"] = self.timeout
         with httpx.Client(**client_kwargs) as client:
@@ -139,7 +208,7 @@ class GeneralRestClient:
                 url=url,
                 params=params,
                 json=body,
-                auth=self.auth if not self.api_key else None,  # Use basic auth only if no API key
+                auth=self.auth if not (self.api_key or self.bearer_token) else None,
                 headers=headers
             )
             resp.raise_for_status()
