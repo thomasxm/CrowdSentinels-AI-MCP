@@ -15,6 +15,8 @@
 [![Tools](https://img.shields.io/badge/MCP%20Tools-79-brightgreen.svg)](https://github.com/thomasxm/CrowdSentinels-AI-MCP)
 [![Rules](https://img.shields.io/badge/Detection%20Rules-5%2C049-blue.svg)](https://github.com/thomasxm/CrowdSentinels-AI-MCP)
 
+[MCP Official Registry](https://registry.modelcontextprotocol.io/v0/servers?search=io.github.thomasxm/crowdsentinel-mcp-server)
+
 **Open-source threat hunting orchestrator connecting LLMs to enterprise security data via Model Context Protocol (MCP)**
 
 [Quick Start](#quick-start) · [Installation](#installation) · [CLI Usage](#cli-usage) · [Features](#key-features) · [Architecture](#architecture) · [Documentation](#documentation) · [Examples](#usage-examples)
