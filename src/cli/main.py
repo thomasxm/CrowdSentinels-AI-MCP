@@ -78,13 +78,39 @@ def _create_client():
     return create_search_client("elasticsearch")
 
 
+def _get_data_dir() -> Path:
+    """Return the CrowdSentinel data directory.
+
+    Resolution order:
+    1. CROWDSENTINEL_DATA_DIR environment variable
+    2. Project root (when running from source checkout)
+    3. ~/.crowdsentinel/ (pip install default)
+    """
+    import os
+    env_dir = os.environ.get("CROWDSENTINEL_DATA_DIR")
+    if env_dir:
+        return Path(env_dir)
+
+    # Check if running from source (rules/ exists at project root)
+    project_root = Path(__file__).parent.parent.parent
+    if (project_root / "rules").exists():
+        return project_root
+
+    # Default: ~/.crowdsentinel/
+    return Path.home() / ".crowdsentinel"
+
+
 def _create_rule_loader():
     """Create and load the detection rule loader."""
     from src.clients.common.rule_loader import RuleLoader
 
-    project_root = Path(__file__).parent.parent.parent
-    rules_dir = project_root / "rules"
+    rules_dir = _get_data_dir() / "rules"
     if not rules_dir.exists():
+        print(
+            "Error: detection rules not found.\n"
+            "Run 'crowdsentinel setup' to download detection rules and Chainsaw.",
+            file=sys.stderr,
+        )
         return None
     loader = RuleLoader(str(rules_dir))
     loader.load_all_rules()
@@ -337,12 +363,29 @@ def _cmd_pcap(args):
 
 def _cmd_chainsaw(args):
     """Hunt through EVTX logs using Chainsaw with Sigma rules."""
+    import os
+    data_dir = _get_data_dir()
+    chainsaw_dir = data_dir / "chainsaw"
+
+    # Set env vars so ChainsawClient finds the right paths
+    if not os.environ.get("CHAINSAW_PATH") and (chainsaw_dir / "chainsaw").exists():
+        os.environ["CHAINSAW_PATH"] = str(chainsaw_dir / "chainsaw")
+    if not os.environ.get("SIGMA_RULES_PATH") and (chainsaw_dir / "sigma").exists():
+        os.environ["SIGMA_RULES_PATH"] = str(chainsaw_dir / "sigma")
+
     from src.clients.common.chainsaw_client import ChainsawClient
     client = ChainsawClient()
 
     if args.action == "hunt":
         if not args.evtx:
             print("Error: EVTX path required for hunt", file=sys.stderr)
+            return 1
+        if not client.chainsaw_path.exists():
+            print(
+                "Error: Chainsaw not installed.\n"
+                "Run 'crowdsentinel setup' to download Chainsaw and Sigma rules.",
+                file=sys.stderr,
+            )
             return 1
         # Resolve mapping path relative to chainsaw binary if not found at project root
         mapping_path = args.mapping
@@ -370,12 +413,120 @@ def _cmd_chainsaw(args):
             "installed": client.chainsaw_path.exists(),
             "sigma_rules_path": str(client.sigma_rules),
             "sigma_rules_exist": client.sigma_rules.exists(),
+            "data_dir": str(data_dir),
         }
     else:
         print(f"Error: unknown action: {args.action}", file=sys.stderr)
         return 1
 
     _emit(result, args.output)
+    return 0
+
+
+def _cmd_setup(args):
+    """Download detection rules and Chainsaw for offline use."""
+    import os
+    import platform
+    import subprocess
+    import tarfile
+    import urllib.request
+    import zipfile
+
+    data_dir = _get_data_dir()
+    data_dir.mkdir(parents=True, exist_ok=True)
+
+    print(f"CrowdSentinel data directory: {data_dir}")
+
+    # --- Detection Rules ---
+    rules_dir = data_dir / "rules"
+    if rules_dir.exists() and any(rules_dir.iterdir()):
+        print(f"  Detection rules: already installed ({rules_dir})")
+    else:
+        print("  Downloading detection rules...")
+        rules_dir.mkdir(parents=True, exist_ok=True)
+        rules_url = "https://github.com/thomasxm/CrowdSentinel-AI-MCP/releases/download/v0.2.2/detection-rules.tar.gz"
+        try:
+            rules_archive = data_dir / "detection-rules.tar.gz"
+            urllib.request.urlretrieve(rules_url, str(rules_archive))
+            with tarfile.open(str(rules_archive), "r:gz") as tar:
+                tar.extractall(path=str(data_dir))
+            rules_archive.unlink()
+            rule_count = sum(1 for _ in rules_dir.rglob("*.eql")) + sum(1 for _ in rules_dir.rglob("*.lucene"))
+            print(f"  Detection rules: installed ({rule_count} rules)")
+        except Exception as exc:
+            print(f"  Detection rules: download failed ({exc})", file=sys.stderr)
+            print("  You can manually copy rules/ from the source repository.", file=sys.stderr)
+
+    # --- Chainsaw ---
+    chainsaw_dir = data_dir / "chainsaw"
+    chainsaw_bin = chainsaw_dir / "chainsaw"
+    if chainsaw_bin.exists():
+        print(f"  Chainsaw: already installed ({chainsaw_bin})")
+    else:
+        print("  Downloading Chainsaw...")
+        chainsaw_dir.mkdir(parents=True, exist_ok=True)
+        arch = platform.machine()
+        if arch == "x86_64":
+            arch_suffix = "x86_64-unknown-linux-gnu"
+        elif arch == "aarch64":
+            arch_suffix = "aarch64-unknown-linux-gnu"
+        else:
+            print(f"  Chainsaw: unsupported architecture ({arch})", file=sys.stderr)
+            arch_suffix = None
+
+        if arch_suffix:
+            chainsaw_version = "2.13.1"
+            chainsaw_url = f"https://github.com/WithSecureLabs/chainsaw/releases/download/v{chainsaw_version}/chainsaw_{arch_suffix}.tar.gz"
+            try:
+                archive_path = data_dir / "chainsaw.tar.gz"
+                urllib.request.urlretrieve(chainsaw_url, str(archive_path))
+                with tarfile.open(str(archive_path), "r:gz") as tar:
+                    tar.extractall(path=str(data_dir))
+                archive_path.unlink()
+                # Make binary executable
+                if chainsaw_bin.exists():
+                    chainsaw_bin.chmod(0o755)
+                    print(f"  Chainsaw: installed ({chainsaw_bin})")
+                else:
+                    # Chainsaw extracts into a subdirectory
+                    for candidate in chainsaw_dir.rglob("chainsaw"):
+                        if candidate.is_file():
+                            candidate.chmod(0o755)
+                            print(f"  Chainsaw: installed ({candidate})")
+                            break
+            except Exception as exc:
+                print(f"  Chainsaw: download failed ({exc})", file=sys.stderr)
+
+    # --- Sigma Rules for Chainsaw ---
+    sigma_dir = chainsaw_dir / "sigma"
+    if sigma_dir.exists() and any(sigma_dir.rglob("*.yml")):
+        rule_count = sum(1 for _ in sigma_dir.rglob("*.yml"))
+        print(f"  Sigma rules: already installed ({rule_count} rules)")
+    else:
+        print("  Downloading Sigma rules...")
+        try:
+            sigma_url = "https://github.com/SigmaHQ/sigma/releases/latest/download/sigma_all_rules.zip"
+            sigma_archive = data_dir / "sigma_rules.zip"
+            urllib.request.urlretrieve(sigma_url, str(sigma_archive))
+            sigma_dir.mkdir(parents=True, exist_ok=True)
+            with zipfile.ZipFile(str(sigma_archive), "r") as zf:
+                zf.extractall(str(sigma_dir))
+            sigma_archive.unlink()
+            rule_count = sum(1 for _ in sigma_dir.rglob("*.yml"))
+            print(f"  Sigma rules: installed ({rule_count} rules)")
+        except Exception as exc:
+            print(f"  Sigma rules: download failed ({exc})", file=sys.stderr)
+
+    # --- Mappings for Chainsaw ---
+    mappings_dir = chainsaw_dir / "mappings"
+    if not mappings_dir.exists():
+        mappings_dir.mkdir(parents=True, exist_ok=True)
+        mapping_content = """name: Sigma event log sources\nkind: evtx\nrules: sigma\n\ngroups:\n  - name: Sigma\n    timestamp: Event.System.TimeCreated\n    filter:\n      Provider: \"*\"\n    keys:\n      Event.System.Channel: source\n      Event.System.EventID: event_id\n"""
+        (mappings_dir / "sigma-event-logs-all.yml").write_text(mapping_content)
+        print(f"  Chainsaw mappings: created ({mappings_dir})")
+
+    print("\nSetup complete. Set this in your shell profile for persistence:")
+    print(f'  export CROWDSENTINEL_DATA_DIR="{data_dir}"')
     return 0
 
 
@@ -651,6 +802,19 @@ def _build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--keyword", default=None,
                     help="Keyword to search for (for 'search' action)")
     sp.set_defaults(func=_cmd_chainsaw)
+
+    # --- setup -----------------------------------------------------------
+    sp = subparsers.add_parser(
+        "setup",
+        help="Download detection rules, Chainsaw, and Sigma rules",
+        epilog=(
+            "Examples:\n"
+            "  crowdsentinel setup\n"
+            "  CROWDSENTINEL_DATA_DIR=/opt/crowdsentinel crowdsentinel setup"
+        ),
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    sp.set_defaults(func=_cmd_setup)
 
     return parser
 
