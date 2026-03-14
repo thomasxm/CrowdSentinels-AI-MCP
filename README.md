@@ -1,7 +1,7 @@
 <!-- mcp-name: io.github.thomasxm/crowdsentinel-mcp-server -->
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/thomasxm/CrowdSentinels-AI-MCP/main/logo.png" alt="CrowdSentinel Logo" width="400"/>
+  <img src="https://raw.githubusercontent.com/thomasxm/CrowdSentinel-AI-MCP/main/logo.png" alt="CrowdSentinel Logo" width="400"/>
 
 # CrowdSentinel MCP Server
 
