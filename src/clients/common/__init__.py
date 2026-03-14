@@ -1,3 +1,4 @@
+"""CrowdSentinel specialised client modules."""
 from .index import IndexClient
 from .document import DocumentClient
 from .cluster import ClusterClient

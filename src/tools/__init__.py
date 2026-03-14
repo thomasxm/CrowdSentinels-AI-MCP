@@ -1,3 +1,4 @@
+"""CrowdSentinel MCP tool registration modules."""
 from src.tools.alias import AliasTools
 from src.tools.cluster import ClusterTools
 from src.tools.document import DocumentTools

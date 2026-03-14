@@ -1,3 +1,4 @@
+"""MCP tools for document search and manipulation."""
 from typing import Dict, Optional
 
 from fastmcp import FastMCP

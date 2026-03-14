@@ -1,3 +1,4 @@
+"""MCP tools for data stream operations."""
 from typing import Dict, Optional
 from fastmcp import FastMCP
 

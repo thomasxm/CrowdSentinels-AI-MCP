@@ -1,3 +1,4 @@
+# CrowdSentinel release automation
 .PHONY: release
 
 release:

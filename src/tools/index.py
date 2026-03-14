@@ -1,3 +1,4 @@
+"""MCP tools for index listing, mapping, and settings."""
 from typing import Dict, Optional, List
 
 from fastmcp import FastMCP

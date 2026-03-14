@@ -1,3 +1,4 @@
+"""MCP tools for general-purpose API requests."""
 from typing import Dict, Optional
 
 from fastmcp import FastMCP

@@ -1,5 +1,5 @@
 """
-Configuration for high-risk operations management.
+CrowdSentinel configuration for high-risk operations management.
 """
 import os
 from typing import Set, Dict, Any, Callable

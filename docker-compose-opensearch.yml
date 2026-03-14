@@ -1,3 +1,4 @@
+# CrowdSentinel local OpenSearch cluster for development and testing
 services:
   opensearch-node1: # This is also the hostname of the container within the Docker network (i.e. https://opensearch-node1/)
     image: opensearchproject/opensearch:2.11.0

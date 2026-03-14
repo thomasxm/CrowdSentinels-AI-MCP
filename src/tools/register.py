@@ -1,3 +1,4 @@
+"""Dynamic tool registration for the CrowdSentinel MCP server."""
 import logging
 from typing import List, Type
 

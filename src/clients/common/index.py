@@ -1,3 +1,4 @@
+"""Index management and introspection operations."""
 from typing import Dict, Optional
 
 from src.clients.base import SearchClientBase

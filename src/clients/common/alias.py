@@ -1,3 +1,4 @@
+"""Alias management operations for Elasticsearch and OpenSearch."""
 from typing import Dict
 
 from src.clients.base import SearchClientBase

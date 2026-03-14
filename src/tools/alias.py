@@ -1,3 +1,4 @@
+"""MCP tools for index alias management."""
 from typing import Dict, List
 
 from fastmcp import FastMCP

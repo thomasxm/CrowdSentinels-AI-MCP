@@ -1,3 +1,4 @@
+"""MCP tools for cluster health and statistics."""
 from typing import Dict
 
 from fastmcp import FastMCP

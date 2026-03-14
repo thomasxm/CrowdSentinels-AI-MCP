@@ -1,3 +1,4 @@
+"""Cluster health and information operations."""
 from typing import Dict
 
 from src.clients.base import SearchClientBase
