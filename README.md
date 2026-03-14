@@ -15,7 +15,9 @@
 [![Tools](https://img.shields.io/badge/MCP%20Tools-79-brightgreen.svg)](https://github.com/thomasxm/CrowdSentinels-AI-MCP)
 [![Rules](https://img.shields.io/badge/Detection%20Rules-5%2C049-blue.svg)](https://github.com/thomasxm/CrowdSentinels-AI-MCP)
 
-[MCP Official Registry](https://registry.modelcontextprotocol.io/v0/servers?search=io.github.thomasxm/crowdsentinel-mcp-server)
+[![Install from PyPI](https://img.shields.io/badge/Install-pip%20install%20crowdsentinel--mcp--server-3775A9?style=for-the-badge&logo=pypi&logoColor=white)](https://pypi.org/project/crowdsentinel-mcp-server/)
+
+[MCP Official Registry](https://registry.modelcontextprotocol.io/v0/servers?search=io.github.thomasxm/crowdsentinel-mcp-server) · [PyPI Package](https://pypi.org/project/crowdsentinel-mcp-server/)
 
 **Open-source threat hunting orchestrator connecting LLMs to enterprise security data via Model Context Protocol (MCP)**
 
@@ -27,7 +29,9 @@
 
 ## Demo
 
-![CrowdSentinel Demo](demo.mp4)
+[![CrowdSentinel Demo](https://raw.githubusercontent.com/thomasxm/crowdsentinel-assets/main/demo_thumb.jpg)](https://github.com/thomasxm/CrowdSentinels-AI-MCP/blob/main/demo.mp4)
+
+> Click the image above to watch the full demo video.
 
 ---
 
