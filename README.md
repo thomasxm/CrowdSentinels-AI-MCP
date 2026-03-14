@@ -25,7 +25,7 @@
 
 ## Demo
 
-https://github.com/thomasxm/CrowdSentinels-AI-MCP/raw/main/demo.mp4
+![CrowdSentinel Demo](demo.mp4)
 
 ---
 
