@@ -100,7 +100,26 @@ export ELASTICSEARCH_API_KEY="your_api_key"
 export VERIFY_CERTS="false"
 ```
 
-### 2. Use as MCP Server
+### 2. Connect to an MCP Client
+
+CrowdSentinel works with any MCP-compatible AI agent. Choose your client below:
+
+<details>
+<summary><b>Claude Code (CLI)</b></summary>
+
+```bash
+claude mcp add crowdsentinel \
+  -e ELASTICSEARCH_HOSTS="https://localhost:9200" \
+  -e ELASTICSEARCH_API_KEY="your_api_key" \
+  -e VERIFY_CERTS="false" \
+  -- uvx crowdsentinel-mcp-server
+```
+</details>
+
+<details>
+<summary><b>Claude Desktop</b></summary>
+
+Edit `~/.config/Claude/claude_desktop_config.json` (Linux) or `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS):
 
 ```json
 {
@@ -117,6 +136,125 @@ export VERIFY_CERTS="false"
   }
 }
 ```
+</details>
+
+<details>
+<summary><b>VS Code Copilot</b></summary>
+
+Create `.vscode/mcp.json` in your workspace:
+
+```json
+{
+  "servers": {
+    "crowdsentinel": {
+      "command": "uvx",
+      "args": ["crowdsentinel-mcp-server"],
+      "env": {
+        "ELASTICSEARCH_HOSTS": "https://localhost:9200",
+        "ELASTICSEARCH_API_KEY": "your_api_key",
+        "VERIFY_CERTS": "false"
+      }
+    }
+  }
+}
+```
+
+Then enable MCP in VS Code settings: `"chat.mcp.enabled": true`
+</details>
+
+<details>
+<summary><b>Cursor</b></summary>
+
+Create or edit `~/.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "crowdsentinel": {
+      "command": "uvx",
+      "args": ["crowdsentinel-mcp-server"],
+      "env": {
+        "ELASTICSEARCH_HOSTS": "https://localhost:9200",
+        "ELASTICSEARCH_API_KEY": "your_api_key",
+        "VERIFY_CERTS": "false"
+      }
+    }
+  }
+}
+```
+</details>
+
+<details>
+<summary><b>Roo Code (VS Code Extension)</b></summary>
+
+Create `.roo/mcp.json` in your workspace:
+
+```json
+{
+  "mcpServers": {
+    "crowdsentinel": {
+      "command": "uvx",
+      "args": ["crowdsentinel-mcp-server"],
+      "env": {
+        "ELASTICSEARCH_HOSTS": "https://localhost:9200",
+        "ELASTICSEARCH_API_KEY": "your_api_key",
+        "VERIFY_CERTS": "false"
+      }
+    }
+  }
+}
+```
+
+Or configure via Roo Code settings panel: Settings > MCP Servers > Add Server.
+</details>
+
+<details>
+<summary><b>5ire</b></summary>
+
+In 5ire settings (v0.15.0+), add an MCP server with:
+
+- **Command**: `uvx`
+- **Arguments**: `crowdsentinel-mcp-server`
+- **Environment Variables**:
+  - `ELASTICSEARCH_HOSTS` = `https://localhost:9200`
+  - `ELASTICSEARCH_API_KEY` = `your_api_key`
+  - `VERIFY_CERTS` = `false`
+
+> **Note:** 5ire v0.14.0 has known MCP compatibility issues. Use v0.15.0+ for reliable operation.
+</details>
+
+<details>
+<summary><b>Any MCP Client (Generic)</b></summary>
+
+**stdio transport** (default — works with most clients):
+```json
+{
+  "mcpServers": {
+    "crowdsentinel": {
+      "command": "uvx",
+      "args": ["crowdsentinel-mcp-server"],
+      "env": {
+        "ELASTICSEARCH_HOSTS": "https://localhost:9200",
+        "ELASTICSEARCH_API_KEY": "your_api_key",
+        "VERIFY_CERTS": "false"
+      }
+    }
+  }
+}
+```
+
+**SSE transport** (for web-based clients):
+```bash
+crowdsentinel-mcp-server --transport sse --port 8001
+# Connect to: http://localhost:8001/sse/
+```
+
+**HTTP transport** (for REST API clients):
+```bash
+crowdsentinel-mcp-server --transport streamable-http --port 8001
+# Connect to: http://localhost:8001/mcp/
+```
+</details>
 
 ### 3. Or use the CLI directly
 
