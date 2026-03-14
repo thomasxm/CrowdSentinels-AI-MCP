@@ -25,7 +25,7 @@
 
 ## Demo
 
-https://github.com/thomasxm/CrowdSentinels-AI-MCP/blob/main/demo.mp4
+https://github.com/thomasxm/CrowdSentinels-AI-MCP/raw/main/demo.mp4
 
 ---
 
