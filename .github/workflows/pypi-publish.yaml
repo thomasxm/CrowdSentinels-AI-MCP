@@ -1,4 +1,4 @@
-# Publish Python packages to PyPI using Trusted Publishing (OIDC)
+# Publish to PyPI using Trusted Publishing (OIDC)
 # No API tokens required — authenticates via GitHub OIDC identity
 # See: https://docs.pypi.org/trusted-publishers/
 
@@ -24,18 +24,6 @@ jobs:
       name: pypi
       url: https://pypi.org/project/crowdsentinel-mcp-server/
 
-    strategy:
-      matrix:
-        variant:
-          - name: "crowdsentinel-mcp-server-es7"
-            elasticsearch_version: "7.13.0"
-          - name: "crowdsentinel-mcp-server"
-            elasticsearch_version: "8.17.2"
-          - name: "crowdsentinel-mcp-server-es9"
-            elasticsearch_version: "9.0.0"
-          - name: "opensearch-mcp-server"
-            elasticsearch_version: "8.17.2"
-
     steps:
     - uses: actions/checkout@v4
 
@@ -50,24 +38,8 @@ jobs:
     - name: Install dependencies
       run: uv sync
 
-    - name: Modify pyproject.toml for ${{ matrix.variant.name }}
-      run: |
-        # Update package name
-        sed -i 's/^name = .*$/name = "${{ matrix.variant.name }}"/' pyproject.toml
-
-        # Update elasticsearch version
-        sed -i 's/elasticsearch==.*/elasticsearch==${{ matrix.variant.elasticsearch_version }}",/' pyproject.toml
-
-        # Update script name to match package name (only for non-opensearch packages)
-        if [[ "${{ matrix.variant.name }}" != "opensearch-mcp-server" ]]; then
-          sed -i 's/^crowdsentinel-mcp-server = /"${{ matrix.variant.name }}" = /' pyproject.toml
-        fi
-
-    - name: Build ${{ matrix.variant.name }} package
+    - name: Build package
       run: uv build
 
-    - name: Publish ${{ matrix.variant.name }} to PyPI
+    - name: Publish to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
-
-    - name: Clean dist directory
-      run: rm -rf dist/*
