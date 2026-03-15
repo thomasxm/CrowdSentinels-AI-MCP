@@ -891,7 +891,10 @@ def _handle_cli_error(exc: Exception) -> None:
     if "TLS" in msg or "SSL" in msg or "CERTIFICATE_VERIFY_FAILED" in msg:
         print(
             f"TLS/SSL error connecting to {hosts}\n"
-            "For self-signed certificates, set: export VERIFY_CERTS=false",
+            "Possible fixes:\n"
+            '  - If Elasticsearch has no TLS:  export ELASTICSEARCH_HOSTS="http://localhost:9200"\n'
+            "  - For self-signed certificates: export VERIFY_CERTS=false\n"
+            "  - For custom CA:                export VERIFY_CERTS=/path/to/ca.crt",
             file=sys.stderr,
         )
         sys.exit(1)

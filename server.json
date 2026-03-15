@@ -18,15 +18,22 @@
       "environmentVariables": [
         {
           "name": "ELASTICSEARCH_HOSTS",
-          "description": "Comma-separated list of Elasticsearch hosts (e.g., https://localhost:9200)",
+          "description": "Comma-separated Elasticsearch hosts. Supports HTTP/HTTPS, local/remote/cloud (e.g., http://localhost:9200, https://es.prod.example.com:9200)",
           "isRequired": false,
           "format": "string",
           "isSecret": false,
           "default": "https://localhost:9200"
         },
         {
+          "name": "ELASTICSEARCH_CLOUD_ID",
+          "description": "Elastic Cloud deployment ID (alternative to ELASTICSEARCH_HOSTS for cloud deployments)",
+          "isRequired": false,
+          "format": "string",
+          "isSecret": false
+        },
+        {
           "name": "ELASTICSEARCH_API_KEY",
-          "description": "API key for Elasticsearch or Elastic Cloud authentication (recommended)",
+          "description": "API key for authentication (recommended for production and Elastic Cloud)",
           "isRequired": false,
           "format": "string",
           "isSecret": true
@@ -46,10 +53,17 @@
           "isSecret": true
         },
         {
-          "name": "VERIFY_CERTS",
-          "description": "Whether to verify SSL certificates (true/false)",
+          "name": "ELASTICSEARCH_BEARER_TOKEN",
+          "description": "Bearer/service token for authentication (alternative to API key)",
           "isRequired": false,
-          "format": "boolean",
+          "format": "string",
+          "isSecret": true
+        },
+        {
+          "name": "VERIFY_CERTS",
+          "description": "TLS certificate verification: true (verify CA — production), false (skip — dev/test), or /path/to/ca.crt (custom CA)",
+          "isRequired": false,
+          "format": "string",
           "isSecret": false,
           "default": "false"
         },
