@@ -1,27 +1,21 @@
-"""OAuth browser sign-in for OpenAI and Anthropic.
+"""OAuth authentication for OpenAI and Anthropic.
 
 Supports:
-    - OpenAI Codex OAuth (PKCE) — sign in with ChatGPT subscription
-    - Anthropic setup-token — paste token from `claude setup-token`
-    - API key fallback — manual key entry
+    - OpenAI Device Code flow — sign in with ChatGPT subscription (works headless)
+    - Anthropic — setup-token from `claude setup-token` or API key
+    - API key fallback — env vars
 
-Tokens are stored in ~/.crowdsentinel/auth.json and auto-refreshed.
+Tokens stored in ~/.crowdsentinel/auth.json and auto-refreshed.
 """
 
-import base64
-import hashlib
-import http.server
 import json
 import logging
 import os
-import secrets
 import sys
-import threading
 import time
 import webbrowser
 from pathlib import Path
 from typing import Any, Dict, Optional
-from urllib.parse import parse_qs, urlencode, urlparse
 
 import httpx
 
@@ -29,29 +23,21 @@ logger = logging.getLogger("crowdsentinel.agent.auth")
 
 AUTH_FILE = Path.home() / ".crowdsentinel" / "auth.json"
 
-# OpenAI Codex OAuth configuration
-OPENAI_AUTH_URL = "https://auth.openai.com/oauth/authorize"
-OPENAI_TOKEN_URL = "https://auth.openai.com/oauth/token"
-OPENAI_CALLBACK_PORT = 1455
-OPENAI_CALLBACK_URL = f"http://127.0.0.1:{OPENAI_CALLBACK_PORT}/auth/callback"
-# Public client ID used by Codex CLI tools
+# OpenAI Codex OAuth configuration (same as Codex CLI / OpenClaw)
 OPENAI_CLIENT_ID = "app_EMoamEEZ73f0CkXaXp7hrann"
-
-
-def _generate_pkce() -> tuple:
-    """Generate PKCE code verifier and challenge."""
-    verifier = secrets.token_urlsafe(32)
-    challenge = base64.urlsafe_b64encode(
-        hashlib.sha256(verifier.encode()).digest()
-    ).rstrip(b"=").decode()
-    return verifier, challenge
+OPENAI_AUTH_BASE = "https://auth.openai.com"
+OPENAI_DEVICE_USERCODE_URL = f"{OPENAI_AUTH_BASE}/api/accounts/deviceauth/usercode"
+OPENAI_DEVICE_TOKEN_URL = f"{OPENAI_AUTH_BASE}/api/accounts/deviceauth/token"
+OPENAI_TOKEN_URL = f"{OPENAI_AUTH_BASE}/oauth/token"
+OPENAI_DEVICE_CALLBACK_URI = f"{OPENAI_AUTH_BASE}/deviceauth/callback"
+OPENAI_DEVICE_AUTH_PAGE = "https://auth.openai.com/codex/device"
 
 
 def _save_auth(data: Dict[str, Any]) -> None:
     """Save auth tokens to ~/.crowdsentinel/auth.json."""
     AUTH_FILE.parent.mkdir(parents=True, exist_ok=True)
     AUTH_FILE.write_text(json.dumps(data, indent=2), encoding="utf-8")
-    AUTH_FILE.chmod(0o600)  # Owner-only read/write
+    AUTH_FILE.chmod(0o600)
     logger.info("Auth tokens saved to %s", AUTH_FILE)
 
 
@@ -78,7 +64,6 @@ def get_auth_status() -> Dict[str, Any]:
     """Check authentication status."""
     auth = load_auth()
     if not auth:
-        # Check env vars
         if os.environ.get("ANTHROPIC_API_KEY"):
             return {"authenticated": True, "method": "env:ANTHROPIC_API_KEY", "provider": "anthropic"}
         if os.environ.get("OPENAI_API_KEY"):
@@ -100,17 +85,17 @@ def get_auth_status() -> Dict[str, Any]:
 
 
 def refresh_token_if_needed(auth: Dict[str, Any]) -> Dict[str, Any]:
-    """Refresh OAuth token if expired. Returns updated auth dict."""
+    """Refresh OAuth token if expired."""
     if auth.get("provider") != "openai":
-        return auth  # Anthropic tokens don't auto-refresh
+        return auth
 
     expires_at = auth.get("expires_at", 0)
     if expires_at > 0 and time.time() < expires_at - 60:
-        return auth  # Still valid (with 60s buffer)
+        return auth
 
     refresh_token = auth.get("refresh_token")
     if not refresh_token:
-        return auth  # No refresh token available
+        return auth
 
     try:
         resp = httpx.post(
@@ -131,7 +116,7 @@ def refresh_token_if_needed(auth: Dict[str, Any]) -> Dict[str, Any]:
         auth["expires_at"] = int(time.time()) + tokens.get("expires_in", 3600)
 
         _save_auth(auth)
-        logger.info("OpenAI token refreshed successfully")
+        logger.info("OpenAI token refreshed")
     except Exception as exc:
         logger.warning("Token refresh failed: %s", exc)
 
@@ -165,106 +150,128 @@ def get_access_token() -> Optional[tuple]:
 
 
 # ---------------------------------------------------------------------------
-# OpenAI Codex OAuth (PKCE browser flow)
+# OpenAI Device Code Flow
 # ---------------------------------------------------------------------------
 
-class _OAuthCallbackHandler(http.server.BaseHTTPRequestHandler):
-    """HTTP handler to capture the OAuth callback."""
+def login_openai() -> bool:
+    """Authenticate with OpenAI using the Device Code flow.
 
-    auth_code = None
-    state = None
+    This is the same flow used by Codex CLI and OpenClaw:
+    1. Request a device code from OpenAI
+    2. User opens a URL and enters the code
+    3. CLI polls until the user authorises
+    4. Exchange the authorisation code for tokens
+    """
+    client = httpx.Client(timeout=30)
 
-    def do_GET(self):
-        parsed = urlparse(self.path)
-        if parsed.path == "/auth/callback":
-            params = parse_qs(parsed.query)
-            _OAuthCallbackHandler.auth_code = params.get("code", [None])[0]
-            _OAuthCallbackHandler.state = params.get("state", [None])[0]
-
-            self.send_response(200)
-            self.send_header("Content-Type", "text/html")
-            self.end_headers()
-            self.wfile.write(
-                b"<html><body><h2>Authentication successful!</h2>"
-                b"<p>You can close this window and return to the terminal.</p>"
-                b"</body></html>"
+    # Step 1: Request device code
+    print("Requesting device code from OpenAI...")
+    try:
+        resp = client.post(
+            OPENAI_DEVICE_USERCODE_URL,
+            json={"client_id": OPENAI_CLIENT_ID},
+            headers={
+                "Content-Type": "application/json",
+                "User-Agent": "crowdsentinel-mcp-server/1.0",
+                "Accept": "application/json",
+            },
+        )
+        resp.raise_for_status()
+        device_data = resp.json()
+    except httpx.HTTPStatusError as exc:
+        if exc.response.status_code == 404:
+            print(
+                "Device code login is not enabled for your account.\n"
+                "Enable it at: https://chatgpt.com/settings/security\n"
+                "Look for 'Device Code Login' and turn it on.",
+                file=sys.stderr,
             )
         else:
-            self.send_response(404)
-            self.end_headers()
-
-    def log_message(self, format, *args):
-        pass  # Suppress server logs
-
-
-def login_openai() -> bool:
-    """Run the OpenAI Codex OAuth PKCE flow."""
-    verifier, challenge = _generate_pkce()
-    state = secrets.token_urlsafe(16)
-
-    params = {
-        "client_id": OPENAI_CLIENT_ID,
-        "redirect_uri": OPENAI_CALLBACK_URL,
-        "response_type": "code",
-        "scope": "openid profile email offline_access",
-        "code_challenge": challenge,
-        "code_challenge_method": "S256",
-        "state": state,
-    }
-
-    auth_url = f"{OPENAI_AUTH_URL}?{urlencode(params)}"
-
-    # Start local callback server
-    server = http.server.HTTPServer(("127.0.0.1", OPENAI_CALLBACK_PORT), _OAuthCallbackHandler)
-    server_thread = threading.Thread(target=server.handle_request, daemon=True)
-    server_thread.start()
-
-    print(f"Opening browser for OpenAI sign-in...")
-    print(f"If the browser doesn't open, visit:\n  {auth_url}\n")
-    webbrowser.open(auth_url)
-
-    # Wait for callback
-    print("Waiting for authentication...")
-    server_thread.join(timeout=120)
-    server.server_close()
-
-    code = _OAuthCallbackHandler.auth_code
-    returned_state = _OAuthCallbackHandler.state
-
-    # Reset class variables for next use
-    _OAuthCallbackHandler.auth_code = None
-    _OAuthCallbackHandler.state = None
-
-    if not code:
-        # Fallback: ask user to paste the redirect URL manually
-        print("\nBrowser callback not received.")
-        print("After signing in, copy the URL from your browser and paste it here:")
-        redirect_url = input("Paste URL: ").strip()
-        if redirect_url:
-            parsed = parse_qs(urlparse(redirect_url).query)
-            code = parsed.get("code", [None])[0]
-            returned_state = parsed.get("state", [None])[0]
-
-    if not code:
-        print("Authentication failed: no authorization code received.", file=sys.stderr)
+            print(f"Failed to request device code: {exc}", file=sys.stderr)
+        return False
+    except Exception as exc:
+        print(f"Failed to request device code: {exc}", file=sys.stderr)
         return False
 
-    if returned_state != state:
-        print("Authentication failed: state mismatch (possible CSRF).", file=sys.stderr)
+    device_auth_id = device_data.get("device_auth_id")
+    user_code = device_data.get("user_code") or device_data.get("usercode")
+    interval = int(device_data.get("interval", 5))
+
+    if not device_auth_id or not user_code:
+        print(f"Unexpected response: {device_data}", file=sys.stderr)
         return False
 
-    # Exchange code for tokens
+    # Step 2: Show code and open browser
+    print(f"\n  Your code: {user_code}\n")
+    print(f"  Open this URL and enter the code above:")
+    print(f"  {OPENAI_DEVICE_AUTH_PAGE}\n")
+
     try:
-        resp = httpx.post(
+        webbrowser.open(OPENAI_DEVICE_AUTH_PAGE)
+    except Exception:
+        pass  # Browser may not be available (headless)
+
+    # Step 3: Poll for authorisation
+    print("Waiting for authorisation", end="", flush=True)
+    max_wait = 15 * 60  # 15 minutes
+    start = time.time()
+
+    auth_code = None
+    code_verifier = None
+
+    while time.time() - start < max_wait:
+        time.sleep(interval)
+        print(".", end="", flush=True)
+
+        try:
+            resp = client.post(
+                OPENAI_DEVICE_TOKEN_URL,
+                json={
+                    "device_auth_id": device_auth_id,
+                    "user_code": user_code,
+                },
+                headers={
+                    "Content-Type": "application/json",
+                    "User-Agent": "crowdsentinel-mcp-server/1.0",
+                    "Accept": "application/json",
+                },
+            )
+
+            if resp.status_code == 200:
+                token_data = resp.json()
+                auth_code = token_data.get("authorization_code")
+                code_verifier = token_data.get("code_verifier")
+                print(" Authorised!")
+                break
+            elif resp.status_code in (403, 404):
+                continue  # Still pending
+            else:
+                print(f"\nPolling error: {resp.status_code} {resp.text}", file=sys.stderr)
+                return False
+        except Exception:
+            print("!", end="", flush=True)
+            continue
+
+    if not auth_code:
+        print("\nAuthorisation timed out after 15 minutes.", file=sys.stderr)
+        return False
+
+    # Step 4: Exchange code for tokens
+    print("Exchanging code for tokens...")
+    try:
+        exchange_data = {
+            "grant_type": "authorization_code",
+            "client_id": OPENAI_CLIENT_ID,
+            "code": auth_code,
+            "redirect_uri": OPENAI_DEVICE_CALLBACK_URI,
+        }
+        if code_verifier:
+            exchange_data["code_verifier"] = code_verifier
+
+        resp = client.post(
             OPENAI_TOKEN_URL,
-            data={
-                "grant_type": "authorization_code",
-                "client_id": OPENAI_CLIENT_ID,
-                "code": code,
-                "redirect_uri": OPENAI_CALLBACK_URL,
-                "code_verifier": verifier,
-            },
-            timeout=60,
+            data=exchange_data,
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
         )
         resp.raise_for_status()
         tokens = resp.json()
@@ -280,20 +287,25 @@ def login_openai() -> bool:
     }
 
     _save_auth(auth_data)
-    print("OpenAI authentication successful! Token stored.")
+    print("OpenAI authentication successful! Token stored in ~/.crowdsentinel/auth.json")
     return True
 
 
 # ---------------------------------------------------------------------------
-# Anthropic (setup-token or API key paste)
+# Anthropic (setup-token or API key)
 # ---------------------------------------------------------------------------
 
 def login_anthropic() -> bool:
-    """Authenticate with Anthropic via setup-token or API key."""
-    print("Anthropic authentication options:\n")
-    print("  1. Paste a setup-token (from `claude setup-token`)")
-    print("  2. Paste an API key (from https://console.anthropic.com/settings/keys)")
-    print("  3. Open Anthropic Console in browser to create a key\n")
+    """Authenticate with Anthropic via setup-token or API key.
+
+    For subscription auth (Pro/Max), use `claude setup-token` to generate
+    a token, then paste it here. For API key auth, paste the key from
+    https://console.anthropic.com/settings/keys.
+    """
+    print("Anthropic authentication\n")
+    print("  Option 1: Run `claude setup-token` in another terminal, then paste the token here")
+    print("  Option 2: Paste an API key from https://console.anthropic.com/settings/keys")
+    print("  Option 3: Open Anthropic Console in browser to create a key\n")
 
     choice = input("Choose [1/2/3]: ").strip()
 
@@ -303,35 +315,35 @@ def login_anthropic() -> bool:
         choice = "2"
 
     if choice == "1":
-        token = input("Paste setup-token: ").strip()
+        print("\nRun this in another terminal:")
+        print("  claude setup-token\n")
+        token = input("Paste the setup-token: ").strip()
         if not token:
             print("No token provided.", file=sys.stderr)
             return False
 
-        auth_data = {
+        _save_auth({
             "provider": "anthropic",
             "access_token": token,
             "refresh_token": "",
-            "expires_at": 0,  # Setup tokens don't have a fixed expiry
-        }
-        _save_auth(auth_data)
-        print("Anthropic authentication successful! Token stored.")
+            "expires_at": 0,
+        })
+        print("Anthropic setup-token stored in ~/.crowdsentinel/auth.json")
         return True
 
     elif choice == "2":
-        key = input("Paste API key: ").strip()
+        key = input("Paste API key (sk-ant-...): ").strip()
         if not key:
             print("No key provided.", file=sys.stderr)
             return False
 
-        auth_data = {
+        _save_auth({
             "provider": "anthropic",
             "access_token": key,
             "refresh_token": "",
             "expires_at": 0,
-        }
-        _save_auth(auth_data)
-        print("Anthropic API key stored.")
+        })
+        print("Anthropic API key stored in ~/.crowdsentinel/auth.json")
         return True
 
     else:
