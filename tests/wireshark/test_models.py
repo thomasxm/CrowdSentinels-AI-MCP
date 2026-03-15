@@ -1,6 +1,5 @@
 # tests/wireshark/test_models.py
 """Tests for Wireshark data models."""
-import pytest
 from datetime import datetime
 
 

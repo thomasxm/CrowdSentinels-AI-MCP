@@ -1,5 +1,5 @@
 """Chainsaw Log Hunting Tools with Pyramid of Pain and Diamond Model integration."""
-from typing import Dict, List, Optional
+
 from fastmcp import FastMCP
 
 from src.storage.auto_capture import auto_capture_chainsaw_results
@@ -27,13 +27,13 @@ class ChainsawHuntingTools:
         @mcp.tool()
         def hunt_with_sigma_rules(
             evtx_path: str,
-            sigma_rules_path: Optional[str] = None,
-            mapping_path: Optional[str] = None,
-            from_time: Optional[str] = None,
-            to_time: Optional[str] = None,
+            sigma_rules_path: str | None = None,
+            mapping_path: str | None = None,
+            from_time: str | None = None,
+            to_time: str | None = None,
             prioritize_by_pyramid: bool = True
-        ) -> Dict:
-            f"""
+        ) -> dict:
+            """
             Hunt for threats in EVTX logs using Sigma rules.
 
             This tool uses Chainsaw to hunt through Windows Event Logs (EVTX) with Sigma rules,
@@ -137,9 +137,9 @@ class ChainsawHuntingTools:
             ioc: str,
             ioc_type: str,
             case_insensitive: bool = True,
-            event_id: Optional[int] = None,
+            event_id: int | None = None,
             use_regex: bool = False
-        ) -> Dict:
+        ) -> dict:
             """
             Search for a specific IoC in EVTX logs.
 
@@ -255,7 +255,7 @@ class ChainsawHuntingTools:
             initial_ioc_type: str,
             max_iterations: int = 3,
             follow_pyramid: bool = True
-        ) -> Dict:
+        ) -> dict:
             """
             Perform iterative threat hunting starting from an initial IoC.
 
@@ -339,7 +339,10 @@ class ChainsawHuntingTools:
                     result = search_result
                 else:
                     matches = search_result.get("matches", [])
-                    pyramid_info = ChainsawClient.categorize_ioc_by_pyramid(current_ioc_type, current_ioc)
+                    from src.clients.common.chainsaw_client import (
+                        ChainsawClient as _ChainsawClient,
+                    )
+                    pyramid_info = _ChainsawClient.categorize_ioc_by_pyramid(current_ioc_type, current_ioc)
                     result = {
                         "ioc_searched": current_ioc,
                         "ioc_type": current_ioc_type,
@@ -415,7 +418,7 @@ class ChainsawHuntingTools:
             )
 
         @mcp.tool()
-        def get_pyramid_of_pain_guide() -> Dict:
+        def get_pyramid_of_pain_guide() -> dict:
             """
             Get the Pyramid of Pain framework guide for IoC prioritization.
 
@@ -488,7 +491,7 @@ class ChainsawHuntingTools:
             }
 
         @mcp.tool()
-        def get_diamond_model_guide() -> Dict:
+        def get_diamond_model_guide() -> dict:
             """
             Get the Diamond Model of Intrusion Analysis guide.
 
@@ -542,7 +545,7 @@ class ChainsawHuntingTools:
             }
 
     # Helper methods - now proper class methods
-    def _categorize_and_analyze_detections(self, detections: List[Dict], prioritize: bool) -> Dict:
+    def _categorize_and_analyze_detections(self, detections: list[dict], prioritize: bool) -> dict:
         """Categorize detections by Pyramid of Pain and analyze with Diamond Model."""
         by_pyramid = {i: [] for i in range(1, 7)}
         diamond_summary = {
@@ -611,7 +614,7 @@ class ChainsawHuntingTools:
             "follow_ups": follow_ups
         }
 
-    def _generate_hunt_summary(self, categorized: Dict, evtx_path: str) -> str:
+    def _generate_hunt_summary(self, categorized: dict, evtx_path: str) -> str:
         """Generate human-readable summary of hunt results."""
         total = sum(len(categorized["by_pyramid"][i]) for i in range(1, 7))
 
@@ -639,7 +642,7 @@ class ChainsawHuntingTools:
 
         return "\n".join(summary_parts)
 
-    def _generate_search_summary(self, ioc: str, ioc_type: str, matches: List[Dict]) -> str:
+    def _generate_search_summary(self, ioc: str, ioc_type: str, matches: list[dict]) -> str:
         """Generate summary of search results."""
         if not matches:
             return f"No matches found for {ioc_type}: {ioc}"
@@ -667,7 +670,7 @@ class ChainsawHuntingTools:
 
         return summary
 
-    def _suggest_follow_up_searches(self, ioc: str, ioc_type: str, matches: List[Dict]) -> List[Dict]:
+    def _suggest_follow_up_searches(self, ioc: str, ioc_type: str, matches: list[dict]) -> list[dict]:
         """Suggest follow-up searches based on results."""
         suggestions = []
 
@@ -689,7 +692,7 @@ class ChainsawHuntingTools:
 
         return suggestions
 
-    def _extract_diamond_model_from_matches(self, matches: List[Dict]) -> Dict:
+    def _extract_diamond_model_from_matches(self, matches: list[dict]) -> dict:
         """Extract Diamond Model elements from search matches."""
         diamond = {
             "infrastructure": [],
@@ -722,7 +725,7 @@ class ChainsawHuntingTools:
 
         return diamond
 
-    def _extract_iocs_from_matches(self, matches: List[Dict]) -> List[Dict]:
+    def _extract_iocs_from_matches(self, matches: list[dict]) -> list[dict]:
         """Extract IoCs from search matches for iterative hunting."""
         iocs = []
         seen = set()
@@ -758,7 +761,7 @@ class ChainsawHuntingTools:
 
         return iocs
 
-    def _select_next_ioc_by_pyramid(self, new_iocs: List[Dict], discovered: set) -> Optional[Dict]:
+    def _select_next_ioc_by_pyramid(self, new_iocs: list[dict], discovered: set) -> dict | None:
         """Select next IoC to hunt based on Pyramid of Pain priority."""
         # Prioritize by pyramid level (prefer higher levels)
         prioritized = []
@@ -779,7 +782,7 @@ class ChainsawHuntingTools:
         prioritized.sort(key=lambda x: x["priority"], reverse=True)
         return prioritized[0]["ioc"]
 
-    def _build_complete_diamond_model(self, iterations: List[Dict]) -> Dict:
+    def _build_complete_diamond_model(self, iterations: list[dict]) -> dict:
         """Build complete Diamond Model from all iterations."""
         complete = {
             "adversary": {"elements": [], "confidence": "LOW"},
@@ -793,7 +796,7 @@ class ChainsawHuntingTools:
 
         return complete
 
-    def _reconstruct_attack_timeline(self, iterations: List[Dict]) -> List[Dict]:
+    def _reconstruct_attack_timeline(self, iterations: list[dict]) -> list[dict]:
         """Reconstruct attack timeline from iterations."""
         timeline = []
 
@@ -807,7 +810,7 @@ class ChainsawHuntingTools:
 
         return timeline
 
-    def _generate_final_recommendations(self, iterations: List[Dict]) -> List[str]:
+    def _generate_final_recommendations(self, iterations: list[dict]) -> list[str]:
         """Generate final recommendations based on all iterations."""
         recommendations = []
 

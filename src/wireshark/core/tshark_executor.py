@@ -1,11 +1,8 @@
 # src/wireshark/core/tshark_executor.py
 """TShark command executor and builder."""
-import subprocess
-import shlex
-import shutil
 import logging
-from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+import shutil
+import subprocess
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +14,7 @@ def escape_filter_value(value: str) -> str:
     return escaped
 
 
-def build_ip_filter(ips: List[str], field: str = "ip.addr") -> str:
+def build_ip_filter(ips: list[str], field: str = "ip.addr") -> str:
     """Build a filter for multiple IP addresses."""
     if not ips:
         return ""
@@ -25,7 +22,7 @@ def build_ip_filter(ips: List[str], field: str = "ip.addr") -> str:
     return " || ".join(conditions)
 
 
-def build_port_filter(ports: List[int], protocol: str = "tcp") -> str:
+def build_port_filter(ports: list[int], protocol: str = "tcp") -> str:
     """Build a filter for multiple ports."""
     if not ports:
         return ""
@@ -33,7 +30,7 @@ def build_port_filter(ports: List[int], protocol: str = "tcp") -> str:
     return " || ".join(conditions)
 
 
-def build_domain_filter(domains: List[str]) -> str:
+def build_domain_filter(domains: list[str]) -> str:
     """Build a filter for DNS domain queries."""
     if not domains:
         return ""
@@ -47,10 +44,10 @@ def build_domain_filter(domains: List[str]) -> str:
 class TSharkExecutor:
     """Execute TShark commands safely."""
 
-    def __init__(self, tshark_path: Optional[str] = None):
+    def __init__(self, tshark_path: str | None = None):
         """Initialize executor with tshark path."""
         self.tshark_path = tshark_path or shutil.which("tshark") or "/usr/bin/tshark"
-        self._version: Optional[str] = None
+        self._version: str | None = None
 
     def is_available(self) -> bool:
         """Check if tshark is available."""
@@ -65,7 +62,7 @@ class TSharkExecutor:
         except (subprocess.SubprocessError, FileNotFoundError):
             return False
 
-    def get_version(self) -> Optional[str]:
+    def get_version(self) -> str | None:
         """Get tshark version string."""
         if self._version:
             return self._version
@@ -86,13 +83,13 @@ class TSharkExecutor:
     def build_command(
         self,
         pcap_path: str,
-        display_filter: Optional[str] = None,
-        fields: Optional[List[str]] = None,
+        display_filter: str | None = None,
+        fields: list[str] | None = None,
         output_format: str = "fields",
-        limit: Optional[int] = None,
+        limit: int | None = None,
         no_resolve: bool = True,
-        additional_args: Optional[List[str]] = None
-    ) -> List[str]:
+        additional_args: list[str] | None = None
+    ) -> list[str]:
         """Build a tshark command for reading pcap files.
 
         Args:
@@ -138,8 +135,8 @@ class TSharkExecutor:
         self,
         pcap_path: str,
         stat_type: str,
-        display_filter: Optional[str] = None
-    ) -> List[str]:
+        display_filter: str | None = None
+    ) -> list[str]:
         """Build a tshark command for statistics.
 
         Args:
@@ -163,7 +160,7 @@ class TSharkExecutor:
         stream_type: str,
         stream_index: int,
         output_type: str = "ascii"
-    ) -> List[str]:
+    ) -> list[str]:
         """Build command to follow a TCP/UDP stream.
 
         Args:
@@ -185,7 +182,7 @@ class TSharkExecutor:
         pcap_path: str,
         protocol: str,
         output_dir: str
-    ) -> List[str]:
+    ) -> list[str]:
         """Build command to export objects (HTTP, SMB, etc.).
 
         Args:
@@ -203,9 +200,9 @@ class TSharkExecutor:
 
     def execute(
         self,
-        cmd: List[str],
+        cmd: list[str],
         timeout: int = 300
-    ) -> Tuple[int, str, str]:
+    ) -> tuple[int, str, str]:
         """Execute a tshark command.
 
         Args:
@@ -234,11 +231,11 @@ class TSharkExecutor:
     def execute_and_parse_fields(
         self,
         pcap_path: str,
-        fields: List[str],
-        display_filter: Optional[str] = None,
-        limit: Optional[int] = None,
+        fields: list[str],
+        display_filter: str | None = None,
+        limit: int | None = None,
         timeout: int = 300
-    ) -> List[Dict[str, str]]:
+    ) -> list[dict[str, str]]:
         """Execute tshark and parse field output.
 
         Returns:

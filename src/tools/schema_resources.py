@@ -5,17 +5,16 @@ field mapping lookups, and schema-aware query building.
 """
 
 import logging
-from typing import Dict, List, Optional, Any
+from typing import Any
 
 from mcp.server.fastmcp import FastMCP
 
 from ..clients.common.schemas import (
     SCHEMA_REGISTRY,
-    get_schema,
-    detect_schema_from_index,
-    detect_schema_from_fields,
-    list_schemas,
     LogSourceSchema,
+    detect_schema_from_index,
+    get_schema,
+    list_schemas,
 )
 from ..clients.common.schemas.registry import SchemaResolver
 
@@ -124,7 +123,7 @@ class SchemaTools:
         # =====================================================================
 
         @mcp.tool()
-        def list_available_schemas() -> Dict[str, Any]:
+        def list_available_schemas() -> dict[str, Any]:
             """
             List all available log source schemas in the registry.
 
@@ -148,7 +147,7 @@ class SchemaTools:
             }
 
         @mcp.tool()
-        def get_schema_details(schema_id: str) -> Dict[str, Any]:
+        def get_schema_details(schema_id: str) -> dict[str, Any]:
             """
             Get detailed information about a specific schema.
 
@@ -193,9 +192,9 @@ class SchemaTools:
         def get_field_mapping(
             semantic_field: str,
             event_type: str,
-            schema_id: Optional[str] = None,
-            index: Optional[str] = None
-        ) -> Dict[str, Any]:
+            schema_id: str | None = None,
+            index: str | None = None
+        ) -> dict[str, Any]:
             """
             Get the actual field name for a semantic field concept.
 
@@ -223,7 +222,7 @@ class SchemaTools:
                 get_field_mapping("destination_ip", "network_connection", index="winlogbeat-*")
             """
             # Resolve schema
-            schema: Optional[LogSourceSchema] = None
+            schema: LogSourceSchema | None = None
             if schema_id:
                 schema = get_schema(schema_id)
             if not schema and index:
@@ -263,7 +262,7 @@ class SchemaTools:
             }
 
         @mcp.tool()
-        def detect_schema_for_index(index_pattern: str) -> Dict[str, Any]:
+        def detect_schema_for_index(index_pattern: str) -> dict[str, Any]:
             """
             Detect which schema to use for an index pattern.
 
@@ -292,26 +291,25 @@ class SchemaTools:
                     "field_prefix": schema.field_prefix,
                     "event_types": list(schema.event_types.keys())
                 }
-            else:
-                return {
-                    "detected": False,
-                    "index_pattern": index_pattern,
-                    "message": "No schema auto-detected. Will fall back to Sysmon schema.",
-                    "suggestion": "Use schema_hint parameter to specify explicitly.",
-                    "available_schemas": [
-                        {
-                            "schema_id": s["schema_id"],
-                            "index_patterns": s["index_patterns"]
-                        }
-                        for s in list_schemas()
-                    ]
-                }
+            return {
+                "detected": False,
+                "index_pattern": index_pattern,
+                "message": "No schema auto-detected. Will fall back to Sysmon schema.",
+                "suggestion": "Use schema_hint parameter to specify explicitly.",
+                "available_schemas": [
+                    {
+                        "schema_id": s["schema_id"],
+                        "index_patterns": s["index_patterns"]
+                    }
+                    for s in list_schemas()
+                ]
+            }
 
         @mcp.tool()
         def get_event_type_fields(
             event_type: str,
-            schema_id: Optional[str] = None
-        ) -> Dict[str, Any]:
+            schema_id: str | None = None
+        ) -> dict[str, Any]:
             """
             Get all fields available for a specific event type.
 

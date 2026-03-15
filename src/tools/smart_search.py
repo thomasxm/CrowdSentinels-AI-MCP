@@ -1,6 +1,4 @@
 """Smart Search Tools - Token-efficient search with automatic summarization."""
-from typing import Dict, List, Optional, Tuple
-from datetime import datetime, timedelta
 
 from fastmcp import FastMCP
 
@@ -24,7 +22,7 @@ class SmartSearchTools:
     def __init__(self, search_client):
         self.search_client = search_client
 
-    def _get_index_time_range(self, index: str) -> Optional[Tuple[str, str]]:
+    def _get_index_time_range(self, index: str) -> tuple[str, str] | None:
         """
         Get the actual timestamp range of data in an index.
 
@@ -55,9 +53,9 @@ class SmartSearchTools:
     def _build_adaptive_time_filter(
         self,
         index: str,
-        timeframe_minutes: Optional[int],
+        timeframe_minutes: int | None,
         query: str = "*"
-    ) -> Tuple[Optional[Dict], Optional[str]]:
+    ) -> tuple[dict | None, str | None]:
         """
         Build time filter that adapts to actual data range if needed.
 
@@ -144,12 +142,12 @@ class SmartSearchTools:
         def smart_search(
             index: str,
             query: str,
-            fields: Optional[List[str]] = None,
+            fields: list[str] | None = None,
             max_results: int = 20,
             offset: int = 0,
-            timeframe_minutes: Optional[int] = None,
-            search_after: Optional[List] = None
-        ) -> Dict:
+            timeframe_minutes: int | None = None,
+            search_after: list | None = None
+        ) -> dict:
             """
             Token-efficient search with automatic summarization and PAGINATION.
 
@@ -204,15 +202,15 @@ class SmartSearchTools:
         def threat_hunt_search(
             index: str,
             query: str,
-            timeframe_minutes: Optional[int] = 60,
+            timeframe_minutes: int | None = 60,
             extract_iocs: bool = True,
             map_mitre: bool = True,
             max_sample_events: int = 5,
             analysis_size: int = 50,
             offset: int = 0,
-            search_after: Optional[List] = None,
+            search_after: list | None = None,
             agg_bucket_size: int = 20
-        ) -> Dict:
+        ) -> dict:
             """
             IR-focused search with automatic IoC extraction, MITRE mapping, and PAGINATION.
 
@@ -282,7 +280,7 @@ class SmartSearchTools:
             query: str = "*",
             timeframe_minutes: int = 60,
             top_n: int = 10
-        ) -> Dict:
+        ) -> dict:
             """
             Fast triage aggregation - counts without returning documents.
 
@@ -324,20 +322,20 @@ class SmartSearchTools:
         index_lower = index.lower()
         if "winlog" in index_lower:
             return "winlogbeat"
-        elif "audit" in index_lower:
+        if "audit" in index_lower:
             return "auditbeat"
-        elif "file" in index_lower:
+        if "file" in index_lower:
             return "filebeat"
-        elif "cef" in index_lower:
+        if "cef" in index_lower:
             return "cef"
         return "default"
 
-    def _get_default_fields(self, index: str) -> List[str]:
+    def _get_default_fields(self, index: str) -> list[str]:
         """Get default fields based on index type."""
         index_type = self._detect_index_type(index)
         return self.DEFAULT_FIELDS.get(index_type, self.DEFAULT_FIELDS["default"])
 
-    def _build_time_filter(self, timeframe_minutes: Optional[int]) -> Optional[Dict]:
+    def _build_time_filter(self, timeframe_minutes: int | None) -> dict | None:
         """Build time range filter."""
         if not timeframe_minutes:
             return None
@@ -350,7 +348,7 @@ class SmartSearchTools:
             }
         }
 
-    def _extract_field_value(self, source: Dict, field: str):
+    def _extract_field_value(self, source: dict, field: str):
         """Extract nested field value using dot notation."""
         keys = field.split(".")
         value = source
@@ -361,7 +359,7 @@ class SmartSearchTools:
                 return None
         return value
 
-    def _simplify_hit(self, hit: Dict, fields: List[str]) -> Dict:
+    def _simplify_hit(self, hit: dict, fields: list[str]) -> dict:
         """Extract only requested fields from a hit."""
         source = hit.get("_source", {})
         simplified = {}
@@ -373,7 +371,7 @@ class SmartSearchTools:
                 simplified[short_name] = value
         return simplified
 
-    def _calculate_top_values(self, hits: List[Dict], fields: List[str], top_n: int = 5) -> Dict:
+    def _calculate_top_values(self, hits: list[dict], fields: list[str], top_n: int = 5) -> dict:
         """Calculate most common values for each field."""
         field_values = {field: {} for field in fields}
 
@@ -397,7 +395,7 @@ class SmartSearchTools:
 
         return top_values
 
-    def _get_time_range(self, hits: List[Dict]) -> Dict:
+    def _get_time_range(self, hits: list[dict]) -> dict:
         """Extract time range from hits."""
         timestamps = []
         for hit in hits:
@@ -417,12 +415,12 @@ class SmartSearchTools:
         self,
         index: str,
         query: str,
-        fields: Optional[List[str]],
+        fields: list[str] | None,
         max_results: int,
         offset: int,
-        timeframe_minutes: Optional[int],
-        search_after: Optional[List]
-    ) -> Dict:
+        timeframe_minutes: int | None,
+        search_after: list | None
+    ) -> dict:
         """Execute smart search with summarization and PAGINATION support."""
         # Determine fields to extract
         if not fields:
@@ -536,9 +534,9 @@ class SmartSearchTools:
         max_sample_events: int,
         analysis_size: int = 50,
         offset: int = 0,
-        search_after: Optional[List] = None,
+        search_after: list | None = None,
         agg_bucket_size: int = 20
-    ) -> Dict:
+    ) -> dict:
         """Execute threat hunting search with automatic analysis and PAGINATION."""
         # Clamp analysis_size to reasonable range
         analysis_size = min(max(analysis_size, 10), 200)
@@ -764,7 +762,7 @@ class SmartSearchTools:
         query: str,
         timeframe_minutes: int,
         top_n: int
-    ) -> Dict:
+    ) -> dict:
         """Execute quick count aggregation."""
         # Build adaptive time filter (auto-detects if no recent data)
         time_filter, time_info = self._build_adaptive_time_filter(

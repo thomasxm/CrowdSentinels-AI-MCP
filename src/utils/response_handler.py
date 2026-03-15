@@ -4,8 +4,8 @@ Handles large responses with automatic truncation and summarization.
 """
 
 import json
-from typing import Dict, Any, List
 import logging
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +30,7 @@ def truncate_text(text: str, max_chars: int) -> str:
     return text[:max_chars] + "\n\n... [TRUNCATED - Response too large]"
 
 
-def summarize_hits(hits: List[Dict], max_hits: int = MAX_HITS_DEFAULT) -> Dict:
+def summarize_hits(hits: list[dict], max_hits: int = MAX_HITS_DEFAULT) -> dict:
     """
     Summarize search hits to reduce response size.
 
@@ -59,7 +59,7 @@ def summarize_hits(hits: List[Dict], max_hits: int = MAX_HITS_DEFAULT) -> Dict:
     }
 
 
-def summarize_search_response(response: Dict, max_hits: int = MAX_HITS_DEFAULT) -> Dict:
+def summarize_search_response(response: dict, max_hits: int = MAX_HITS_DEFAULT) -> dict:
     """
     Summarize Elasticsearch search response.
 
@@ -100,7 +100,7 @@ def summarize_search_response(response: Dict, max_hits: int = MAX_HITS_DEFAULT) 
     return result
 
 
-def slim_event(event: Dict) -> Dict:
+def slim_event(event: dict) -> dict:
     """
     Extract only essential fields from an event for IoC extraction.
     This dramatically reduces event size while preserving huntable data.
@@ -161,7 +161,7 @@ def slim_event(event: Dict) -> Dict:
     return slim
 
 
-def summarize_events_response(response: Dict, max_events: int = MAX_HITS_DEFAULT) -> Dict:
+def summarize_events_response(response: dict, max_events: int = MAX_HITS_DEFAULT) -> dict:
     """
     Summarize MCP tool response that uses 'events' format.
 
@@ -205,7 +205,7 @@ def summarize_events_response(response: Dict, max_events: int = MAX_HITS_DEFAULT
     return result
 
 
-def limit_response_size(response: Any, max_chars: int = MAX_RESPONSE_CHARS) -> Dict:
+def limit_response_size(response: Any, max_chars: int = MAX_RESPONSE_CHARS) -> dict:
     """
     Limit response size with automatic truncation and summarization.
 
@@ -320,12 +320,12 @@ def limit_response_size_if_needed(response: Any, max_chars: int = MAX_RESPONSE_C
     return limit_response_size(response, max_chars=max_chars)
 
 
-def chunk_large_list(items: List, chunk_size: int = 100) -> List[List]:
+def chunk_large_list(items: list, chunk_size: int = 100) -> list[list]:
     """Split large list into chunks."""
     return [items[i:i + chunk_size] for i in range(0, len(items), chunk_size)]
 
 
-def summarize_aggregation(agg_result: Dict) -> Dict:
+def summarize_aggregation(agg_result: dict) -> dict:
     """
     Summarize aggregation results to reduce size.
     Keep only top buckets and add truncation info.

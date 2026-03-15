@@ -1,8 +1,5 @@
 # tests/wireshark/test_beaconing_detector.py
 """Tests for beaconing detector."""
-import pytest
-from pathlib import Path
-from datetime import datetime
 
 
 class TestBeaconingDetector:

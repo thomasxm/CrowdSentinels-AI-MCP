@@ -1,5 +1,4 @@
 """EQL (Event Query Language) Client for threat hunting and incident response."""
-from typing import Dict, List, Optional, Any
 from src.clients.base import SearchClientBase
 from src.clients.common.field_mapper import FieldMapper
 
@@ -7,7 +6,7 @@ from src.clients.common.field_mapper import FieldMapper
 class EQLQueryClient(SearchClientBase):
     """Client for executing EQL queries for threat hunting."""
 
-    def __init__(self, config: Dict, engine_type: str = "elasticsearch"):
+    def __init__(self, config: dict, engine_type: str = "elasticsearch"):
         """
         Initialise the EQL query client.
 
@@ -17,7 +16,7 @@ class EQLQueryClient(SearchClientBase):
         """
         super().__init__(config, engine_type)
         # Initialise FieldMapper for field name substitution
-        self._field_mapper: Optional[FieldMapper] = None
+        self._field_mapper: FieldMapper | None = None
 
     @property
     def field_mapper(self) -> FieldMapper:
@@ -27,11 +26,11 @@ class EQLQueryClient(SearchClientBase):
         return self._field_mapper
 
     def eql_search(self, index: str, query: str, size: int = 100,
-                   filter_query: Optional[Dict] = None,
+                   filter_query: dict | None = None,
                    timestamp_field: str = "@timestamp",
-                   start_time: Optional[str] = None,
-                   end_time: Optional[str] = None,
-                   field_substitution: bool = True) -> Dict:
+                   start_time: str | None = None,
+                   end_time: str | None = None,
+                   field_substitution: bool = True) -> dict:
         """
         Execute an EQL query for threat hunting with automatic field substitution.
 
@@ -154,14 +153,13 @@ class EQLQueryClient(SearchClientBase):
                     }
 
                 return formatted_response
-            else:
-                return response
+            return response
 
         except Exception as e:
             self.logger.error(f"EQL search failed: {e}")
             raise
 
-    def eql_delete(self, eql_search_id: str) -> Dict:
+    def eql_delete(self, eql_search_id: str) -> dict:
         """Delete an async EQL search."""
         try:
             return self.client.eql.delete(id=eql_search_id)
@@ -169,7 +167,7 @@ class EQLQueryClient(SearchClientBase):
             self.logger.error(f"Failed to delete EQL search: {e}")
             raise
 
-    def get_eql_status(self, eql_search_id: str) -> Dict:
+    def get_eql_status(self, eql_search_id: str) -> dict:
         """Get status of an async EQL search."""
         try:
             return self.client.eql.get_status(id=eql_search_id)

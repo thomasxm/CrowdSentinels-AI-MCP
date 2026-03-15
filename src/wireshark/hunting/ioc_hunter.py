@@ -3,7 +3,7 @@
 import logging
 import re
 from datetime import datetime
-from typing import Dict, List, Optional, Any, Set
+from typing import Any
 
 from src.wireshark.models import NetworkIoC, PyramidLevel
 
@@ -15,14 +15,14 @@ class IoCHunter:
 
     def __init__(self):
         """Initialize IoC hunter."""
-        self._compiled_patterns: Dict[str, re.Pattern] = {}
+        self._compiled_patterns: dict[str, re.Pattern] = {}
 
     def hunt_ips(
         self,
-        ip_iocs: List[str],
-        connections: List[Dict],
+        ip_iocs: list[str],
+        connections: list[dict],
         check_both_directions: bool = True
-    ) -> List[Dict]:
+    ) -> list[dict]:
         """Hunt for IP addresses in connection data.
 
         Args:
@@ -64,10 +64,10 @@ class IoCHunter:
 
     def hunt_domains(
         self,
-        domain_iocs: List[str],
-        dns_queries: List[Dict],
+        domain_iocs: list[str],
+        dns_queries: list[dict],
         include_subdomains: bool = True
-    ) -> List[Dict]:
+    ) -> list[dict]:
         """Hunt for domains in DNS query data.
 
         Args:
@@ -90,9 +90,7 @@ class IoCHunter:
                 domain_lower = domain.lower()
                 matched = False
 
-                if query_name == domain_lower:
-                    matched = True
-                elif include_subdomains and query_name.endswith("." + domain_lower):
+                if query_name == domain_lower or include_subdomains and query_name.endswith("." + domain_lower):
                     matched = True
 
                 if matched:
@@ -106,9 +104,9 @@ class IoCHunter:
 
     def hunt_hashes(
         self,
-        hash_iocs: List[str],
-        file_transfers: List[Dict]
-    ) -> List[Dict]:
+        hash_iocs: list[str],
+        file_transfers: list[dict]
+    ) -> list[dict]:
         """Hunt for file hashes in transfer data.
 
         Args:
@@ -140,9 +138,9 @@ class IoCHunter:
 
     def hunt_user_agents(
         self,
-        ua_patterns: List[str],
-        http_requests: List[Dict]
-    ) -> List[Dict]:
+        ua_patterns: list[str],
+        http_requests: list[dict]
+    ) -> list[dict]:
         """Hunt for suspicious user agents in HTTP traffic.
 
         Args:
@@ -191,11 +189,11 @@ class IoCHunter:
     def hunt_iocs_in_pcap(
         self,
         pcap_path: str,
-        ip_iocs: Optional[List[str]] = None,
-        domain_iocs: Optional[List[str]] = None,
-        hash_iocs: Optional[List[str]] = None,
+        ip_iocs: list[str] | None = None,
+        domain_iocs: list[str] | None = None,
+        hash_iocs: list[str] | None = None,
         executor=None
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Hunt for all IoC types in a PCAP file.
 
         Args:
@@ -249,7 +247,7 @@ class IoCHunter:
             "summary": summary
         }
 
-    def _extract_connections(self, pcap_path: str, executor) -> List[Dict]:
+    def _extract_connections(self, pcap_path: str, executor) -> list[dict]:
         """Extract connection data from PCAP."""
         results = executor.execute_and_parse_fields(
             pcap_path=pcap_path,
@@ -271,7 +269,7 @@ class IoCHunter:
 
         return connections
 
-    def _extract_dns_queries(self, pcap_path: str, executor) -> List[Dict]:
+    def _extract_dns_queries(self, pcap_path: str, executor) -> list[dict]:
         """Extract DNS query data from PCAP."""
         results = executor.execute_and_parse_fields(
             pcap_path=pcap_path,
@@ -293,9 +291,9 @@ class IoCHunter:
 
     def create_iocs_from_matches(
         self,
-        matches: List[Dict],
+        matches: list[dict],
         source_tool: str = "wireshark"
-    ) -> List[NetworkIoC]:
+    ) -> list[NetworkIoC]:
         """Create NetworkIoC objects from hunt matches.
 
         Args:

@@ -1,6 +1,5 @@
 """Tests for FieldMapper - field name substitution for different log schemas."""
-import pytest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 
 class TestFieldMapper:
@@ -240,14 +239,11 @@ class TestFieldMapperIntegration:
     def test_esql_client_uses_field_mapper(self):
         """Test that ESQLClient integrates with FieldMapper."""
         # This will be tested after implementation
-        pass
 
     def test_eql_client_uses_field_mapper(self):
         """Test that EQLQueryClient integrates with FieldMapper."""
         # This will be tested after implementation
-        pass
 
     def test_lucene_search_uses_field_mapper(self):
         """Test that search_with_lucene integrates with FieldMapper."""
         # This will be tested after implementation
-        pass

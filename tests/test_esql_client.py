@@ -1,10 +1,8 @@
 """Test ES|QL client functionality."""
 
 import sys
-import re
 from pathlib import Path
 from unittest.mock import MagicMock, patch
-from datetime import datetime
 
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -135,7 +133,7 @@ def test_extract_index_multi():
         result = client.extract_index_from_query(q1)
         expected = "logs-endpoint.events.process-*, logs-windows.sysmon_operational-*, logs-system.security-*"
         assert result == expected, f"Expected '{expected}', got '{result}'"
-        print(f"  Multi-index (spaces): [PASS]")
+        print("  Multi-index (spaces): [PASS]")
 
         # Multi-index without spaces
         q2 = "FROM idx1,idx2,idx3 | LIMIT 10"
@@ -148,7 +146,7 @@ def test_extract_index_multi():
 | where host.os.type == "windows" """
         result = client.extract_index_from_query(q3)
         assert "logs-endpoint" in result and "logs-windows" in result
-        print(f"  Multi-index (newline): [PASS]")
+        print("  Multi-index (newline): [PASS]")
 
 
 def test_substitute_index_single():
@@ -165,14 +163,14 @@ def test_substitute_index_single():
         result = client.substitute_index(q1, "NEW-INDEX")
         assert result.startswith("FROM NEW-INDEX |"), f"Got: {result}"
         assert "winlogbeat" not in result
-        print(f"  Single index substituted: [PASS]")
+        print("  Single index substituted: [PASS]")
 
         # With METADATA
         q2 = "FROM logs-* METADATA _id | LIMIT 10"
         result = client.substitute_index(q2, "NEW-INDEX")
         assert "FROM NEW-INDEX METADATA" in result or "FROM NEW-INDEX " in result
         assert "logs-*" not in result
-        print(f"  With METADATA: [PASS]")
+        print("  With METADATA: [PASS]")
 
 
 def test_substitute_index_multi():
@@ -194,7 +192,7 @@ def test_substitute_index_multi():
         assert "logs-windows" not in result, f"Original index not replaced! Got: {result}"
         assert "logs-system" not in result, f"Original index not replaced! Got: {result}"
         assert result.lower().startswith("from winlogbeat-*"), f"New index not at start! Got: {result}"
-        print(f"  Multi-index (spaces) ALL replaced: [PASS]")
+        print("  Multi-index (spaces) ALL replaced: [PASS]")
 
         # Multi-index without spaces
         q2 = "FROM idx1,idx2,idx3 | LIMIT 10"
@@ -203,11 +201,11 @@ def test_substitute_index_multi():
         assert "idx2" not in result
         assert "idx3" not in result
         assert "FROM NEW-INDEX |" in result
-        print(f"  Multi-index (no spaces) ALL replaced: [PASS]")
+        print("  Multi-index (no spaces) ALL replaced: [PASS]")
 
         # Verify WHERE clause preserved
         assert "host.os.type" in result or "LIMIT" in result
-        print(f"  WHERE clause preserved: [PASS]")
+        print("  WHERE clause preserved: [PASS]")
 
 
 def test_timeframe_substitution():
@@ -223,8 +221,8 @@ def test_timeframe_substitution():
         query1 = "FROM logs-* | WHERE @timestamp > now() - 30 day | LIMIT 10"
         result1 = client.substitute_timeframe(query1, 7)
         assert "@timestamp > now() - 7 day" in result1
-        print(f"  Original: ...now() - 30 day...")
-        print(f"  Modified: ...now() - 7 day...")
+        print("  Original: ...now() - 30 day...")
+        print("  Modified: ...now() - 7 day...")
 
         # Test with different spacing
         query2 = "FROM logs-* | WHERE @timestamp>now()-14 day | LIMIT 10"
@@ -421,7 +419,7 @@ def test_execution_history_limit():
         assert history[0]["rule_id"] == "rule-50"  # First 50 should be dropped
 
         print(f"  Added 150 executions, history length: {len(history)}")
-        print(f"  First entry is rule-50 (oldest 50 dropped): PASS")
+        print("  First entry is rule-50 (oldest 50 dropped): PASS")
         print("  [PASS] Execution history limit works correctly")
 
 

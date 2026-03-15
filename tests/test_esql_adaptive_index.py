@@ -253,13 +253,11 @@ def test_execute_with_auto_discovery_mock():
         # Second call succeeds (with alternative index)
         def esql_query_side_effect(query, format):
             if "logs-endpoint" in query:
-                from elasticsearch import NotFoundError
                 raise Exception("Unknown index [logs-endpoint.events.process-*]")
-            else:
-                return {
-                    "columns": [{"name": "process.name"}, {"name": "count"}],
-                    "values": [["powershell.exe", 10], ["cmd.exe", 5]]
-                }
+            return {
+                "columns": [{"name": "process.name"}, {"name": "count"}],
+                "values": [["powershell.exe", 10], ["cmd.exe", 5]]
+            }
 
         client.client.esql.query.side_effect = esql_query_side_effect
 

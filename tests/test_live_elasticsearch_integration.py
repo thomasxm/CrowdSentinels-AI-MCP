@@ -5,8 +5,8 @@ that IoCs are automatically captured to investigations.
 """
 
 import os
-import sys
 import shutil
+import sys
 from pathlib import Path
 
 # Configure Elasticsearch connection (HTTP, not HTTPS)
@@ -45,17 +45,16 @@ def test_live_elasticsearch_hunting():
     setup_test_environment()
 
     # Import after setting config
-    from src.storage.models import Severity, SourceType
-    from src.storage.auto_capture import (
-        auto_capture_elasticsearch_results,
-        has_active_investigation,
-        get_active_investigation_summary,
-        get_client,
-    )
-    from src.clients import create_search_client
-
     # Reset global client
     import src.storage.auto_capture as auto_module
+    from src.clients import create_search_client
+    from src.storage.auto_capture import (
+        auto_capture_elasticsearch_results,
+        get_active_investigation_summary,
+        get_client,
+        has_active_investigation,
+    )
+    from src.storage.models import Severity
     auto_module._client = None
 
     # Initialize Elasticsearch client
@@ -109,7 +108,7 @@ def test_live_elasticsearch_hunting():
         host=None
     )
 
-    print(f"  Hunt results:")
+    print("  Hunt results:")
     for attack_type, data in hunt_results.get("findings", {}).items():
         hits = data.get("total_hits", 0)
         if hits > 0:
@@ -201,7 +200,7 @@ def test_live_elasticsearch_hunting():
     # Show some high-priority IoCs
     high_priority = [ioc for ioc in shared_iocs if ioc.pyramid_priority >= 4]
     if high_priority:
-        print(f"\n  High-priority IoCs (Pyramid level 4+):")
+        print("\n  High-priority IoCs (Pyramid level 4+):")
         for ioc in high_priority[:5]:
             print(f"    [{ioc.pyramid_priority}] {ioc.type.value}: {ioc.value[:50]}")
 

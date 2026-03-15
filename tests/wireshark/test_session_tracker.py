@@ -1,9 +1,8 @@
 # tests/wireshark/test_session_tracker.py
 """Tests for session tracker."""
-import pytest
 from pathlib import Path
-from datetime import datetime
 
+import pytest
 
 TEST_PCAP_DIR = Path("/home/kali/Desktop/CTU/normal_traffics")
 

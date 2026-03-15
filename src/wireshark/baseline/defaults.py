@@ -1,10 +1,9 @@
 # src/wireshark/baseline/defaults.py
 """Prebuilt baseline defaults for network analysis."""
 import ipaddress
-from typing import Dict, List, Any
+from typing import Any
 
-
-DEFAULT_BASELINE: Dict[str, Any] = {
+DEFAULT_BASELINE: dict[str, Any] = {
     "legitimate_ports": {
         "tcp": [
             20, 21,      # FTP
@@ -123,7 +122,7 @@ def is_internal_ip(ip: str) -> bool:
         return False
 
 
-def is_legitimate_port(port: int, protocol: str, baseline: Dict = None) -> bool:
+def is_legitimate_port(port: int, protocol: str, baseline: dict = None) -> bool:
     """Check if port is in legitimate ports list.
 
     Args:
@@ -142,7 +141,7 @@ def is_legitimate_port(port: int, protocol: str, baseline: Dict = None) -> bool:
     return port in legitimate
 
 
-def is_suspicious_port(port: int, baseline: Dict = None) -> bool:
+def is_suspicious_port(port: int, baseline: dict = None) -> bool:
     """Check if port is in suspicious ports list.
 
     Args:
@@ -158,7 +157,7 @@ def is_suspicious_port(port: int, baseline: Dict = None) -> bool:
     return port in baseline.get("suspicious_ports", [])
 
 
-def get_threshold(name: str, baseline: Dict = None) -> Any:
+def get_threshold(name: str, baseline: dict = None) -> Any:
     """Get a threshold value from baseline.
 
     Args:

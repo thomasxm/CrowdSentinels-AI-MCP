@@ -3,7 +3,7 @@
 import json
 import logging
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Any
 
 from src.wireshark.config import get_baselines_path
 
@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 class BaselineStore:
     """Store and retrieve baselines."""
 
-    def __init__(self, baselines_dir: Optional[Path] = None):
+    def __init__(self, baselines_dir: Path | None = None):
         """Initialize store with directory path."""
         self.baselines_dir = baselines_dir or get_baselines_path()
         self.baselines_dir.mkdir(parents=True, exist_ok=True)
@@ -24,7 +24,7 @@ class BaselineStore:
         safe_name = "".join(c if c.isalnum() or c in "-_" else "_" for c in name)
         return self.baselines_dir / f"{safe_name}.json"
 
-    def save(self, name: str, baseline: Dict[str, Any]) -> Path:
+    def save(self, name: str, baseline: dict[str, Any]) -> Path:
         """Save baseline to file.
 
         Args:
@@ -44,7 +44,7 @@ class BaselineStore:
 
         return path
 
-    def load(self, name: str) -> Optional[Dict[str, Any]]:
+    def load(self, name: str) -> dict[str, Any] | None:
         """Load baseline from file.
 
         Args:
@@ -65,7 +65,7 @@ class BaselineStore:
             logger.error(f"Failed to load baseline '{name}': {e}")
             return None
 
-    def list_baselines(self) -> List[str]:
+    def list_baselines(self) -> list[str]:
         """List all saved baselines.
 
         Returns:
@@ -94,7 +94,7 @@ class BaselineStore:
 
         return False
 
-    def get_default_baseline(self) -> Optional[Dict[str, Any]]:
+    def get_default_baseline(self) -> dict[str, Any] | None:
         """Get the default baseline if it exists."""
         return self.load("default")
 

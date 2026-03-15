@@ -1,6 +1,5 @@
 # tests/wireshark/test_report_generator.py
 """Tests for NCSC-style report generator."""
-import pytest
 from datetime import datetime
 
 

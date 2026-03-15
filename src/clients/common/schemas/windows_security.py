@@ -7,8 +7,7 @@ This schema covers Windows Security events (Event IDs 4624, 4625, 4688, etc.)
 as collected by Winlogbeat.
 """
 
-from .base import LogSourceSchema, LogSourceType, EventTypeDefinition
-
+from .base import EventTypeDefinition, LogSourceSchema, LogSourceType
 
 WINDOWS_SECURITY_SCHEMA = LogSourceSchema(
     name="Windows Security Events",

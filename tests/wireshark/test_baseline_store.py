@@ -1,6 +1,5 @@
 # tests/wireshark/test_baseline_store.py
 """Tests for baseline storage."""
-import pytest
 import tempfile
 from pathlib import Path
 

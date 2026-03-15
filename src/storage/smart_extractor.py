@@ -1,19 +1,17 @@
 """Smart extraction engine for token-efficient IoC and event extraction."""
 
-import re
-import hashlib
-from datetime import datetime
-from typing import Dict, List, Any, Optional, Tuple, Set
 import logging
+from datetime import datetime
+from typing import Any
 
 from src.storage.models import (
     IoC,
-    IoCType,
     IoCSource,
+    IoCType,
+    Severity,
+    SourceFindings,
     SourceType,
     TimelineEvent,
-    SourceFindings,
-    Severity,
 )
 
 logger = logging.getLogger(__name__)
@@ -63,7 +61,7 @@ class SmartExtractor:
         """Initialize the extractor."""
         self.max_iocs = max_iocs
         self.max_events = max_events
-        self._seen_values: Set[str] = set()
+        self._seen_values: set[str] = set()
 
     def reset(self) -> None:
         """Reset the seen values cache."""
@@ -71,10 +69,10 @@ class SmartExtractor:
 
     def extract_iocs_from_elasticsearch(
         self,
-        results: Dict[str, Any],
+        results: dict[str, Any],
         source_tool: str = "elasticsearch",
-        investigation_id: Optional[str] = None,
-    ) -> List[IoC]:
+        investigation_id: str | None = None,
+    ) -> list[IoC]:
         """
         Extract IoCs from Elasticsearch search results.
 
@@ -144,10 +142,10 @@ class SmartExtractor:
 
     def extract_iocs_from_chainsaw(
         self,
-        results: Dict[str, Any],
+        results: dict[str, Any],
         source_tool: str = "chainsaw",
-        investigation_id: Optional[str] = None,
-    ) -> List[IoC]:
+        investigation_id: str | None = None,
+    ) -> list[IoC]:
         """
         Extract IoCs from Chainsaw results.
 
@@ -184,10 +182,10 @@ class SmartExtractor:
 
     def extract_iocs_from_wireshark(
         self,
-        results: Dict[str, Any],
+        results: dict[str, Any],
         source_tool: str = "wireshark",
-        investigation_id: Optional[str] = None,
-    ) -> List[IoC]:
+        investigation_id: str | None = None,
+    ) -> list[IoC]:
         """
         Extract IoCs from Wireshark/tshark results.
 
@@ -232,11 +230,11 @@ class SmartExtractor:
 
     def _extract_from_event(
         self,
-        event: Dict[str, Any],
+        event: dict[str, Any],
         source_type: SourceType,
         source_tool: str,
-        investigation_id: Optional[str],
-    ) -> List[IoC]:
+        investigation_id: str | None,
+    ) -> list[IoC]:
         """Extract IoCs from a single event."""
         iocs = []
 
@@ -333,8 +331,8 @@ class SmartExtractor:
         ioc_type: IoCType,
         source_type: SourceType,
         source_tool: str,
-        investigation_id: Optional[str],
-        context: Dict[str, Any],
+        investigation_id: str | None,
+        context: dict[str, Any],
     ) -> IoC:
         """Create an IoC with source tracking."""
         source = IoCSource(
@@ -396,7 +394,7 @@ class SmartExtractor:
 
         return True
 
-    def _get_nested(self, data: Dict, path: str) -> Optional[str]:
+    def _get_nested(self, data: dict, path: str) -> str | None:
         """Get a nested value from a dictionary using dot notation.
 
         Handles both flat keys (e.g., "source.ip" as a direct key) and
@@ -424,7 +422,7 @@ class SmartExtractor:
             return str(value[0]) if value else None
         return str(value) if value is not None else None
 
-    def _get_nested_list(self, data: Dict, path: str) -> Optional[Any]:
+    def _get_nested_list(self, data: dict, path: str) -> Any | None:
         """Get a nested value preserving lists.
 
         Similar to _get_nested but preserves list values for fields that
@@ -447,10 +445,10 @@ class SmartExtractor:
                 return None
         return value
 
-    def _deduplicate_and_prioritize(self, iocs: List[IoC]) -> List[IoC]:
+    def _deduplicate_and_prioritize(self, iocs: list[IoC]) -> list[IoC]:
         """Deduplicate IoCs and sort by priority."""
         # Deduplicate by type+value
-        unique: Dict[str, IoC] = {}
+        unique: dict[str, IoC] = {}
 
         for ioc in iocs:
             key = f"{ioc.type.value}:{ioc.value}"
@@ -470,7 +468,7 @@ class SmartExtractor:
 
     def summarize_events(
         self,
-        events: List[Dict[str, Any]],
+        events: list[dict[str, Any]],
         source_type: SourceType,
         source_tool: str,
     ) -> SourceFindings:
@@ -486,11 +484,11 @@ class SmartExtractor:
             Summarized findings
         """
         # Extract key information
-        event_types: Dict[str, int] = {}
-        hosts: Set[str] = set()
-        users: Set[str] = set()
-        mitre_techniques: Set[str] = set()
-        key_findings: List[str] = []
+        event_types: dict[str, int] = {}
+        hosts: set[str] = set()
+        users: set[str] = set()
+        mitre_techniques: set[str] = set()
+        key_findings: list[str] = []
 
         for event in events:
             # Count event types
@@ -548,11 +546,11 @@ class SmartExtractor:
 
     def extract_timeline_events(
         self,
-        events: List[Dict[str, Any]],
+        events: list[dict[str, Any]],
         source_type: SourceType,
         source_tool: str,
-        max_events: Optional[int] = None,
-    ) -> List[TimelineEvent]:
+        max_events: int | None = None,
+    ) -> list[TimelineEvent]:
         """
         Extract significant events for the timeline.
 

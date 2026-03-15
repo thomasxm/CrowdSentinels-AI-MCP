@@ -2,28 +2,26 @@
 
 import json
 import logging
-from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Optional, Any, Union
+from typing import Any
 
 from src.storage.config import StorageConfig, get_config
 from src.storage.models import (
+    IndexEntry,
     Investigation,
     InvestigationManifest,
     InvestigationStatus,
-    Severity,
     IoC,
-    IoCType,
     IoCCollection,
     IoCSource,
-    TimelineEvent,
+    IoCType,
+    Severity,
     SourceFindings,
     SourceType,
-    MasterIndex,
-    IndexEntry,
+    TimelineEvent,
 )
-from src.storage.storage_manager import StorageManager
 from src.storage.smart_extractor import SmartExtractor
+from src.storage.storage_manager import StorageManager
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +29,7 @@ logger = logging.getLogger(__name__)
 class InvestigationStateClient:
     """Client for managing investigation state across sessions and tools."""
 
-    def __init__(self, config: Optional[StorageConfig] = None):
+    def __init__(self, config: StorageConfig | None = None):
         """Initialize the investigation state client."""
         self.config = config or get_config()
         self.storage = StorageManager(self.config)
@@ -39,16 +37,16 @@ class InvestigationStateClient:
             max_iocs=self.config.storage.max_iocs_per_investigation,
             max_events=self.config.extraction.max_events_to_keep,
         )
-        self._active_investigation: Optional[Investigation] = None
-        self._active_id: Optional[str] = None
+        self._active_investigation: Investigation | None = None
+        self._active_id: str | None = None
 
     @property
-    def active_investigation(self) -> Optional[Investigation]:
+    def active_investigation(self) -> Investigation | None:
         """Get the currently active investigation."""
         return self._active_investigation
 
     @property
-    def active_investigation_id(self) -> Optional[str]:
+    def active_investigation_id(self) -> str | None:
         """Get the ID of the currently active investigation."""
         return self._active_id
 
@@ -56,7 +54,7 @@ class InvestigationStateClient:
         self,
         name: str,
         description: str = "",
-        tags: Optional[List[str]] = None,
+        tags: list[str] | None = None,
         severity: Severity = Severity.UNKNOWN,
         auto_activate: bool = True,
     ) -> Investigation:
@@ -102,7 +100,7 @@ class InvestigationStateClient:
 
         return investigation
 
-    def load_investigation(self, investigation_id: str) -> Optional[Investigation]:
+    def load_investigation(self, investigation_id: str) -> Investigation | None:
         """
         Load an investigation from storage.
 
@@ -173,7 +171,7 @@ class InvestigationStateClient:
             logger.error(f"Failed to load investigation {investigation_id}: {e}")
             return None
 
-    def resume_investigation(self, investigation_id: str) -> Optional[Investigation]:
+    def resume_investigation(self, investigation_id: str) -> Investigation | None:
         """
         Resume a previous investigation.
 
@@ -383,10 +381,10 @@ class InvestigationStateClient:
 
     def add_iocs(
         self,
-        iocs: List[IoC],
+        iocs: list[IoC],
         source: str = "manual",
         source_type: SourceType = SourceType.OTHER,
-        investigation_id: Optional[str] = None,
+        investigation_id: str | None = None,
     ) -> int:
         """
         Add IoCs to an investigation.
@@ -430,10 +428,10 @@ class InvestigationStateClient:
 
     def add_iocs_from_results(
         self,
-        results: Dict[str, Any],
+        results: dict[str, Any],
         source_type: SourceType,
         source_tool: str,
-        investigation_id: Optional[str] = None,
+        investigation_id: str | None = None,
     ) -> int:
         """
         Extract and add IoCs from search results.
@@ -476,12 +474,12 @@ class InvestigationStateClient:
         self,
         source_type: SourceType,
         source_tool: str,
-        results: Dict[str, Any],
-        query_description: Optional[str] = None,
-        investigation_id: Optional[str] = None,
+        results: dict[str, Any],
+        query_description: str | None = None,
+        investigation_id: str | None = None,
         extract_iocs: bool = True,
         extract_timeline: bool = True,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Add findings from a tool to the investigation.
 
@@ -569,7 +567,7 @@ class InvestigationStateClient:
 
     def get_summary(
         self,
-        investigation_id: Optional[str] = None,
+        investigation_id: str | None = None,
         format: str = "markdown",
     ) -> str:
         """
@@ -612,12 +610,12 @@ class InvestigationStateClient:
 
     def get_shared_iocs(
         self,
-        ioc_types: Optional[List[IoCType]] = None,
+        ioc_types: list[IoCType] | None = None,
         min_priority: int = 1,
-        sources: Optional[List[str]] = None,
+        sources: list[str] | None = None,
         active_only: bool = True,
         limit: int = 100,
-    ) -> List[IoC]:
+    ) -> list[IoC]:
         """
         Get IoCs shared across investigations.
 
@@ -631,7 +629,7 @@ class InvestigationStateClient:
         Returns:
             List of IoCs from all matching investigations
         """
-        all_iocs: Dict[str, IoC] = {}
+        all_iocs: dict[str, IoC] = {}
 
         # Get investigations
         investigations = self.storage.list_investigations(
@@ -671,11 +669,11 @@ class InvestigationStateClient:
 
     def export_iocs(
         self,
-        investigation_id: Optional[str] = None,
+        investigation_id: str | None = None,
         format: str = "json",
-        ioc_types: Optional[List[IoCType]] = None,
+        ioc_types: list[IoCType] | None = None,
         min_priority: int = 1,
-    ) -> Union[str, Dict]:
+    ) -> str | dict:
         """
         Export IoCs from an investigation.
 
@@ -723,7 +721,7 @@ class InvestigationStateClient:
 
     def close_investigation(
         self,
-        investigation_id: Optional[str] = None,
+        investigation_id: str | None = None,
         resolution: str = "",
     ) -> bool:
         """
@@ -757,9 +755,9 @@ class InvestigationStateClient:
     def list_investigations(
         self,
         limit: int = 10,
-        status: Optional[InvestigationStatus] = None,
-        severity: Optional[Severity] = None,
-    ) -> List[IndexEntry]:
+        status: InvestigationStatus | None = None,
+        severity: Severity | None = None,
+    ) -> list[IndexEntry]:
         """
         List investigations.
 
@@ -821,7 +819,7 @@ class InvestigationStateClient:
 
         return "\n".join(lines)
 
-    def _get_investigation(self, investigation_id: Optional[str] = None) -> Optional[Investigation]:
+    def _get_investigation(self, investigation_id: str | None = None) -> Investigation | None:
         """Get investigation by ID or return active."""
         if investigation_id:
             if investigation_id == self._active_id:
@@ -832,7 +830,7 @@ class InvestigationStateClient:
     def add_analyst_note(
         self,
         note: str,
-        investigation_id: Optional[str] = None,
+        investigation_id: str | None = None,
     ) -> bool:
         """Add an analyst note to the investigation."""
         investigation = self._get_investigation(investigation_id)
@@ -848,7 +846,7 @@ class InvestigationStateClient:
     def set_severity(
         self,
         severity: Severity,
-        investigation_id: Optional[str] = None,
+        investigation_id: str | None = None,
     ) -> bool:
         """Set the severity of an investigation."""
         investigation = self._get_investigation(investigation_id)
@@ -863,7 +861,7 @@ class InvestigationStateClient:
     def add_kill_chain_stage(
         self,
         stage: str,
-        investigation_id: Optional[str] = None,
+        investigation_id: str | None = None,
     ) -> bool:
         """Add a kill chain stage to the investigation."""
         investigation = self._get_investigation(investigation_id)
@@ -876,10 +874,10 @@ class InvestigationStateClient:
             self.save_state()
         return True
 
-    def get_storage_stats(self) -> Dict[str, Any]:
+    def get_storage_stats(self) -> dict[str, Any]:
         """Get storage statistics."""
         return self.storage.get_storage_stats()
 
-    def cleanup_storage(self, keep_count: int = 10, force: bool = False) -> Dict[str, Any]:
+    def cleanup_storage(self, keep_count: int = 10, force: bool = False) -> dict[str, Any]:
         """Manual storage cleanup."""
         return self.storage.cleanup(keep_count=keep_count, force=force)

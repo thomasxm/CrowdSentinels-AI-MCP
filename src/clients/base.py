@@ -1,14 +1,14 @@
-from abc import ABC
 import logging
 import warnings
-from typing import Dict, Optional
+from abc import ABC
 
-from elasticsearch import Elasticsearch
 import httpx
+from elasticsearch import Elasticsearch
 from opensearchpy import OpenSearch
 
+
 class SearchClientBase(ABC):
-    def __init__(self, config: Dict, engine_type: str):
+    def __init__(self, config: dict, engine_type: str):
         """
         Initialize the search client.
         
@@ -19,7 +19,7 @@ class SearchClientBase(ABC):
         self.logger = logging.getLogger()
         self.config = config
         self.engine_type = engine_type
-        
+
         # Extract common configuration
         hosts = config.get("hosts")
         username = config.get("username")
@@ -59,7 +59,7 @@ class SearchClientBase(ABC):
             # Cloud ID takes precedence over hosts
             if cloud_id:
                 es_kwargs["cloud_id"] = cloud_id
-                self.logger.info(f"Elasticsearch client using Cloud ID")
+                self.logger.info("Elasticsearch client using Cloud ID")
             else:
                 es_kwargs["hosts"] = hosts
 
@@ -111,11 +111,11 @@ class SearchClientBase(ABC):
 
     def _get_elasticsearch_auth_params(
         self,
-        username: Optional[str],
-        password: Optional[str],
-        api_key: Optional[str],
-        bearer_token: Optional[str] = None,
-    ) -> Dict:
+        username: str | None,
+        password: str | None,
+        api_key: str | None,
+        bearer_token: str | None = None,
+    ) -> dict:
         """
         Get authentication parameters for Elasticsearch client based on package version.
 
@@ -140,20 +140,19 @@ class SearchClientBase(ABC):
 
         if not username or not password:
             return {}
-            
+
         # Check Elasticsearch package version to determine auth parameter name
         try:
             from elasticsearch import __version__ as es_version
             # Convert version tuple to string format
             version_str = '.'.join(map(str, es_version))
             self.logger.info(f"Elasticsearch client version: {version_str}")
-            major_version = es_version[0]    
+            major_version = es_version[0]
             if major_version >= 8:
                 # ES 8+ uses basic_auth
                 return {"basic_auth": (username, password)}
-            else:
-                # ES 7 and below use http_auth
-                return {"http_auth": (username, password)}
+            # ES 7 and below use http_auth
+            return {"http_auth": (username, password)}
         except Exception as e:
             self.logger.error(f"Failed to detect Elasticsearch version: {e}")
             # If we can't detect version, try basic_auth first (ES 8+ default)
@@ -162,16 +161,16 @@ class SearchClientBase(ABC):
 class GeneralRestClient:
     def __init__(
         self,
-        base_url: Optional[str],
-        username: Optional[str],
-        password: Optional[str],
-        api_key: Optional[str],
+        base_url: str | None,
+        username: str | None,
+        password: str | None,
+        api_key: str | None,
         verify_certs: bool,
-        timeout: Optional[float] = None,
-        bearer_token: Optional[str] = None,
-        ca_certs: Optional[str] = None,
-        client_cert: Optional[str] = None,
-        client_key: Optional[str] = None,
+        timeout: float | None = None,
+        bearer_token: str | None = None,
+        ca_certs: str | None = None,
+        client_cert: str | None = None,
+        client_key: str | None = None,
     ):
         self.base_url = base_url.rstrip("/") if base_url else ""
         self.auth = (username, password) if username and password else None

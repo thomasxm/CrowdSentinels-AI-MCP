@@ -3,16 +3,15 @@
 import logging
 import re
 from datetime import datetime
-from typing import Dict, List, Optional, Any
 
-from src.wireshark.models import AnomalyFinding, PyramidLevel
 from src.wireshark.baseline.defaults import (
     DEFAULT_BASELINE,
+    get_threshold,
     is_internal_ip,
     is_legitimate_port,
     is_suspicious_port,
-    get_threshold
 )
+from src.wireshark.models import AnomalyFinding
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +19,7 @@ logger = logging.getLogger(__name__)
 class AnomalyDetector:
     """Detect protocol and traffic anomalies."""
 
-    def __init__(self, baseline: Optional[Dict] = None):
+    def __init__(self, baseline: dict | None = None):
         """Initialize detector with optional custom baseline."""
         self.baseline = baseline or DEFAULT_BASELINE
 
@@ -29,9 +28,9 @@ class AnomalyDetector:
         port: int,
         protocol: str,
         occurrence_count: int,
-        src_ip: Optional[str] = None,
-        dst_ip: Optional[str] = None
-    ) -> List[AnomalyFinding]:
+        src_ip: str | None = None,
+        dst_ip: str | None = None
+    ) -> list[AnomalyFinding]:
         """Check for port-based anomalies.
 
         Args:
@@ -87,10 +86,10 @@ class AnomalyDetector:
         self,
         query_name: str,
         query_type: str,
-        response_code: Optional[str],
+        response_code: str | None,
         src_ip: str = "unknown",
         response_size: int = 0
-    ) -> List[AnomalyFinding]:
+    ) -> list[AnomalyFinding]:
         """Check for DNS-based anomalies.
 
         Args:
@@ -165,10 +164,10 @@ class AnomalyDetector:
         self,
         has_sni: bool,
         server_ip: str,
-        ja3_hash: Optional[str] = None,
-        cert_cn: Optional[str] = None,
+        ja3_hash: str | None = None,
+        cert_cn: str | None = None,
         src_ip: str = "unknown"
-    ) -> List[AnomalyFinding]:
+    ) -> list[AnomalyFinding]:
         """Check for TLS-based anomalies.
 
         Args:
@@ -227,7 +226,7 @@ class AnomalyDetector:
         bytes_sent: int,
         bytes_received: int,
         duration_seconds: float
-    ) -> List[AnomalyFinding]:
+    ) -> list[AnomalyFinding]:
         """Check for traffic volume anomalies.
 
         Args:

@@ -1,18 +1,18 @@
 """Storage manager for FIFO and size management of investigations."""
 
 import json
-import shutil
 import logging
-from pathlib import Path
+import shutil
 from datetime import datetime, timedelta
-from typing import List, Optional, Tuple, Dict, Any
+from pathlib import Path
+from typing import Any
 
 from src.storage.config import StorageConfig, get_config
 from src.storage.models import (
-    MasterIndex,
     IndexEntry,
     InvestigationManifest,
     InvestigationStatus,
+    MasterIndex,
 )
 
 logger = logging.getLogger(__name__)
@@ -21,11 +21,11 @@ logger = logging.getLogger(__name__)
 class StorageManager:
     """Manages investigation storage with FIFO and size limits."""
 
-    def __init__(self, config: Optional[StorageConfig] = None):
+    def __init__(self, config: StorageConfig | None = None):
         """Initialize the storage manager."""
         self.config = config or get_config()
         self.config.ensure_directories()
-        self._index: Optional[MasterIndex] = None
+        self._index: MasterIndex | None = None
 
     @property
     def investigations_path(self) -> Path:
@@ -55,7 +55,7 @@ class StorageManager:
         self._save_index(index)
         return index
 
-    def _save_index(self, index: Optional[MasterIndex] = None) -> None:
+    def _save_index(self, index: MasterIndex | None = None) -> None:
         """Save the master index to disk."""
         index = index or self._index
         if index is None:
@@ -135,7 +135,7 @@ class StorageManager:
         self._save_index()
         return True
 
-    def enforce_limit(self) -> List[str]:
+    def enforce_limit(self) -> list[str]:
         """
         Enforce storage limit using FIFO.
 
@@ -171,7 +171,7 @@ class StorageManager:
 
         return deleted
 
-    def prune_oldest(self, count: int = 1) -> List[str]:
+    def prune_oldest(self, count: int = 1) -> list[str]:
         """
         Delete the N oldest investigations.
 
@@ -254,7 +254,7 @@ class StorageManager:
         logger.info(f"Compacted {investigation_id}: saved {bytes_saved} bytes")
         return bytes_saved
 
-    def compact_old_investigations(self) -> Dict[str, int]:
+    def compact_old_investigations(self) -> dict[str, int]:
         """
         Compact investigations older than compact_after_days.
 
@@ -274,7 +274,7 @@ class StorageManager:
 
         return results
 
-    def get_storage_stats(self) -> Dict[str, Any]:
+    def get_storage_stats(self) -> dict[str, Any]:
         """Get current storage statistics."""
         current_usage = self.calculate_usage()
         max_size = self.config.max_size_bytes
@@ -309,9 +309,9 @@ class StorageManager:
     def list_investigations(
         self,
         limit: int = 10,
-        status: Optional[InvestigationStatus] = None,
+        status: InvestigationStatus | None = None,
         include_size: bool = False
-    ) -> List[IndexEntry]:
+    ) -> list[IndexEntry]:
         """
         List investigations with optional filtering.
 
@@ -331,7 +331,7 @@ class StorageManager:
 
         return self.index.get_recent(limit=limit, status=status)
 
-    def cleanup(self, keep_count: int = 10, force: bool = False) -> Dict[str, Any]:
+    def cleanup(self, keep_count: int = 10, force: bool = False) -> dict[str, Any]:
         """
         Manual cleanup: enforce limits and compact old investigations.
 

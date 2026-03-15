@@ -6,14 +6,13 @@ the 4-phase IR methodology. Provider-agnostic — works with any LLMProvider.
 
 import json
 import logging
-import os
 import sys
 import time
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from src.agent.mcp_bridge import MCPBridge
 from src.agent.prompts import build_system_prompt, build_user_message
-from src.agent.providers import LLMProvider, LLMResponse
+from src.agent.providers import LLMProvider
 
 logger = logging.getLogger("crowdsentinel.agent.loop")
 
@@ -24,7 +23,7 @@ def _stderr(msg: str) -> None:
     sys.stderr.flush()
 
 
-def _parse_structured_output(text: str) -> Dict[str, Any]:
+def _parse_structured_output(text: str) -> dict[str, Any]:
     """Extract structured JSON from the agent's final response.
 
     The agent is instructed to return JSON, but it may wrap it in
@@ -75,11 +74,11 @@ def _parse_structured_output(text: str) -> Dict[str, Any]:
 def run_agent(
     provider: LLMProvider,
     bridge: MCPBridge,
-    hunt_data: Dict[str, Any],
+    hunt_data: dict[str, Any],
     context: str,
     max_steps: int = 30,
     timeout: int = 300,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Run the agent investigation loop.
 
     Args:
@@ -97,7 +96,7 @@ def run_agent(
     total_tokens = {"input": 0, "output": 0}
 
     # Build tool inventory grouped by server
-    tool_names_by_server: Dict[str, List[str]] = {}
+    tool_names_by_server: dict[str, list[str]] = {}
     for schema in bridge.list_tools():
         # Determine server from registry
         name = schema["name"]
@@ -114,7 +113,7 @@ def run_agent(
     tools = [provider.convert_tool_schema(s) for s in bridge.list_tools()]
 
     # Conversation history
-    messages: List[Dict[str, Any]] = [
+    messages: list[dict[str, Any]] = [
         {"role": "user", "content": user_message},
     ]
 

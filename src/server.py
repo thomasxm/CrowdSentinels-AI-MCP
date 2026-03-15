@@ -1,38 +1,37 @@
+import argparse
 import logging
 import sys
-import argparse
-import os
-from pathlib import Path
 
 from fastmcp import FastMCP
 
-from src.logging_config import configure_logging, get_log_file_path
 from src.clients import create_search_client
-from src.clients.common.rule_loader import RuleLoader
+from src.clients.common.esql_client import ESQLClient
 from src.clients.common.hunting_rule_loader import HuntingRuleLoader
-from src.clients.common.esql_client import ESQLClient, ESQLNotSupportedError
+from src.clients.common.rule_loader import RuleLoader
+from src.logging_config import configure_logging, get_log_file_path
+from src.paths import get_hunting_rules_dir, get_rules_dir, get_toml_rules_dir
 from src.tools.alias import AliasTools
+from src.tools.asset_discovery import AssetDiscoveryTools
+from src.tools.chainsaw_hunting import ChainsawHuntingTools
 from src.tools.cluster import ClusterTools
 from src.tools.data_stream import DataStreamTools
 from src.tools.document import DocumentTools
+from src.tools.eql_query import EQLQueryTools
+from src.tools.esql_hunting import ESQLHuntingTools
 from src.tools.general import GeneralTools
 from src.tools.index import IndexTools
-from src.tools.asset_discovery import AssetDiscoveryTools
-from src.tools.eql_query import EQLQueryTools
-from src.tools.threat_hunting import ThreatHuntingTools
-from src.tools.ioc_analysis import IoCAnalysisTools
-from src.tools.smart_search import SmartSearchTools
-from src.tools.rule_management import RuleManagementTools
 from src.tools.investigation_prompts import InvestigationPromptsTools
-from src.tools.chainsaw_hunting import ChainsawHuntingTools
 from src.tools.investigation_state_tools import InvestigationStateTools
-from src.tools.wireshark_tools import WiresharkTools
-from src.tools.esql_hunting import ESQLHuntingTools
-from src.tools.workflow_guidance import WorkflowGuidanceTools
-from src.tools.schema_resources import SchemaTools
+from src.tools.ioc_analysis import IoCAnalysisTools
 from src.tools.register import ToolsRegister
-from src.paths import get_rules_dir, get_hunting_rules_dir, get_toml_rules_dir
+from src.tools.rule_management import RuleManagementTools
+from src.tools.schema_resources import SchemaTools
+from src.tools.smart_search import SmartSearchTools
+from src.tools.threat_hunting import ThreatHuntingTools
+from src.tools.wireshark_tools import WiresharkTools
+from src.tools.workflow_guidance import WorkflowGuidanceTools
 from src.version import __version__ as VERSION
+
 
 class SearchMCPServer:
     def __init__(self, engine_type):
@@ -218,12 +217,12 @@ def run_search_server(engine_type, transport, host, port, path):
         port: Port to bind to when using HTTP transports
         path: URL path prefix for HTTP transports
     """
-    
+
     server = SearchMCPServer(engine_type=engine_type)
-    
+
     if transport in ["streamable-http", "sse"]:
         server.logger.info(f"Starting {server.name} with {transport} transport on {host}:{port}{path}")
-        server.logger.info(f"Logs visible in this terminal - tool calls will appear here")
+        server.logger.info("Logs visible in this terminal - tool calls will appear here")
         server.mcp.run(transport=transport, host=host, port=port, path=path)
     else:
         # stdio transport - logs go to file since stdout/stderr are captured by MCP client
@@ -260,9 +259,9 @@ def parse_server_args():
         "--path", "-P",
         help="URL path prefix for HTTP transports (default: /mcp/ for streamable-http, /sse/ for sse)"
     )
-    
+
     args = parser.parse_args()
-    
+
     # Set default path based on transport type if not specified
     # Use trailing slash to avoid 307 redirects on every request
     if args.path is None:
@@ -270,13 +269,13 @@ def parse_server_args():
             args.path = "/sse/"
         else:
             args.path = "/mcp/"
-            
+
     return args
 
 def elasticsearch_mcp_server():
     """Entry point for Elasticsearch MCP server."""
     args = parse_server_args()
-    
+
     # Run the server with the specified options
     run_search_server(
         engine_type="elasticsearch",
@@ -289,7 +288,7 @@ def elasticsearch_mcp_server():
 def opensearch_mcp_server():
     """Entry point for OpenSearch MCP server."""
     args = parse_server_args()
-    
+
     # Run the server with the specified options
     run_search_server(
         engine_type="opensearch",
@@ -304,18 +303,18 @@ if __name__ == "__main__":
     if len(sys.argv) <= 1 or sys.argv[1] not in ["crowdsentinel-mcp-server", "crowdsentinel-opensearch-mcp-server"]:
         print("Error: First argument must be 'crowdsentinel-mcp-server' or 'crowdsentinel-opensearch-mcp-server'")
         sys.exit(1)
-        
+
     # Determine engine type based on the first argument
     engine_type = "elasticsearch"  # Default
     if sys.argv[1] == "crowdsentinel-opensearch-mcp-server":
         engine_type = "opensearch"
-        
+
     # Remove the first argument so it doesn't interfere with argparse
     sys.argv.pop(1)
-    
+
     # Parse command line arguments
     args = parse_server_args()
-    
+
     # Run the server with the specified options
     run_search_server(
         engine_type=engine_type,

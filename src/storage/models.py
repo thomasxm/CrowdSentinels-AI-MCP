@@ -1,10 +1,11 @@
 """Pydantic models for investigation state storage."""
 
-from datetime import datetime
-from typing import Dict, List, Optional, Any, Set
-from enum import Enum
-from pydantic import BaseModel, Field, field_validator
 import uuid
+from datetime import datetime
+from enum import Enum
+from typing import Any
+
+from pydantic import BaseModel, Field
 
 
 class InvestigationStatus(str, Enum):
@@ -56,10 +57,10 @@ class IoCSource(BaseModel):
     """Source information for an IoC."""
     tool: str
     source_type: SourceType = SourceType.OTHER
-    investigation_id: Optional[str] = None
+    investigation_id: str | None = None
     first_seen: datetime = Field(default_factory=datetime.utcnow)
     last_seen: datetime = Field(default_factory=datetime.utcnow)
-    query_context: Optional[str] = None
+    query_context: str | None = None
     occurrence_count: int = 1
 
 
@@ -69,16 +70,16 @@ class IoC(BaseModel):
     type: IoCType
     value: str
     pyramid_priority: int = Field(ge=1, le=6, default=3)
-    sources: List[IoCSource] = Field(default_factory=list)
+    sources: list[IoCSource] = Field(default_factory=list)
     first_seen: datetime = Field(default_factory=datetime.utcnow)
     last_seen: datetime = Field(default_factory=datetime.utcnow)
     total_occurrences: int = 1
-    context: Dict[str, Any] = Field(default_factory=dict)
-    tags: List[str] = Field(default_factory=list)
-    related_iocs: List[str] = Field(default_factory=list)
-    mitre_techniques: List[str] = Field(default_factory=list)
+    context: dict[str, Any] = Field(default_factory=dict)
+    tags: list[str] = Field(default_factory=list)
+    related_iocs: list[str] = Field(default_factory=list)
+    mitre_techniques: list[str] = Field(default_factory=list)
     confidence: float = Field(ge=0.0, le=1.0, default=0.5)
-    is_malicious: Optional[bool] = None
+    is_malicious: bool | None = None
 
     def merge_with(self, other: "IoC") -> "IoC":
         """Merge another IoC into this one (for deduplication)."""
@@ -124,9 +125,9 @@ class IoCCollection(BaseModel):
     investigation_id: str
     extracted_at: datetime = Field(default_factory=datetime.utcnow)
     total_count: int = 0
-    by_type: Dict[str, int] = Field(default_factory=dict)
-    by_source: Dict[str, int] = Field(default_factory=dict)
-    iocs: List[IoC] = Field(default_factory=list)
+    by_type: dict[str, int] = Field(default_factory=dict)
+    by_source: dict[str, int] = Field(default_factory=dict)
+    iocs: list[IoC] = Field(default_factory=list)
 
     def add_ioc(self, ioc: IoC) -> bool:
         """Add or merge an IoC. Returns True if new, False if merged."""
@@ -157,16 +158,16 @@ class IoCCollection(BaseModel):
             for source in ioc.sources:
                 self.by_source[source.tool] = self.by_source.get(source.tool, 0) + 1
 
-    def get_by_type(self, ioc_type: IoCType) -> List[IoC]:
+    def get_by_type(self, ioc_type: IoCType) -> list[IoC]:
         """Get IoCs filtered by type."""
         return [ioc for ioc in self.iocs if ioc.type == ioc_type]
 
-    def get_by_priority(self, min_priority: int = 1) -> List[IoC]:
+    def get_by_priority(self, min_priority: int = 1) -> list[IoC]:
         """Get IoCs with priority >= min_priority, sorted by priority desc."""
         filtered = [ioc for ioc in self.iocs if ioc.pyramid_priority >= min_priority]
         return sorted(filtered, key=lambda x: x.pyramid_priority, reverse=True)
 
-    def get_by_source(self, source: str) -> List[IoC]:
+    def get_by_source(self, source: str) -> list[IoC]:
         """Get IoCs from a specific source/tool."""
         return [
             ioc for ioc in self.iocs
@@ -183,12 +184,12 @@ class TimelineEvent(BaseModel):
     tool: str
     summary: str
     severity: Severity = Severity.INFO
-    details: Dict[str, Any] = Field(default_factory=dict)
-    related_iocs: List[str] = Field(default_factory=list)
-    mitre_technique: Optional[str] = None
-    host: Optional[str] = None
-    user: Optional[str] = None
-    raw_event_id: Optional[str] = None
+    details: dict[str, Any] = Field(default_factory=dict)
+    related_iocs: list[str] = Field(default_factory=list)
+    mitre_technique: str | None = None
+    host: str | None = None
+    user: str | None = None
+    raw_event_id: str | None = None
 
 
 class SourceFindings(BaseModel):
@@ -196,14 +197,14 @@ class SourceFindings(BaseModel):
     source: SourceType
     tool: str
     query_time: datetime = Field(default_factory=datetime.utcnow)
-    query_description: Optional[str] = None
+    query_description: str | None = None
     total_events: int = 0
-    summary: Dict[str, Any] = Field(default_factory=dict)
-    key_findings: List[str] = Field(default_factory=list)
+    summary: dict[str, Any] = Field(default_factory=dict)
+    key_findings: list[str] = Field(default_factory=list)
     iocs_extracted: int = 0
     events_kept: int = 0
-    mitre_techniques: List[str] = Field(default_factory=list)
-    raw_query: Optional[str] = None
+    mitre_techniques: list[str] = Field(default_factory=list)
+    raw_query: str | None = None
 
 
 class InvestigationStatistics(BaseModel):
@@ -226,15 +227,15 @@ class InvestigationManifest(BaseModel):
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     status: InvestigationStatus = InvestigationStatus.ACTIVE
     severity: Severity = Severity.UNKNOWN
-    tags: List[str] = Field(default_factory=list)
-    sources_used: List[str] = Field(default_factory=list)
+    tags: list[str] = Field(default_factory=list)
+    sources_used: list[str] = Field(default_factory=list)
     statistics: InvestigationStatistics = Field(default_factory=InvestigationStatistics)
-    kill_chain_stages: List[str] = Field(default_factory=list)
+    kill_chain_stages: list[str] = Field(default_factory=list)
     size_bytes: int = 0
     session_count: int = 1
     last_session_at: datetime = Field(default_factory=datetime.utcnow)
-    resolution: Optional[str] = None
-    analyst_notes: List[str] = Field(default_factory=list)
+    resolution: str | None = None
+    analyst_notes: list[str] = Field(default_factory=list)
 
     def update_timestamp(self) -> None:
         """Update the updated_at timestamp."""
@@ -245,11 +246,11 @@ class Investigation(BaseModel):
     """Complete investigation data structure."""
     manifest: InvestigationManifest
     iocs: IoCCollection
-    timeline: List[TimelineEvent] = Field(default_factory=list)
-    source_findings: Dict[str, SourceFindings] = Field(default_factory=dict)
+    timeline: list[TimelineEvent] = Field(default_factory=list)
+    source_findings: dict[str, SourceFindings] = Field(default_factory=dict)
 
     @classmethod
-    def create(cls, name: str, description: str = "", tags: List[str] = None) -> "Investigation":
+    def create(cls, name: str, description: str = "", tags: list[str] = None) -> "Investigation":
         """Create a new investigation."""
         inv_id = f"INV-{datetime.utcnow().strftime('%Y%m%d-%H%M%S')}"
         manifest = InvestigationManifest(
@@ -299,8 +300,8 @@ class IndexEntry(BaseModel):
     severity: Severity
     size_bytes: int
     ioc_count: int
-    sources: List[str]
-    tags: List[str] = Field(default_factory=list)
+    sources: list[str]
+    tags: list[str] = Field(default_factory=list)
 
 
 class MasterIndex(BaseModel):
@@ -310,7 +311,7 @@ class MasterIndex(BaseModel):
     total_investigations: int = 0
     total_size_bytes: int = 0
     max_size_bytes: int = 8 * 1024 * 1024 * 1024  # 8GB default
-    investigations: List[IndexEntry] = Field(default_factory=list)
+    investigations: list[IndexEntry] = Field(default_factory=list)
 
     def add_investigation(self, manifest: InvestigationManifest) -> None:
         """Add or update an investigation in the index."""
@@ -337,7 +338,7 @@ class MasterIndex(BaseModel):
         self.investigations.append(entry)
         self._update_totals()
 
-    def remove_investigation(self, investigation_id: str) -> Optional[IndexEntry]:
+    def remove_investigation(self, investigation_id: str) -> IndexEntry | None:
         """Remove an investigation from the index."""
         for i, entry in enumerate(self.investigations):
             if entry.id == investigation_id:
@@ -352,7 +353,7 @@ class MasterIndex(BaseModel):
         self.total_size_bytes = sum(inv.size_bytes for inv in self.investigations)
         self.last_updated = datetime.utcnow()
 
-    def get_recent(self, limit: int = 10, status: Optional[InvestigationStatus] = None) -> List[IndexEntry]:
+    def get_recent(self, limit: int = 10, status: InvestigationStatus | None = None) -> list[IndexEntry]:
         """Get recent investigations, optionally filtered by status."""
         filtered = self.investigations
         if status:
@@ -362,7 +363,7 @@ class MasterIndex(BaseModel):
         sorted_inv = sorted(filtered, key=lambda x: x.updated_at, reverse=True)
         return sorted_inv[:limit]
 
-    def get_oldest(self) -> Optional[IndexEntry]:
+    def get_oldest(self) -> IndexEntry | None:
         """Get the oldest investigation (for FIFO)."""
         if not self.investigations:
             return None

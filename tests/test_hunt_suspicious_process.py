@@ -2,8 +2,8 @@
 
 import sys
 from pathlib import Path
-from unittest.mock import MagicMock, patch
-from typing import Dict, Any
+from typing import Any
+from unittest.mock import MagicMock
 
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -30,7 +30,7 @@ def create_stage1_response(
     users: list = None,
     executables: list = None,
     parent_processes: list = None
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Create a mock Stage 1 (process bounds) response."""
     return {
         "hits_count": 1,
@@ -45,7 +45,7 @@ def create_stage1_response(
     }
 
 
-def create_stage2_response(child_processes: list = None) -> Dict[str, Any]:
+def create_stage2_response(child_processes: list = None) -> dict[str, Any]:
     """Create a mock Stage 2 (child processes) response."""
     if child_processes is None:
         child_processes = [
@@ -80,7 +80,7 @@ def create_stage2_response(child_processes: list = None) -> Dict[str, Any]:
     }
 
 
-def create_stage3_response(file_operations: list = None) -> Dict[str, Any]:
+def create_stage3_response(file_operations: list = None) -> dict[str, Any]:
     """Create a mock Stage 3 (file operations) response."""
     if file_operations is None:
         file_operations = [
@@ -115,7 +115,7 @@ def create_stage3_response(file_operations: list = None) -> Dict[str, Any]:
     }
 
 
-def create_stage4_response(network_connections: list = None) -> Dict[str, Any]:
+def create_stage4_response(network_connections: list = None) -> dict[str, Any]:
     """Create a mock Stage 4 (network connections) response."""
     if network_connections is None:
         network_connections = [
@@ -181,11 +181,11 @@ class TestHuntSuspiciousProcessActivity:
             call_count[0] += 1
             if call_count[0] == 1:
                 return create_stage1_response()
-            elif call_count[0] == 2:
+            if call_count[0] == 2:
                 return create_stage2_response()
-            elif call_count[0] == 3:
+            if call_count[0] == 3:
                 return create_stage3_response()
-            elif call_count[0] == 4:
+            if call_count[0] == 4:
                 return create_stage4_response()
             return {"hits_count": 0, "results": []}
 
@@ -239,16 +239,16 @@ class TestHuntSuspiciousProcessActivity:
             call_count[0] += 1
             if call_count[0] == 1:
                 return create_stage1_response()
-            elif call_count[0] == 2:
+            if call_count[0] == 2:
                 # Return duplicate process names
                 return create_stage2_response([
                     {"@timestamp": "2024-01-15T10:05:00.000Z", "process.name": "cmd.exe", "process.executable": "C:\\Windows\\System32\\cmd.exe"},
                     {"@timestamp": "2024-01-15T10:06:00.000Z", "process.name": "cmd.exe", "process.executable": "C:\\Windows\\System32\\cmd.exe"},
                     {"@timestamp": "2024-01-15T10:07:00.000Z", "process.name": "cmd.exe", "process.executable": "C:\\Windows\\System32\\cmd.exe"},
                 ])
-            elif call_count[0] == 3:
+            if call_count[0] == 3:
                 return create_stage3_response([])
-            elif call_count[0] == 4:
+            if call_count[0] == 4:
                 # Return duplicate IPs
                 return create_stage4_response([
                     {"@timestamp": "2024-01-15T10:02:00.000Z", "destination.ip": "185.220.101.42"},
@@ -290,15 +290,15 @@ class TestHuntSuspiciousProcessActivity:
             call_count[0] += 1
             if call_count[0] == 1:
                 return create_stage1_response()
-            elif call_count[0] == 2:
+            if call_count[0] == 2:
                 return create_stage2_response([
                     {"@timestamp": "2024-01-15T10:15:00.000Z", "process.name": "late_process.exe"}
                 ])
-            elif call_count[0] == 3:
+            if call_count[0] == 3:
                 return create_stage3_response([
                     {"@timestamp": "2024-01-15T10:05:00.000Z", "file.path": "C:\\early_file.txt"}
                 ])
-            elif call_count[0] == 4:
+            if call_count[0] == 4:
                 return create_stage4_response([
                     {"@timestamp": "2024-01-15T10:10:00.000Z", "destination.ip": "1.2.3.4"}
                 ])
@@ -341,11 +341,11 @@ class TestHuntSuspiciousProcessActivity:
             call_count[0] += 1
             if call_count[0] == 1:
                 return create_stage1_response(hosts=["HOST1", "HOST2"])
-            elif call_count[0] == 2:
+            if call_count[0] == 2:
                 return create_stage2_response()  # 3 child processes
-            elif call_count[0] == 3:
+            if call_count[0] == 3:
                 return create_stage3_response()  # 3 file operations
-            elif call_count[0] == 4:
+            if call_count[0] == 4:
                 return create_stage4_response()  # 3 network connections
             return {"hits_count": 0, "results": []}
 
@@ -463,11 +463,11 @@ class TestHuntSuspiciousProcessActivity:
             call_count[0] += 1
             if call_count[0] == 1:
                 return create_stage1_response()
-            elif call_count[0] == 2:
+            if call_count[0] == 2:
                 raise Exception("Network timeout on child process query")
-            elif call_count[0] == 3:
+            if call_count[0] == 3:
                 return create_stage3_response()
-            elif call_count[0] == 4:
+            if call_count[0] == 4:
                 raise Exception("Index not found for network data")
             return {"hits_count": 0, "results": []}
 
@@ -501,7 +501,7 @@ class TestHuntSuspiciousProcessActivity:
         assert stage_statuses[4] == "error"
 
         print(f"  ✓ Errors captured: {len(result['errors'])}")
-        print(f"  ✓ Stage 3 still succeeded despite Stage 2 failure")
+        print("  ✓ Stage 3 still succeeded despite Stage 2 failure")
         print("  [PASS] Error handling works correctly")
 
     def test_ioc_extraction_with_ransomware_scenario(self):
@@ -519,7 +519,7 @@ class TestHuntSuspiciousProcessActivity:
                     executables=["C:\\Users\\john.smith\\Downloads\\invoice.exe"],
                     parent_processes=["outlook.exe"]
                 )
-            elif call_count[0] == 2:
+            if call_count[0] == 2:
                 return create_stage2_response([
                     {"@timestamp": "2024-01-15T10:01:00.000Z", "process.name": "wmic.exe",
                      "process.executable": "C:\\Windows\\System32\\wbem\\WMIC.exe",
@@ -531,13 +531,13 @@ class TestHuntSuspiciousProcessActivity:
                      "process.executable": "C:\\Windows\\System32\\bcdedit.exe",
                      "process.command_line": "bcdedit /set {default} recoveryenabled No"},
                 ])
-            elif call_count[0] == 3:
+            if call_count[0] == 3:
                 return create_stage3_response([
                     {"@timestamp": "2024-01-15T10:05:00.000Z", "file.path": "C:\\README_DECRYPT.txt"},
                     {"@timestamp": "2024-01-15T10:06:00.000Z", "file.path": "C:\\Users\\john.smith\\Documents\\Q4_Report.xlsx.encrypted"},
                     {"@timestamp": "2024-01-15T10:07:00.000Z", "file.path": "C:\\Users\\john.smith\\Desktop\\family_photos.zip.encrypted"},
                 ])
-            elif call_count[0] == 4:
+            if call_count[0] == 4:
                 return create_stage4_response([
                     {"@timestamp": "2024-01-15T10:00:30.000Z", "destination.ip": "45.33.32.156", "destination.port": 443},
                     {"@timestamp": "2024-01-15T10:04:00.000Z", "destination.ip": "185.141.62.123", "destination.port": 8443},
@@ -570,10 +570,10 @@ class TestHuntSuspiciousProcessActivity:
         assert "45.33.32.156" in iocs["ips"]
         assert "185.141.62.123" in iocs["ips"]
 
-        print(f"  ✓ Victim host: FINANCE-PC-01")
-        print(f"  ✓ Shadow deletion tools detected: WMIC.exe, vssadmin.exe")
-        print(f"  ✓ Recovery disabled: bcdedit.exe")
-        print(f"  ✓ Ransom note: README_DECRYPT.txt")
+        print("  ✓ Victim host: FINANCE-PC-01")
+        print("  ✓ Shadow deletion tools detected: WMIC.exe, vssadmin.exe")
+        print("  ✓ Recovery disabled: bcdedit.exe")
+        print("  ✓ Ransom note: README_DECRYPT.txt")
         print(f"  ✓ C2 IPs: {iocs['ips']}")
         print(f"  ✓ Total IoCs: {result['summary']['total_iocs_extracted']}")
         print("  [PASS] Ransomware IoCs correctly extracted")
@@ -598,7 +598,7 @@ def test_hunt_suspicious_process_activity_exists():
     tools.register_tools(mock_mcp)
 
     assert "hunt_suspicious_process_activity" in registered
-    print(f"  ✓ Tool registered: hunt_suspicious_process_activity")
+    print("  ✓ Tool registered: hunt_suspicious_process_activity")
     print(f"  ✓ Total tools registered: {len(registered)}")
     print("  [PASS] Tool registration verified")
 

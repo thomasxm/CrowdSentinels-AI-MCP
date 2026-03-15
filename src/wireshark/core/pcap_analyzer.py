@@ -3,15 +3,11 @@
 import hashlib
 import logging
 import re
-from collections import Counter
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
 
 from src.wireshark.core.tshark_executor import TSharkExecutor
-from src.wireshark.models import (
-    PcapMetadata, TopTalker, ProtocolStats, Session
-)
+from src.wireshark.models import PcapMetadata, ProtocolStats, TopTalker
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +15,7 @@ logger = logging.getLogger(__name__)
 class PcapAnalyzer:
     """Analyze PCAP files using TShark."""
 
-    def __init__(self, executor: Optional[TSharkExecutor] = None):
+    def __init__(self, executor: TSharkExecutor | None = None):
         """Initialize analyzer with optional custom executor."""
         self.executor = executor or TSharkExecutor()
 
@@ -135,7 +131,7 @@ class PcapAnalyzer:
             protocols_detected=protocols
         )
 
-    def get_protocol_list(self, pcap_path: str) -> List[str]:
+    def get_protocol_list(self, pcap_path: str) -> list[str]:
         """Get list of protocols detected in pcap."""
         cmd = self.executor.build_stats_command(pcap_path, "io,phs")
         returncode, stdout, _ = self.executor.execute(cmd, timeout=120)
@@ -150,7 +146,7 @@ class PcapAnalyzer:
 
         return list(set(protocols))
 
-    def get_protocol_hierarchy(self, pcap_path: str) -> List[ProtocolStats]:
+    def get_protocol_hierarchy(self, pcap_path: str) -> list[ProtocolStats]:
         """Get protocol hierarchy statistics.
 
         Returns:
@@ -192,7 +188,7 @@ class PcapAnalyzer:
         self,
         pcap_path: str,
         limit: int = 20
-    ) -> List[TopTalker]:
+    ) -> list[TopTalker]:
         """Get top communicating hosts by packet count.
 
         Args:
@@ -287,19 +283,18 @@ class PcapAnalyzer:
         unit = parts[1].lower() if len(parts) > 1 else "bytes"
         if unit == "kb":
             return int(value * 1024)
-        elif unit == "mb":
+        if unit == "mb":
             return int(value * 1024 * 1024)
-        elif unit == "gb":
+        if unit == "gb":
             return int(value * 1024 * 1024 * 1024)
-        else:
-            return int(value)
+        return int(value)
 
     def get_conversations(
         self,
         pcap_path: str,
         protocol: str = "tcp",
         limit: int = 50
-    ) -> List[Dict]:
+    ) -> list[dict]:
         """Get conversation statistics.
 
         Args:
@@ -350,7 +345,7 @@ class PcapAnalyzer:
         self,
         pcap_path: str,
         limit: int = 500
-    ) -> List[Dict]:
+    ) -> list[dict]:
         """Get DNS queries from pcap.
 
         Args:

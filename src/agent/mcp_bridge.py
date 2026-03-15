@@ -9,8 +9,7 @@ import asyncio
 import json
 import logging
 import subprocess
-import sys
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 from src.agent.config import MCPServerConfig
 
@@ -23,13 +22,13 @@ class MCPBridge:
     def __init__(
         self,
         crowdsentinel_server,
-        external_configs: List[MCPServerConfig],
+        external_configs: list[MCPServerConfig],
     ):
         self._cs_server = crowdsentinel_server  # SearchMCPServer instance
         self._external_configs = external_configs
-        self._external_procs: Dict[str, subprocess.Popen] = {}
-        self._tool_registry: Dict[str, Tuple[str, Any]] = {}  # tool_name -> (server_name, tool_obj)
-        self._tool_schemas: List[Dict[str, Any]] = []
+        self._external_procs: dict[str, subprocess.Popen] = {}
+        self._tool_registry: dict[str, tuple[str, Any]] = {}  # tool_name -> (server_name, tool_obj)
+        self._tool_schemas: list[dict[str, Any]] = []
         self._started = False
 
     def start(self) -> None:
@@ -73,11 +72,11 @@ class MCPBridge:
     def __exit__(self, *args):
         self.stop()
 
-    def list_tools(self) -> List[Dict[str, Any]]:
+    def list_tools(self) -> list[dict[str, Any]]:
         """Return all available tool schemas in MCP format."""
         return list(self._tool_schemas)
 
-    def execute_tool(self, name: str, arguments: Dict[str, Any]) -> str:
+    def execute_tool(self, name: str, arguments: dict[str, Any]) -> str:
         """Execute a tool by name and return the result as a string."""
         if name not in self._tool_registry:
             return json.dumps({"error": f"Unknown tool: {name}"})
@@ -86,8 +85,7 @@ class MCPBridge:
 
         if server_name == "crowdsentinel":
             return self._execute_crowdsentinel_tool(tool_obj, arguments)
-        else:
-            return self._execute_external_tool(server_name, name, arguments)
+        return self._execute_external_tool(server_name, name, arguments)
 
     def _load_crowdsentinel_tools(self) -> None:
         """Load tools from the in-process CrowdSentinel MCP server."""
@@ -112,7 +110,7 @@ class MCPBridge:
 
         logger.info("Loaded %d CrowdSentinel tools", len(tools))
 
-    def _execute_crowdsentinel_tool(self, tool_obj: Any, arguments: Dict[str, Any]) -> str:
+    def _execute_crowdsentinel_tool(self, tool_obj: Any, arguments: dict[str, Any]) -> str:
         """Execute a CrowdSentinel tool in-process."""
         loop = asyncio.new_event_loop()
         try:
@@ -214,7 +212,7 @@ class MCPBridge:
         except Exception as exc:
             logger.error("Failed to start external MCP server %s: %s", config.name, exc)
 
-    def _execute_external_tool(self, server_name: str, tool_name: str, arguments: Dict[str, Any]) -> str:
+    def _execute_external_tool(self, server_name: str, tool_name: str, arguments: dict[str, Any]) -> str:
         """Execute a tool on an external MCP server via JSON-RPC."""
         proc = self._external_procs.get(server_name)
         if not proc or proc.poll() is not None:
@@ -255,7 +253,7 @@ class MCPBridge:
         return "\n".join(texts) if texts else json.dumps(result, default=str)
 
     @staticmethod
-    def _send_jsonrpc(proc: subprocess.Popen, message: Dict) -> None:
+    def _send_jsonrpc(proc: subprocess.Popen, message: dict) -> None:
         """Send a JSON-RPC message via stdio."""
         body = json.dumps(message)
         header = f"Content-Length: {len(body)}\r\n\r\n"
@@ -263,7 +261,7 @@ class MCPBridge:
         proc.stdin.flush()
 
     @staticmethod
-    def _recv_jsonrpc(proc: subprocess.Popen, timeout: int = 10) -> Optional[Dict]:
+    def _recv_jsonrpc(proc: subprocess.Popen, timeout: int = 10) -> dict | None:
         """Receive a JSON-RPC response via stdio."""
         import select
 

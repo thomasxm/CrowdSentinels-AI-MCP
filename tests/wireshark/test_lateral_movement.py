@@ -1,9 +1,8 @@
 # tests/wireshark/test_lateral_movement.py
 """Tests for lateral movement detector."""
-import pytest
 from pathlib import Path
-from datetime import datetime
 
+import pytest
 
 TEST_PCAP_DIR = Path("/home/kali/Desktop/CTU/normal_traffics")
 

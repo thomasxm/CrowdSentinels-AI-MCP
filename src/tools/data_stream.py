@@ -1,16 +1,17 @@
 """MCP tools for data stream operations."""
-from typing import Dict, Optional
+
 from fastmcp import FastMCP
 
-class DataStreamTools:    
+
+class DataStreamTools:
     def __init__(self, search_client):
         self.search_client = search_client
-    
+
     def register_tools(self, mcp: FastMCP):
         """Register data stream tools with the MCP server."""
-        
+
         @mcp.tool()
-        def create_data_stream(name: str) -> Dict:
+        def create_data_stream(name: str) -> dict:
             """Create a new data stream.
             
             This creates a new data stream with the specified name.
@@ -20,9 +21,9 @@ class DataStreamTools:
                 name: Name of the data stream to create
             """
             return self.search_client.create_data_stream(name=name)
-        
+
         @mcp.tool()
-        def get_data_stream(name: Optional[str] = None) -> Dict:
+        def get_data_stream(name: str | None = None) -> dict:
             """Get information about one or more data streams.
             
             Retrieves configuration, mappings, settings, and other information
@@ -34,9 +35,9 @@ class DataStreamTools:
                       If not provided, retrieves all data streams.
             """
             return self.search_client.get_data_stream(name=name)
-        
+
         @mcp.tool()
-        def delete_data_stream(name: str) -> Dict:
+        def delete_data_stream(name: str) -> dict:
             """Delete one or more data streams.
             
             Permanently deletes the specified data streams and all their backing indices.

@@ -1,6 +1,4 @@
 """IoC Analysis and Decision-Making Client for incident response."""
-from typing import Dict, List, Optional, Tuple
-import json
 from datetime import datetime
 
 from src.clients.base import SearchClientBase
@@ -82,7 +80,7 @@ class IoCAnalysisClient(SearchClientBase):
         "procdump": {"technique": "T1003.001", "tactic": "Credential Access", "name": "ProcDump LSASS"},
     }
 
-    def analyze_search_results(self, search_results: Dict, context: str = "") -> Dict:
+    def analyze_search_results(self, search_results: dict, context: str = "") -> dict:
         """
         Analyze search results and provide insights with follow-up recommendations.
 
@@ -172,7 +170,7 @@ class IoCAnalysisClient(SearchClientBase):
 
         return analysis
 
-    def _extract_iocs_from_events(self, events: List[Dict]) -> List[Dict]:
+    def _extract_iocs_from_events(self, events: list[dict]) -> list[dict]:
         """Extract IoCs from event data.
 
         Handles both standard ES format (with _source wrapper) and simplified format
@@ -246,7 +244,7 @@ class IoCAnalysisClient(SearchClientBase):
 
         return iocs
 
-    def _map_to_mitre_attack(self, events: List[Dict]) -> List[Dict]:
+    def _map_to_mitre_attack(self, events: list[dict]) -> list[dict]:
         """Map events to MITRE ATT&CK techniques.
 
         Uses two detection methods:
@@ -304,8 +302,8 @@ class IoCAnalysisClient(SearchClientBase):
 
         return techniques
 
-    def _assess_severity(self, total_hits: int, iocs: List[Dict],
-                        techniques: List[Dict]) -> str:
+    def _assess_severity(self, total_hits: int, iocs: list[dict],
+                        techniques: list[dict]) -> str:
         """Assess severity based on findings.
 
         Severity is driven primarily by *what* was detected (technique
@@ -346,15 +344,14 @@ class IoCAnalysisClient(SearchClientBase):
         # Determine severity level
         if severity_score >= 7:
             return "critical"
-        elif severity_score >= 4:
+        if severity_score >= 4:
             return "high"
-        elif severity_score >= 2:
+        if severity_score >= 2:
             return "medium"
-        else:
-            return "low"
+        return "low"
 
-    def _generate_insights(self, events: List[Dict], iocs: List[Dict],
-                          techniques: List[Dict]) -> List[str]:
+    def _generate_insights(self, events: list[dict], iocs: list[dict],
+                          techniques: list[dict]) -> list[str]:
         """Generate human-readable insights from the analysis."""
         insights = []
 
@@ -392,8 +389,8 @@ class IoCAnalysisClient(SearchClientBase):
 
         return insights
 
-    def _recommend_followup_queries(self, iocs: List[Dict], events: List[Dict],
-                                   context: str) -> List[Dict]:
+    def _recommend_followup_queries(self, iocs: list[dict], events: list[dict],
+                                   context: str) -> list[dict]:
         """Recommend follow-up queries based on findings."""
         recommendations = []
 
@@ -452,7 +449,7 @@ class IoCAnalysisClient(SearchClientBase):
 
         return recommendations
 
-    def _get_nested_value(self, data: Dict, path: str) -> Optional[str]:
+    def _get_nested_value(self, data: dict, path: str) -> str | None:
         """Get value from nested dictionary using dot notation."""
         keys = path.split(".")
         value = data
@@ -463,8 +460,8 @@ class IoCAnalysisClient(SearchClientBase):
                 return None
         return value
 
-    def generate_investigation_report(self, analysis_results: List[Dict],
-                                     investigation_context: str) -> Dict:
+    def generate_investigation_report(self, analysis_results: list[dict],
+                                     investigation_context: str) -> dict:
         """
         Generate a comprehensive investigation report from multiple analyses.
 
@@ -557,7 +554,7 @@ class IoCAnalysisClient(SearchClientBase):
 
         return report
 
-    def _generate_executive_summary(self, report: Dict) -> str:
+    def _generate_executive_summary(self, report: dict) -> str:
         """Generate executive summary for the report."""
         summary_parts = []
 

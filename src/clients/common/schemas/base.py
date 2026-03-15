@@ -4,10 +4,10 @@ This module provides the core dataclasses used to define log source schemas,
 enabling adaptive field mapping across different log formats.
 """
 
+import json
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Optional, Set, Any
-import json
+from typing import Any
 
 
 class LogSourceType(Enum):
@@ -36,10 +36,10 @@ class EventTypeDefinition:
     """
     event_code: str
     description: str
-    fields: Dict[str, str]
-    category: Optional[str] = None
+    fields: dict[str, str]
+    category: str | None = None
 
-    def get_field(self, semantic_name: str) -> Optional[str]:
+    def get_field(self, semantic_name: str) -> str | None:
         """Get the actual field name for a semantic concept.
 
         Args:
@@ -54,11 +54,11 @@ class EventTypeDefinition:
         """Check if this event type defines a semantic field."""
         return semantic_name in self.fields
 
-    def list_semantic_fields(self) -> List[str]:
+    def list_semantic_fields(self) -> list[str]:
         """List all semantic field names defined for this event type."""
         return list(self.fields.keys())
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary for JSON serialisation."""
         return {
             "event_code": self.event_code,
@@ -93,20 +93,20 @@ class LogSourceSchema:
     schema_id: str
     source_type: LogSourceType
     description: str
-    index_patterns: List[str]
+    index_patterns: list[str]
     field_prefix: str
-    event_types: Dict[str, EventTypeDefinition]
-    common_fields: Dict[str, str] = field(default_factory=dict)
+    event_types: dict[str, EventTypeDefinition]
+    common_fields: dict[str, str] = field(default_factory=dict)
     timestamp_field: str = "@timestamp"
     host_field: str = "host.name"
     event_code_field: str = "event.code"
-    event_code_alternatives: List[str] = field(default_factory=list)
+    event_code_alternatives: list[str] = field(default_factory=list)
 
     def get_field(
         self,
         semantic_name: str,
-        event_type: Optional[str] = None
-    ) -> Optional[str]:
+        event_type: str | None = None
+    ) -> str | None:
         """Get the actual field name for a semantic concept.
 
         Args:
@@ -141,7 +141,7 @@ class LogSourceSchema:
 
         return None
 
-    def get_event_code(self, event_type: str) -> Optional[str]:
+    def get_event_code(self, event_type: str) -> str | None:
         """Get the event code for a specific event type.
 
         Args:
@@ -154,7 +154,7 @@ class LogSourceSchema:
             return self.event_types[event_type].event_code
         return None
 
-    def get_event_code_fields(self) -> List[str]:
+    def get_event_code_fields(self) -> list[str]:
         """Get all possible event code field names (primary + alternatives).
 
         Returns:
@@ -174,11 +174,11 @@ class LogSourceSchema:
         """Check if this schema defines an event type."""
         return event_type in self.event_types
 
-    def list_event_types(self) -> List[str]:
+    def list_event_types(self) -> list[str]:
         """List all event types defined in this schema."""
         return list(self.event_types.keys())
 
-    def get_all_fields(self, event_type: Optional[str] = None) -> Set[str]:
+    def get_all_fields(self, event_type: str | None = None) -> set[str]:
         """Get all actual field names for this schema.
 
         Args:
@@ -239,7 +239,7 @@ class LogSourceSchema:
 
         return False
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary for JSON serialisation."""
         return {
             "name": self.name,
@@ -264,7 +264,7 @@ class LogSourceSchema:
         return json.dumps(self.to_dict(), indent=indent)
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "LogSourceSchema":
+    def from_dict(cls, data: dict[str, Any]) -> "LogSourceSchema":
         """Create a schema from a dictionary.
 
         Args:

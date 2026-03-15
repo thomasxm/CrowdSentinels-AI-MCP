@@ -8,8 +8,7 @@ different log sources. This schema is used for Elastic Agent, Endpoint
 Security, and other ECS-compliant data sources.
 """
 
-from .base import LogSourceSchema, LogSourceType, EventTypeDefinition
-
+from .base import EventTypeDefinition, LogSourceSchema, LogSourceType
 
 ECS_SCHEMA = LogSourceSchema(
     name="Elastic Common Schema",

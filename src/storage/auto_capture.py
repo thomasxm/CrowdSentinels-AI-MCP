@@ -5,15 +5,15 @@ results from Elasticsearch, Chainsaw, and other tools.
 """
 
 import logging
-from typing import Dict, Any, Optional
+from typing import Any
 
-from src.storage.models import SourceType
 from src.storage.investigation_state import InvestigationStateClient
+from src.storage.models import SourceType
 
 logger = logging.getLogger(__name__)
 
 # Global client instance
-_client: Optional[InvestigationStateClient] = None
+_client: InvestigationStateClient | None = None
 
 
 def get_client() -> InvestigationStateClient:
@@ -25,11 +25,11 @@ def get_client() -> InvestigationStateClient:
 
 
 def auto_capture_elasticsearch_results(
-    results: Dict[str, Any],
+    results: dict[str, Any],
     tool_name: str,
     query_description: str = "",
     extract_timeline: bool = False,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Automatically capture IoCs from Elasticsearch results.
 
@@ -92,11 +92,11 @@ def auto_capture_elasticsearch_results(
 
 
 def auto_capture_chainsaw_results(
-    results: Dict[str, Any],
+    results: dict[str, Any],
     tool_name: str,
     query_description: str = "",
     extract_timeline: bool = True,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Automatically capture IoCs from Chainsaw results.
 
@@ -158,10 +158,10 @@ def auto_capture_chainsaw_results(
 
 
 def auto_capture_wireshark_results(
-    results: Dict[str, Any],
+    results: dict[str, Any],
     tool_name: str,
     query_description: str = "",
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Automatically capture IoCs from Wireshark/tshark results.
 
@@ -223,7 +223,7 @@ def has_active_investigation() -> bool:
     return client.active_investigation is not None
 
 
-def get_active_investigation_summary() -> Optional[Dict[str, Any]]:
+def get_active_investigation_summary() -> dict[str, Any] | None:
     """Get summary of the active investigation, if any."""
     client = get_client()
     if client.active_investigation is None:

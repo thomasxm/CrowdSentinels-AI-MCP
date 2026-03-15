@@ -1,9 +1,9 @@
 import functools
 import logging
-import time
-import sys
 import os
-from typing import TypeVar, Callable, Any, Dict, Optional
+import time
+from collections.abc import Callable
+from typing import Any, TypeVar
 
 from fastmcp import FastMCP
 from mcp.types import TextContent
@@ -51,7 +51,7 @@ def _truncate_value(value: Any, max_length: int = 100) -> str:
     return str_value
 
 
-def _format_params(kwargs: Dict[str, Any]) -> str:
+def _format_params(kwargs: dict[str, Any]) -> str:
     """Format parameters for logging, truncating large values."""
     if not kwargs:
         return ""

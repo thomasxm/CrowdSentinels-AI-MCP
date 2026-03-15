@@ -1,14 +1,12 @@
 """Chainsaw Log Analyzer Client for EVTX hunting and analysis."""
-from typing import Dict, List, Optional, Any
-import subprocess
 import json
 import logging
 import os
+import subprocess
+from dataclasses import dataclass
 from pathlib import Path
-from datetime import datetime
-from dataclasses import dataclass, field
 
-from src.paths import get_chainsaw_dir, get_binary_path
+from src.paths import get_binary_path, get_chainsaw_dir
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +23,7 @@ class PyramidOfPainLevel:
     name: str
     description: str
     difficulty_to_change: str
-    examples: List[str]
+    examples: list[str]
 
 
 @dataclass
@@ -33,7 +31,7 @@ class DiamondModelVertex:
     """Diamond Model of Intrusion Analysis vertex."""
     vertex: str
     description: str
-    elements: List[str]
+    elements: list[str]
 
 
 class ChainsawClient:
@@ -109,7 +107,7 @@ class ChainsawClient:
         )
     }
 
-    def __init__(self, chainsaw_path: Optional[str] = None):
+    def __init__(self, chainsaw_path: str | None = None):
         """
         Initialise Chainsaw client.
 
@@ -208,13 +206,13 @@ class ChainsawClient:
 
     def hunt(self,
              evtx_path: str,
-             sigma_path: Optional[str] = None,
-             mapping_path: Optional[str] = None,
-             custom_rules: Optional[str] = None,
-             from_time: Optional[str] = None,
-             to_time: Optional[str] = None,
+             sigma_path: str | None = None,
+             mapping_path: str | None = None,
+             custom_rules: str | None = None,
+             from_time: str | None = None,
+             to_time: str | None = None,
              output_format: str = "json",
-             skip_errors: bool = True) -> Dict:
+             skip_errors: bool = True) -> dict:
         """
         Hunt for threats using Sigma rules.
 
@@ -353,9 +351,9 @@ class ChainsawClient:
                evtx_path: str,
                search_term: str,
                case_insensitive: bool = True,
-               event_id: Optional[int] = None,
+               event_id: int | None = None,
                regex: bool = False,
-               output_format: str = "json") -> Dict:
+               output_format: str = "json") -> dict:
         """
         Search for specific terms in EVTX files.
 
@@ -471,7 +469,7 @@ class ChainsawClient:
             }
 
     @classmethod
-    def categorize_ioc_by_pyramid(cls, ioc_type: str, ioc_value: str) -> Dict:
+    def categorize_ioc_by_pyramid(cls, ioc_type: str, ioc_value: str) -> dict:
         """
         Categorize an IoC by Pyramid of Pain level.
 
@@ -514,7 +512,7 @@ class ChainsawClient:
         }
 
     @classmethod
-    def map_to_diamond_model(cls, detection: Dict) -> Dict:
+    def map_to_diamond_model(cls, detection: dict) -> dict:
         """
         Map a detection to the Diamond Model of Intrusion Analysis.
 

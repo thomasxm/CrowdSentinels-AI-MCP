@@ -7,8 +7,7 @@ Tests cover:
 - SchemaResolver with caching
 - SchemaAwareQueryBuilder integration
 """
-import pytest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 
 class TestLogSourceSchema:
@@ -17,7 +16,9 @@ class TestLogSourceSchema:
     def test_schema_creation(self):
         """Test creating a schema instance."""
         from src.clients.common.schemas.base import (
-            LogSourceSchema, LogSourceType, EventTypeDefinition
+            EventTypeDefinition,
+            LogSourceSchema,
+            LogSourceType,
         )
 
         event_types = {
@@ -52,7 +53,9 @@ class TestLogSourceSchema:
     def test_has_event_type(self):
         """Test checking for event type existence."""
         from src.clients.common.schemas.base import (
-            LogSourceSchema, LogSourceType, EventTypeDefinition
+            EventTypeDefinition,
+            LogSourceSchema,
+            LogSourceType,
         )
 
         event_types = {
@@ -83,7 +86,9 @@ class TestLogSourceSchema:
     def test_get_field(self):
         """Test retrieving field mappings."""
         from src.clients.common.schemas.base import (
-            LogSourceSchema, LogSourceType, EventTypeDefinition
+            EventTypeDefinition,
+            LogSourceSchema,
+            LogSourceType,
         )
 
         event_types = {
@@ -126,7 +131,8 @@ class TestLogSourceSchema:
     def test_matches_index(self):
         """Test index pattern matching."""
         from src.clients.common.schemas.base import (
-            LogSourceSchema, LogSourceType, EventTypeDefinition
+            LogSourceSchema,
+            LogSourceType,
         )
 
         schema = LogSourceSchema(
@@ -150,7 +156,9 @@ class TestLogSourceSchema:
     def test_get_event_code(self):
         """Test retrieving event codes."""
         from src.clients.common.schemas.base import (
-            LogSourceSchema, LogSourceType, EventTypeDefinition
+            EventTypeDefinition,
+            LogSourceSchema,
+            LogSourceType,
         )
 
         event_types = {
@@ -508,7 +516,8 @@ class TestSchemaAwareQueryBuilder:
     def test_build_process_bounds_query(self):
         """Test building process bounds query."""
         from src.clients.common.schemas.query_builder import (
-            SchemaAwareQueryBuilder, QueryResult
+            QueryResult,
+            SchemaAwareQueryBuilder,
         )
         from src.clients.common.schemas.sysmon import SYSMON_SCHEMA
 
@@ -525,7 +534,8 @@ class TestSchemaAwareQueryBuilder:
     def test_build_child_processes_query(self):
         """Test building child processes query."""
         from src.clients.common.schemas.query_builder import (
-            SchemaAwareQueryBuilder, QueryResult
+            QueryResult,
+            SchemaAwareQueryBuilder,
         )
         from src.clients.common.schemas.sysmon import SYSMON_SCHEMA
 
@@ -544,7 +554,8 @@ class TestSchemaAwareQueryBuilder:
     def test_build_network_connections_query(self):
         """Test building network connections query."""
         from src.clients.common.schemas.query_builder import (
-            SchemaAwareQueryBuilder, QueryResult
+            QueryResult,
+            SchemaAwareQueryBuilder,
         )
         from src.clients.common.schemas.sysmon import SYSMON_SCHEMA
 
@@ -563,7 +574,8 @@ class TestSchemaAwareQueryBuilder:
     def test_build_file_operations_query(self):
         """Test building file operations query."""
         from src.clients.common.schemas.query_builder import (
-            SchemaAwareQueryBuilder, QueryResult
+            QueryResult,
+            SchemaAwareQueryBuilder,
         )
         from src.clients.common.schemas.sysmon import SYSMON_SCHEMA
 
@@ -580,10 +592,11 @@ class TestSchemaAwareQueryBuilder:
 
     def test_query_builder_with_ecs_schema(self):
         """Test query builder with ECS schema uses correct fields."""
-        from src.clients.common.schemas.query_builder import (
-            SchemaAwareQueryBuilder, QueryResult
-        )
         from src.clients.common.schemas.ecs import ECS_SCHEMA
+        from src.clients.common.schemas.query_builder import (
+            QueryResult,
+            SchemaAwareQueryBuilder,
+        )
 
         builder = SchemaAwareQueryBuilder(ECS_SCHEMA, "logs-endpoint.*")
         result = builder.build_process_bounds_query("malware.exe")
@@ -595,7 +608,8 @@ class TestSchemaAwareQueryBuilder:
     def test_build_registry_operations_query(self):
         """Test building registry operations query."""
         from src.clients.common.schemas.query_builder import (
-            SchemaAwareQueryBuilder, QueryResult
+            QueryResult,
+            SchemaAwareQueryBuilder,
         )
         from src.clients.common.schemas.sysmon import SYSMON_SCHEMA
 
@@ -614,7 +628,8 @@ class TestSchemaAwareQueryBuilder:
     def test_build_dns_query(self):
         """Test building DNS query."""
         from src.clients.common.schemas.query_builder import (
-            SchemaAwareQueryBuilder, QueryResult
+            QueryResult,
+            SchemaAwareQueryBuilder,
         )
         from src.clients.common.schemas.sysmon import SYSMON_SCHEMA
 
@@ -635,12 +650,10 @@ class TestSchemaIntegration:
 
     def test_full_workflow_sysmon(self):
         """Test complete workflow with Sysmon schema."""
-        from src.clients.common.schemas import (
-            get_schema,
-            detect_schema_from_index
-        )
+        from src.clients.common.schemas import detect_schema_from_index
         from src.clients.common.schemas.query_builder import (
-            SchemaAwareQueryBuilder, QueryResult
+            QueryResult,
+            SchemaAwareQueryBuilder,
         )
 
         # 1. Detect schema from index
@@ -658,12 +671,10 @@ class TestSchemaIntegration:
 
     def test_full_workflow_ecs(self):
         """Test complete workflow with ECS schema."""
-        from src.clients.common.schemas import (
-            get_schema,
-            detect_schema_from_index
-        )
+        from src.clients.common.schemas import get_schema
         from src.clients.common.schemas.query_builder import (
-            SchemaAwareQueryBuilder, QueryResult
+            QueryResult,
+            SchemaAwareQueryBuilder,
         )
 
         # 1. Get schema explicitly

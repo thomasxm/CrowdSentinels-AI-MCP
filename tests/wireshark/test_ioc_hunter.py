@@ -1,8 +1,8 @@
 # tests/wireshark/test_ioc_hunter.py
 """Tests for IoC hunter."""
-import pytest
 from pathlib import Path
 
+import pytest
 
 TEST_PCAP_DIR = Path("/home/kali/Desktop/CTU/normal_traffics")
 

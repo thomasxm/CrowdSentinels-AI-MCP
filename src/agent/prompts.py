@@ -1,8 +1,7 @@
 """Build system and user prompts for the investigation agent."""
 
 import json
-from typing import Any, Dict, List
-
+from typing import Any
 
 SYSTEM_PROMPT = """You are CrowdSentinel, an expert security analyst performing an investigation using MCP tools.
 
@@ -59,7 +58,7 @@ Your FINAL response must be valid JSON with this structure:
 """
 
 
-def build_system_prompt(tool_names_by_server: Dict[str, List[str]]) -> str:
+def build_system_prompt(tool_names_by_server: dict[str, list[str]]) -> str:
     """Build the system prompt with available tool inventory."""
     tools_section = "\n## Available Tools\n"
     for server, names in tool_names_by_server.items():
@@ -72,7 +71,7 @@ def build_system_prompt(tool_names_by_server: Dict[str, List[str]]) -> str:
     return SYSTEM_PROMPT + tools_section
 
 
-def build_user_message(hunt_data: Dict[str, Any], context: str) -> str:
+def build_user_message(hunt_data: dict[str, Any], context: str) -> str:
     """Build the user message from piped hunt data and investigation context."""
     parts = [f"## Investigation Context\n{context}\n"]
 

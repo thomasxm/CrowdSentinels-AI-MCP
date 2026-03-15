@@ -3,7 +3,6 @@ import logging
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Optional, Set
 
 # Python 3.11+ has tomllib, earlier versions need tomli
 if sys.version_info >= (3, 11):
@@ -24,15 +23,15 @@ class HuntingRule:
     uuid: str
     name: str
     description: str
-    query: List[str]  # All queries (ES|QL, EQL, SQL, etc.)
+    query: list[str]  # All queries (ES|QL, EQL, SQL, etc.)
     platform: str  # linux, windows, macos, aws, azure, okta, llm, cross-platform
-    integration: List[str]  # Data sources: endpoint, windows, system, etc.
-    mitre: List[str]  # MITRE techniques: T1053.003, AML.T0051, etc.
-    notes: List[str]  # Hunting tips and guidance
+    integration: list[str]  # Data sources: endpoint, windows, system, etc.
+    mitre: list[str]  # MITRE techniques: T1053.003, AML.T0051, etc.
+    notes: list[str]  # Hunting tips and guidance
     file_path: str
 
     # Computed fields - queries filtered by language
-    esql_queries: List[str] = field(default_factory=list)
+    esql_queries: list[str] = field(default_factory=list)
 
     @property
     def display_name(self) -> str:
@@ -61,9 +60,9 @@ class HuntingRuleLoader:
             hunting_directory: Path to the detection-rules/hunting/ directory
         """
         self.hunting_directory = Path(hunting_directory)
-        self.rules: Dict[str, HuntingRule] = {}
-        self.rules_by_platform: Dict[str, List[str]] = {}
-        self.rules_by_mitre: Dict[str, List[str]] = {}
+        self.rules: dict[str, HuntingRule] = {}
+        self.rules_by_platform: dict[str, list[str]] = {}
+        self.rules_by_mitre: dict[str, list[str]] = {}
 
         self.logger = logging.getLogger(__name__)
 
@@ -101,7 +100,7 @@ class HuntingRuleLoader:
 
         self.logger.info(f"Loaded {loaded_count} ES|QL hunting rules with {esql_count} queries")
 
-    def _parse_toml(self, toml_file: Path) -> Optional[HuntingRule]:
+    def _parse_toml(self, toml_file: Path) -> HuntingRule | None:
         """Parse a TOML hunting file into a HuntingRule."""
         try:
             with open(toml_file, "rb") as f:
@@ -165,17 +164,17 @@ class HuntingRuleLoader:
                 return part.lower()
         return "unknown"
 
-    def get_rule(self, rule_id: str) -> Optional[HuntingRule]:
+    def get_rule(self, rule_id: str) -> HuntingRule | None:
         """Get a hunting rule by UUID."""
         return self.rules.get(rule_id)
 
     def search_rules(
         self,
-        platform: Optional[str] = None,
-        mitre: Optional[str] = None,
-        keyword: Optional[str] = None,
+        platform: str | None = None,
+        mitre: str | None = None,
+        keyword: str | None = None,
         limit: int = 50
-    ) -> List[HuntingRule]:
+    ) -> list[HuntingRule]:
         """
         Search hunting rules with optional filters.
 
@@ -218,7 +217,7 @@ class HuntingRuleLoader:
 
         return results
 
-    def get_statistics(self) -> Dict:
+    def get_statistics(self) -> dict:
         """Get statistics about loaded hunting rules."""
         total_esql_queries = sum(len(r.esql_queries) for r in self.rules.values())
 
@@ -229,10 +228,10 @@ class HuntingRuleLoader:
             "mitre_techniques_covered": len(self.rules_by_mitre)
         }
 
-    def get_platforms(self) -> List[str]:
+    def get_platforms(self) -> list[str]:
         """Get list of available platforms."""
         return sorted(self.rules_by_platform.keys())
 
-    def get_mitre_techniques(self) -> List[str]:
+    def get_mitre_techniques(self) -> list[str]:
         """Get list of MITRE techniques covered."""
         return sorted(self.rules_by_mitre.keys())

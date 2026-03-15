@@ -9,7 +9,7 @@ import logging
 import os
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 logger = logging.getLogger("crowdsentinel.agent.providers")
 
@@ -19,16 +19,16 @@ class ToolCall:
     """A tool call extracted from an LLM response."""
     id: str
     name: str
-    arguments: Dict[str, Any]
+    arguments: dict[str, Any]
 
 
 @dataclass
 class LLMResponse:
     """Normalised response from any LLM provider."""
     text: str = ""
-    tool_calls: List[ToolCall] = field(default_factory=list)
+    tool_calls: list[ToolCall] = field(default_factory=list)
     stop_reason: str = ""
-    usage: Dict[str, int] = field(default_factory=dict)
+    usage: dict[str, int] = field(default_factory=dict)
 
     @property
     def is_done(self) -> bool:
@@ -45,14 +45,14 @@ class LLMProvider(ABC):
     def create_message(
         self,
         system: str,
-        messages: List[Dict[str, Any]],
-        tools: List[Dict[str, Any]],
+        messages: list[dict[str, Any]],
+        tools: list[dict[str, Any]],
         max_tokens: int = 8192,
     ) -> LLMResponse:
         """Send a message with tool definitions and return a normalised response."""
 
     @abstractmethod
-    def convert_tool_schema(self, mcp_tool: Dict[str, Any]) -> Dict[str, Any]:
+    def convert_tool_schema(self, mcp_tool: dict[str, Any]) -> dict[str, Any]:
         """Convert an MCP tool schema to the provider's native format."""
 
 
@@ -66,7 +66,7 @@ class AnthropicProvider(LLMProvider):
     # Beta headers required for OAuth token auth (discovered from OpenClaw source)
     OAUTH_BETAS = ["claude-code-20250219", "oauth-2025-04-20"]
 
-    def __init__(self, model: str, api_key: Optional[str] = None):
+    def __init__(self, model: str, api_key: str | None = None):
         super().__init__(model)
         import anthropic
         key = api_key or os.environ.get("ANTHROPIC_API_KEY", "")
@@ -83,7 +83,7 @@ class AnthropicProvider(LLMProvider):
         else:
             self.client = anthropic.Anthropic(api_key=key)
 
-    def convert_tool_schema(self, mcp_tool: Dict[str, Any]) -> Dict[str, Any]:
+    def convert_tool_schema(self, mcp_tool: dict[str, Any]) -> dict[str, Any]:
         """MCP tool → Anthropic tool format (nearly 1:1)."""
         input_schema = mcp_tool.get("inputSchema", mcp_tool.get("parameters", {}))
         return {
@@ -95,8 +95,8 @@ class AnthropicProvider(LLMProvider):
     def create_message(
         self,
         system: str,
-        messages: List[Dict[str, Any]],
-        tools: List[Dict[str, Any]],
+        messages: list[dict[str, Any]],
+        tools: list[dict[str, Any]],
         max_tokens: int = 8192,
     ) -> LLMResponse:
         kwargs = {
@@ -137,14 +137,14 @@ class AnthropicProvider(LLMProvider):
 class OpenAICompatibleProvider(LLMProvider):
     """Provider for OpenAI-compatible APIs (OpenAI, Ollama, vLLM, LM Studio)."""
 
-    def __init__(self, model: str, api_key: Optional[str] = None, base_url: Optional[str] = None):
+    def __init__(self, model: str, api_key: str | None = None, base_url: str | None = None):
         super().__init__(model)
         import httpx
         self.base_url = (base_url or os.environ.get("CROWDSENTINEL_MODEL_URL", "https://api.openai.com/v1")).rstrip("/")
         self.api_key = api_key or os.environ.get("OPENAI_API_KEY", "")
         self.http = httpx.Client(timeout=300)
 
-    def convert_tool_schema(self, mcp_tool: Dict[str, Any]) -> Dict[str, Any]:
+    def convert_tool_schema(self, mcp_tool: dict[str, Any]) -> dict[str, Any]:
         """MCP tool → OpenAI function-calling format."""
         input_schema = mcp_tool.get("inputSchema", mcp_tool.get("parameters", {}))
         return {
@@ -159,8 +159,8 @@ class OpenAICompatibleProvider(LLMProvider):
     def create_message(
         self,
         system: str,
-        messages: List[Dict[str, Any]],
-        tools: List[Dict[str, Any]],
+        messages: list[dict[str, Any]],
+        tools: list[dict[str, Any]],
         max_tokens: int = 8192,
     ) -> LLMResponse:
         # Build OpenAI-format messages with system as first message
@@ -293,7 +293,7 @@ class CodexProvider(LLMProvider):
         self.access_token = access_token
         self.http = httpx.Client(timeout=300)
 
-    def convert_tool_schema(self, mcp_tool: Dict[str, Any]) -> Dict[str, Any]:
+    def convert_tool_schema(self, mcp_tool: dict[str, Any]) -> dict[str, Any]:
         """MCP tool → Codex Responses API function format."""
         input_schema = mcp_tool.get("inputSchema", mcp_tool.get("parameters", {}))
         return {
@@ -306,8 +306,8 @@ class CodexProvider(LLMProvider):
     def create_message(
         self,
         system: str,
-        messages: List[Dict[str, Any]],
-        tools: List[Dict[str, Any]],
+        messages: list[dict[str, Any]],
+        tools: list[dict[str, Any]],
         max_tokens: int = 8192,
     ) -> LLMResponse:
         # Build input items (system goes in instructions, not input)
@@ -427,8 +427,8 @@ class CodexProvider(LLMProvider):
 
 
 def create_provider(
-    model: Optional[str] = None,
-    model_url: Optional[str] = None,
+    model: str | None = None,
+    model_url: str | None = None,
 ) -> LLMProvider:
     """Create an LLM provider from stored OAuth tokens, env vars, or CLI overrides.
 
@@ -466,7 +466,7 @@ def create_provider(
                 model=model or os.environ.get("CROWDSENTINEL_MODEL", "claude-sonnet-4-20250514"),
                 api_key=token,
             )
-        elif provider == "openai":
+        if provider == "openai":
             # Detect if this is a Codex OAuth JWT (starts with eyJ) or an API key (starts with sk-)
             if token.startswith("eyJ"):
                 # Codex OAuth token → use Codex backend-api endpoint
@@ -474,11 +474,10 @@ def create_provider(
                     model=model or os.environ.get("CROWDSENTINEL_MODEL", "gpt-4o"),
                     access_token=token,
                 )
-            else:
-                return OpenAICompatibleProvider(
-                    model=model or os.environ.get("CROWDSENTINEL_MODEL", "gpt-4o"),
-                    api_key=token,
-                )
+            return OpenAICompatibleProvider(
+                model=model or os.environ.get("CROWDSENTINEL_MODEL", "gpt-4o"),
+                api_key=token,
+            )
 
     # Env var fallbacks
     if anthropic_key:

@@ -1,15 +1,15 @@
-from typing import Dict
 
 from src.clients.common.alias import AliasClient
+from src.clients.common.asset_discovery import AssetDiscoveryClient
 from src.clients.common.cluster import ClusterClient
 from src.clients.common.data_stream import DataStreamClient
 from src.clients.common.document import DocumentClient
+from src.clients.common.eql_query import EQLQueryClient
 from src.clients.common.general import GeneralClient
 from src.clients.common.index import IndexClient
-from src.clients.common.asset_discovery import AssetDiscoveryClient
-from src.clients.common.eql_query import EQLQueryClient
-from src.clients.common.threat_hunting import ThreatHuntingClient
 from src.clients.common.ioc_analysis import IoCAnalysisClient
+from src.clients.common.threat_hunting import ThreatHuntingClient
+
 
 class SearchClient(IndexClient, DocumentClient, ClusterClient, AliasClient, DataStreamClient, GeneralClient, AssetDiscoveryClient, EQLQueryClient, ThreatHuntingClient, IoCAnalysisClient):
     """
@@ -18,8 +18,8 @@ class SearchClient(IndexClient, DocumentClient, ClusterClient, AliasClient, Data
     This class uses multiple inheritance to combine all specialized client implementations
     (index, document, cluster, alias) into a single unified client.
     """
-    
-    def __init__(self, config: Dict, engine_type: str):
+
+    def __init__(self, config: dict, engine_type: str):
         """
         Initialize the search client.
         

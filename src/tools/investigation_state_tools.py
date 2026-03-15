@@ -7,23 +7,21 @@ These tools provide investigation lifecycle management with:
 - Smart extraction to minimize storage and context usage
 """
 
-from typing import Dict, List, Optional, Any
+from typing import Any
+
 from fastmcp import FastMCP
 
-from src.storage.config import StorageConfig, get_config
+from src.storage.investigation_state import InvestigationStateClient
 from src.storage.models import (
-    Severity,
-    IoCType,
-    SourceType,
     IoC,
     IoCSource,
+    IoCType,
+    Severity,
+    SourceType,
 )
-from src.storage.storage_manager import StorageManager
-from src.storage.investigation_state import InvestigationStateClient
-
 
 # Global client instance (singleton for session)
-_investigation_client: Optional[InvestigationStateClient] = None
+_investigation_client: InvestigationStateClient | None = None
 
 
 def get_investigation_client() -> InvestigationStateClient:
@@ -47,9 +45,9 @@ class InvestigationStateTools:
         @mcp.tool()
         def list_investigations(
             limit: int = 10,
-            status: Optional[str] = None,
+            status: str | None = None,
             include_size: bool = False
-        ) -> Dict[str, Any]:
+        ) -> dict[str, Any]:
             """
             List recent investigations with optional filtering.
 
@@ -116,9 +114,9 @@ class InvestigationStateTools:
         def create_investigation(
             name: str,
             description: str = "",
-            tags: Optional[List[str]] = None,
+            tags: list[str] | None = None,
             severity: str = "medium"
-        ) -> Dict[str, Any]:
+        ) -> dict[str, Any]:
             """
             Create a new investigation and make it active.
 
@@ -175,7 +173,7 @@ class InvestigationStateTools:
             }
 
         @mcp.tool()
-        def resume_investigation(investigation_id: str) -> Dict[str, Any]:
+        def resume_investigation(investigation_id: str) -> dict[str, Any]:
             """
             Resume an existing investigation and make it active.
 
@@ -224,8 +222,8 @@ class InvestigationStateTools:
         @mcp.tool()
         def get_investigation_summary(
             format: str = "detailed",
-            investigation_id: Optional[str] = None
-        ) -> Dict[str, Any]:
+            investigation_id: str | None = None
+        ) -> dict[str, Any]:
             """
             Get a comprehensive summary of an investigation.
 
@@ -261,31 +259,31 @@ class InvestigationStateTools:
                     "summary": client.get_summary(format=format),
                     "investigation_id": investigation.manifest.id,
                 }
-            else:  # json format
-                return {
-                    "id": investigation.manifest.id,
-                    "name": investigation.manifest.name,
-                    "description": investigation.manifest.description,
-                    "status": investigation.manifest.status.value,
-                    "severity": investigation.manifest.severity.value,
-                    "created_at": investigation.manifest.created_at.isoformat(),
-                    "updated_at": investigation.manifest.updated_at.isoformat(),
-                    "statistics": {
-                        "total_iocs": investigation.iocs.total_count,
-                        "iocs_by_type": investigation.iocs.by_type,
-                        "iocs_by_source": investigation.iocs.by_source,
-                        "timeline_events": len(investigation.timeline),
-                        "sources_used": investigation.manifest.sources_used,
-                    },
-                    "tags": investigation.manifest.tags,
-                    "kill_chain_stages": investigation.manifest.kill_chain_stages,
-                }
+            # json format
+            return {
+                "id": investigation.manifest.id,
+                "name": investigation.manifest.name,
+                "description": investigation.manifest.description,
+                "status": investigation.manifest.status.value,
+                "severity": investigation.manifest.severity.value,
+                "created_at": investigation.manifest.created_at.isoformat(),
+                "updated_at": investigation.manifest.updated_at.isoformat(),
+                "statistics": {
+                    "total_iocs": investigation.iocs.total_count,
+                    "iocs_by_type": investigation.iocs.by_type,
+                    "iocs_by_source": investigation.iocs.by_source,
+                    "timeline_events": len(investigation.timeline),
+                    "sources_used": investigation.manifest.sources_used,
+                },
+                "tags": investigation.manifest.tags,
+                "kill_chain_stages": investigation.manifest.kill_chain_stages,
+            }
 
         @mcp.tool()
         def add_iocs_to_investigation(
-            iocs: List[Dict[str, Any]],
-            investigation_id: Optional[str] = None
-        ) -> Dict[str, Any]:
+            iocs: list[dict[str, Any]],
+            investigation_id: str | None = None
+        ) -> dict[str, Any]:
             """
             Manually add IoCs to an investigation.
 
@@ -356,12 +354,12 @@ class InvestigationStateTools:
 
         @mcp.tool()
         def get_shared_iocs(
-            ioc_types: Optional[List[str]] = None,
+            ioc_types: list[str] | None = None,
             min_priority: int = 1,
-            sources: Optional[List[str]] = None,
+            sources: list[str] | None = None,
             active_only: bool = False,
             limit: int = 100
-        ) -> Dict[str, Any]:
+        ) -> dict[str, Any]:
             """
             Get IoCs shared across investigations and tools.
 
@@ -470,10 +468,10 @@ class InvestigationStateTools:
         @mcp.tool()
         def export_iocs(
             format: str = "json",
-            ioc_types: Optional[List[str]] = None,
+            ioc_types: list[str] | None = None,
             min_priority: int = 1,
-            investigation_id: Optional[str] = None
-        ) -> Dict[str, Any]:
+            investigation_id: str | None = None
+        ) -> dict[str, Any]:
             """
             Export IoCs from an investigation in various formats.
 
@@ -521,8 +519,8 @@ class InvestigationStateTools:
         @mcp.tool()
         def close_investigation(
             resolution: str = "",
-            investigation_id: Optional[str] = None
-        ) -> Dict[str, Any]:
+            investigation_id: str | None = None
+        ) -> dict[str, Any]:
             """
             Close an investigation with a resolution summary.
 
@@ -576,7 +574,7 @@ class InvestigationStateTools:
         def cleanup_storage(
             force: bool = False,
             keep_count: int = 10
-        ) -> Dict[str, Any]:
+        ) -> dict[str, Any]:
             """
             Cleanup investigation storage and enforce size limits.
 
@@ -615,7 +613,7 @@ class InvestigationStateTools:
             }
 
         @mcp.tool()
-        def get_progressive_disclosure() -> Dict[str, Any]:
+        def get_progressive_disclosure() -> dict[str, Any]:
             """
             Get progressive disclosure prompt for session start.
 

@@ -2,8 +2,7 @@
 """Lateral movement detection (SMB/RDP/WinRM/NTLM)."""
 import logging
 from collections import defaultdict
-from datetime import datetime
-from typing import Dict, List, Optional, Any
+from typing import Any
 
 from src.wireshark.baseline.defaults import is_internal_ip
 
@@ -26,15 +25,15 @@ SUSPICIOUS_PIPES = ["svcctl", "atsvc", "eventlog", "lsass", "netlogon", "samr"]
 class LateralMovementDetector:
     """Detect lateral movement patterns in network traffic."""
 
-    def __init__(self, baseline: Optional[Dict] = None):
+    def __init__(self, baseline: dict | None = None):
         """Initialize detector with optional baseline."""
         self.baseline = baseline or {}
 
     def detect_smb_movement(
         self,
-        connections: List[Dict],
+        connections: list[dict],
         internal_only: bool = True
-    ) -> List[Dict]:
+    ) -> list[dict]:
         """Detect SMB-based lateral movement.
 
         Args:
@@ -77,9 +76,9 @@ class LateralMovementDetector:
 
     def detect_rdp_movement(
         self,
-        connections: List[Dict],
+        connections: list[dict],
         internal_only: bool = True
-    ) -> List[Dict]:
+    ) -> list[dict]:
         """Detect RDP-based lateral movement.
 
         Args:
@@ -118,9 +117,9 @@ class LateralMovementDetector:
 
     def detect_winrm_movement(
         self,
-        connections: List[Dict],
+        connections: list[dict],
         internal_only: bool = True
-    ) -> List[Dict]:
+    ) -> list[dict]:
         """Detect WinRM-based lateral movement.
 
         Args:
@@ -159,10 +158,10 @@ class LateralMovementDetector:
 
     def detect_enumeration(
         self,
-        connections: List[Dict],
+        connections: list[dict],
         min_targets: int = 5,
-        ports: Optional[List[int]] = None
-    ) -> List[Dict]:
+        ports: list[int] | None = None
+    ) -> list[dict]:
         """Detect host enumeration (single source targeting many hosts).
 
         Args:
@@ -209,8 +208,8 @@ class LateralMovementDetector:
 
     def detect_psexec_pattern(
         self,
-        connections: List[Dict]
-    ) -> List[Dict]:
+        connections: list[dict]
+    ) -> list[dict]:
         """Detect PsExec-like patterns.
 
         PsExec pattern:
@@ -277,9 +276,9 @@ class LateralMovementDetector:
 
     def detect_all(
         self,
-        connections: List[Dict],
+        connections: list[dict],
         internal_only: bool = True
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Detect all types of lateral movement.
 
         Args:
@@ -310,7 +309,7 @@ class LateralMovementDetector:
             }
         }
 
-    def calculate_risk_score(self, finding: Dict) -> int:
+    def calculate_risk_score(self, finding: dict) -> int:
         """Calculate risk score for a lateral movement finding.
 
         Args:
@@ -326,9 +325,7 @@ class LateralMovementDetector:
         # Type-based scoring
         if movement_type == "psexec_pattern":
             score += 4
-        elif movement_type == "smb":
-            score += 2
-        elif movement_type == "rdp":
+        elif movement_type == "smb" or movement_type == "rdp":
             score += 2
         elif movement_type == "winrm":
             score += 3  # WinRM is often used for remote management attacks
@@ -347,7 +344,7 @@ class LateralMovementDetector:
         self,
         pcap_path: str,
         executor=None
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Detect lateral movement from a PCAP file.
 
         Args:
@@ -419,7 +416,7 @@ class LateralMovementDetector:
 
     def get_lateral_movement_summary(
         self,
-        results: Dict[str, Any]
+        results: dict[str, Any]
     ) -> str:
         """Generate human-readable summary of lateral movement findings.
 

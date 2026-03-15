@@ -1,9 +1,8 @@
 # tests/wireshark/test_pcap_analyzer.py
 """Tests for PCAP analyzer."""
-import pytest
 from pathlib import Path
-from datetime import datetime
 
+import pytest
 
 # Use a small test pcap if available, otherwise mock
 TEST_PCAP_DIR = Path("/home/kali/Desktop/CTU/normal_traffics")

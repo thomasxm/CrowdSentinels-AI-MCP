@@ -4,7 +4,7 @@ import json
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Any
 
 from src.wireshark.reporting.timeline_visualizer import TimelineVisualizer
 
@@ -24,8 +24,8 @@ class ReportGenerator:
     def generate_report(
         self,
         pcap_path: str,
-        findings: Dict[str, Any],
-        investigation_id: Optional[str] = None,
+        findings: dict[str, Any],
+        investigation_id: str | None = None,
         include_raw_json: bool = True
     ) -> str:
         """Generate complete NCSC-style markdown report.
@@ -153,7 +153,7 @@ class ReportGenerator:
 
         return "\n".join(lines)
 
-    def generate_executive_summary(self, findings: Dict[str, Any]) -> str:
+    def generate_executive_summary(self, findings: dict[str, Any]) -> str:
         """Generate executive summary section.
 
         Args:
@@ -196,7 +196,7 @@ class ReportGenerator:
 
         return " ".join(summary_parts)
 
-    def generate_ioc_table(self, iocs: List[Dict]) -> str:
+    def generate_ioc_table(self, iocs: list[dict]) -> str:
         """Generate IoC table in markdown format.
 
         Args:
@@ -226,7 +226,7 @@ class ReportGenerator:
 
         return "\n".join(lines)
 
-    def generate_affected_assets(self, assets: List[Dict]) -> str:
+    def generate_affected_assets(self, assets: list[dict]) -> str:
         """Generate affected assets section.
 
         Args:
@@ -248,7 +248,7 @@ class ReportGenerator:
 
         return "\n".join(lines)
 
-    def generate_recommendations(self, findings: Dict[str, Any]) -> List[str]:
+    def generate_recommendations(self, findings: dict[str, Any]) -> list[str]:
         """Generate recommended actions.
 
         Args:
@@ -292,7 +292,7 @@ class ReportGenerator:
         """
         return dt.strftime("%Y-%m-%d %H:%M:%S UTC")
 
-    def generate_containment_steps(self, findings: Dict[str, Any]) -> List[str]:
+    def generate_containment_steps(self, findings: dict[str, Any]) -> list[str]:
         """Generate containment steps based on findings.
 
         Args:
@@ -331,8 +331,8 @@ class ReportGenerator:
     def export_to_json(
         self,
         investigation_id: str,
-        findings: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        findings: dict[str, Any]
+    ) -> dict[str, Any]:
         """Export report data as JSON.
 
         Args:
@@ -356,7 +356,7 @@ class ReportGenerator:
             }
         }
 
-    def _extract_affected_assets(self, findings: Dict[str, Any]) -> List[Dict]:
+    def _extract_affected_assets(self, findings: dict[str, Any]) -> list[dict]:
         """Extract affected assets from findings.
 
         Args:
@@ -397,7 +397,7 @@ class ReportGenerator:
 
         return list(assets.values())
 
-    def _generate_attack_timeline(self, findings: Dict[str, Any]) -> str:
+    def _generate_attack_timeline(self, findings: dict[str, Any]) -> str:
         """Generate attack timeline visualization.
 
         Args:
@@ -422,7 +422,7 @@ class ReportGenerator:
 
         return "No timeline data available."
 
-    def _generate_immediate_actions(self, findings: Dict[str, Any]) -> List[str]:
+    def _generate_immediate_actions(self, findings: dict[str, Any]) -> list[str]:
         """Generate immediate action items.
 
         Args:
@@ -449,7 +449,7 @@ class ReportGenerator:
 
         return actions
 
-    def _generate_detection_rules(self, findings: Dict[str, Any]) -> List[str]:
+    def _generate_detection_rules(self, findings: dict[str, Any]) -> list[str]:
         """Generate recommended detection rules.
 
         Args:
@@ -477,7 +477,7 @@ class ReportGenerator:
 
         return rules
 
-    def _generate_remediation_checklist(self, findings: Dict[str, Any]) -> List[str]:
+    def _generate_remediation_checklist(self, findings: dict[str, Any]) -> list[str]:
         """Generate remediation checklist.
 
         Args:

@@ -1,10 +1,8 @@
 """Test investigation state storage functionality."""
 
-import sys
-import json
 import shutil
+import sys
 from pathlib import Path
-from datetime import datetime
 
 import pytest
 
@@ -12,18 +10,17 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.storage.config import StorageConfig, set_config
-from src.storage.models import (
-    Investigation,
-    IoC,
-    IoCType,
-    IoCSource,
-    SourceType,
-    Severity,
-    InvestigationStatus,
-)
-from src.storage.storage_manager import StorageManager
-from src.storage.smart_extractor import SmartExtractor
 from src.storage.investigation_state import InvestigationStateClient
+from src.storage.models import (
+    InvestigationStatus,
+    IoC,
+    IoCSource,
+    IoCType,
+    Severity,
+    SourceType,
+)
+from src.storage.smart_extractor import SmartExtractor
+from src.storage.storage_manager import StorageManager
 
 
 @pytest.fixture

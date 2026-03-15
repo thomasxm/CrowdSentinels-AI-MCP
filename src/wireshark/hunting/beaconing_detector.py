@@ -4,10 +4,10 @@ import logging
 import statistics
 from collections import defaultdict
 from datetime import datetime
-from typing import Dict, List, Optional, Any, Tuple
+from typing import Any
 
-from src.wireshark.models import BeaconPattern
 from src.wireshark.baseline.defaults import DEFAULT_BASELINE, get_threshold
+from src.wireshark.models import BeaconPattern
 
 logger = logging.getLogger(__name__)
 
@@ -15,11 +15,11 @@ logger = logging.getLogger(__name__)
 class BeaconingDetector:
     """Detect C2 beaconing patterns in network traffic."""
 
-    def __init__(self, baseline: Optional[Dict] = None):
+    def __init__(self, baseline: dict | None = None):
         """Initialize detector with optional custom baseline."""
         self.baseline = baseline or DEFAULT_BASELINE
 
-    def analyze_intervals(self, timestamps: List[float]) -> Dict[str, Any]:
+    def analyze_intervals(self, timestamps: list[float]) -> dict[str, Any]:
         """Analyze time intervals between connections.
 
         Args:
@@ -71,10 +71,10 @@ class BeaconingDetector:
 
     def detect_patterns(
         self,
-        connections: List[Dict],
-        min_count: Optional[int] = None,
-        max_jitter: Optional[float] = None
-    ) -> List[BeaconPattern]:
+        connections: list[dict],
+        min_count: int | None = None,
+        max_jitter: float | None = None
+    ) -> list[BeaconPattern]:
         """Detect beaconing patterns from connection data.
 
         Args:
@@ -185,10 +185,9 @@ class BeaconingDetector:
         # Determine confidence
         if score >= 5:
             return "HIGH"
-        elif score >= 3:
+        if score >= 3:
             return "MEDIUM"
-        else:
-            return "LOW"
+        return "LOW"
 
     def generate_ascii_timeline(
         self,
@@ -219,7 +218,7 @@ class BeaconingDetector:
         lines.append("")
 
         # Interval analysis
-        lines.append(f" Interval Analysis:")
+        lines.append(" Interval Analysis:")
         lines.append(f"   Mean: {pattern.interval_mean_seconds:.1f}s")
         lines.append(f"   StdDev: {pattern.interval_stddev:.1f}s")
         lines.append(f"   Jitter: {pattern.jitter_percent:.1f}%")
@@ -268,7 +267,7 @@ class BeaconingDetector:
                 spacing = bar_width - len(start_label) - len(end_label) + 2
                 lines.append(f"    {start_label}{' ' * spacing}{end_label}")
         else:
-            lines.append(f" (No timestamp data available for visualization)")
+            lines.append(" (No timestamp data available for visualization)")
 
         lines.append("")
         lines.append(header)
@@ -279,9 +278,9 @@ class BeaconingDetector:
         self,
         pcap_path: str,
         executor=None,
-        min_count: Optional[int] = None,
-        max_jitter: Optional[float] = None,
-    ) -> List[BeaconPattern]:
+        min_count: int | None = None,
+        max_jitter: float | None = None,
+    ) -> list[BeaconPattern]:
         """Detect beaconing patterns from a PCAP file.
 
         Uses TCP SYN packets (connection initiations) rather than all packets

@@ -1,8 +1,6 @@
 # tests/wireshark/test_anomaly_detector.py
 """Tests for anomaly detector."""
-import pytest
 from pathlib import Path
-
 
 TEST_MALWARE_DIR = Path("/home/kali/Desktop/CTU/malware_traffics")
 
@@ -12,8 +10,8 @@ class TestAnomalyDetector:
 
     def test_detect_unusual_ports(self):
         """Should detect unusual destination ports."""
-        from src.wireshark.hunting.anomaly_detector import AnomalyDetector
         from src.wireshark.baseline.defaults import DEFAULT_BASELINE
+        from src.wireshark.hunting.anomaly_detector import AnomalyDetector
 
         detector = AnomalyDetector(baseline=DEFAULT_BASELINE)
 

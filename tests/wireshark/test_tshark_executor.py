@@ -1,8 +1,5 @@
 # tests/wireshark/test_tshark_executor.py
 """Tests for TShark command executor."""
-import pytest
-from pathlib import Path
-from unittest.mock import patch, MagicMock
 
 
 class TestTSharkExecutor:

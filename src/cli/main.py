@@ -10,12 +10,11 @@ import os
 import signal
 import sys
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 from dotenv import load_dotenv
 
 from src.version import __version__
-
 
 # ---------------------------------------------------------------------------
 # Output formatting helpers
@@ -828,7 +827,10 @@ def _validate_download_url(url):
 def _cmd_auth(args):
     """Manage LLM authentication for agent mode."""
     from src.agent.auth import (
-        login_openai, login_anthropic, get_auth_status, remove_auth,
+        get_auth_status,
+        login_anthropic,
+        login_openai,
+        remove_auth,
     )
 
     action = args.action
@@ -840,10 +842,10 @@ def _cmd_auth(args):
             success = login_anthropic()
         return 0 if success else 1
 
-    elif action == "status":
+    if action == "status":
         status = get_auth_status()
         if status["authenticated"]:
-            print(f"Authenticated: yes")
+            print("Authenticated: yes")
             print(f"Method: {status['method']}")
             print(f"Provider: {status['provider']}")
             if status.get("expired"):
@@ -859,7 +861,7 @@ def _cmd_auth(args):
             print("Run: crowdsentinel auth login")
         return 0
 
-    elif action == "logout":
+    if action == "logout":
         if remove_auth():
             print("Logged out. Stored tokens removed.")
         else:
@@ -872,7 +874,6 @@ def _cmd_auth(args):
 def _cmd_setup(args):
     """Download detection rules and Chainsaw for offline use."""
     import platform
-    import subprocess
     import urllib.request
 
     data_dir = _get_data_dir()
@@ -1028,10 +1029,10 @@ def _cmd_analyse(args):
 
 def _cmd_analyse_mcp(args, search_results):
     """Run the AI agent investigation loop with MCP tools."""
-    from src.agent.providers import create_provider
     from src.agent.config import load_mcp_config
-    from src.agent.mcp_bridge import MCPBridge
     from src.agent.loop import run_agent
+    from src.agent.mcp_bridge import MCPBridge
+    from src.agent.providers import create_provider
 
     # Create LLM provider
     try:

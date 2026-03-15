@@ -3,7 +3,7 @@
 import json
 import shutil
 from pathlib import Path
-from typing import List, Optional
+
 from pydantic import BaseModel, Field
 
 
@@ -12,15 +12,15 @@ class AutoCaptureConfig(BaseModel):
     enabled: bool = True
     min_confidence: int = Field(default=7, ge=1, le=10)
     min_occurrences: int = Field(default=3, ge=1)
-    auto_capture_types: List[str] = Field(
+    auto_capture_types: list[str] = Field(
         default=["ip", "domain", "hash", "user", "process"]
     )
     skip_internal_ips: bool = True
     min_pyramid_priority: int = Field(default=2, ge=1, le=6)
-    ignore_domains: List[str] = Field(
+    ignore_domains: list[str] = Field(
         default=["microsoft.com", "windows.com", "google.com", "googleapis.com"]
     )
-    ignore_ports: List[int] = Field(default=[80, 443, 53])
+    ignore_ports: list[int] = Field(default=[80, 443, 53])
 
 
 class ArtifactStorageConfig(BaseModel):
@@ -34,7 +34,7 @@ class WiresharkConfig(BaseModel):
     tshark_path: str = Field(default_factory=lambda: shutil.which("tshark") or "/usr/bin/tshark")
     auto_capture: AutoCaptureConfig = Field(default_factory=AutoCaptureConfig)
     artifact_storage: ArtifactStorageConfig = Field(default_factory=ArtifactStorageConfig)
-    active_baseline: Optional[str] = None
+    active_baseline: str | None = None
 
 
 def get_storage_path() -> Path:

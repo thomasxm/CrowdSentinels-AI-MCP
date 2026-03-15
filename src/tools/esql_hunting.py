@@ -1,17 +1,15 @@
 """MCP Tools for ES|QL Hunting Queries."""
 import logging
-from typing import Dict, List, Optional, Any
+
 from fastmcp import FastMCP
 
 from ..clients.common.schemas import (
-    get_schema,
-    detect_schema_from_index,
-    list_schemas,
-    LogSourceSchema,
     SYSMON_SCHEMA,
+    LogSourceSchema,
+    detect_schema_from_index,
+    get_schema,
 )
 from ..clients.common.schemas.query_builder import SchemaAwareQueryBuilder
-from ..clients.common.schemas.registry import SchemaResolver
 
 logger = logging.getLogger(__name__)
 
@@ -40,11 +38,11 @@ class ESQLHuntingTools:
     def register_tools(self, mcp: FastMCP):
         @mcp.tool()
         def list_esql_hunts(
-            platform: Optional[str] = None,
-            mitre_technique: Optional[str] = None,
-            keyword: Optional[str] = None,
+            platform: str | None = None,
+            mitre_technique: str | None = None,
+            keyword: str | None = None,
             limit: int = 50
-        ) -> Dict:
+        ) -> dict:
             """
             List available ES|QL hunting queries from the curated rule library.
 
@@ -108,7 +106,7 @@ class ESQLHuntingTools:
             }
 
         @mcp.tool()
-        def get_esql_hunt_details(rule_id: str) -> Dict:
+        def get_esql_hunt_details(rule_id: str) -> dict:
             """
             Get detailed information about a specific ES|QL hunting rule.
 
@@ -145,11 +143,11 @@ class ESQLHuntingTools:
         @mcp.tool()
         def execute_esql_hunt(
             rule_id: str,
-            index: Optional[str] = None,
-            timeframe_days: Optional[int] = None,
+            index: str | None = None,
+            timeframe_days: int | None = None,
             query_index: int = 0,
             lean: bool = False
-        ) -> Dict:
+        ) -> dict:
             """
             Execute a curated ES|QL hunting query from the rule library.
 
@@ -274,7 +272,7 @@ class ESQLHuntingTools:
             query: str,
             auto_discover: bool = True,
             lean: bool = False
-        ) -> Dict:
+        ) -> dict:
             """
             Execute a raw ES|QL query for ad-hoc threat hunting.
 
@@ -329,9 +327,9 @@ class ESQLHuntingTools:
 
         @mcp.tool()
         def discover_esql_indices(
-            fields: Optional[List[str]] = None,
-            data_type: Optional[str] = None
-        ) -> Dict:
+            fields: list[str] | None = None,
+            data_type: str | None = None
+        ) -> dict:
             """
             Discover available indices for ES|QL hunting.
 
@@ -398,16 +396,15 @@ class ESQLHuntingTools:
                             f"Use the top match in your FROM clause or override with index parameter."
                         )
                     }
-                else:
-                    return {
-                        "indices": all_indices[:20],  # Top 20 by doc count
-                        "total_indices": len(all_indices),
-                        "field_aliases": self.esql_client.FIELD_ALIASES,
-                        "suggestion": (
-                            "Use discover_esql_indices(fields=['process.name', ...]) to find "
-                            "indices compatible with specific queries."
-                        )
-                    }
+                return {
+                    "indices": all_indices[:20],  # Top 20 by doc count
+                    "total_indices": len(all_indices),
+                    "field_aliases": self.esql_client.FIELD_ALIASES,
+                    "suggestion": (
+                        "Use discover_esql_indices(fields=['process.name', ...]) to find "
+                        "indices compatible with specific queries."
+                    )
+                }
 
             except Exception as e:
                 return {
@@ -416,7 +413,7 @@ class ESQLHuntingTools:
                 }
 
         @mcp.tool()
-        def get_esql_execution_history() -> Dict:
+        def get_esql_execution_history() -> dict:
             """
             Get ES|QL query execution history for token usage analysis.
 
@@ -457,7 +454,7 @@ class ESQLHuntingTools:
             }
 
         @mcp.tool()
-        def check_esql_support() -> Dict:
+        def check_esql_support() -> dict:
             """
             Check if the connected Elasticsearch cluster supports ES|QL.
 
@@ -493,7 +490,7 @@ class ESQLHuntingTools:
         @mcp.tool()
         def hunt_suspicious_process_activity(
             process_name: str,
-            index: Optional[str] = None,
+            index: str | None = None,
             timeframe_days: int = 7,
             include_network: bool = True,
             include_files: bool = True,
@@ -502,9 +499,9 @@ class ESQLHuntingTools:
             include_process_access: bool = True,
             include_remote_threads: bool = True,
             include_dns: bool = True,
-            schema_hint: Optional[str] = None,
+            schema_hint: str | None = None,
             max_results: int = 100
-        ) -> Dict:
+        ) -> dict:
             """
             Hunt for all activity associated with a suspicious process.
 
@@ -624,7 +621,7 @@ class ESQLHuntingTools:
             network_index = index or "winlogbeat-*,auditbeat-*,logs-endpoint.events.network-*"
 
             # Resolve schema - explicit hint > auto-detect from index > default to sysmon
-            schema: Optional[LogSourceSchema] = None
+            schema: LogSourceSchema | None = None
             if schema_hint:
                 schema = get_schema(schema_hint)
                 if not schema:

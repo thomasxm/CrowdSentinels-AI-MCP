@@ -1,6 +1,5 @@
 # tests/wireshark/test_baseline_defaults.py
 """Tests for baseline defaults."""
-import pytest
 
 
 class TestBaselineDefaults:
@@ -45,7 +44,7 @@ class TestBaselineDefaults:
 
     def test_is_legitimate_port(self):
         """Should identify legitimate ports."""
-        from src.wireshark.baseline.defaults import is_legitimate_port, DEFAULT_BASELINE
+        from src.wireshark.baseline.defaults import DEFAULT_BASELINE, is_legitimate_port
 
         assert is_legitimate_port(443, "tcp", DEFAULT_BASELINE) is True
         assert is_legitimate_port(80, "tcp", DEFAULT_BASELINE) is True

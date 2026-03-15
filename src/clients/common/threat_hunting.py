@@ -1,12 +1,9 @@
 """Threat Hunting Client for incident response and threat detection."""
-from typing import Dict, List, Optional, Tuple, Any
-from datetime import datetime, timedelta
-import json
 import logging
 
 from src.clients.base import SearchClientBase
 from src.clients.common.field_mapper import FieldMapper
-from src.utils import limit_response_size, summarize_search_response
+from src.utils import limit_response_size
 
 logger = logging.getLogger(__name__)
 
@@ -14,7 +11,7 @@ logger = logging.getLogger(__name__)
 class ThreatHuntingClient(SearchClientBase):
     """Client for threat hunting operations and incident response."""
 
-    def __init__(self, config: Dict, engine_type: str = "elasticsearch"):
+    def __init__(self, config: dict, engine_type: str = "elasticsearch"):
         """
         Initialise the threat hunting client.
 
@@ -24,7 +21,7 @@ class ThreatHuntingClient(SearchClientBase):
         """
         super().__init__(config, engine_type)
         # Initialise FieldMapper for field name substitution
-        self._field_mapper: Optional[FieldMapper] = None
+        self._field_mapper: FieldMapper | None = None
 
     @property
     def field_mapper(self) -> FieldMapper:
@@ -117,9 +114,9 @@ class ThreatHuntingClient(SearchClientBase):
         }
     }
 
-    def hunt_by_timeframe(self, index: str, attack_types: List[str],
-                         start_time: str, end_time: Optional[str] = None,
-                         host: Optional[str] = None) -> Dict:
+    def hunt_by_timeframe(self, index: str, attack_types: list[str],
+                         start_time: str, end_time: str | None = None,
+                         host: str | None = None) -> dict:
         """
         Hunt for specific attack patterns within a timeframe.
 
@@ -166,8 +163,8 @@ class ThreatHuntingClient(SearchClientBase):
         # Apply response size limiting to entire result
         return limit_response_size(findings)
 
-    def _build_attack_query(self, pattern: Dict, start_time: str,
-                           end_time: str, host: Optional[str] = None) -> Dict:
+    def _build_attack_query(self, pattern: dict, start_time: str,
+                           end_time: str, host: str | None = None) -> dict:
         """Build Elasticsearch query for attack pattern."""
         must_clauses = []
         should_clauses = []
@@ -230,7 +227,7 @@ class ThreatHuntingClient(SearchClientBase):
         return query
 
     def analyze_failed_logins(self, index: str, timeframe_minutes: int = 15,
-                             threshold: int = 5) -> Dict:
+                             threshold: int = 5) -> dict:
         """
         Analyze failed login attempts (potential brute force).
 
@@ -304,7 +301,7 @@ class ThreatHuntingClient(SearchClientBase):
             raise
 
     def analyze_process_creation(self, index: str, timeframe_minutes: int = 60,
-                                process_filter: Optional[List[str]] = None) -> Dict:
+                                process_filter: list[str] | None = None) -> dict:
         """
         Analyze process creation events for suspicious activity.
 
@@ -370,7 +367,7 @@ class ThreatHuntingClient(SearchClientBase):
             raise
 
     def hunt_for_ioc(self, index: str, ioc: str, ioc_type: str,
-                    timeframe_minutes: Optional[int] = None) -> Dict:
+                    timeframe_minutes: int | None = None) -> dict:
         """
         Hunt for a specific Indicator of Compromise (IoC).
 
@@ -446,7 +443,7 @@ class ThreatHuntingClient(SearchClientBase):
             raise
 
     def get_host_activity_timeline(self, index: str, hostname: str,
-                                   start_time: str, end_time: Optional[str] = None) -> Dict:
+                                   start_time: str, end_time: str | None = None) -> dict:
         """
         Get a timeline of all activity for a specific host.
 
@@ -504,9 +501,9 @@ class ThreatHuntingClient(SearchClientBase):
             raise
 
     def search_with_lucene(self, index: str, lucene_query: str,
-                          timeframe_minutes: Optional[int] = None,
+                          timeframe_minutes: int | None = None,
                           size: int = 100,
-                          field_substitution: bool = True) -> Dict:
+                          field_substitution: bool = True) -> dict:
         """
         Execute a Lucene query string search with automatic field substitution.
 
@@ -596,7 +593,7 @@ class ThreatHuntingClient(SearchClientBase):
     def execute_investigation_prompt(self, prompt_id: str, index: str,
                                     timeframe_minutes: int = 60,
                                     size: int = 100,
-                                    additional_filters: Optional[Dict] = None) -> Dict:
+                                    additional_filters: dict | None = None) -> dict:
         """
         Execute an investigation prompt query.
 

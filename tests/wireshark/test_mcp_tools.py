@@ -1,9 +1,9 @@
 # tests/wireshark/test_mcp_tools.py
 """Tests for Wireshark MCP tools."""
-import pytest
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
+import pytest
 
 TEST_PCAP_DIR = Path("/home/kali/Desktop/CTU/normal_traffics")
 

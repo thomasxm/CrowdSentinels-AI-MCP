@@ -1,4 +1,3 @@
-from typing import Dict, Optional
 import logging
 
 from src.clients.base import SearchClientBase
@@ -10,9 +9,9 @@ class DocumentClient(SearchClientBase):
     def search_documents(
         self,
         index: str,
-        body: Dict,
+        body: dict,
         raw: bool = False
-    ) -> Dict:
+    ) -> dict:
         """
         Search for documents in the index.
 
@@ -48,32 +47,29 @@ class DocumentClient(SearchClientBase):
 
         # Always apply size limiting to prevent token overflow
         return limit_response_size(response)
-    
-    def index_document(self, index: str, document: Dict, id: Optional[str] = None) -> Dict:
+
+    def index_document(self, index: str, document: dict, id: str | None = None) -> dict:
         """Creates a new document in the index."""
         # Handle parameter name differences between Elasticsearch and OpenSearch
         if self.engine_type == "elasticsearch":
             # For Elasticsearch: index(index, document, id=None, ...)
             if id is not None:
                 return self.client.index(index=index, document=document, id=id)
-            else:
-                return self.client.index(index=index, document=document)
-        else:
-            # For OpenSearch: index(index, body, id=None, ...)
-            if id is not None:
-                return self.client.index(index=index, body=document, id=id)
-            else:
-                return self.client.index(index=index, body=document)
-    
-    def get_document(self, index: str, id: str) -> Dict:
+            return self.client.index(index=index, document=document)
+        # For OpenSearch: index(index, body, id=None, ...)
+        if id is not None:
+            return self.client.index(index=index, body=document, id=id)
+        return self.client.index(index=index, body=document)
+
+    def get_document(self, index: str, id: str) -> dict:
         """Get a document by ID."""
         return self.client.get(index=index, id=id)
-    
-    def delete_document(self, index: str, id: str) -> Dict:
+
+    def delete_document(self, index: str, id: str) -> dict:
         """Removes a document from the index."""
         return self.client.delete(index=index, id=id)
 
-    def delete_by_query(self, index: str, body: Dict) -> Dict:
+    def delete_by_query(self, index: str, body: dict) -> dict:
         """Deletes documents matching the provided query."""
         return self.client.delete_by_query(index=index, body=body)
 

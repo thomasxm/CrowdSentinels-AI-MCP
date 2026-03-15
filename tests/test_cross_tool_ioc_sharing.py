@@ -1,7 +1,7 @@
 """Test Cross-Tool IoC Sharing between Elasticsearch and Chainsaw."""
 
-import sys
 import shutil
+import sys
 from pathlib import Path
 
 # Add src to path
@@ -31,17 +31,16 @@ def test_cross_tool_ioc_sharing():
     setup_test_environment()
 
     # Import after setting config
-    from src.storage.models import Severity, SourceType
-    from src.storage.auto_capture import (
-        auto_capture_elasticsearch_results,
-        auto_capture_chainsaw_results,
-        has_active_investigation,
-        get_active_investigation_summary,
-        get_client,
-    )
-
     # Reset the global client
     import src.storage.auto_capture as auto_module
+    from src.storage.auto_capture import (
+        auto_capture_chainsaw_results,
+        auto_capture_elasticsearch_results,
+        get_active_investigation_summary,
+        get_client,
+        has_active_investigation,
+    )
+    from src.storage.models import Severity
     auto_module._client = None
 
     # Test 1: Verify no active investigation initially
@@ -185,7 +184,7 @@ def test_cross_tool_ioc_sharing():
     if shared_ips:
         pivot_ip = shared_ips[0].value
         print(f"  Found IP from shared IoCs: {pivot_ip}")
-        print(f"  This IP can now be searched in Chainsaw EVTX logs")
+        print("  This IP can now be searched in Chainsaw EVTX logs")
         print(f"  Example: search_ioc_in_evtx(evtx_path='./logs/', ioc='{pivot_ip}', ioc_type='ip')")
     else:
         print("  (No IPs found, but workflow would work with any IoC type)")

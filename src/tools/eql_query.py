@@ -1,5 +1,5 @@
 """EQL Query Tools for threat hunting with Event Query Language."""
-from typing import Dict, Optional
+
 from fastmcp import FastMCP
 
 
@@ -10,8 +10,8 @@ class EQLQueryTools:
     def register_tools(self, mcp: FastMCP):
         @mcp.tool()
         def eql_search(index: str, query: str, size: int = 100,
-                      filter_query: Optional[Dict] = None,
-                      timestamp_field: str = "@timestamp") -> Dict:
+                      filter_query: dict | None = None,
+                      timestamp_field: str = "@timestamp") -> dict:
             """
             Execute an EQL (Event Query Language) query for advanced threat hunting.
             EQL is designed for event-based data and is excellent for detecting
@@ -47,7 +47,7 @@ class EQLQueryTools:
             )
 
         @mcp.tool()
-        def eql_delete(eql_search_id: str) -> Dict:
+        def eql_delete(eql_search_id: str) -> dict:
             """
             Delete an async EQL search by ID.
 
@@ -60,7 +60,7 @@ class EQLQueryTools:
             return self.search_client.eql_delete(eql_search_id)
 
         @mcp.tool()
-        def eql_get_status(eql_search_id: str) -> Dict:
+        def eql_get_status(eql_search_id: str) -> dict:
             """
             Get the status of an async EQL search.
 

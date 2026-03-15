@@ -5,7 +5,7 @@ different log formats (e.g., ECS vs winlogbeat vs CEF).
 """
 import logging
 import re
-from typing import Dict, List, Optional, Set, Any
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +25,7 @@ class FieldMapper:
     # ECS field to alternative field mappings
     # Format: "ecs_field": ["alternative1", "alternative2", ...]
     # Order matters - first matching alternative is used
-    FIELD_ALIASES: Dict[str, List[str]] = {
+    FIELD_ALIASES: dict[str, list[str]] = {
         # Process fields
         "process.name": [
             "winlog.event_data.Image",
@@ -212,7 +212,7 @@ class FieldMapper:
         ],
     }
 
-    def __init__(self, client: Optional[Any] = None):
+    def __init__(self, client: Any | None = None):
         """
         Initialise the FieldMapper.
 
@@ -220,10 +220,10 @@ class FieldMapper:
             client: Optional Elasticsearch client for fetching index mappings
         """
         self.client = client
-        self._field_cache: Dict[str, Set[str]] = {}  # Cache index field mappings
+        self._field_cache: dict[str, set[str]] = {}  # Cache index field mappings
         self.logger = logging.getLogger(__name__)
 
-    def get_index_fields(self, index: str) -> Set[str]:
+    def get_index_fields(self, index: str) -> set[str]:
         """
         Get all field names from an index's mapping.
 
@@ -275,9 +275,9 @@ class FieldMapper:
 
     def _extract_fields_recursive(
         self,
-        obj: Dict,
+        obj: dict,
         prefix: str,
-        fields: Set[str]
+        fields: set[str]
     ) -> None:
         """Recursively extract field names from mapping."""
         if "properties" in obj:
@@ -294,9 +294,9 @@ class FieldMapper:
     def find_substitute(
         self,
         ecs_field: str,
-        available_fields: Set[str],
+        available_fields: set[str],
         prefer_winlog: bool = True
-    ) -> Optional[str]:
+    ) -> str | None:
         """
         Find a substitute field name for an ECS field.
 
@@ -341,7 +341,7 @@ class FieldMapper:
     def substitute_fields_esql(
         self,
         query: str,
-        available_fields: Set[str],
+        available_fields: set[str],
         enabled: bool = True
     ) -> str:
         """
@@ -385,7 +385,7 @@ class FieldMapper:
     def substitute_fields_lucene(
         self,
         query: str,
-        available_fields: Set[str],
+        available_fields: set[str],
         enabled: bool = True
     ) -> str:
         """
@@ -436,7 +436,7 @@ class FieldMapper:
     def substitute_fields_eql(
         self,
         query: str,
-        available_fields: Set[str],
+        available_fields: set[str],
         enabled: bool = True
     ) -> str:
         """
@@ -483,8 +483,8 @@ class FieldMapper:
     def get_substitution_report(
         self,
         query: str,
-        available_fields: Set[str]
-    ) -> Dict[str, Any]:
+        available_fields: set[str]
+    ) -> dict[str, Any]:
         """
         Generate a report of field substitutions that would be applied.
 

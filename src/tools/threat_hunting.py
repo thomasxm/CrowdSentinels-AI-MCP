@@ -1,5 +1,5 @@
 """Threat Hunting Tools for incident response and threat detection."""
-from typing import Dict, List, Optional
+
 from fastmcp import FastMCP
 
 from src.storage.auto_capture import auto_capture_elasticsearch_results
@@ -11,9 +11,9 @@ class ThreatHuntingTools:
 
     def register_tools(self, mcp: FastMCP):
         @mcp.tool()
-        def hunt_by_timeframe(index: str, attack_types: List[str],
-                             start_time: str, end_time: Optional[str] = None,
-                             host: Optional[str] = None) -> Dict:
+        def hunt_by_timeframe(index: str, attack_types: list[str],
+                             start_time: str, end_time: str | None = None,
+                             host: str | None = None) -> dict:
             """
             Hunt for specific attack patterns within a timeframe.
             This tool automatically searches for common attack indicators based on
@@ -64,7 +64,7 @@ class ThreatHuntingTools:
 
         @mcp.tool()
         def analyze_failed_logins(index: str, timeframe_minutes: int = 15,
-                                  threshold: int = 5) -> Dict:
+                                  threshold: int = 5) -> dict:
             """
             Analyze failed login attempts to detect potential brute force attacks.
             This tool aggregates failed login events (Event ID 4625) and identifies
@@ -99,7 +99,7 @@ class ThreatHuntingTools:
 
         @mcp.tool()
         def analyze_process_creation(index: str, timeframe_minutes: int = 60,
-                                    process_filter: Optional[List[str]] = None) -> Dict:
+                                    process_filter: list[str] | None = None) -> dict:
             """
             Analyze process creation events (Event ID 4688) for suspicious activity.
             This is crucial for detecting malicious process execution and LOLBins usage.
@@ -132,7 +132,7 @@ class ThreatHuntingTools:
 
         @mcp.tool()
         def hunt_for_ioc(index: str, ioc: str, ioc_type: str,
-                        timeframe_minutes: Optional[int] = None) -> Dict:
+                        timeframe_minutes: int | None = None) -> dict:
             """
             Hunt for a specific Indicator of Compromise (IoC) across logs.
             This tool searches multiple fields based on the IoC type.
@@ -182,7 +182,7 @@ class ThreatHuntingTools:
 
         @mcp.tool()
         def get_host_activity_timeline(index: str, hostname: str,
-                                       start_time: str, end_time: Optional[str] = None) -> Dict:
+                                       start_time: str, end_time: str | None = None) -> dict:
             """
             Get a complete timeline of all activity for a specific host.
             This is essential for forensic analysis and incident investigation.
@@ -218,8 +218,8 @@ class ThreatHuntingTools:
 
         @mcp.tool()
         def search_with_lucene(index: str, lucene_query: str,
-                              timeframe_minutes: Optional[int] = None,
-                              size: int = 100) -> Dict:
+                              timeframe_minutes: int | None = None,
+                              size: int = 100) -> dict:
             """
             Execute a Lucene query string search for flexible threat hunting.
             Use this for custom queries that don't fit predefined patterns.
@@ -267,8 +267,8 @@ class ThreatHuntingTools:
         @mcp.tool()
         def hunt_by_kill_chain_stage(index: str, stage: str,
                                      timeframe_minutes: int = 60,
-                                     host: Optional[str] = None,
-                                     size: int = 100) -> Dict:
+                                     host: str | None = None,
+                                     size: int = 100) -> dict:
             """
             Hunt for indicators of a specific Cyber Kill Chain stage.
 
@@ -335,7 +335,10 @@ class ThreatHuntingTools:
                 - Comprehensive stage-by-stage threat hunt
                 - Validating detection gaps at specific stages
             """
-            from src.clients.common.cyber_kill_chain import CyberKillChainClient, KillChainStage
+            from src.clients.common.cyber_kill_chain import (
+                CyberKillChainClient,
+                KillChainStage,
+            )
 
             # Find the matching stage
             stage_upper = stage.upper().replace(' ', '_')
@@ -425,9 +428,12 @@ class ThreatHuntingTools:
             )
 
         def _hunt_stage(index: str, stage: str, timeframe_minutes: int = 60,
-                        host: Optional[str] = None, size: int = 100) -> Dict:
+                        host: str | None = None, size: int = 100) -> dict:
             """Internal helper: execute kill chain stage hunt without MCP wrapper."""
-            from src.clients.common.cyber_kill_chain import CyberKillChainClient, KillChainStage
+            from src.clients.common.cyber_kill_chain import (
+                CyberKillChainClient,
+                KillChainStage,
+            )
             stage_upper = stage.upper().replace(' ', '_')
             kill_chain_stage = None
             for kc_stage in KillChainStage:
@@ -472,7 +478,7 @@ class ThreatHuntingTools:
                                 timeframe_minutes: int = 120,
                                 hunt_previous: bool = True,
                                 hunt_next: bool = True,
-                                host: Optional[str] = None) -> Dict:
+                                host: str | None = None) -> dict:
             """
             Hunt for IoCs in stages adjacent to the current attack stage.
 
@@ -538,7 +544,10 @@ class ThreatHuntingTools:
                 - Root cause analysis (trace back to initial access)
                 - Comprehensive compromise assessment
             """
-            from src.clients.common.cyber_kill_chain import CyberKillChainClient, KillChainStage
+            from src.clients.common.cyber_kill_chain import (
+                CyberKillChainClient,
+                KillChainStage,
+            )
 
             # Find the matching stage
             stage_upper = current_stage.upper().replace(' ', '_')

@@ -1,5 +1,6 @@
 """IoC Analysis and Decision-Making Tools for incident response."""
-from typing import Annotated, Dict, List, Optional
+from typing import Annotated
+
 from fastmcp import FastMCP
 from pydantic import Field
 
@@ -11,9 +12,9 @@ class IoCAnalysisTools:
     def register_tools(self, mcp: FastMCP):
         @mcp.tool()
         def analyze_search_results(
-            search_results: Annotated[Dict, Field(description='Search results dict. Accepts ES format {"hits":{"hits":[...]}}, simplified {"hits":[...]}, or hunt output {"sample_events":[...], "summary":{"total_hits": N}}')],
+            search_results: Annotated[dict, Field(description='Search results dict. Accepts ES format {"hits":{"hits":[...]}}, simplified {"hits":[...]}, or hunt output {"sample_events":[...], "summary":{"total_hits": N}}')],
             context: str = "",
-        ) -> Dict:
+        ) -> dict:
             """
             Analyze search results and provide intelligent insights with follow-up recommendations.
             This is a critical tool for incident response - it acts like an experienced analyst
@@ -59,8 +60,8 @@ class IoCAnalysisTools:
             )
 
         @mcp.tool()
-        def generate_investigation_report(analysis_results: List[Dict],
-                                          investigation_context: str) -> Dict:
+        def generate_investigation_report(analysis_results: list[dict],
+                                          investigation_context: str) -> dict:
             """
             Generate a comprehensive investigation report from multiple analyses.
             This tool aggregates results from multiple queries and analyses to create
@@ -110,9 +111,9 @@ class IoCAnalysisTools:
 
         @mcp.tool()
         def analyze_kill_chain_stage(
-            iocs: Annotated[List[Dict], Field(description='List of IoC dicts, each with "type" and "value" keys. Types: ip, domain, file_path, hostname, commandline, hash, registry_key, c2_domain. Example: [{"type": "hostname", "value": "MSEDGEWIN10"}, {"type": "ip", "value": "10.0.2.16"}]')],
+            iocs: Annotated[list[dict], Field(description='List of IoC dicts, each with "type" and "value" keys. Types: ip, domain, file_path, hostname, commandline, hash, registry_key, c2_domain. Example: [{"type": "hostname", "value": "MSEDGEWIN10"}, {"type": "ip", "value": "10.0.2.16"}]')],
             include_hunting_suggestions: bool = True,
-        ) -> Dict:
+        ) -> dict:
             """
             Analyze IoCs to identify which Cyber Kill Chain stage(s) an attack is in.
 
@@ -207,7 +208,7 @@ class IoCAnalysisTools:
             return result
 
         @mcp.tool()
-        def get_kill_chain_overview() -> Dict:
+        def get_kill_chain_overview() -> dict:
             """
             Get a complete overview of the Cyber Kill Chain framework.
 
@@ -245,8 +246,8 @@ class IoCAnalysisTools:
 
         @mcp.tool()
         def map_events_to_kill_chain(
-            events: Annotated[List[Dict], Field(description='List of event dicts from search results. Each should have fields like "@timestamp", "event.code"/"code", "message", "host.name"/"name", etc.')],
-        ) -> Dict:
+            events: Annotated[list[dict], Field(description='List of event dicts from search results. Each should have fields like "@timestamp", "event.code"/"code", "message", "host.name"/"name", etc.')],
+        ) -> dict:
             """
             Map Elasticsearch events to Cyber Kill Chain stages.
 

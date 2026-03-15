@@ -1,8 +1,8 @@
 # tests/wireshark/test_baseline_builder.py
 """Tests for baseline builder (auto-learn)."""
-import pytest
 from pathlib import Path
 
+import pytest
 
 TEST_PCAP_DIR = Path("/home/kali/Desktop/CTU/normal_traffics")
 

@@ -3,7 +3,7 @@
 import logging
 from collections import defaultdict
 from datetime import datetime
-from typing import Dict, List, Optional, Any
+from typing import Any
 
 from src.wireshark.models import Session
 
@@ -27,13 +27,12 @@ class SessionTracker:
 
     def __init__(self):
         """Initialize session tracker."""
-        pass
 
     def build_sessions_from_packets(
         self,
-        packets: List[Dict],
+        packets: list[dict],
         protocol: str = "tcp"
-    ) -> List[Session]:
+    ) -> list[Session]:
         """Build session objects from packet list.
 
         Args:
@@ -70,9 +69,9 @@ class SessionTracker:
     def _build_single_session(
         self,
         stream_id: int,
-        packets: List[Dict],
+        packets: list[dict],
         protocol: str
-    ) -> Optional[Session]:
+    ) -> Session | None:
         """Build a single session from its packets.
 
         Args:
@@ -172,9 +171,9 @@ class SessionTracker:
         self,
         pcap_path: str,
         protocol: str = "tcp",
-        display_filter: Optional[str] = None,
+        display_filter: str | None = None,
         executor=None
-    ) -> List[Session]:
+    ) -> list[Session]:
         """Track sessions from a PCAP file.
 
         Args:
@@ -228,7 +227,7 @@ class SessionTracker:
         self,
         pcap_path: str,
         executor=None
-    ) -> List[Session]:
+    ) -> list[Session]:
         """Track both TCP and UDP sessions from a PCAP.
 
         Args:
@@ -252,10 +251,10 @@ class SessionTracker:
 
     def filter_by_port(
         self,
-        sessions: List[Session],
-        ports: List[int],
+        sessions: list[Session],
+        ports: list[int],
         check_both: bool = True
-    ) -> List[Session]:
+    ) -> list[Session]:
         """Filter sessions by port number.
 
         Args:
@@ -270,19 +269,17 @@ class SessionTracker:
         filtered = []
 
         for session in sessions:
-            if session.dst_port in port_set:
-                filtered.append(session)
-            elif check_both and session.src_port in port_set:
+            if session.dst_port in port_set or check_both and session.src_port in port_set:
                 filtered.append(session)
 
         return filtered
 
     def filter_by_ip(
         self,
-        sessions: List[Session],
-        ips: List[str],
+        sessions: list[Session],
+        ips: list[str],
         check_both: bool = True
-    ) -> List[Session]:
+    ) -> list[Session]:
         """Filter sessions by IP address.
 
         Args:
@@ -297,14 +294,12 @@ class SessionTracker:
         filtered = []
 
         for session in sessions:
-            if session.dst_ip in ip_set:
-                filtered.append(session)
-            elif check_both and session.src_ip in ip_set:
+            if session.dst_ip in ip_set or check_both and session.src_ip in ip_set:
                 filtered.append(session)
 
         return filtered
 
-    def get_session_summary(self, sessions: List[Session]) -> Dict[str, Any]:
+    def get_session_summary(self, sessions: list[Session]) -> dict[str, Any]:
         """Get summary statistics for a list of sessions.
 
         Args:
@@ -341,9 +336,9 @@ class SessionTracker:
 
     def find_long_sessions(
         self,
-        sessions: List[Session],
+        sessions: list[Session],
         min_duration_seconds: float = 300
-    ) -> List[Session]:
+    ) -> list[Session]:
         """Find sessions that lasted longer than threshold.
 
         Args:
@@ -365,9 +360,9 @@ class SessionTracker:
 
     def find_high_volume_sessions(
         self,
-        sessions: List[Session],
+        sessions: list[Session],
         min_bytes: int = 1048576  # 1MB default
-    ) -> List[Session]:
+    ) -> list[Session]:
         """Find sessions with high data transfer.
 
         Args:

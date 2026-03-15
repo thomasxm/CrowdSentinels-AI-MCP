@@ -1,9 +1,7 @@
 # tests/wireshark/test_hasher.py
 """Tests for file hasher module."""
-import pytest
 import tempfile
 from pathlib import Path
-from datetime import datetime
 
 
 class TestFileHasher:

@@ -1,7 +1,7 @@
 """Test MCP Investigation State Tools."""
 
-import sys
 import shutil
+import sys
 from pathlib import Path
 
 # Add src to path
@@ -31,13 +31,11 @@ def test_investigation_state_tools():
     config = setup_test_environment()
 
     # Import after setting config
-    from src.tools.investigation_state_tools import (
-        get_investigation_client,
-        InvestigationStateTools,
-    )
-
     # Reset the global client
     import src.tools.investigation_state_tools as tools_module
+    from src.tools.investigation_state_tools import (
+        get_investigation_client,
+    )
     tools_module._investigation_client = None
 
     client = get_investigation_client()
@@ -64,7 +62,7 @@ def test_investigation_state_tools():
 
     # Test 3: Add IoCs manually
     print("\n--- Test 3: Add IoCs manually ---")
-    from src.storage.models import IoC, IoCType, IoCSource, SourceType
+    from src.storage.models import IoC, IoCSource, IoCType, SourceType
     ioc1 = IoC(
         type=IoCType.IP,
         value="10.0.0.50",

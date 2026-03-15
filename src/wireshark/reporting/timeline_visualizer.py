@@ -2,7 +2,7 @@
 """ASCII timeline visualization for network analysis."""
 import logging
 from datetime import datetime
-from typing import Dict, List, Optional, Any
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +51,7 @@ class TimelineVisualizer:
 
     def generate_beaconing_timeline(
         self,
-        beacon_events: List[Dict],
+        beacon_events: list[dict],
         target_ip: str,
         time_range_hours: int = 24
     ) -> str:
@@ -116,7 +116,7 @@ class TimelineVisualizer:
 
     def generate_volume_chart(
         self,
-        volume_data: List[Dict],
+        volume_data: list[dict],
         bar_width: int = 30
     ) -> str:
         """Generate volume over time chart.
@@ -156,7 +156,7 @@ class TimelineVisualizer:
 
     def generate_connection_timeline(
         self,
-        connections: List[Dict]
+        connections: list[dict]
     ) -> str:
         """Generate connection timeline.
 
@@ -206,7 +206,7 @@ class TimelineVisualizer:
 
     def generate_attack_stage_timeline(
         self,
-        events: List[Dict]
+        events: list[dict]
     ) -> str:
         """Generate kill chain stage timeline.
 
@@ -247,7 +247,7 @@ class TimelineVisualizer:
 
     def generate_lateral_movement_graph(
         self,
-        movements: List[Dict]
+        movements: list[dict]
     ) -> str:
         """Generate lateral movement graph.
 
@@ -277,7 +277,7 @@ class TimelineVisualizer:
             for mov in movs:
                 dst = mov.get("dst_ip", "?")
                 mov_type = mov.get("movement_type", "unknown")
-                lines.append(f"      │")
+                lines.append("      │")
                 lines.append(f"      └──({mov_type})──> [{dst}]")
 
             lines.append("")
@@ -288,7 +288,7 @@ class TimelineVisualizer:
 
     def generate_summary_dashboard(
         self,
-        stats: Dict[str, Any]
+        stats: dict[str, Any]
     ) -> str:
         """Generate summary dashboard.
 

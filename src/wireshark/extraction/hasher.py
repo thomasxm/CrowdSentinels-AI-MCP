@@ -6,7 +6,7 @@ import os
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -43,12 +43,12 @@ class HashRecord:
     file_size: int
     file_category: str
     is_suspicious: bool
-    source_ip: Optional[str] = None
-    dest_ip: Optional[str] = None
-    protocol: Optional[str] = None
+    source_ip: str | None = None
+    dest_ip: str | None = None
+    protocol: str | None = None
     timestamp: datetime = field(default_factory=datetime.now)
-    tags: List[str] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    tags: list[str] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 class FileHasher:
@@ -59,7 +59,7 @@ class FileHasher:
         self._supported_algorithms = ["md5", "sha1", "sha256", "sha512"]
 
     @property
-    def supported_algorithms(self) -> List[str]:
+    def supported_algorithms(self) -> list[str]:
         """Get list of supported hash algorithms."""
         return self._supported_algorithms.copy()
 
@@ -81,8 +81,8 @@ class FileHasher:
     def compute_hashes(
         self,
         file_path: str,
-        algorithms: Optional[List[str]] = None
-    ) -> Dict[str, str]:
+        algorithms: list[str] | None = None
+    ) -> dict[str, str]:
         """Compute multiple hash algorithms for file.
 
         Args:
@@ -115,7 +115,7 @@ class FileHasher:
         # Return hex digests
         return {alg: hash_obj.hexdigest() for alg, hash_obj in hash_objects.items()}
 
-    def hash_with_metadata(self, file_path: str) -> Dict[str, Any]:
+    def hash_with_metadata(self, file_path: str) -> dict[str, Any]:
         """Compute hash with full file metadata.
 
         Args:
@@ -174,8 +174,8 @@ class FileHasher:
     def hash_buffer(
         self,
         data: bytes,
-        algorithms: Optional[List[str]] = None
-    ) -> Dict[str, str]:
+        algorithms: list[str] | None = None
+    ) -> dict[str, str]:
         """Hash raw bytes buffer.
 
         Args:
@@ -198,9 +198,9 @@ class FileHasher:
 
     def batch_hash(
         self,
-        file_paths: List[str],
-        algorithms: Optional[List[str]] = None
-    ) -> List[Dict[str, Any]]:
+        file_paths: list[str],
+        algorithms: list[str] | None = None
+    ) -> list[dict[str, Any]]:
         """Hash multiple files in batch.
 
         Args:
@@ -238,11 +238,11 @@ class FileHasher:
     def create_hash_record(
         self,
         file_path: str,
-        source_ip: Optional[str] = None,
-        dest_ip: Optional[str] = None,
-        protocol: Optional[str] = None,
-        tags: Optional[List[str]] = None,
-        metadata: Optional[Dict[str, Any]] = None
+        source_ip: str | None = None,
+        dest_ip: str | None = None,
+        protocol: str | None = None,
+        tags: list[str] | None = None,
+        metadata: dict[str, Any] | None = None
     ) -> HashRecord:
         """Create structured hash record for investigation.
 
@@ -278,7 +278,7 @@ class FileHasher:
             metadata=metadata or {},
         )
 
-    def format_for_lookup(self, file_path: str) -> Dict[str, Any]:
+    def format_for_lookup(self, file_path: str) -> dict[str, Any]:
         """Format hash data for threat intel lookup (VirusTotal-style).
 
         Args:
@@ -313,7 +313,7 @@ class FileHasher:
         import hmac
         return hmac.compare_digest(hash1.lower(), hash2.lower())
 
-    def get_hash_summary(self, results: List[Dict]) -> str:
+    def get_hash_summary(self, results: list[dict]) -> str:
         """Generate human-readable hash summary.
 
         Args:

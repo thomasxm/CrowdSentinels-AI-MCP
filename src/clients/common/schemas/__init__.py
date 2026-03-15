@@ -5,16 +5,16 @@ Windows Security, etc.) enabling the hunt tools to adapt queries to different
 field naming conventions.
 """
 
-from .base import LogSourceType, EventTypeDefinition, LogSourceSchema
+from .base import EventTypeDefinition, LogSourceSchema, LogSourceType
+from .ecs import ECS_SCHEMA
 from .registry import (
     SCHEMA_REGISTRY,
-    get_schema,
-    detect_schema_from_index,
     detect_schema_from_fields,
+    detect_schema_from_index,
+    get_schema,
     list_schemas,
 )
 from .sysmon import SYSMON_SCHEMA
-from .ecs import ECS_SCHEMA
 from .windows_security import WINDOWS_SECURITY_SCHEMA
 
 __all__ = [

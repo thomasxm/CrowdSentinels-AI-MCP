@@ -1,7 +1,5 @@
 # tests/wireshark/test_config.py
 """Tests for Wireshark module configuration."""
-import pytest
-from pathlib import Path
 
 
 class TestWiresharkConfig:
@@ -21,7 +19,7 @@ class TestWiresharkConfig:
 
     def test_config_storage_path_created(self):
         """Config should create storage directory if missing."""
-        from src.wireshark.config import WiresharkConfig, get_storage_path
+        from src.wireshark.config import get_storage_path
 
         path = get_storage_path()
 

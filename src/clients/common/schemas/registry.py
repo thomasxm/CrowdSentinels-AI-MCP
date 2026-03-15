@@ -5,27 +5,26 @@ functions for detecting the appropriate schema based on index patterns
 or field analysis.
 """
 
-import fnmatch
 import logging
-from typing import Dict, List, Optional, Set, Tuple, Any
+from typing import Any
 
-from .base import LogSourceSchema, LogSourceType
-from .sysmon import SYSMON_SCHEMA
+from .base import LogSourceSchema
 from .ecs import ECS_SCHEMA
+from .sysmon import SYSMON_SCHEMA
 from .windows_security import WINDOWS_SECURITY_SCHEMA
 
 logger = logging.getLogger(__name__)
 
 
 # Central schema registry
-SCHEMA_REGISTRY: Dict[str, LogSourceSchema] = {
+SCHEMA_REGISTRY: dict[str, LogSourceSchema] = {
     "sysmon": SYSMON_SCHEMA,
     "ecs": ECS_SCHEMA,
     "windows_security": WINDOWS_SECURITY_SCHEMA,
 }
 
 
-def get_schema(schema_id: str) -> Optional[LogSourceSchema]:
+def get_schema(schema_id: str) -> LogSourceSchema | None:
     """Get a schema by its ID.
 
     Args:
@@ -37,7 +36,7 @@ def get_schema(schema_id: str) -> Optional[LogSourceSchema]:
     return SCHEMA_REGISTRY.get(schema_id)
 
 
-def list_schemas() -> List[Dict[str, Any]]:
+def list_schemas() -> list[dict[str, Any]]:
     """List all available schemas with summary information.
 
     Returns:
@@ -56,7 +55,7 @@ def list_schemas() -> List[Dict[str, Any]]:
     ]
 
 
-def detect_schema_from_index(index_pattern: str) -> Optional[LogSourceSchema]:
+def detect_schema_from_index(index_pattern: str) -> LogSourceSchema | None:
     """Detect the appropriate schema based on index pattern.
 
     Checks the index pattern against known patterns for each schema.
@@ -80,9 +79,9 @@ def detect_schema_from_index(index_pattern: str) -> Optional[LogSourceSchema]:
 
 
 def detect_schema_from_fields(
-    fields: Set[str],
+    fields: set[str],
     min_confidence: float = 0.3
-) -> Tuple[Optional[LogSourceSchema], float]:
+) -> tuple[LogSourceSchema | None, float]:
     """Detect the appropriate schema by analysing available fields.
 
     Calculates a confidence score for each schema based on how many
@@ -95,7 +94,7 @@ def detect_schema_from_fields(
     Returns:
         Tuple of (schema, confidence) or (None, 0.0) if no match above threshold
     """
-    best_schema: Optional[LogSourceSchema] = None
+    best_schema: LogSourceSchema | None = None
     best_score: float = 0.0
 
     for schema_id, schema in SCHEMA_REGISTRY.items():
@@ -118,7 +117,7 @@ def detect_schema_from_fields(
 
 def _calculate_field_match_score(
     schema: LogSourceSchema,
-    available_fields: Set[str]
+    available_fields: set[str]
 ) -> float:
     """Calculate how well a set of fields matches a schema.
 
@@ -176,7 +175,7 @@ def unregister_schema(schema_id: str) -> bool:
     return False
 
 
-def get_schema_for_event_type(event_type: str) -> List[Tuple[LogSourceSchema, str]]:
+def get_schema_for_event_type(event_type: str) -> list[tuple[LogSourceSchema, str]]:
     """Find all schemas that define a specific event type.
 
     Args:
@@ -193,7 +192,7 @@ def get_schema_for_event_type(event_type: str) -> List[Tuple[LogSourceSchema, st
     return results
 
 
-def get_semantic_field_mappings(semantic_field: str) -> Dict[str, str]:
+def get_semantic_field_mappings(semantic_field: str) -> dict[str, str]:
     """Get the field name for a semantic concept across all schemas.
 
     Args:
@@ -220,21 +219,21 @@ class SchemaResolver:
     integration for field-based auto-detection.
     """
 
-    def __init__(self, es_client: Optional[Any] = None):
+    def __init__(self, es_client: Any | None = None):
         """Initialise the schema resolver.
 
         Args:
             es_client: Optional Elasticsearch client for field sampling
         """
         self.es_client = es_client
-        self._cache: Dict[str, LogSourceSchema] = {}
+        self._cache: dict[str, LogSourceSchema] = {}
 
     def resolve(
         self,
         index: str,
-        schema_hint: Optional[str] = None,
+        schema_hint: str | None = None,
         use_cache: bool = True
-    ) -> Optional[LogSourceSchema]:
+    ) -> LogSourceSchema | None:
         """Resolve the schema for an index.
 
         Resolution order:
@@ -289,7 +288,7 @@ class SchemaResolver:
         self,
         index: str,
         sample_size: int = 100
-    ) -> Set[str]:
+    ) -> set[str]:
         """Sample fields from an Elasticsearch index.
 
         Args:
@@ -322,9 +321,9 @@ class SchemaResolver:
 
     def _extract_fields(
         self,
-        obj: Dict,
+        obj: dict,
         prefix: str,
-        fields: Set[str]
+        fields: set[str]
     ) -> None:
         """Recursively extract field names from mapping."""
         if "properties" in obj:

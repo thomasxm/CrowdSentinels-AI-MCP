@@ -1,8 +1,7 @@
 """Lockheed Martin Cyber Kill Chain implementation for threat analysis."""
-from typing import Dict, List, Optional, Set, Tuple
+import logging
 from dataclasses import dataclass, field
 from enum import Enum
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -24,12 +23,12 @@ class KillChainStageInfo:
     stage: KillChainStage
     name: str
     description: str
-    indicators: List[str]
-    typical_iocs: List[str]
-    log_sources: List[str]
-    event_codes: List[str] = field(default_factory=list)
-    mitre_tactics: List[str] = field(default_factory=list)
-    hunting_queries: Dict[str, str] = field(default_factory=dict)
+    indicators: list[str]
+    typical_iocs: list[str]
+    log_sources: list[str]
+    event_codes: list[str] = field(default_factory=list)
+    mitre_tactics: list[str] = field(default_factory=list)
+    hunting_queries: dict[str, str] = field(default_factory=dict)
 
 
 class CyberKillChainClient:
@@ -386,7 +385,7 @@ class CyberKillChainClient:
         return cls.KILL_CHAIN_STAGES.get(stage)
 
     @classmethod
-    def identify_stage_from_iocs(cls, iocs: List[Dict]) -> Dict:
+    def identify_stage_from_iocs(cls, iocs: list[dict]) -> dict:
         """
         Identify Kill Chain stages from a list of IoCs.
 
@@ -449,7 +448,7 @@ class CyberKillChainClient:
         }
 
     @classmethod
-    def identify_stage_from_mitre_tactics(cls, tactics: List[str]) -> List[KillChainStage]:
+    def identify_stage_from_mitre_tactics(cls, tactics: list[str]) -> list[KillChainStage]:
         """
         Map MITRE ATT&CK tactics to Kill Chain stages.
 
@@ -469,7 +468,7 @@ class CyberKillChainClient:
         return sorted(list(stages), key=lambda s: s.value)
 
     @classmethod
-    def get_adjacent_stages(cls, current_stage: KillChainStage) -> Dict[str, Optional[KillChainStage]]:
+    def get_adjacent_stages(cls, current_stage: KillChainStage) -> dict[str, KillChainStage | None]:
         """
         Get the previous and next stages in the Kill Chain.
 
@@ -497,7 +496,7 @@ class CyberKillChainClient:
         }
 
     @classmethod
-    def get_hunting_queries_for_stage(cls, stage: KillChainStage) -> Dict[str, str]:
+    def get_hunting_queries_for_stage(cls, stage: KillChainStage) -> dict[str, str]:
         """
         Get hunting queries for a specific Kill Chain stage.
 
@@ -511,7 +510,7 @@ class CyberKillChainClient:
         return stage_info.hunting_queries if stage_info else {}
 
     @classmethod
-    def suggest_next_hunting_actions(cls, current_stage: KillChainStage) -> Dict:
+    def suggest_next_hunting_actions(cls, current_stage: KillChainStage) -> dict:
         """
         Suggest hunting actions for adjacent stages.
 
@@ -563,7 +562,7 @@ class CyberKillChainClient:
         return suggestions
 
     @classmethod
-    def get_full_kill_chain_overview(cls) -> Dict:
+    def get_full_kill_chain_overview(cls) -> dict:
         """
         Get a complete overview of the Cyber Kill Chain.
 
@@ -593,7 +592,7 @@ class CyberKillChainClient:
         return overview
 
     @classmethod
-    def map_event_to_stage(cls, event: Dict) -> List[KillChainStage]:
+    def map_event_to_stage(cls, event: dict) -> list[KillChainStage]:
         """
         Map an Elasticsearch event to potential Kill Chain stages.
 

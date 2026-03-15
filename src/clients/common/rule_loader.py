@@ -1,9 +1,6 @@
 """Rule Loader for Lucene and EQL Detection Rules."""
-import os
-import re
 import logging
 import sys
-from typing import Dict, List, Optional, Set
 
 # Python 3.11+ has tomllib, earlier versions need tomli
 if sys.version_info >= (3, 11):
@@ -13,8 +10,8 @@ else:
         import tomli as tomllib
     except ImportError:
         tomllib = None
-from pathlib import Path
 from dataclasses import dataclass, field
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
@@ -40,20 +37,20 @@ class DetectionRule:
     file_path: str
 
     # Tags for searching
-    tags: Set[str] = field(default_factory=set)
+    tags: set[str] = field(default_factory=set)
 
     # MITRE ATT&CK mapping (extracted from tags/name)
-    mitre_tactics: Set[str] = field(default_factory=set)
-    mitre_techniques: Set[str] = field(default_factory=set)
+    mitre_tactics: set[str] = field(default_factory=set)
+    mitre_techniques: set[str] = field(default_factory=set)
 
     # Hunting tips and guidance (from hunting rules)
-    notes: List[str] = field(default_factory=list)
+    notes: list[str] = field(default_factory=list)
 
     # TOML rule metadata (from detection-rules/rules/)
     description: str = ""
     severity: str = ""
     risk_score: int = 0
-    references: List[str] = field(default_factory=list)
+    references: list[str] = field(default_factory=list)
     investigation_notes: str = ""
 
     @property
@@ -63,10 +60,10 @@ class DetectionRule:
         return self.name.replace('_', ' ').title()
 
     def matches_filter(self,
-                      platform: Optional[str] = None,
-                      log_source: Optional[str] = None,
-                      rule_type: Optional[str] = None,
-                      search_term: Optional[str] = None) -> bool:
+                      platform: str | None = None,
+                      log_source: str | None = None,
+                      rule_type: str | None = None,
+                      search_term: str | None = None) -> bool:
         """Check if this rule matches the given filters."""
         if platform and self.platform.lower() != platform.lower():
             return False
@@ -99,8 +96,8 @@ class RuleLoader:
     # Languages accepted from TOML detection rules
     TOML_ALLOWED_LANGUAGES = {"eql", "esql"}
 
-    def __init__(self, rules_directory: str, hunting_directory: Optional[str] = None,
-                 toml_rules_directory: Optional[str] = None):
+    def __init__(self, rules_directory: str, hunting_directory: str | None = None,
+                 toml_rules_directory: str | None = None):
         """
         Initialise the rule loader.
 
@@ -112,10 +109,10 @@ class RuleLoader:
         self.rules_directory = Path(rules_directory)
         self.hunting_directory = Path(hunting_directory) if hunting_directory else None
         self.toml_rules_directory = Path(toml_rules_directory) if toml_rules_directory else None
-        self.rules: Dict[str, DetectionRule] = {}
-        self.rules_by_platform: Dict[str, List[str]] = {}
-        self.rules_by_type: Dict[str, List[str]] = {}
-        self.rules_by_log_source: Dict[str, List[str]] = {}
+        self.rules: dict[str, DetectionRule] = {}
+        self.rules_by_platform: dict[str, list[str]] = {}
+        self.rules_by_type: dict[str, list[str]] = {}
+        self.rules_by_log_source: dict[str, list[str]] = {}
 
         self.logger = logging.getLogger(__name__)
 
@@ -212,7 +209,7 @@ class RuleLoader:
         self.logger.info(f"Loaded {loaded_count} EQL rules from hunting directory")
         return loaded_count
 
-    def _parse_hunting_toml(self, toml_file: Path) -> List[DetectionRule]:
+    def _parse_hunting_toml(self, toml_file: Path) -> list[DetectionRule]:
         """Parse a hunting TOML file and extract EQL queries as DetectionRules."""
         rules = []
 
@@ -285,7 +282,7 @@ class RuleLoader:
                 return part.lower()
         return 'unknown'
 
-    def _extract_tactics_from_mitre(self, mitre_ids: List[str]) -> Set[str]:
+    def _extract_tactics_from_mitre(self, mitre_ids: list[str]) -> set[str]:
         """Extract MITRE tactics from technique IDs using keyword heuristics."""
         tactics = set()
 
@@ -330,7 +327,7 @@ class RuleLoader:
         self.logger.info(f"Loaded {loaded_count} TOML detection rules (EQL + ES|QL)")
         return loaded_count
 
-    def _parse_toml_detection_rule(self, toml_file: Path) -> Optional[DetectionRule]:
+    def _parse_toml_detection_rule(self, toml_file: Path) -> DetectionRule | None:
         """Parse a [rule]-format TOML detection rule file."""
         with open(toml_file, "rb") as f:
             data = tomllib.load(f)
@@ -447,11 +444,11 @@ class RuleLoader:
 
         return tactics, techniques
 
-    def _load_rule_file(self, file_path: Path, rule_type: str) -> Optional[DetectionRule]:
+    def _load_rule_file(self, file_path: Path, rule_type: str) -> DetectionRule | None:
         """Load a single rule file and parse its metadata."""
         # Read the rule query
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 query = f.read().strip()
         except Exception as e:
             self.logger.error(f"Failed to read {file_path}: {e}")
@@ -547,17 +544,17 @@ class RuleLoader:
             self.rules_by_log_source[rule.log_source] = []
         self.rules_by_log_source[rule.log_source].append(rule.rule_id)
 
-    def get_rule(self, rule_id: str) -> Optional[DetectionRule]:
+    def get_rule(self, rule_id: str) -> DetectionRule | None:
         """Get a specific rule by ID."""
         return self.rules.get(rule_id)
 
     def search_rules(self,
-                    platform: Optional[str] = None,
-                    log_source: Optional[str] = None,
-                    rule_type: Optional[str] = None,
-                    search_term: Optional[str] = None,
-                    mitre_tactic: Optional[str] = None,
-                    limit: int = 100) -> List[DetectionRule]:
+                    platform: str | None = None,
+                    log_source: str | None = None,
+                    rule_type: str | None = None,
+                    search_term: str | None = None,
+                    mitre_tactic: str | None = None,
+                    limit: int = 100) -> list[DetectionRule]:
         """
         Search for rules matching the given criteria.
 
@@ -599,7 +596,7 @@ class RuleLoader:
 
         return results
 
-    def get_statistics(self) -> Dict:
+    def get_statistics(self) -> dict:
         """Get statistics about loaded rules."""
         return {
             "total_rules": len(self.rules),
@@ -619,12 +616,12 @@ class RuleLoader:
             "log_sources": list(self.rules_by_log_source.keys())
         }
 
-    def get_rules_by_platform(self, platform: str) -> List[DetectionRule]:
+    def get_rules_by_platform(self, platform: str) -> list[DetectionRule]:
         """Get all rules for a specific platform."""
         rule_ids = self.rules_by_platform.get(platform, [])
         return [self.rules[rid] for rid in rule_ids]
 
-    def get_rules_by_mitre_tactic(self, tactic: str) -> List[DetectionRule]:
+    def get_rules_by_mitre_tactic(self, tactic: str) -> list[DetectionRule]:
         """Get all rules mapped to a specific MITRE ATT&CK tactic."""
         return [
             rule for rule in self.rules.values()

@@ -1,5 +1,4 @@
 """Asset Discovery Tools for MCP."""
-from typing import Dict, List, Optional
 from fastmcp import FastMCP
 
 
@@ -9,7 +8,7 @@ class AssetDiscoveryTools:
 
     def register_tools(self, mcp: FastMCP):
         @mcp.tool()
-        def discover_all_assets() -> Dict:
+        def discover_all_assets() -> dict:
             """
             Discover all assets in the Elasticsearch cluster including indices,
             data streams, and their metadata. This will scan all indices and
@@ -24,7 +23,7 @@ class AssetDiscoveryTools:
             return self.search_client.discover_all_assets()
 
         @mcp.tool()
-        def get_saved_assets() -> Dict:
+        def get_saved_assets() -> dict:
             """
             Retrieve previously discovered assets from the saved file.
 
@@ -37,7 +36,7 @@ class AssetDiscoveryTools:
             return assets
 
         @mcp.tool()
-        def get_indices_by_type(log_type: str) -> List[str]:
+        def get_indices_by_type(log_type: str) -> list[str]:
             """
             Get indices matching a specific log type.
 
@@ -56,7 +55,7 @@ class AssetDiscoveryTools:
             return self.search_client.get_indices_by_type(log_type)
 
         @mcp.tool()
-        def get_index_metadata(index_pattern: str) -> Dict:
+        def get_index_metadata(index_pattern: str) -> dict:
             """
             Get metadata for a specific index pattern.
 

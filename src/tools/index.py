@@ -1,20 +1,20 @@
 """MCP tools for index listing, mapping, and settings."""
-from typing import Dict, Optional, List
 
 from fastmcp import FastMCP
+
 
 class IndexTools:
     def __init__(self, search_client):
         self.search_client = search_client
-        
+
     def register_tools(self, mcp: FastMCP):
         @mcp.tool()
-        def list_indices() -> List[Dict]:
+        def list_indices() -> list[dict]:
             """List all indices."""
             return self.search_client.list_indices()
 
         @mcp.tool()
-        def get_index(index: str) -> Dict:
+        def get_index(index: str) -> dict:
             """
             Returns information (mappings, settings, aliases) about one or more indices.
             
@@ -24,7 +24,7 @@ class IndexTools:
             return self.search_client.get_index(index=index)
 
         @mcp.tool()
-        def create_index(index: str, body: Optional[Dict] = None) -> Dict:
+        def create_index(index: str, body: dict | None = None) -> dict:
             """
             Create a new index.
             
@@ -35,7 +35,7 @@ class IndexTools:
             return self.search_client.create_index(index=index, body=body)
 
         @mcp.tool()
-        def delete_index(index: str) -> Dict:
+        def delete_index(index: str) -> dict:
             """
             Delete an index.
             

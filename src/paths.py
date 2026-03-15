@@ -13,7 +13,6 @@ the same logic.
 import os
 import shutil
 from pathlib import Path
-from typing import Optional
 
 # Package directory — the 'src/' folder
 _PKG_DIR = Path(__file__).parent
@@ -27,8 +26,8 @@ _USER_DATA_DIR = Path.home() / ".crowdsentinel"
 
 def _resolve_data_dir(
     name: str,
-    env_var: Optional[str] = None,
-) -> Optional[Path]:
+    env_var: str | None = None,
+) -> Path | None:
     """Resolve a data directory by checking multiple candidate locations.
 
     Resolution order:
@@ -81,12 +80,12 @@ def get_user_data_dir() -> Path:
     return _USER_DATA_DIR
 
 
-def get_rules_dir() -> Optional[Path]:
+def get_rules_dir() -> Path | None:
     """Resolve the detection rules directory (Lucene + EQL)."""
     return _resolve_data_dir("rules", env_var="CROWDSENTINEL_RULES_DIR")
 
 
-def get_hunting_rules_dir() -> Optional[Path]:
+def get_hunting_rules_dir() -> Path | None:
     """Resolve the ES|QL hunting rules directory."""
     return _resolve_data_dir(
         str(Path("detection-rules") / "hunting"),
@@ -94,7 +93,7 @@ def get_hunting_rules_dir() -> Optional[Path]:
     )
 
 
-def get_toml_rules_dir() -> Optional[Path]:
+def get_toml_rules_dir() -> Path | None:
     """Resolve the TOML detection rules directory (detection-rules/rules/)."""
     return _resolve_data_dir(
         str(Path("detection-rules") / "rules"),
@@ -102,7 +101,7 @@ def get_toml_rules_dir() -> Optional[Path]:
     )
 
 
-def get_chainsaw_dir() -> Optional[Path]:
+def get_chainsaw_dir() -> Path | None:
     """Resolve the chainsaw root directory."""
     return _resolve_data_dir("chainsaw", env_var="CHAINSAW_DIR")
 
@@ -119,9 +118,9 @@ def get_assets_dir() -> Path:
 
 def get_binary_path(
     name: str,
-    env_var: Optional[str] = None,
-    subdir: Optional[str] = None,
-) -> Optional[Path]:
+    env_var: str | None = None,
+    subdir: str | None = None,
+) -> Path | None:
     """Resolve an external binary for tool integration (chainsaw, tshark, etc.).
 
     Resolution order:

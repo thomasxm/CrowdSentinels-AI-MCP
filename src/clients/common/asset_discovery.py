@@ -1,9 +1,6 @@
 """Asset Discovery Client for extracting and storing index metadata."""
 import json
-import os
 from datetime import datetime
-from typing import Dict, List, Optional
-from pathlib import Path
 
 from src.clients.base import SearchClientBase
 from src.paths import get_assets_dir
@@ -16,7 +13,7 @@ class AssetDiscoveryClient(SearchClientBase):
         super().__init__(*args, **kwargs)
         self.assets_dir = get_assets_dir()
 
-    def discover_all_assets(self) -> Dict:
+    def discover_all_assets(self) -> dict:
         """
         Discover all assets in the Elasticsearch cluster including indices,
         data streams, and their metadata.
@@ -45,7 +42,7 @@ class AssetDiscoveryClient(SearchClientBase):
         except Exception:
             return "unknown"
 
-    def _discover_indices(self) -> List[Dict]:
+    def _discover_indices(self) -> list[dict]:
         """Discover all indices and their metadata."""
         try:
             # Get all indices with detailed info
@@ -89,7 +86,7 @@ class AssetDiscoveryClient(SearchClientBase):
             self.logger.error(f"Failed to discover indices: {e}")
             return []
 
-    def _discover_data_streams(self) -> List[Dict]:
+    def _discover_data_streams(self) -> list[dict]:
         """Discover all data streams."""
         try:
             data_streams = self.client.indices.get_data_stream(name="*")
@@ -98,7 +95,7 @@ class AssetDiscoveryClient(SearchClientBase):
             self.logger.warning(f"Failed to discover data streams: {e}")
             return []
 
-    def _analyze_index_metadata(self, index_name: str, mappings: Dict, settings: Dict) -> Dict:
+    def _analyze_index_metadata(self, index_name: str, mappings: dict, settings: dict) -> dict:
         """
         Analyze index to extract metadata like OS type, log source, etc.
 
@@ -177,7 +174,7 @@ class AssetDiscoveryClient(SearchClientBase):
 
         return metadata
 
-    def _analyze_index_patterns(self) -> Dict:
+    def _analyze_index_patterns(self) -> dict:
         """Analyze indices to identify common patterns."""
         try:
             indices = self.client.cat.indices(format="json", h="index")
@@ -216,7 +213,7 @@ class AssetDiscoveryClient(SearchClientBase):
             self.logger.error(f"Failed to analyze index patterns: {e}")
             return {}
 
-    def _save_assets(self, assets: Dict) -> None:
+    def _save_assets(self, assets: dict) -> None:
         """Save assets to JSON file."""
         try:
             assets_file = self.assets_dir / "discovered_assets.json"
@@ -226,19 +223,19 @@ class AssetDiscoveryClient(SearchClientBase):
         except Exception as e:
             self.logger.error(f"Failed to save assets: {e}")
 
-    def get_saved_assets(self) -> Optional[Dict]:
+    def get_saved_assets(self) -> dict | None:
         """Load previously discovered assets from file."""
         try:
             assets_file = self.assets_dir / "discovered_assets.json"
             if assets_file.exists():
-                with open(assets_file, "r") as f:
+                with open(assets_file) as f:
                     return json.load(f)
             return None
         except Exception as e:
             self.logger.error(f"Failed to load assets: {e}")
             return None
 
-    def get_indices_by_type(self, log_type: str) -> List[str]:
+    def get_indices_by_type(self, log_type: str) -> list[str]:
         """
         Get indices matching a specific log type.
 
@@ -265,16 +262,12 @@ class AssetDiscoveryClient(SearchClientBase):
                     matching_indices.append(idx["name"])
 
             # Match by log source
-            elif log_type.lower() in metadata.get("log_source", "").lower():
-                matching_indices.append(idx["name"])
-
-            # Match by beat type
-            elif log_type.lower() in str(metadata.get("beat_type", "")).lower():
+            elif log_type.lower() in metadata.get("log_source", "").lower() or log_type.lower() in str(metadata.get("beat_type", "")).lower():
                 matching_indices.append(idx["name"])
 
         return matching_indices
 
-    def get_index_metadata(self, index_pattern: str) -> Optional[Dict]:
+    def get_index_metadata(self, index_pattern: str) -> dict | None:
         """Get metadata for a specific index pattern."""
         assets = self.get_saved_assets()
         if not assets:

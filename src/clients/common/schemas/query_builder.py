@@ -6,7 +6,7 @@ the correct field names based on the target schema.
 
 import logging
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Any, Set
+from typing import Any
 
 from .base import LogSourceSchema
 
@@ -19,7 +19,7 @@ class QueryResult:
     query: str
     event_type: str
     event_code: str
-    fields_used: List[str]
+    fields_used: list[str]
     description: str
 
 
@@ -88,9 +88,9 @@ class SchemaAwareQueryBuilder:
     def build_process_terminate_query(
         self,
         process_name: str,
-        host: Optional[str] = None,
-        start_time: Optional[str] = None,
-        end_time: Optional[str] = None
+        host: str | None = None,
+        start_time: str | None = None,
+        end_time: str | None = None
     ) -> QueryResult:
         """Build query for process termination events.
 
@@ -593,7 +593,7 @@ class SchemaAwareQueryBuilder:
         host: str,
         start_time: str,
         end_time: str,
-        event_codes: Optional[List[str]] = None
+        event_codes: list[str] | None = None
     ) -> QueryResult:
         """Build query for all activity on a host during a time window.
 
@@ -635,11 +635,11 @@ class SchemaAwareQueryBuilder:
             description=f"Find all activity on host '{host}'"
         )
 
-    def get_supported_event_types(self) -> List[str]:
+    def get_supported_event_types(self) -> list[str]:
         """Get list of event types supported by this schema."""
         return self.schema.list_event_types()
 
-    def get_schema_info(self) -> Dict[str, Any]:
+    def get_schema_info(self) -> dict[str, Any]:
         """Get information about the current schema."""
         return {
             "schema_id": self.schema.schema_id,
@@ -686,7 +686,7 @@ class SchemaAwareQueryBuilder:
 
     def build_event_codes_in_condition(
         self,
-        event_codes: List[str],
+        event_codes: list[str],
         use_alternatives: bool = False
     ) -> str:
         """Build event code IN filter condition for multiple codes.

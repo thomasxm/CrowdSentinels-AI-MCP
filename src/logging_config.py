@@ -8,16 +8,16 @@ Provides comprehensive logging with:
 - Works in both stdio and HTTP transport modes
 """
 
+import functools
 import logging
 import os
 import sys
-import functools
-import time
 import tempfile
-from pathlib import Path
-from typing import Any, Callable, Dict, Optional, TextIO
+import time
+from collections.abc import Callable
 from datetime import datetime
-
+from pathlib import Path
+from typing import Any, TextIO
 
 # Default log file location
 DEFAULT_LOG_DIR = Path(tempfile.gettempdir()) / "crowdsentinel"
@@ -77,7 +77,7 @@ def get_log_level() -> int:
     return getattr(logging, level_str, logging.INFO)
 
 
-def _get_tty_stream() -> Optional[TextIO]:
+def _get_tty_stream() -> TextIO | None:
     """
     Get a direct handle to the controlling terminal (TTY).
 
@@ -96,7 +96,7 @@ def _get_tty_stream() -> Optional[TextIO]:
         # to the terminal, bypassing any stdout/stderr redirection
         tty = open('/dev/tty', 'w')
         return tty
-    except (OSError, IOError):
+    except OSError:
         # No controlling terminal (e.g., running in background, Docker, etc.)
         return None
 
@@ -211,7 +211,7 @@ class TTYHandler(logging.StreamHandler):
                 super().emit(record)
             else:
                 self._closed = True
-        except (ValueError, IOError, OSError):
+        except (ValueError, OSError):
             # Stream closed or unavailable - mark as closed and continue
             self._closed = True
         except Exception:
@@ -247,7 +247,7 @@ class StderrHandler(logging.StreamHandler):
         try:
             super().emit(record)
             self.flush()
-        except (ValueError, IOError, OSError):
+        except (ValueError, OSError):
             # Stream closed or unavailable
             pass
         except Exception:
@@ -384,7 +384,7 @@ def truncate_value(value: Any, max_length: int = 200) -> str:
     return str_value
 
 
-def format_params_for_log(params: Dict[str, Any]) -> str:
+def format_params_for_log(params: dict[str, Any]) -> str:
     """Format parameters for logging, truncating large values."""
     formatted = {}
     for key, value in params.items():
@@ -473,7 +473,7 @@ def _extract_result_summary(result: Any) -> str:
 
 
 def log_query(logger: logging.Logger, query_type: str, index: str,
-              query: str, timeframe: Optional[int] = None):
+              query: str, timeframe: int | None = None):
     """
     Log an Elasticsearch query execution.
 
@@ -517,8 +517,8 @@ class ToolLogger:
 
     def __init__(self, tool_category: str):
         self.logger = get_logger(f"tools.{tool_category}")
-        self._current_tool: Optional[str] = None
-        self._start_time: Optional[float] = None
+        self._current_tool: str | None = None
+        self._start_time: float | None = None
 
     def tool_start(self, tool_name: str, **params):
         """Log tool invocation start."""
@@ -528,7 +528,7 @@ class ToolLogger:
         self.logger.info(f">>> {tool_name} | {params_str}")
 
     def query(self, query_type: str, query: str, index: str,
-              timeframe: Optional[int] = None):
+              timeframe: int | None = None):
         """Log a query being executed."""
         log_query(self.logger, query_type, index, query, timeframe)
 
@@ -540,7 +540,7 @@ class ToolLogger:
         self._current_tool = None
         self._start_time = None
 
-    def error(self, message: str, exc: Optional[Exception] = None):
+    def error(self, message: str, exc: Exception | None = None):
         """Log an error."""
         if exc:
             self.logger.error(f"!!! {self._current_tool} | {message}: {exc}")

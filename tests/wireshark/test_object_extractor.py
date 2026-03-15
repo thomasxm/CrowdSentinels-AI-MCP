@@ -1,10 +1,9 @@
 # tests/wireshark/test_object_extractor.py
 """Tests for object extractor."""
-import pytest
 import tempfile
 from pathlib import Path
-from datetime import datetime
 
+import pytest
 
 TEST_PCAP_DIR = Path("/home/kali/Desktop/CTU/normal_traffics")
 

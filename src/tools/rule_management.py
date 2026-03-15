@@ -1,5 +1,5 @@
 """MCP Tools for Detection Rule Management."""
-from typing import Dict, List, Optional
+
 from fastmcp import FastMCP
 
 
@@ -7,7 +7,7 @@ class RuleManagementTools:
     """Tools for managing and executing detection rules."""
 
     def _execute_single_rule(self, rule_id: str, index: str,
-                             timeframe_minutes: int = 15, size: int = 100) -> Dict:
+                             timeframe_minutes: int = 15, size: int = 100) -> dict:
         """Execute a single detection rule (internal, no MCP wrapper)."""
         rule = self.rule_loader.get_rule(rule_id)
         if not rule:
@@ -57,13 +57,13 @@ class RuleManagementTools:
     def register_tools(self, mcp: FastMCP):
         @mcp.tool()
         def list_detection_rules(
-            platform: Optional[str] = None,
-            log_source: Optional[str] = None,
-            rule_type: Optional[str] = None,
-            search_term: Optional[str] = None,
-            mitre_tactic: Optional[str] = None,
+            platform: str | None = None,
+            log_source: str | None = None,
+            rule_type: str | None = None,
+            search_term: str | None = None,
+            mitre_tactic: str | None = None,
             limit: int = 50
-        ) -> Dict:
+        ) -> dict:
             """
             List available detection rules with optional filtering.
 
@@ -145,7 +145,7 @@ class RuleManagementTools:
             }
 
         @mcp.tool()
-        def get_rule_details(rule_id: str) -> Dict:
+        def get_rule_details(rule_id: str) -> dict:
             """
             Get detailed information about a specific detection rule.
 
@@ -183,9 +183,9 @@ class RuleManagementTools:
         def execute_detection_rule(
             rule_id: str,
             index: str,
-            timeframe_minutes: Optional[int] = 15,
+            timeframe_minutes: int | None = 15,
             size: int = 100
-        ) -> Dict:
+        ) -> dict:
             """
             Execute a specific detection rule against Elasticsearch.
 
@@ -258,7 +258,7 @@ class RuleManagementTools:
                 # Provide more specific error messages based on error type
                 if "timeout" in error_msg.lower() or "timed out" in error_msg.lower():
                     return {
-                        "error": f"Query timed out: The rule query may be too complex or the index too large",
+                        "error": "Query timed out: The rule query may be too complex or the index too large",
                         "rule_id": rule_id,
                         "rule_type": rule.rule_type,
                         "query_preview": rule.query[:200] + "..." if len(rule.query) > 200 else rule.query,
@@ -269,7 +269,7 @@ class RuleManagementTools:
                             "Increase REQUEST_TIMEOUT environment variable"
                         ]
                     }
-                elif "parse" in error_msg.lower() or "syntax" in error_msg.lower():
+                if "parse" in error_msg.lower() or "syntax" in error_msg.lower():
                     return {
                         "error": f"Query parsing error: {error_msg}",
                         "rule_id": rule_id,
@@ -277,21 +277,20 @@ class RuleManagementTools:
                         "query": rule.query,
                         "suggestion": "The rule query may have syntax errors or use unsupported features"
                     }
-                else:
-                    return {
-                        "error": f"Failed to execute rule: {error_msg}",
-                        "rule_id": rule_id,
-                        "rule_type": rule.rule_type,
-                        "query_preview": rule.query[:200] + "..." if len(rule.query) > 200 else rule.query
-                    }
+                return {
+                    "error": f"Failed to execute rule: {error_msg}",
+                    "rule_id": rule_id,
+                    "rule_type": rule.rule_type,
+                    "query_preview": rule.query[:200] + "..." if len(rule.query) > 200 else rule.query
+                }
 
         @mcp.tool()
         def execute_multiple_rules(
-            rule_ids: List[str],
+            rule_ids: list[str],
             index: str,
-            timeframe_minutes: Optional[int] = 15,
+            timeframe_minutes: int | None = 15,
             max_results_per_rule: int = 50
-        ) -> Dict:
+        ) -> dict:
             """
             Execute multiple detection rules in batch.
 
@@ -368,9 +367,9 @@ class RuleManagementTools:
         @mcp.tool()
         def search_rules_by_mitre_attack(
             tactic: str,
-            platform: Optional[str] = None,
+            platform: str | None = None,
             limit: int = 50
-        ) -> Dict:
+        ) -> dict:
             """
             Search detection rules by MITRE ATT&CK tactic.
 
@@ -432,7 +431,7 @@ class RuleManagementTools:
             }
 
         @mcp.tool()
-        def get_rule_statistics() -> Dict:
+        def get_rule_statistics() -> dict:
             """
             Get comprehensive statistics about the detection rule library.
 
@@ -451,7 +450,7 @@ class RuleManagementTools:
             index: str,
             timeframe_minutes: int = 15,
             max_rules: int = 10
-        ) -> Dict:
+        ) -> dict:
             """
             Execute all rules in a specific category for comprehensive hunting.
 
@@ -510,7 +509,7 @@ class RuleManagementTools:
             rule_id: str,
             index: str,
             sample_size: int = 10
-        ) -> Dict:
+        ) -> dict:
             """
             Validate if a detection rule is applicable to your data.
 
@@ -676,7 +675,7 @@ class RuleManagementTools:
         def suggest_rules_for_data(
             index: str,
             sample_size: int = 100
-        ) -> Dict:
+        ) -> dict:
             """
             Analyze your data and suggest applicable detection rules.
 
@@ -758,10 +757,10 @@ class RuleManagementTools:
                 }
 
                 suggested_log_sources = set()
-                for channel in channels.keys():
+                for channel in channels:
                     if channel in log_source_mapping:
                         suggested_log_sources.add(log_source_mapping[channel])
-                for provider in providers.keys():
+                for provider in providers:
                     if provider in log_source_mapping:
                         suggested_log_sources.add(log_source_mapping[provider])
 

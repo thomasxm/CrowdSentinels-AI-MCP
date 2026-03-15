@@ -1,14 +1,14 @@
 """Test hunting rule loader functionality."""
 
+import shutil
 import sys
 import tempfile
-import shutil
 from pathlib import Path
 
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.clients.common.hunting_rule_loader import HuntingRuleLoader, HuntingRule
+from src.clients.common.hunting_rule_loader import HuntingRule, HuntingRuleLoader
 
 
 def create_test_hunting_directory():

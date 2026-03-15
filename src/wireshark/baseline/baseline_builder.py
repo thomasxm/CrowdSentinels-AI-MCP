@@ -4,11 +4,11 @@ import logging
 from collections import Counter
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Any
 
-from src.wireshark.core.tshark_executor import TSharkExecutor
-from src.wireshark.core.pcap_analyzer import PcapAnalyzer
 from src.wireshark.baseline.defaults import DEFAULT_BASELINE, is_internal_ip
+from src.wireshark.core.pcap_analyzer import PcapAnalyzer
+from src.wireshark.core.tshark_executor import TSharkExecutor
 
 logger = logging.getLogger(__name__)
 
@@ -18,8 +18,8 @@ class BaselineBuilder:
 
     def __init__(
         self,
-        executor: Optional[TSharkExecutor] = None,
-        analyzer: Optional[PcapAnalyzer] = None
+        executor: TSharkExecutor | None = None,
+        analyzer: PcapAnalyzer | None = None
     ):
         """Initialize baseline builder."""
         self.executor = executor or TSharkExecutor()
@@ -28,9 +28,9 @@ class BaselineBuilder:
     def build_from_pcap(
         self,
         pcap_path: str,
-        name: Optional[str] = None,
+        name: str | None = None,
         include_defaults: bool = True
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Build baseline from a normal traffic PCAP.
 
         Args:
@@ -95,7 +95,7 @@ class BaselineBuilder:
 
         return baseline
 
-    def _extract_ports(self, pcap_path: str, protocol: str) -> List[int]:
+    def _extract_ports(self, pcap_path: str, protocol: str) -> list[int]:
         """Extract unique destination ports."""
         field = f"{protocol}.dstport"
         cmd = self.executor.build_command(
@@ -117,7 +117,7 @@ class BaselineBuilder:
 
         return sorted(list(ports))
 
-    def _extract_ips(self, pcap_path: str) -> List[str]:
+    def _extract_ips(self, pcap_path: str) -> list[str]:
         """Extract unique IP addresses."""
         results = self.executor.execute_and_parse_fields(
             pcap_path=pcap_path,
@@ -135,12 +135,12 @@ class BaselineBuilder:
 
         return sorted(list(ips))
 
-    def _extract_protocols(self, pcap_path: str) -> List[str]:
+    def _extract_protocols(self, pcap_path: str) -> list[str]:
         """Extract detected protocols."""
         stats = self.analyzer.get_protocol_hierarchy(pcap_path)
         return [s.protocol for s in stats]
 
-    def _extract_dns_servers(self, pcap_path: str) -> List[str]:
+    def _extract_dns_servers(self, pcap_path: str) -> list[str]:
         """Extract DNS server IPs (sources of DNS responses)."""
         results = self.executor.execute_and_parse_fields(
             pcap_path=pcap_path,
@@ -156,7 +156,7 @@ class BaselineBuilder:
 
         return sorted(list(servers))
 
-    def _extract_domains(self, pcap_path: str) -> List[str]:
+    def _extract_domains(self, pcap_path: str) -> list[str]:
         """Extract queried domain names."""
         results = self.executor.execute_and_parse_fields(
             pcap_path=pcap_path,
@@ -173,7 +173,7 @@ class BaselineBuilder:
         # Return most common domains
         return [d for d, _ in domains.most_common(1000)]
 
-    def merge_baselines(self, baselines: List[Dict]) -> Dict[str, Any]:
+    def merge_baselines(self, baselines: list[dict]) -> dict[str, Any]:
         """Merge multiple baselines into one.
 
         Args:

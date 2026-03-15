@@ -15,7 +15,7 @@ import sys
 import time
 import webbrowser
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 import httpx
 
@@ -33,7 +33,7 @@ OPENAI_DEVICE_CALLBACK_URI = f"{OPENAI_AUTH_BASE}/deviceauth/callback"
 OPENAI_DEVICE_AUTH_PAGE = "https://auth.openai.com/codex/device"
 
 
-def _save_auth(data: Dict[str, Any]) -> None:
+def _save_auth(data: dict[str, Any]) -> None:
     """Save auth tokens to ~/.crowdsentinel/auth.json."""
     AUTH_FILE.parent.mkdir(parents=True, exist_ok=True)
     AUTH_FILE.write_text(json.dumps(data, indent=2), encoding="utf-8")
@@ -41,7 +41,7 @@ def _save_auth(data: Dict[str, Any]) -> None:
     logger.info("Auth tokens saved to %s", AUTH_FILE)
 
 
-def load_auth() -> Optional[Dict[str, Any]]:
+def load_auth() -> dict[str, Any] | None:
     """Load auth tokens from ~/.crowdsentinel/auth.json."""
     if not AUTH_FILE.is_file():
         return None
@@ -60,7 +60,7 @@ def remove_auth() -> bool:
     return False
 
 
-def get_auth_status() -> Dict[str, Any]:
+def get_auth_status() -> dict[str, Any]:
     """Check authentication status."""
     auth = load_auth()
     if not auth:
@@ -84,7 +84,7 @@ def get_auth_status() -> Dict[str, Any]:
     }
 
 
-def refresh_token_if_needed(auth: Dict[str, Any]) -> Dict[str, Any]:
+def refresh_token_if_needed(auth: dict[str, Any]) -> dict[str, Any]:
     """Refresh OAuth token if expired."""
     if auth.get("provider") != "openai":
         return auth
@@ -123,7 +123,7 @@ def refresh_token_if_needed(auth: Dict[str, Any]) -> Dict[str, Any]:
     return auth
 
 
-def get_access_token() -> Optional[tuple]:
+def get_access_token() -> tuple | None:
     """Get a valid access token. Returns (token, provider) or None.
 
     Resolution order:
@@ -163,11 +163,10 @@ def login_openai() -> bool:
 
     if choice == "1":
         return _login_openai_device_code()
-    elif choice == "2":
+    if choice == "2":
         return _login_openai_api_key()
-    else:
-        print("Invalid choice.", file=sys.stderr)
-        return False
+    print("Invalid choice.", file=sys.stderr)
+    return False
 
 
 def _login_openai_device_code() -> bool:
@@ -213,7 +212,7 @@ def _login_openai_device_code() -> bool:
 
     print(f"\n  Your code: {user_code}\n")
     print(f"  Open: {OPENAI_DEVICE_AUTH_PAGE}")
-    print(f"  Enter the code above and sign in with your ChatGPT account.\n")
+    print("  Enter the code above and sign in with your ChatGPT account.\n")
 
     try:
         webbrowser.open(OPENAI_DEVICE_AUTH_PAGE)
@@ -246,11 +245,10 @@ def _login_openai_device_code() -> bool:
                 code_verifier = token_data.get("code_verifier")
                 print(" Authorised!")
                 break
-            elif resp.status_code in (403, 404):
+            if resp.status_code in (403, 404):
                 continue
-            else:
-                print(f"\nPolling error: {resp.status_code}", file=sys.stderr)
-                return False
+            print(f"\nPolling error: {resp.status_code}", file=sys.stderr)
+            return False
         except Exception:
             print("!", end="", flush=True)
 
@@ -344,11 +342,10 @@ def login_anthropic() -> bool:
 
     if choice == "1":
         return _login_anthropic_setup_token()
-    elif choice == "2":
+    if choice == "2":
         return _login_anthropic_api_key()
-    else:
-        print("Invalid choice.", file=sys.stderr)
-        return False
+    print("Invalid choice.", file=sys.stderr)
+    return False
 
 
 def _login_anthropic_setup_token() -> bool:

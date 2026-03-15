@@ -4,7 +4,7 @@ import logging
 import re
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Dict, List, Optional, Any
+from typing import Any
 
 from src.clients.base import SearchClientBase
 from src.clients.common.field_mapper import FieldMapper
@@ -14,7 +14,6 @@ logger = logging.getLogger(__name__)
 
 class ESQLNotSupportedError(Exception):
     """Raised when Elasticsearch version does not support ES|QL (requires 8.11+)."""
-    pass
 
 
 @dataclass
@@ -59,7 +58,7 @@ class ESQLClient(SearchClientBase):
         "source.ip": ["winlog.event_data.SourceIp"],
     }
 
-    def __init__(self, config: Dict, engine_type: str = "elasticsearch"):
+    def __init__(self, config: dict, engine_type: str = "elasticsearch"):
         """
         Initialize the ES|QL client.
 
@@ -74,12 +73,12 @@ class ESQLClient(SearchClientBase):
         self._version_checked = False
         self._esql_supported = False
         self._es_version = None
-        self._execution_history: List[QueryExecution] = []
-        self._index_cache: Dict[str, List[str]] = {}  # Cache discovered indices
+        self._execution_history: list[QueryExecution] = []
+        self._index_cache: dict[str, list[str]] = {}  # Cache discovered indices
 
         # Initialise FieldMapper for field name substitution
         # Client reference set after connection is established
-        self._field_mapper: Optional[FieldMapper] = None
+        self._field_mapper: FieldMapper | None = None
 
     @property
     def field_mapper(self) -> FieldMapper:
@@ -127,7 +126,7 @@ class ESQLClient(SearchClientBase):
     # Adaptive Index Resolution
     # =========================================================================
 
-    def extract_index_from_query(self, query: str) -> Optional[str]:
+    def extract_index_from_query(self, query: str) -> str | None:
         """
         Extract the index pattern from ES|QL FROM clause.
 
@@ -150,7 +149,7 @@ class ESQLClient(SearchClientBase):
             return match.group(1).strip().rstrip(',')
         return None
 
-    def extract_fields_from_query(self, query: str) -> List[str]:
+    def extract_fields_from_query(self, query: str) -> list[str]:
         """
         Extract field names referenced in an ES|QL query.
 
@@ -187,9 +186,9 @@ class ESQLClient(SearchClientBase):
 
     def discover_compatible_indices(
         self,
-        required_fields: List[str],
-        data_type: Optional[str] = None
-    ) -> List[Dict[str, Any]]:
+        required_fields: list[str],
+        data_type: str | None = None
+    ) -> list[dict[str, Any]]:
         """
         Find indices and data streams that contain the required fields.
 
@@ -360,11 +359,11 @@ class ESQLClient(SearchClientBase):
 
         return compatible
 
-    def _extract_properties(self, mapping: Dict) -> set:
+    def _extract_properties(self, mapping: dict) -> set:
         """Extract all field names from an index mapping."""
         properties = set()
 
-        def extract_recursive(obj: Dict, prefix: str = ""):
+        def extract_recursive(obj: dict, prefix: str = ""):
             if "properties" in obj:
                 for field_name, field_def in obj["properties"].items():
                     full_name = f"{prefix}{field_name}" if prefix else field_name
@@ -381,7 +380,7 @@ class ESQLClient(SearchClientBase):
 
     def _calculate_field_match_score(
         self,
-        required_fields: List[str],
+        required_fields: list[str],
         available_fields: set
     ) -> int:
         """
@@ -433,11 +432,11 @@ class ESQLClient(SearchClientBase):
     def execute_with_auto_discovery(
         self,
         query: str,
-        index: Optional[str] = None,
+        index: str | None = None,
         lean: bool = False,
-        rule_id: Optional[str] = None,
+        rule_id: str | None = None,
         field_substitution: bool = True
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Execute ES|QL query with automatic index discovery and field substitution.
 
@@ -561,8 +560,8 @@ class ESQLClient(SearchClientBase):
         self,
         query: str,
         lean: bool = False,
-        rule_id: Optional[str] = None
-    ) -> Dict[str, Any]:
+        rule_id: str | None = None
+    ) -> dict[str, Any]:
         """
         Execute an ES|QL query.
 
@@ -616,20 +615,19 @@ class ESQLClient(SearchClientBase):
                     "tokens_used": 0,
                     "results": []
                 }
-            elif "parsing_exception" in error_msg.lower() or "verification_exception" in error_msg.lower():
+            if "parsing_exception" in error_msg.lower() or "verification_exception" in error_msg.lower():
                 return {
                     "error": f"ES|QL syntax error: {error_msg}",
                     "hits_count": 0,
                     "tokens_used": 0,
                     "results": []
                 }
-            else:
-                return {
-                    "error": f"ES|QL execution failed: {error_msg}",
-                    "hits_count": 0,
-                    "tokens_used": 0,
-                    "results": []
-                }
+            return {
+                "error": f"ES|QL execution failed: {error_msg}",
+                "hits_count": 0,
+                "tokens_used": 0,
+                "results": []
+            }
 
     def substitute_timeframe(self, query: str, days: int) -> str:
         """
@@ -665,7 +663,7 @@ class ESQLClient(SearchClientBase):
 
         return query.strip()
 
-    def _parse_response(self, response) -> Dict[str, Any]:
+    def _parse_response(self, response) -> dict[str, Any]:
         """Parse ES|QL response into structured result."""
         # Handle both dict and response object
         if hasattr(response, 'body'):
@@ -693,7 +691,7 @@ class ESQLClient(SearchClientBase):
             "results": results
         }
 
-    def _count_tokens(self, result: Dict[str, Any]) -> int:
+    def _count_tokens(self, result: dict[str, Any]) -> int:
         """
         Estimate token count from result size.
 
@@ -705,7 +703,7 @@ class ESQLClient(SearchClientBase):
         except Exception:
             return 0
 
-    def _summarize(self, result: Dict[str, Any]) -> Dict[str, Any]:
+    def _summarize(self, result: dict[str, Any]) -> dict[str, Any]:
         """
         Create token-efficient summary of results.
 
@@ -744,7 +742,7 @@ class ESQLClient(SearchClientBase):
             "sample_results": sample_results
         }
 
-    def _track_execution(self, rule_id: str, query: str, result: Dict[str, Any]) -> None:
+    def _track_execution(self, rule_id: str, query: str, result: dict[str, Any]) -> None:
         """Track query execution for token usage analysis."""
         execution = QueryExecution(
             rule_id=rule_id,
@@ -760,7 +758,7 @@ class ESQLClient(SearchClientBase):
         if len(self._execution_history) > 100:
             self._execution_history = self._execution_history[-100:]
 
-    def get_execution_history(self) -> List[Dict[str, Any]]:
+    def get_execution_history(self) -> list[dict[str, Any]]:
         """Get execution history for token usage analysis."""
         return [
             {
@@ -774,7 +772,7 @@ class ESQLClient(SearchClientBase):
         ]
 
     @property
-    def es_version(self) -> Optional[str]:
+    def es_version(self) -> str | None:
         """Get the detected Elasticsearch version."""
         return self._es_version
 

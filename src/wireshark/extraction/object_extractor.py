@@ -3,12 +3,11 @@
 import hashlib
 import logging
 import os
-import re
 import subprocess
 import tempfile
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Any
 
 from src.wireshark.models import ExtractedObject
 
@@ -30,7 +29,7 @@ class ObjectExtractor:
     def __init__(
         self,
         store_files: bool = False,
-        storage_path: Optional[Path] = None
+        storage_path: Path | None = None
     ):
         """Initialize object extractor.
 
@@ -43,7 +42,7 @@ class ObjectExtractor:
         self._tshark_path = "tshark"
 
     @property
-    def supported_protocols(self) -> List[str]:
+    def supported_protocols(self) -> list[str]:
         """Get list of supported protocols."""
         return list(SUPPORTED_PROTOCOLS.keys())
 
@@ -51,7 +50,7 @@ class ObjectExtractor:
         self,
         pcap_path: str,
         protocol: str = "http"
-    ) -> List[Dict]:
+    ) -> list[dict]:
         """List objects in PCAP without extracting.
 
         Args:
@@ -109,7 +108,7 @@ class ObjectExtractor:
         output_dir: str,
         protocol: str = "http",
         compute_hash: bool = True
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Extract objects from PCAP to directory.
 
         Args:
@@ -188,12 +187,12 @@ class ObjectExtractor:
 
     def build_metadata(
         self,
-        object_data: Dict,
+        object_data: dict,
         src_ip: str,
         dst_ip: str,
         protocol: str,
-        timestamp: Optional[datetime] = None
-    ) -> Dict[str, Any]:
+        timestamp: datetime | None = None
+    ) -> dict[str, Any]:
         """Build metadata dictionary for an extracted object.
 
         Args:
@@ -220,9 +219,9 @@ class ObjectExtractor:
 
     def create_extracted_object(
         self,
-        metadata: Dict,
+        metadata: dict,
         pcap_path: str,
-        local_path: Optional[str] = None
+        local_path: str | None = None
     ) -> ExtractedObject:
         """Create ExtractedObject model from metadata.
 
@@ -253,9 +252,9 @@ class ObjectExtractor:
 
     def filter_by_extension(
         self,
-        objects: List[Dict],
-        extensions: List[str]
-    ) -> List[Dict]:
+        objects: list[dict],
+        extensions: list[str]
+    ) -> list[dict]:
         """Filter objects by file extension.
 
         Args:
@@ -280,10 +279,10 @@ class ObjectExtractor:
 
     def filter_by_size(
         self,
-        objects: List[Dict],
+        objects: list[dict],
         min_size: int = 0,
-        max_size: Optional[int] = None
-    ) -> List[Dict]:
+        max_size: int | None = None
+    ) -> list[dict]:
         """Filter objects by size.
 
         Args:
@@ -305,8 +304,8 @@ class ObjectExtractor:
 
     def filter_suspicious(
         self,
-        objects: List[Dict]
-    ) -> List[Dict]:
+        objects: list[dict]
+    ) -> list[dict]:
         """Filter for potentially suspicious objects.
 
         Looks for: executables, scripts, archives, documents with macros
@@ -330,9 +329,9 @@ class ObjectExtractor:
     def extract_from_pcap(
         self,
         pcap_path: str,
-        protocols: Optional[List[str]] = None,
-        store_files: Optional[bool] = None
-    ) -> Dict[str, Any]:
+        protocols: list[str] | None = None,
+        store_files: bool | None = None
+    ) -> dict[str, Any]:
         """Extract all objects from PCAP file.
 
         Args:
@@ -404,7 +403,7 @@ class ObjectExtractor:
 
     def get_extraction_summary(
         self,
-        results: Dict[str, Any]
+        results: dict[str, Any]
     ) -> str:
         """Generate human-readable extraction summary.
 

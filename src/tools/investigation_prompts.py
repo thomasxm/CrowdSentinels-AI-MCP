@@ -1,5 +1,4 @@
 """MCP Tools for Investigation Prompts - Triage Questions for SIEM/SOAR."""
-from typing import Dict, List, Optional
 from fastmcp import FastMCP
 
 
@@ -18,9 +17,9 @@ class InvestigationPromptsTools:
     def register_tools(self, mcp: FastMCP):
         @mcp.tool()
         def show_investigation_prompts(
-            platform: Optional[str] = None,
+            platform: str | None = None,
             show_details: bool = False
-        ) -> Dict:
+        ) -> dict:
             """
             Display investigation triage questions for SIEM/SOAR.
 
@@ -47,7 +46,9 @@ class InvestigationPromptsTools:
                 # Show with full details
                 show_investigation_prompts(platform="linux", show_details=True)
             """
-            from src.clients.common.investigation_prompts import InvestigationPromptsClient
+            from src.clients.common.investigation_prompts import (
+                InvestigationPromptsClient,
+            )
 
             prompts = InvestigationPromptsClient.get_all_prompts(platform=platform)
 
@@ -93,8 +94,8 @@ class InvestigationPromptsTools:
             platform: str,
             index: str,
             timeframe_minutes: int = 60,
-            host: Optional[str] = None
-        ) -> Dict:
+            host: str | None = None
+        ) -> dict:
             """
             Start a guided investigation with all triage prompts for a platform.
 
@@ -127,7 +128,9 @@ class InvestigationPromptsTools:
                     host="web-server-01"
                 )
             """
-            from src.clients.common.investigation_prompts import InvestigationPromptsClient
+            from src.clients.common.investigation_prompts import (
+                InvestigationPromptsClient,
+            )
 
             # Get prompts for platform (sorted by priority)
             prompts = InvestigationPromptsClient.get_prompts_by_priority(platform=platform)
@@ -185,10 +188,10 @@ class InvestigationPromptsTools:
             index: str,
             timeframe_minutes: int = 60,
             size: int = 100,
-            host: Optional[str] = None,
-            username: Optional[str] = None,
-            source_ip: Optional[str] = None
-        ) -> Dict:
+            host: str | None = None,
+            username: str | None = None,
+            source_ip: str | None = None
+        ) -> dict:
             """
             Execute a specific investigation prompt against Elasticsearch.
 
@@ -256,7 +259,7 @@ class InvestigationPromptsTools:
             return result
 
         @mcp.tool()
-        def get_investigation_query(prompt_id: str) -> Dict:
+        def get_investigation_query(prompt_id: str) -> dict:
             """
             Get the Elasticsearch query for an investigation prompt.
 
@@ -277,7 +280,9 @@ class InvestigationPromptsTools:
             Example:
                 get_investigation_query("windows_logon_1")
             """
-            from src.clients.common.investigation_prompts import InvestigationPromptsClient
+            from src.clients.common.investigation_prompts import (
+                InvestigationPromptsClient,
+            )
 
             prompt = InvestigationPromptsClient.get_prompt_by_id(prompt_id)
 
@@ -308,7 +313,7 @@ class InvestigationPromptsTools:
             host: str,
             timeframe_minutes: int = 60,
             top_n_prompts: int = 3
-        ) -> Dict:
+        ) -> dict:
             """
             Quick triage: Run top N priority prompts for fast initial assessment.
 
@@ -342,7 +347,9 @@ class InvestigationPromptsTools:
                     top_n_prompts=5
                 )
             """
-            from src.clients.common.investigation_prompts import InvestigationPromptsClient
+            from src.clients.common.investigation_prompts import (
+                InvestigationPromptsClient,
+            )
 
             # Get top priority prompts
             prompts = InvestigationPromptsClient.get_prompts_by_priority(

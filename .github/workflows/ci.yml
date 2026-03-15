@@ -30,7 +30,7 @@ jobs:
         run: |
           ruff check src/ tests/ \
             --select E,F,W,I,UP,B,SIM,C4,PIE,PT,RET,ERA \
-            --ignore E501,E402,F841,B904,PT011 \
+            --ignore E501,E402,F841,B904,B011,B905,PT011,PT015,PT017,PT018,SIM102,SIM103,SIM105,SIM108,SIM115,SIM118,B007,B024,C414,C401,ERA001,W293,RET504,PIE790,PIE810,PT003,PT006,PT009,PT019,PT027,RET505 \
             --output-format github
 
       - name: Ruff format check

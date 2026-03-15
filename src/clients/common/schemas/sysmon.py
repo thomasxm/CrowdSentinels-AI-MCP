@@ -7,8 +7,7 @@ This schema maps Sysmon event types (Event ID 1-29) to their field names
 as stored in Winlogbeat indices under winlog.event_data.*.
 """
 
-from .base import LogSourceSchema, LogSourceType, EventTypeDefinition
-
+from .base import EventTypeDefinition, LogSourceSchema, LogSourceType
 
 SYSMON_SCHEMA = LogSourceSchema(
     name="Sysmon (Winlogbeat)",

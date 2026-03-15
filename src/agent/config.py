@@ -22,7 +22,6 @@ import logging
 import shlex
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger("crowdsentinel.agent.config")
 
@@ -32,11 +31,11 @@ class MCPServerConfig:
     """Configuration for an external MCP server."""
     name: str
     command: str
-    args: List[str] = field(default_factory=list)
-    env: Dict[str, str] = field(default_factory=dict)
+    args: list[str] = field(default_factory=list)
+    env: dict[str, str] = field(default_factory=dict)
 
 
-def _load_config_file() -> Dict[str, MCPServerConfig]:
+def _load_config_file() -> dict[str, MCPServerConfig]:
     """Load MCP server configs from ~/.crowdsentinel/mcp-servers.json."""
     config_path = Path.home() / ".crowdsentinel" / "mcp-servers.json"
     if not config_path.is_file():
@@ -66,7 +65,7 @@ def _load_config_file() -> Dict[str, MCPServerConfig]:
     return servers
 
 
-def _parse_cli_servers(cli_servers: Optional[List[str]]) -> Dict[str, MCPServerConfig]:
+def _parse_cli_servers(cli_servers: list[str] | None) -> dict[str, MCPServerConfig]:
     """Parse --mcp-server CLI flags.
 
     Format: "name:command args..."
@@ -98,9 +97,9 @@ def _parse_cli_servers(cli_servers: Optional[List[str]]) -> Dict[str, MCPServerC
 
 
 def load_mcp_config(
-    cli_add: Optional[List[str]] = None,
-    cli_exclude: Optional[List[str]] = None,
-) -> List[MCPServerConfig]:
+    cli_add: list[str] | None = None,
+    cli_exclude: list[str] | None = None,
+) -> list[MCPServerConfig]:
     """Load and merge MCP server configurations.
 
     Args:

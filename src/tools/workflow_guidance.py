@@ -8,7 +8,6 @@ primitives are exposed by the server itself and accessible to all connected clie
 """
 from fastmcp import FastMCP
 
-
 INVESTIGATION_WORKFLOW = """
 # CrowdSentinel Investigation Workflow
 
@@ -285,13 +284,12 @@ Begin your investigation now, following this workflow strictly.
                     **RECOMMENDED_NEXT_STEPS[tool_name],
                     "workflow_phase": self._get_phase(tool_name)
                 }
-            else:
-                return {
-                    "previous_tool": tool_name,
-                    "next_step": "analyze_search_results",
-                    "hint": "If this tool returned search results, analyze them with analyze_search_results()",
-                    "workflow_phase": "unknown"
-                }
+            return {
+                "previous_tool": tool_name,
+                "next_step": "analyze_search_results",
+                "hint": "If this tool returned search results, analyze them with analyze_search_results()",
+                "workflow_phase": "unknown"
+            }
 
     def _get_phase(self, tool_name: str) -> str:
         """Determine which workflow phase a tool belongs to."""
@@ -309,9 +307,8 @@ Begin your investigation now, following this workflow strictly.
 
         if tool_name in collection_tools:
             return "Phase 1: Data Collection"
-        elif tool_name in analysis_tools:
+        if tool_name in analysis_tools:
             return "Phase 2: Analysis"
-        elif tool_name in reporting_tools:
+        if tool_name in reporting_tools:
             return "Phase 4: Reporting"
-        else:
-            return "Unknown"
+        return "Unknown"

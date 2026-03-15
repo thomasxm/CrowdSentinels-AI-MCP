@@ -2,7 +2,7 @@
 """Wireshark/TShark MCP tools for network traffic analysis."""
 import logging
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Any
 
 from fastmcp import FastMCP
 
@@ -116,7 +116,7 @@ class WiresharkTools:
 
         # Tool 1: PCAP Overview
         @mcp.tool()
-        def pcap_overview(pcap_path: str) -> Dict[str, Any]:
+        def pcap_overview(pcap_path: str) -> dict[str, Any]:
             """
             Load and analyze a PCAP file to get an overview of the network traffic.
 
@@ -144,8 +144,8 @@ class WiresharkTools:
         def build_baseline(
             pcap_path: str,
             baseline_name: str,
-            description: Optional[str] = None
-        ) -> Dict[str, Any]:
+            description: str | None = None
+        ) -> dict[str, Any]:
             """
             Build a baseline from normal traffic to compare against suspicious activity.
 
@@ -172,9 +172,9 @@ class WiresharkTools:
         @mcp.tool()
         def hunt_iocs(
             pcap_path: str,
-            iocs: List[str],
-            ioc_type: Optional[str] = None
-        ) -> Dict[str, Any]:
+            iocs: list[str],
+            ioc_type: str | None = None
+        ) -> dict[str, Any]:
             """
             Hunt for specific Indicators of Compromise (IoCs) in a PCAP file.
 
@@ -201,8 +201,8 @@ class WiresharkTools:
         @mcp.tool()
         def hunt_anomalies(
             pcap_path: str,
-            baseline_name: Optional[str] = None
-        ) -> Dict[str, Any]:
+            baseline_name: str | None = None
+        ) -> dict[str, Any]:
             """
             Detect network anomalies by comparing against baseline or defaults.
 
@@ -226,8 +226,8 @@ class WiresharkTools:
         def track_sessions(
             pcap_path: str,
             protocol: str = "tcp",
-            port_filter: Optional[List[int]] = None
-        ) -> Dict[str, Any]:
+            port_filter: list[int] | None = None
+        ) -> dict[str, Any]:
             """
             Track and reconstruct network sessions from PCAP.
 
@@ -253,7 +253,7 @@ class WiresharkTools:
             pcap_path: str,
             protocol: str = "http",
             store_files: bool = False
-        ) -> Dict[str, Any]:
+        ) -> dict[str, Any]:
             """
             Extract transferred objects (files) from network traffic.
 
@@ -279,7 +279,7 @@ class WiresharkTools:
             pcap_path: str,
             min_connections: int = 10,
             max_jitter_percent: float = 15.0
-        ) -> Dict[str, Any]:
+        ) -> dict[str, Any]:
             """
             Detect C2 beaconing patterns based on connection timing analysis.
 
@@ -304,7 +304,7 @@ class WiresharkTools:
         def detect_lateral_movement(
             pcap_path: str,
             internal_only: bool = True
-        ) -> Dict[str, Any]:
+        ) -> dict[str, Any]:
             """
             Detect lateral movement patterns in network traffic.
 
@@ -328,7 +328,7 @@ class WiresharkTools:
         def generate_iocs(
             pcap_path: str,
             min_confidence: int = 5
-        ) -> Dict[str, Any]:
+        ) -> dict[str, Any]:
             """
             Generate structured IoC artifacts from PCAP analysis.
 
@@ -351,9 +351,9 @@ class WiresharkTools:
         @mcp.tool()
         def generate_report(
             pcap_path: str,
-            findings: Optional[Dict[str, Any]] = None,
-            investigation_id: Optional[str] = None
-        ) -> Dict[str, Any]:
+            findings: dict[str, Any] | None = None,
+            investigation_id: str | None = None
+        ) -> dict[str, Any]:
             """
             Generate an NCSC-style incident report from analysis findings.
 
@@ -379,7 +379,7 @@ class WiresharkTools:
             pcap_path: str,
             port: int,
             protocol: str
-        ) -> Dict[str, Any]:
+        ) -> dict[str, Any]:
             """
             Force protocol interpretation on non-standard ports.
 
@@ -401,7 +401,7 @@ class WiresharkTools:
 
     # Internal implementation methods
 
-    def _pcap_overview(self, pcap_path: str) -> Dict[str, Any]:
+    def _pcap_overview(self, pcap_path: str) -> dict[str, Any]:
         """Internal implementation of pcap_overview."""
         try:
             if not Path(pcap_path).exists():
@@ -432,8 +432,8 @@ class WiresharkTools:
         self,
         pcap_path: str,
         baseline_name: str,
-        description: Optional[str] = None
-    ) -> Dict[str, Any]:
+        description: str | None = None
+    ) -> dict[str, Any]:
         """Internal implementation of build_baseline."""
         try:
             if not Path(pcap_path).exists():
@@ -473,9 +473,9 @@ class WiresharkTools:
     def _hunt_iocs(
         self,
         pcap_path: str,
-        iocs: List[str],
-        ioc_type: Optional[str] = None
-    ) -> Dict[str, Any]:
+        iocs: list[str],
+        ioc_type: str | None = None
+    ) -> dict[str, Any]:
         """Internal implementation of hunt_iocs."""
         try:
             if not Path(pcap_path).exists():
@@ -528,8 +528,8 @@ class WiresharkTools:
     def _hunt_anomalies(
         self,
         pcap_path: str,
-        baseline_name: Optional[str] = None
-    ) -> Dict[str, Any]:
+        baseline_name: str | None = None
+    ) -> dict[str, Any]:
         """Internal implementation of hunt_anomalies."""
         try:
             if not Path(pcap_path).exists():
@@ -645,8 +645,8 @@ class WiresharkTools:
         self,
         pcap_path: str,
         protocol: str = "tcp",
-        port_filter: Optional[List[int]] = None
-    ) -> Dict[str, Any]:
+        port_filter: list[int] | None = None
+    ) -> dict[str, Any]:
         """Internal implementation of track_sessions."""
         try:
             if not Path(pcap_path).exists():
@@ -690,7 +690,7 @@ class WiresharkTools:
         pcap_path: str,
         protocol: str = "http",
         store_files: bool = False
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Internal implementation of extract_objects."""
         try:
             if not Path(pcap_path).exists():
@@ -718,7 +718,7 @@ class WiresharkTools:
         pcap_path: str,
         min_connections: int = 5,
         max_jitter_percent: float = 90.0
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Internal implementation of detect_beaconing."""
         try:
             if not Path(pcap_path).exists():
@@ -753,7 +753,9 @@ class WiresharkTools:
             # Generate timeline visualization
             timeline = ""
             if patterns:
-                from src.wireshark.reporting.timeline_visualizer import TimelineVisualizer
+                from src.wireshark.reporting.timeline_visualizer import (
+                    TimelineVisualizer,
+                )
                 visualizer = TimelineVisualizer()
                 timeline = visualizer.generate_beaconing_timeline(
                     beacon_events=patterns[0].get("events", []),
@@ -783,7 +785,7 @@ class WiresharkTools:
         self,
         pcap_path: str,
         internal_only: bool = True
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Internal implementation of detect_lateral_movement."""
         try:
             if not Path(pcap_path).exists():
@@ -813,7 +815,7 @@ class WiresharkTools:
         self,
         pcap_path: str,
         min_confidence: int = 5
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Internal implementation of generate_iocs."""
         try:
             if not Path(pcap_path).exists():
@@ -860,9 +862,9 @@ class WiresharkTools:
     def _generate_report(
         self,
         pcap_path: str,
-        findings: Optional[Dict[str, Any]] = None,
-        investigation_id: Optional[str] = None
-    ) -> Dict[str, Any]:
+        findings: dict[str, Any] | None = None,
+        investigation_id: str | None = None
+    ) -> dict[str, Any]:
         """Internal implementation of generate_report."""
         try:
             # If no findings provided, run analysis
@@ -894,7 +896,7 @@ class WiresharkTools:
         pcap_path: str,
         port: int,
         protocol: str
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Internal implementation of decode_traffic."""
         try:
             if not Path(pcap_path).exists():

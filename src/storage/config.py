@@ -1,10 +1,9 @@
 """Storage configuration for investigation state management."""
 
-import os
 import json
+import os
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Optional
-from dataclasses import dataclass, field, asdict
 
 
 @dataclass
@@ -89,7 +88,7 @@ class StorageConfig:
         self.config_file_path.write_text(json.dumps(config_dict, indent=2))
 
     @classmethod
-    def load(cls, base_path: Optional[Path] = None) -> "StorageConfig":
+    def load(cls, base_path: Path | None = None) -> "StorageConfig":
         """Load configuration from environment and config file."""
         # Determine base path
         env_path = os.environ.get("CROWDSENTINEL_STORAGE_PATH")
@@ -147,7 +146,7 @@ class StorageConfig:
 
 
 # Global default config instance
-_default_config: Optional[StorageConfig] = None
+_default_config: StorageConfig | None = None
 
 
 def get_config() -> StorageConfig:

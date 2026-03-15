@@ -1,6 +1,6 @@
 """Investigation Prompts for SIEM/SOAR Triage."""
-from typing import Dict, List, Optional
 from dataclasses import dataclass, field
+
 from src.clients.base import SearchClientBase
 
 
@@ -13,11 +13,11 @@ class InvestigationPrompt:
     priority: int  # 1-5, with 1 being highest priority
     question: str
     description: str
-    focus_areas: List[str]
-    log_sources: List[str]
-    elasticsearch_fields: List[str]
+    focus_areas: list[str]
+    log_sources: list[str]
+    elasticsearch_fields: list[str]
     query_template: str
-    mitre_tactics: List[str] = field(default_factory=list)
+    mitre_tactics: list[str] = field(default_factory=list)
 
     @property
     def short_description(self) -> str:
@@ -130,7 +130,7 @@ class InvestigationPromptsClient(SearchClientBase):
                 "process.working_directory",
                 "file.path"
             ],
-            query_template="""
+            query_template=r"""
 (process.executable:(*\/tmp\/* OR *\/dev\/shm\/* OR *\/var\/tmp\/* OR *\/.* OR *\/home\/*) OR
  process.working_directory:(*\/tmp OR *\/dev\/shm OR *\/var\/tmp) OR
  process.name:(bash OR sh OR perl OR python OR ruby OR php) AND process.parent.name:(bash OR sh))
@@ -164,7 +164,7 @@ class InvestigationPromptsClient(SearchClientBase):
                 "process.name:(crontab OR systemctl OR chkconfig)",
                 "auditd.data.name"
             ],
-            query_template="""
+            query_template=r"""
 ((file.path:(*\/etc\/cron* OR *\/etc\/systemd\/system\/* OR *\/etc\/rc.local OR *\/.bashrc OR *\/.profile OR *\/etc\/init.d\/*) AND
   event.action:(created OR modified OR renamed OR deleted)) OR
  process.name:(crontab OR systemctl OR "systemd-run") OR
@@ -412,7 +412,7 @@ process.name:(mimikatz* OR procdump* OR dumpert* OR pwdump*)
     }
 
     @classmethod
-    def get_all_prompts(cls, platform: Optional[str] = None) -> Dict[str, InvestigationPrompt]:
+    def get_all_prompts(cls, platform: str | None = None) -> dict[str, InvestigationPrompt]:
         """Get all investigation prompts, optionally filtered by platform."""
         all_prompts = {**cls.LINUX_PROMPTS, **cls.WINDOWS_PROMPTS}
 
@@ -422,13 +422,13 @@ process.name:(mimikatz* OR procdump* OR dumpert* OR pwdump*)
         return all_prompts
 
     @classmethod
-    def get_prompt_by_id(cls, prompt_id: str) -> Optional[InvestigationPrompt]:
+    def get_prompt_by_id(cls, prompt_id: str) -> InvestigationPrompt | None:
         """Get a specific prompt by ID."""
         all_prompts = cls.get_all_prompts()
         return all_prompts.get(prompt_id)
 
     @classmethod
-    def get_prompts_by_priority(cls, platform: str, max_priority: int = 5) -> List[InvestigationPrompt]:
+    def get_prompts_by_priority(cls, platform: str, max_priority: int = 5) -> list[InvestigationPrompt]:
         """Get prompts sorted by priority."""
         prompts = cls.get_all_prompts(platform=platform)
         sorted_prompts = sorted(prompts.values(), key=lambda p: p.priority)
@@ -437,7 +437,7 @@ process.name:(mimikatz* OR procdump* OR dumpert* OR pwdump*)
     def execute_investigation_prompt(self, prompt_id: str, index: str,
                                     timeframe_minutes: int = 60,
                                     size: int = 100,
-                                    additional_filters: Optional[Dict] = None) -> Dict:
+                                    additional_filters: dict | None = None) -> dict:
         """
         Execute an investigation prompt against Elasticsearch.
 
