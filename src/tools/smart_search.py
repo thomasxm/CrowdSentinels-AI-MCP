@@ -204,7 +204,7 @@ class SmartSearchTools:
         def threat_hunt_search(
             index: str,
             query: str,
-            timeframe_minutes: int = 60,
+            timeframe_minutes: Optional[int] = 60,
             extract_iocs: bool = True,
             map_mitre: bool = True,
             max_sample_events: int = 5,

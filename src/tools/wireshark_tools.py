@@ -827,12 +827,15 @@ class WiresharkTools:
             iocs = []
 
             # Extract IPs from beaconing patterns
+            confidence_map = {"HIGH": 9, "MEDIUM": 6, "LOW": 3}
             for pattern in beaconing.get("patterns", []):
-                if pattern.get("confidence", 0) >= min_confidence:
+                conf = pattern.get("confidence", 0)
+                conf_int = confidence_map.get(conf, conf) if isinstance(conf, str) else conf
+                if conf_int >= min_confidence:
                     iocs.append({
                         "type": "ip",
                         "value": pattern.get("dst_ip"),
-                        "confidence": pattern.get("confidence"),
+                        "confidence": conf_int,
                         "source": "beaconing_detection",
                     })
 
