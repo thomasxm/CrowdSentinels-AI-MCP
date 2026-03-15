@@ -427,6 +427,7 @@ class ThreatHuntingTools:
         def _hunt_stage(index: str, stage: str, timeframe_minutes: int = 60,
                         host: Optional[str] = None, size: int = 100) -> Dict:
             """Internal helper: execute kill chain stage hunt without MCP wrapper."""
+            from src.clients.common.cyber_kill_chain import CyberKillChainClient, KillChainStage
             stage_upper = stage.upper().replace(' ', '_')
             kill_chain_stage = None
             for kc_stage in KillChainStage:
