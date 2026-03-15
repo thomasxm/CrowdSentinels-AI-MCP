@@ -389,12 +389,20 @@ crowdsentinel hunt "failed login" -i winlogbeat-* -o table    # Human-readable t
 crowdsentinel hunt "failed login" -i winlogbeat-* -o summary  # Condensed summary
 ```
 
-### Pipeline Example
+### Pipeline Examples
 
 ```bash
 # Hunt then analyse (mirrors the MCP investigation workflow)
 crowdsentinel hunt "powershell encoded" -i winlogbeat-* -o json | \
   crowdsentinel analyse -c "Encoded PowerShell commands" -o summary
+
+# Investigate failed authentication attempts
+crowdsentinel hunt "event.code:4625" -i winlogbeat-* -o json | \
+  crowdsentinel analyse -c "Failed login brute force investigation" -o summary
+
+# Triage process execution and privilege escalation
+crowdsentinel hunt "event.code:4688 OR event.code:4672 OR event.code:1" -i winlogbeat-* -o json | \
+  crowdsentinel analyse -c "Process execution and privilege escalation" -o summary
 ```
 
 ---
