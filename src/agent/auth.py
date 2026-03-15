@@ -85,12 +85,12 @@ def get_auth_status() -> dict[str, Any]:
 
 
 def refresh_token_if_needed(auth: dict[str, Any]) -> dict[str, Any]:
-    """Refresh OAuth token if expired."""
-    if auth.get("provider") != "openai":
-        return auth
+    """Refresh OAuth token proactively.
 
-    expires_at = auth.get("expires_at", 0)
-    if expires_at > 0 and time.time() < expires_at - 60:
+    Always refreshes if a refresh token is available, because Codex
+    tokens can be revoked server-side before their JWT expiry.
+    """
+    if auth.get("provider") != "openai":
         return auth
 
     refresh_token = auth.get("refresh_token")

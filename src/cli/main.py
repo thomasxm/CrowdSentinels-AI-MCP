@@ -1034,20 +1034,38 @@ def _cmd_analyse_mcp(args, search_results):
     from src.agent.mcp_bridge import MCPBridge
     from src.agent.providers import create_provider
 
-    # Create LLM provider
+    # Create LLM provider — auto-login if no auth configured
     try:
         provider = create_provider(
             model=getattr(args, "model", None),
             model_url=getattr(args, "model_url", None),
         )
-    except (RuntimeError, Exception) as exc:
+    except RuntimeError as exc:
+        if "No LLM" in str(exc):
+            # No auth at all — offer inline login
+            print("No LLM authentication found. Starting sign-in...\n", file=sys.stderr)
+            from src.agent.auth import login_openai
+            if not login_openai():
+                print("Authentication failed.", file=sys.stderr)
+                return 1
+            # Retry after login
+            try:
+                provider = create_provider(
+                    model=getattr(args, "model", None),
+                    model_url=getattr(args, "model_url", None),
+                )
+            except Exception as retry_exc:
+                print(f"Agent error after login: {retry_exc}", file=sys.stderr)
+                return 1
+        else:
+            print(f"Agent error: {exc}", file=sys.stderr)
+            return 1
+    except Exception as exc:
         exc_str = str(exc)
         if "401" in exc_str or "Unauthorized" in exc_str:
             print(
-                "LLM API authentication failed.\n"
-                "Check your API key:\n"
-                '  export ANTHROPIC_API_KEY="sk-ant-..."    # Claude\n'
-                '  export OPENAI_API_KEY="sk-..."           # OpenAI\n',
+                "LLM API authentication failed. Token may have expired.\n"
+                "Run: crowdsentinel auth login\n",
                 file=sys.stderr,
             )
         else:
