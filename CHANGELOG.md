@@ -2,7 +2,7 @@
 
 All notable changes to the Elasticsearch Threat Hunting MCP Server will be documented in this file.
 
-## [0.3.2] - 2026-03-14
+## [0.3.3] - 2026-03-15
 
 ### Fixed - PyPI Package Path Resolution
 - **Detection rules now bundled with package** — 6,060 rules (Lucene + EQL + ES|QL) ship inside the wheel, no separate download needed
