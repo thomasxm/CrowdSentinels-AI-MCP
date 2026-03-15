@@ -57,12 +57,31 @@ class LLMProvider(ABC):
 
 
 class AnthropicProvider(LLMProvider):
-    """Anthropic Claude provider using the official SDK."""
+    """Anthropic Claude provider using the official SDK.
+
+    Supports both API keys (sk-ant-api03-*) and OAuth tokens (sk-ant-oat01-*).
+    OAuth tokens require the oauth-2025-04-20 beta header.
+    """
+
+    # Beta headers required for OAuth token auth (discovered from OpenClaw source)
+    OAUTH_BETAS = ["claude-code-20250219", "oauth-2025-04-20"]
 
     def __init__(self, model: str, api_key: Optional[str] = None):
         super().__init__(model)
         import anthropic
-        self.client = anthropic.Anthropic(api_key=api_key or os.environ["ANTHROPIC_API_KEY"])
+        key = api_key or os.environ.get("ANTHROPIC_API_KEY", "")
+        self._is_oauth = "sk-ant-oat" in key
+
+        if self._is_oauth:
+            # OAuth tokens need Bearer auth and beta headers
+            self.client = anthropic.Anthropic(
+                api_key=key,
+                default_headers={
+                    "anthropic-beta": ",".join(self.OAUTH_BETAS),
+                },
+            )
+        else:
+            self.client = anthropic.Anthropic(api_key=key)
 
     def convert_tool_schema(self, mcp_tool: Dict[str, Any]) -> Dict[str, Any]:
         """MCP tool → Anthropic tool format (nearly 1:1)."""

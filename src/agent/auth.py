@@ -335,45 +335,101 @@ def _login_openai_api_key() -> bool:
 # ---------------------------------------------------------------------------
 
 def login_anthropic() -> bool:
-    """Authenticate with Anthropic via API key.
+    """Authenticate with Anthropic — setup-token (subscription) or API key."""
+    print("Anthropic authentication\n")
+    print("  1. Paste a setup-token (from `claude setup-token` — uses your subscription)")
+    print("  2. Paste an API key (from console.anthropic.com — usage-based billing)\n")
 
-    Opens the Anthropic Console in the browser for key creation,
-    then stores the key locally. One-step flow.
-    """
-    print("Opening Anthropic Console to create an API key...\n")
-    webbrowser.open("https://console.anthropic.com/settings/keys")
+    choice = input("Choose [1/2]: ").strip()
 
-    print("  1. Sign in to your Anthropic account (or create one)")
-    print("  2. Click 'Create Key'")
-    print("  3. Copy the key and paste it below\n")
-
-    key = input("Paste API key (sk-ant-...): ").strip()
-    if not key:
-        print("No key provided.", file=sys.stderr)
+    if choice == "1":
+        return _login_anthropic_setup_token()
+    elif choice == "2":
+        return _login_anthropic_api_key()
+    else:
+        print("Invalid choice.", file=sys.stderr)
         return False
 
-    # Validate the key works
-    print("Validating key...")
+
+def _login_anthropic_setup_token() -> bool:
+    """Anthropic setup-token auth (Claude subscription)."""
+    print("\nRun this in another terminal:")
+    print("  claude setup-token\n")
+    print("It will open a browser for sign-in and output a token.\n")
+
+    token = input("Paste the setup-token (sk-ant-oat01-...): ").strip()
+    if not token:
+        print("No token provided.", file=sys.stderr)
+        return False
+
+    # Validate with OAuth beta headers
+    print("Validating token...")
     try:
-        resp = httpx.get(
-            "https://api.anthropic.com/v1/models",
+        resp = httpx.post(
+            "https://api.anthropic.com/v1/messages",
             headers={
-                "x-api-key": key,
+                "x-api-key": token,
                 "anthropic-version": "2023-06-01",
+                "anthropic-beta": "claude-code-20250219,oauth-2025-04-20",
+                "Content-Type": "application/json",
             },
-            timeout=15,
+            json={
+                "model": "claude-sonnet-4-20250514",
+                "max_tokens": 10,
+                "messages": [{"role": "user", "content": "hi"}],
+            },
+            timeout=30,
         )
         if resp.status_code == 200:
-            print("Key validated successfully!")
+            print("Token validated successfully!")
         elif resp.status_code == 401:
-            print("Warning: key returned 401 — it may be invalid or expired.", file=sys.stderr)
-            confirm = input("Store it anyway? [y/N]: ").strip().lower()
-            if confirm != "y":
+            print("Warning: token returned 401 — it may be expired. Run `claude setup-token` again.", file=sys.stderr)
+            if input("Store anyway? [y/N]: ").strip().lower() != "y":
                 return False
         else:
             print(f"Warning: validation returned {resp.status_code}. Storing anyway.")
     except Exception as exc:
-        print(f"Warning: could not validate key ({exc}). Storing anyway.")
+        print(f"Warning: could not validate ({exc}). Storing anyway.")
+
+    _save_auth({
+        "provider": "anthropic",
+        "access_token": token,
+        "refresh_token": "",
+        "expires_at": 0,
+    })
+    print(f"Anthropic setup-token stored in {AUTH_FILE}")
+    return True
+
+
+def _login_anthropic_api_key() -> bool:
+    """Anthropic API key auth."""
+    print("\nOpening Anthropic Console...\n")
+    webbrowser.open("https://console.anthropic.com/settings/keys")
+
+    print("  1. Sign in to your Anthropic account")
+    print("  2. Click 'Create Key'")
+    print("  3. Copy and paste below\n")
+
+    key = input("Paste API key (sk-ant-api03-...): ").strip()
+    if not key:
+        print("No key provided.", file=sys.stderr)
+        return False
+
+    print("Validating key...")
+    try:
+        resp = httpx.get(
+            "https://api.anthropic.com/v1/models",
+            headers={"x-api-key": key, "anthropic-version": "2023-06-01"},
+            timeout=15,
+        )
+        if resp.status_code == 200:
+            print("Key validated!")
+        elif resp.status_code == 401:
+            print("Warning: key returned 401.", file=sys.stderr)
+            if input("Store anyway? [y/N]: ").strip().lower() != "y":
+                return False
+    except Exception as exc:
+        print(f"Warning: could not validate ({exc}).")
 
     _save_auth({
         "provider": "anthropic",
