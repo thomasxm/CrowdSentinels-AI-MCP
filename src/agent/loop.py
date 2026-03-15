@@ -196,9 +196,50 @@ def run_agent(
 
         messages.append({"role": "user", "content": tool_results})
 
-    # Max steps reached
+    # Max steps reached — try to extract useful results from the last tool outputs
     elapsed = time.time() - start_time
     _stderr(f"[agent] Max steps reached ({max_steps}) after {elapsed:.1f}s")
+
+    # Scan tool results for investigation reports or analysis results
+    last_report = None
+    for msg in reversed(messages):
+        content = msg.get("content", [])
+        if not isinstance(content, list):
+            continue
+        for block in content:
+            if not isinstance(block, dict):
+                continue
+            text = ""
+            if block.get("type") == "tool_result":
+                inner = block.get("content", [])
+                if isinstance(inner, list):
+                    text = " ".join(b.get("text", "") for b in inner if isinstance(b, dict))
+                elif isinstance(inner, str):
+                    text = inner
+            if text:
+                try:
+                    parsed = json.loads(text)
+                    if isinstance(parsed, dict) and parsed.get("severity"):
+                        last_report = parsed
+                        break
+                except (json.JSONDecodeError, TypeError):
+                    continue
+        if last_report:
+            break
+
+    if last_report:
+        _stderr("[agent] Extracted results from last tool output")
+        result = {
+            "severity_assessment": last_report.get("severity", "unknown"),
+            "summary": last_report.get("summary", {"status": f"Partial — {max_steps} tool calls"}),
+            "mitre_attack_techniques": last_report.get("mitre_attack_techniques", last_report.get("techniques", [])),
+            "iocs_found": last_report.get("iocs_found", last_report.get("iocs", [])),
+            "insights": last_report.get("insights", last_report.get("raw_insights", [])),
+            "recommended_followup": last_report.get("recommended_followup", last_report.get("recommendations", [])),
+            "agent_metadata": {"steps": max_steps, "elapsed_seconds": round(elapsed, 1), **total_tokens},
+        }
+        return result
+
     return {
         "severity_assessment": "unknown",
         "summary": {"status": f"Max steps reached ({max_steps} tool calls)"},
