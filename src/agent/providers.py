@@ -256,33 +256,55 @@ def create_provider(
     model: Optional[str] = None,
     model_url: Optional[str] = None,
 ) -> LLMProvider:
-    """Create an LLM provider from environment variables and CLI overrides.
+    """Create an LLM provider from stored OAuth tokens, env vars, or CLI overrides.
 
     Auto-detection order:
         1. If model_url is set → OpenAI-compatible (custom endpoint)
-        2. If ANTHROPIC_API_KEY is set → Anthropic
-        3. If OPENAI_API_KEY is set → OpenAI-compatible
-        4. Error with instructions
+        2. Stored OAuth token (~/.crowdsentinel/auth.json) → auto-detect provider
+        3. If ANTHROPIC_API_KEY is set → Anthropic
+        4. If OPENAI_API_KEY is set → OpenAI-compatible
+        5. Error with instructions
     """
+    from src.agent.auth import get_access_token
+
     anthropic_key = os.environ.get("ANTHROPIC_API_KEY")
     openai_key = os.environ.get("OPENAI_API_KEY")
 
     # Explicit model_url → OpenAI-compatible
     if model_url:
+        # Try stored token first, then env var
+        token = openai_key
+        auth = get_access_token()
+        if auth and auth[1] == "openai":
+            token = auth[0]
         return OpenAICompatibleProvider(
             model=model or os.environ.get("CROWDSENTINEL_MODEL", "gpt-4o"),
             base_url=model_url,
-            api_key=openai_key,
+            api_key=token,
         )
 
-    # Anthropic
+    # Stored OAuth token (from `crowdsentinel auth login`)
+    auth = get_access_token()
+    if auth:
+        token, provider = auth
+        if provider == "anthropic":
+            return AnthropicProvider(
+                model=model or os.environ.get("CROWDSENTINEL_MODEL", "claude-sonnet-4-20250514"),
+                api_key=token,
+            )
+        elif provider == "openai":
+            return OpenAICompatibleProvider(
+                model=model or os.environ.get("CROWDSENTINEL_MODEL", "gpt-4o"),
+                api_key=token,
+            )
+
+    # Env var fallbacks
     if anthropic_key:
         return AnthropicProvider(
             model=model or os.environ.get("CROWDSENTINEL_MODEL", "claude-sonnet-4-20250514"),
             api_key=anthropic_key,
         )
 
-    # OpenAI
     if openai_key:
         return OpenAICompatibleProvider(
             model=model or os.environ.get("CROWDSENTINEL_MODEL", "gpt-4o"),
@@ -290,13 +312,16 @@ def create_provider(
         )
 
     raise RuntimeError(
-        "No LLM API key configured for agent mode.\n"
+        "No LLM authentication configured for agent mode.\n"
         "\n"
-        "Set one of the following:\n"
-        '  export ANTHROPIC_API_KEY="sk-ant-..."    # Claude (recommended)\n'
-        '  export OPENAI_API_KEY="sk-..."           # GPT / OpenAI-compatible\n'
+        "Option 1 — Browser sign-in (recommended):\n"
+        "  crowdsentinel auth login                    # OpenAI (ChatGPT subscription)\n"
+        "  crowdsentinel auth login --provider anthropic  # Claude subscription\n"
         "\n"
-        "For local models (Ollama, vLLM, LM Studio):\n"
-        '  export OPENAI_API_KEY="dummy"\n'
+        "Option 2 — API key:\n"
+        '  export ANTHROPIC_API_KEY="sk-ant-..."       # Claude API key\n'
+        '  export OPENAI_API_KEY="sk-..."              # OpenAI API key\n'
+        "\n"
+        "Option 3 — Local models (Ollama, vLLM, LM Studio):\n"
         "  crowdsentinel analyse --mcp --model-url http://localhost:11434/v1 --model llama3.1\n"
     )

@@ -817,6 +817,50 @@ def _validate_download_url(url):
     return url
 
 
+def _cmd_auth(args):
+    """Manage LLM authentication for agent mode."""
+    from src.agent.auth import (
+        login_openai, login_anthropic, get_auth_status, remove_auth,
+    )
+
+    action = args.action
+
+    if action == "login":
+        if args.provider == "openai":
+            success = login_openai()
+        else:
+            success = login_anthropic()
+        return 0 if success else 1
+
+    elif action == "status":
+        status = get_auth_status()
+        if status["authenticated"]:
+            print(f"Authenticated: yes")
+            print(f"Method: {status['method']}")
+            print(f"Provider: {status['provider']}")
+            if status.get("expired"):
+                print("Token: expired (will auto-refresh on next use)")
+            elif status.get("expires_at"):
+                remaining = status["expires_at"] - __import__("time").time()
+                if remaining > 0:
+                    print(f"Expires in: {remaining/3600:.1f} hours")
+            if status.get("token_file"):
+                print(f"Token file: {status['token_file']}")
+        else:
+            print("Authenticated: no")
+            print("Run: crowdsentinel auth login")
+        return 0
+
+    elif action == "logout":
+        if remove_auth():
+            print("Logged out. Stored tokens removed.")
+        else:
+            print("No stored tokens found.")
+        return 0
+
+    return 0
+
+
 def _cmd_setup(args):
     """Download detection rules and Chainsaw for offline use."""
     import platform
@@ -1294,6 +1338,25 @@ def _build_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     sp.set_defaults(func=_cmd_setup)
+
+    # --- auth ------------------------------------------------------------
+    sp = subparsers.add_parser(
+        "auth",
+        help="Manage LLM authentication for agent mode (--mcp)",
+        epilog=(
+            "Examples:\n"
+            "  crowdsentinel auth login                       # OpenAI browser sign-in\n"
+            "  crowdsentinel auth login --provider anthropic  # Anthropic sign-in\n"
+            "  crowdsentinel auth status                      # Check auth status\n"
+            "  crowdsentinel auth logout                      # Remove stored tokens"
+        ),
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    sp.add_argument("action", choices=["login", "status", "logout"],
+                    help="Auth action to perform")
+    sp.add_argument("--provider", choices=["openai", "anthropic"], default="openai",
+                    help="LLM provider (default: openai)")
+    sp.set_defaults(func=_cmd_auth)
 
     return parser
 
