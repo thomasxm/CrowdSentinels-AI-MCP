@@ -6,12 +6,12 @@
     "url": "https://github.com/thomasxm/CrowdSentinels-AI-MCP",
     "source": "github"
   },
-  "version": "0.3.9",
+  "version": "0.3.10",
   "packages": [
     {
       "registryType": "pypi",
       "identifier": "crowdsentinel-mcp-server",
-      "version": "0.3.9",
+      "version": "0.3.10",
       "transport": {
         "type": "stdio"
       },

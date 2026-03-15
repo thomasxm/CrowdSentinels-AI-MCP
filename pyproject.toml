@@ -1,6 +1,6 @@
 [project]
 name = "crowdsentinel-mcp-server"
-version = "0.3.9"
+version = "0.3.10"
 description = "AI-powered threat hunting and incident response MCP server for Elasticsearch/OpenSearch with 79 tools, 6,060 detection rules, and baseline behaviour analysis"
 readme = "README.md"
 requires-python = ">=3.10"
