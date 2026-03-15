@@ -8,6 +8,8 @@ import json
 import subprocess
 import sys
 
+import pytest
+
 
 def run_cli(*args, stdin_data=None, timeout=30):
     """Run crowdsentinel CLI via the main() function in a subprocess.
@@ -86,6 +88,18 @@ class TestCLIAuth:
         assert "--provider" in out
 
 
+def _es_available():
+    """Check if Elasticsearch is reachable."""
+    try:
+        import httpx
+        hosts = __import__("os").environ.get("ELASTICSEARCH_HOSTS", "http://localhost:9200")
+        resp = httpx.get(hosts, timeout=3, verify=False)
+        return resp.status_code in (200, 401)
+    except Exception:
+        return False
+
+
+@pytest.mark.skipif(not _es_available(), reason="No Elasticsearch available")
 class TestCLIAnalyseDeterministic:
     def test_analyse_empty_input(self):
         code, out, _ = run_cli("analyse", "-c", "test", stdin_data="{}")
