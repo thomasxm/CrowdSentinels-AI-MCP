@@ -753,6 +753,14 @@ def _cmd_chainsaw(args):
             sigma_path=args.sigma_rules,
             mapping_path=mapping_path,
         )
+        # Apply --limit to detections
+        limit = getattr(args, "limit", 0)
+        if limit and isinstance(result, dict):
+            detections = result.get("detections", [])
+            if len(detections) > limit:
+                result["total_detections"] = len(detections)
+                result["showing"] = limit
+                result["detections"] = detections[:limit]
     elif args.action == "search":
         if not args.evtx or not args.keyword:
             print("Error: EVTX path and --keyword required for search", file=sys.stderr)
@@ -1324,6 +1332,8 @@ def _build_parser() -> argparse.ArgumentParser:
                     help="Path to Chainsaw mapping file")
     sp.add_argument("--keyword", default=None,
                     help="Keyword to search for (for 'search' action)")
+    sp.add_argument("--limit", "-l", type=int, default=0,
+                    help="Limit number of detections returned (default: all)")
     sp.set_defaults(func=_cmd_chainsaw)
 
     # --- setup -----------------------------------------------------------
