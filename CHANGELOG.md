@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.5.6](https://github.com/thomasxm/CrowdSentinels-AI-MCP/compare/v0.5.5..v0.5.6) - 2026-03-15
+
+### 🐛 Bug Fixes
+
+- always refresh Codex token and auto-login on first use - ([e839c28](https://github.com/thomasxm/CrowdSentinels-AI-MCP/commit/e839c28cc28b4bb0fae3c956cbc2fbd86f9267fa)) - @Your Name
+
+### 📚 Documentation
+
+- update CHANGELOG.md for v0.5.5 - ([a753d3d](https://github.com/thomasxm/CrowdSentinels-AI-MCP/commit/a753d3d3180748a378f8f6db0c7dbdad7734ceec)) - @github-actions[bot]
+
+### Release
+
+- update version to 0.5.6 - ([7abad0e](https://github.com/thomasxm/CrowdSentinels-AI-MCP/commit/7abad0e7be670c1845e4f961f47cfeb1d3f81383)) - @Your Name
+
 ## [0.5.5](https://github.com/thomasxm/CrowdSentinels-AI-MCP/compare/v0.5.4..v0.5.5) - 2026-03-15
 
 ### 🐛 Bug Fixes
