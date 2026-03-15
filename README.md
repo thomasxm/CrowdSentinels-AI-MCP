@@ -25,6 +25,9 @@
 
 </div>
 
+> **Warning**
+> This project is in active development and intended for **security testing, research, and educational purposes only**. It is not production-ready. Do not deploy in production environments. APIs, tool interfaces, and data formats may change without notice. Use at your own risk.
+
 ---
 
 ## Demo
