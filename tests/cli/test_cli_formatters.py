@@ -7,7 +7,6 @@ import json
 
 from src.cli.main import _format_json, _format_summary, _format_table
 
-
 # ---------------------------------------------------------------------------
 # Sample data fixtures
 # ---------------------------------------------------------------------------
