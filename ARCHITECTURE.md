@@ -1,4 +1,4 @@
-# Elasticsearch MCP Server - Architecture & Implementation Guide
+# CrowdSentinel MCP Server - Architecture & Implementation Guide
 
 ## Table of Contents
 1. [Project Overview](#project-overview)
@@ -17,24 +17,17 @@
 ## Project Overview
 
 ### What is This Project?
-The Elasticsearch MCP Server is a **Model Context Protocol (MCP)** server that provides programmatic access to Elasticsearch and OpenSearch clusters. It enables AI assistants and other MCP clients to interact with search engines through a standardized protocol.
+The CrowdSentinel MCP Server is a **Model Context Protocol (MCP)** server that provides programmatic access to Elasticsearch and OpenSearch clusters. It enables AI assistants and other MCP clients to interact with search engines through a standardised protocol.
 
 ### Key Metadata
-- **Version**: 0.2.1
+- **Version**: 0.3.4
 - **Language**: Python 3.10+
 - **Protocol**: MCP (Model Context Protocol)
 - **Supported Engines**:
   - Elasticsearch 7.x, 8.x, 9.x
   - OpenSearch 1.x, 2.x, 3.x
-- **License**: Apache License 2.0
-- **Repository**: https://github.com/Medjed/crowdsentinel-mcp-server
-
-### Package Variants
-The project publishes multiple PyPI packages:
-- `crowdsentinel-mcp-server` (default: ES 8.x)
-- `crowdsentinel-mcp-server-es7` (ES 7.x)
-- `crowdsentinel-mcp-server-es9` (ES 9.x)
-- `opensearch-mcp-server`
+- **Licence**: GPL-3.0-only
+- **Repository**: https://github.com/thomasxm/CrowdSentinels-AI-MCP
 
 ---
 
@@ -65,13 +58,26 @@ The project publishes multiple PyPI packages:
 │  └─────────────────────────┬──────────────────────────────┘ │
 │                            │                                 │
 │  ┌─────────────────────────▼──────────────────────────────┐ │
-│  │              Tool Classes (6)                          │ │
-│  │  - IndexTools                                          │ │
-│  │  - DocumentTools                                       │ │
-│  │  - ClusterTools                                        │ │
-│  │  - AliasTools                                          │ │
-│  │  - DataStreamTools                                     │ │
-│  │  - GeneralTools                                        │ │
+│  │              Tool Classes (19)                         │ │
+│  │                                                        │ │
+│  │  Core Tools:                                           │ │
+│  │  - IndexTools, DocumentTools, ClusterTools              │ │
+│  │  - AliasTools, DataStreamTools, GeneralTools            │ │
+│  │                                                        │ │
+│  │  Security/Hunting Tools:                               │ │
+│  │  - ThreatHuntingTools, SmartSearchTools                 │ │
+│  │  - RuleManagementTools, IoCAnalysisTools                │ │
+│  │  - EQLQueryTools                                        │ │
+│  │                                                        │ │
+│  │  Investigation Tools:                                  │ │
+│  │  - InvestigationStateTools                              │ │
+│  │  - InvestigationPromptsTools                            │ │
+│  │  - WorkflowGuidanceTools                                │ │
+│  │                                                        │ │
+│  │  Analysis Tools:                                       │ │
+│  │  - ChainsawHuntingTools, WiresharkTools                 │ │
+│  │  - ESQLHuntingTools, AssetDiscoveryTools                │ │
+│  │  - SchemaTools                                          │ │
 │  └─────────────────────────┬──────────────────────────────┘ │
 │                            │                                 │
 │  ┌─────────────────────────▼──────────────────────────────┐ │
@@ -166,10 +172,10 @@ crowdsentinel-mcp-server/
 
 | File | Lines | Purpose |
 |------|-------|---------|
-| `src/server.py` | 167 | Server initialization, argument parsing, entry points |
+| `src/server.py` | 167 | Server initialisation, argument parsing, entry points |
 | `src/risk_config.py` | 78 | Risk management for write operations |
 | `src/clients/__init__.py` | 52 | Client factory with env config loading |
-| `src/clients/base.py` | 150 | Base client with authentication & initialization |
+| `src/clients/base.py` | 150 | Base client with authentication & initialisation |
 | `src/clients/exceptions.py` | 69 | Exception handling decorators |
 | `src/clients/common/client.py` | 27 | Unified client combining all capabilities |
 | `src/tools/register.py` | 90 | Tool registration with filtering |
@@ -180,7 +186,7 @@ crowdsentinel-mcp-server/
 
 ### What is MCP?
 
-The **Model Context Protocol (MCP)** is a standardized protocol for AI assistants to interact with external tools and data sources. This server implements MCP to expose Elasticsearch/OpenSearch functionality.
+The **Model Context Protocol (MCP)** is a standardised protocol for AI assistants to interact with external tools and data sources. This server implements MCP to expose Elasticsearch/OpenSearch functionality.
 
 ### MCP Components Used
 
@@ -234,7 +240,7 @@ NO INVESTIGATION IS COMPLETE WITHOUT ANALYSIS TOOLS
 
 Workflow guidance ensures AI agents always use analysis tools (`analyze_search_results`, `analyze_kill_chain_stage`, `generate_investigation_report`) after data collection.
 
-### Server Initialization Flow
+### Server Initialisation Flow
 
 ```python
 # src/server.py:17-36
@@ -302,7 +308,7 @@ Tools are the primary interface for MCP clients to interact with the search engi
 1. Is registered with the MCP server via `@mcp.tool()` decorator
 2. Has exception handling applied automatically
 3. Can be filtered based on risk level
-4. Returns JSON-serializable dictionaries
+4. Returns JSON-serialisable dictionaries
 
 ### Tool Registration Flow
 
@@ -478,10 +484,10 @@ SearchClientBase (ABC)
 
 ### SearchClientBase
 
-The base class handles all initialization logic (from `src/clients/base.py:10-78`):
+The base class handles all initialisation logic (from `src/clients/base.py:10-78`):
 
 **Responsibilities**:
-1. Initialize Elasticsearch or OpenSearch client
+1. Initialise Elasticsearch or OpenSearch client
 2. Handle authentication (API key or basic auth)
 3. Configure SSL/TLS verification
 4. Create GeneralRestClient for arbitrary HTTP requests
@@ -660,7 +666,7 @@ class DocumentClient(SearchClientBase):
 
 ### Risk Management System
 
-The project implements a comprehensive risk management system to prevent accidental or unauthorized write operations.
+The project implements a comprehensive risk management system to prevent accidental or unauthorised write operations.
 
 ### RiskManager Class
 
@@ -890,7 +896,7 @@ The `server.json` file provides metadata for MCP clients:
 ```json
 {
   "name": "crowdsentinel-mcp-server",
-  "version": "0.2.1",
+  "version": "0.3.4",
   "description": "MCP Server for interacting with Elasticsearch and OpenSearch",
   "environment": {
     "ELASTICSEARCH_HOSTS": {
@@ -1093,7 +1099,7 @@ uv add pysolr
 
 #### Step 2: Update SearchClientBase
 
-Add initialization logic in `src/clients/base.py`:
+Add initialisation logic in `src/clients/base.py`:
 
 ```python
 elif engine_type == "solr":
@@ -1581,7 +1587,7 @@ hosts = ["https://my-cluster.es.cloud"]  # Don't hardcode
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/Medjed/crowdsentinel-mcp-server.git
+   git clone https://github.com/thomasxm/CrowdSentinels-AI-MCP.git
    cd crowdsentinel-mcp-server
    ```
 
@@ -1663,6 +1669,17 @@ npx @modelcontextprotocol/inspector uv run crowdsentinel-mcp-server
    uv publish
    ```
 
+### CI Pipeline
+
+The project has continuous integration that runs on every pull request. The pipeline includes:
+
+- **Automated SAST scanning** using Bandit and Semgrep to catch security issues early
+- **Secret detection** via detect-secrets to prevent accidental credential leaks
+- **Test suite execution** across Python 3.10, 3.11, 3.12, and 3.13 to ensure broad compatibility
+- **Linting and formatting** checks to maintain code quality
+
+All checks must pass before a pull request can be merged.
+
 ---
 
 ## Troubleshooting
@@ -1708,10 +1725,7 @@ Set `VERIFY_CERTS=false` for development (not recommended for production)
 **Cause**: Elasticsearch version mismatch
 
 **Solution**:
-1. Install the correct package variant:
-   - `crowdsentinel-mcp-server-es7` for ES 7.x
-   - `crowdsentinel-mcp-server` for ES 8.x
-   - `crowdsentinel-mcp-server-es9` for ES 9.x
+1. Install `crowdsentinel-mcp-server` and ensure the correct Elasticsearch client library version is installed for your cluster
 
 ---
 
@@ -1729,7 +1743,7 @@ REQUEST_TIMEOUT=30  # 30 seconds
 
 The official Elasticsearch client uses connection pooling automatically. For high-traffic scenarios:
 
-1. **Increase pool size**: Modify client initialization in `SearchClientBase`
+1. **Increase pool size**: Modify client initialisation in `SearchClientBase`
 2. **Use persistent connections**: Already enabled by default
 3. **Monitor connection usage**: Add logging in client methods
 
@@ -1782,17 +1796,17 @@ def bulk_index_documents(index: str, documents: List[Dict]) -> Dict:
 
 ## Conclusion
 
-This Elasticsearch MCP Server provides a solid foundation for AI-assisted Elasticsearch/OpenSearch interactions. The architecture is designed for:
+This CrowdSentinel MCP Server provides a solid foundation for AI-assisted Elasticsearch/OpenSearch interactions. The architecture is designed for:
 
 - **Extensibility**: Easy to add new tools and clients
 - **Security**: Risk management and authentication
 - **Reliability**: Exception handling and logging
 - **Flexibility**: Multiple transport modes and engine support
 
-For questions or contributions, visit the [GitHub repository](https://github.com/Medjed/crowdsentinel-mcp-server).
+For questions or contributions, visit the [GitHub repository](https://github.com/thomasxm/CrowdSentinels-AI-MCP).
 
 ---
 
-**Document Version**: 1.0
-**Last Updated**: 2024-12-20
-**Project Version**: 0.2.1
+**Document Version**: 2.0
+**Last Updated**: 2026-03-15
+**Project Version**: 0.3.4
