@@ -42,7 +42,7 @@ class SearchMCPServer:
         self.mcp = FastMCP(self.name)
 
         # Configure logging with file output for debugging
-        # Logs go to: /tmp/crowdsentinel/mcp-server.log
+        # Logs go to: <tmpdir>/crowdsentinel/mcp-server.log
         # Override with CROWDSENTINEL_LOG_FILE environment variable
         configure_logging("crowdsentinel")
         self.logger = logging.getLogger("crowdsentinel.server")

@@ -13,13 +13,14 @@ import os
 import sys
 import functools
 import time
+import tempfile
 from pathlib import Path
 from typing import Any, Callable, Dict, Optional, TextIO
 from datetime import datetime
 
 
 # Default log file location
-DEFAULT_LOG_DIR = Path("/tmp/crowdsentinel")
+DEFAULT_LOG_DIR = Path(tempfile.gettempdir()) / "crowdsentinel"
 DEFAULT_LOG_FILE = DEFAULT_LOG_DIR / "mcp-server.log"
 
 # Environment variable to override log location
@@ -287,7 +288,7 @@ def configure_logging(name: str = "crowdsentinel") -> logging.Logger:
 
     Logs are written to:
     1. TTY/stderr: Direct terminal output with colours
-    2. File: /tmp/crowdsentinel/mcp-server.log (always available)
+    2. File: <tmpdir>/crowdsentinel/mcp-server.log (always available)
 
     Args:
         name: Logger name (default: crowdsentinel)

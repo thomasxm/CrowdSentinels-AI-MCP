@@ -10,6 +10,8 @@ import shutil
 from pathlib import Path
 
 # Configure Elasticsearch connection (HTTP, not HTTPS)
+# WARNING: This is a LOCAL TESTING password only. Do NOT use production
+# passwords here. Set ELASTICSEARCH_PASSWORD as an environment variable instead.
 os.environ.setdefault("ELASTICSEARCH_HOSTS", "http://localhost:9200")
 os.environ.setdefault("ELASTICSEARCH_USERNAME", "elastic")
 os.environ.setdefault("ELASTICSEARCH_PASSWORD", "vJqz2wDD")

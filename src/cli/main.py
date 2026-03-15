@@ -6,6 +6,7 @@ the ``crowdsentinel`` command.
 
 import argparse
 import json
+import os
 import signal
 import sys
 from pathlib import Path
@@ -432,14 +433,48 @@ def _cmd_chainsaw(args):
     return 0
 
 
+def _safe_extract_tar(archive_path, dest_dir):
+    """Safely extract a tar archive with path traversal protection (CWE-22)."""
+    import tarfile
+    dest_dir = str(dest_dir)
+    with tarfile.open(str(archive_path), "r:gz") as tar:
+        if hasattr(tarfile, "data_filter"):
+            tar.extractall(path=dest_dir, filter="data")
+        else:
+            # Fallback for Python < 3.10.12: manual path validation
+            for member in tar.getmembers():
+                member_path = os.path.realpath(os.path.join(dest_dir, member.name))
+                if not member_path.startswith(os.path.realpath(dest_dir) + os.sep):
+                    raise ValueError(f"Path traversal detected in tar member: {member.name!r}")
+            tar.extractall(path=dest_dir)  # nosec B202 - members validated above
+
+
+def _safe_extract_zip(archive_path, dest_dir):
+    """Safely extract a ZIP archive with path traversal protection (CWE-22)."""
+    import zipfile
+    dest_dir = os.path.realpath(str(dest_dir))
+    with zipfile.ZipFile(str(archive_path), "r") as zf:
+        for member in zf.namelist():
+            target_path = os.path.realpath(os.path.join(dest_dir, member))
+            if not target_path.startswith(dest_dir + os.sep) and target_path != dest_dir:
+                raise ValueError(f"Path traversal detected in zip member: {member!r}")
+        zf.extractall(str(dest_dir))  # nosec B202 - members validated above
+
+
+def _validate_download_url(url):
+    """Validate that a download URL uses the HTTPS scheme only."""
+    from urllib.parse import urlparse
+    parsed = urlparse(url)
+    if parsed.scheme != "https":
+        raise ValueError(f"Only HTTPS URLs are allowed, got: {parsed.scheme}://")
+    return url
+
+
 def _cmd_setup(args):
     """Download detection rules and Chainsaw for offline use."""
-    import os
     import platform
     import subprocess
-    import tarfile
     import urllib.request
-    import zipfile
 
     data_dir = _get_data_dir()
     data_dir.mkdir(parents=True, exist_ok=True)
@@ -461,9 +496,8 @@ def _cmd_setup(args):
         rules_url = "https://github.com/thomasxm/CrowdSentinel-AI-MCP/releases/download/v0.2.2/detection-rules.tar.gz"
         try:
             rules_archive = data_dir / "detection-rules.tar.gz"
-            urllib.request.urlretrieve(rules_url, str(rules_archive))
-            with tarfile.open(str(rules_archive), "r:gz") as tar:
-                tar.extractall(path=str(data_dir))
+            urllib.request.urlretrieve(_validate_download_url(rules_url), str(rules_archive))
+            _safe_extract_tar(rules_archive, data_dir)
             rules_archive.unlink()
             rule_count = sum(1 for _ in rules_dir.rglob("*.eql")) + sum(1 for _ in rules_dir.rglob("*.lucene"))
             print(f"  Detection rules: installed ({rule_count} rules)")
@@ -493,9 +527,8 @@ def _cmd_setup(args):
             chainsaw_url = f"https://github.com/WithSecureLabs/chainsaw/releases/download/v{chainsaw_version}/chainsaw_{arch_suffix}.tar.gz"
             try:
                 archive_path = data_dir / "chainsaw.tar.gz"
-                urllib.request.urlretrieve(chainsaw_url, str(archive_path))
-                with tarfile.open(str(archive_path), "r:gz") as tar:
-                    tar.extractall(path=str(data_dir))
+                urllib.request.urlretrieve(_validate_download_url(chainsaw_url), str(archive_path))
+                _safe_extract_tar(archive_path, data_dir)
                 archive_path.unlink()
                 # Make binary executable
                 if chainsaw_bin.exists():
@@ -521,10 +554,9 @@ def _cmd_setup(args):
         try:
             sigma_url = "https://github.com/SigmaHQ/sigma/releases/latest/download/sigma_all_rules.zip"
             sigma_archive = data_dir / "sigma_rules.zip"
-            urllib.request.urlretrieve(sigma_url, str(sigma_archive))
+            urllib.request.urlretrieve(_validate_download_url(sigma_url), str(sigma_archive))
             sigma_dir.mkdir(parents=True, exist_ok=True)
-            with zipfile.ZipFile(str(sigma_archive), "r") as zf:
-                zf.extractall(str(sigma_dir))
+            _safe_extract_zip(sigma_archive, sigma_dir)
             sigma_archive.unlink()
             rule_count = sum(1 for _ in sigma_dir.rglob("*.yml"))
             print(f"  Sigma rules: installed ({rule_count} rules)")
