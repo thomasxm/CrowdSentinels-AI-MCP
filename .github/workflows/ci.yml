@@ -1,0 +1,192 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    name: Tests (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - uses: astral-sh/setup-uv@v4
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run tests
+        run: uv run pytest tests/ --ignore=tests/test_live_elasticsearch_integration.py -v --tb=short
+
+  sast:
+    name: SAST
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install SAST tools
+        run: pip install bandit semgrep
+
+      - name: Run Bandit
+        run: |
+          bandit -r src/ -f json -o bandit-results.json || true
+
+          python3 << 'PYEOF'
+          import json
+          import sys
+
+          with open("bandit-results.json", "r") as f:
+              data = json.load(f)
+
+          results = data.get("results", [])
+          has_high = False
+
+          for issue in results:
+              severity = issue.get("severity", "").upper()
+              confidence = issue.get("confidence", "").upper()
+              filename = issue.get("filename", "")
+              line = issue.get("line_number", 0)
+              test_id = issue.get("test_id", "")
+              text = issue.get("issue_text", "")
+
+              if severity == "HIGH":
+                  has_high = True
+                  print(f"::error file={filename},line={line}::[{test_id}] {severity}/{confidence}: {text}")
+              elif severity == "MEDIUM":
+                  print(f"::warning file={filename},line={line}::[{test_id}] {severity}/{confidence}: {text}")
+
+          if has_high:
+              print("::error::Bandit found HIGH severity issues. Failing the build.")
+              sys.exit(1)
+
+          print("Bandit: no HIGH severity issues found.")
+          PYEOF
+
+      - name: Run Semgrep
+        run: |
+          semgrep scan --config auto src/ --json -o semgrep-results.json || true
+
+          python3 << 'PYEOF'
+          import json
+          import sys
+
+          with open("semgrep-results.json", "r") as f:
+              data = json.load(f)
+
+          results = data.get("results", [])
+          has_error = False
+
+          for finding in results:
+              severity = finding.get("extra", {}).get("severity", "").upper()
+              path = finding.get("path", "")
+              start = finding.get("start", {})
+              line = start.get("line", 0)
+              rule_id = finding.get("check_id", "")
+              message = finding.get("extra", {}).get("message", "").replace("\n", " ")
+
+              if severity == "ERROR":
+                  has_error = True
+                  print(f"::error file={path},line={line}::[{rule_id}] {severity}: {message}")
+              elif severity == "WARNING":
+                  print(f"::warning file={path},line={line}::[{rule_id}] {severity}: {message}")
+
+          if has_error:
+              print("::error::Semgrep found ERROR severity issues. Failing the build.")
+              sys.exit(1)
+
+          print("Semgrep: no ERROR severity issues found.")
+          PYEOF
+
+      - name: Upload SAST results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sast-results
+          path: |
+            bandit-results.json
+            semgrep-results.json
+
+  secrets:
+    name: Secret Detection
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install detect-secrets
+        run: pip install detect-secrets
+
+      - name: Scan for secrets
+        run: |
+          detect-secrets scan \
+            --exclude-files '\.venv/.*' \
+            --exclude-files 'uv\.lock' \
+            --exclude-files 'detection-rules/.*' \
+            --exclude-files '.*\.pyc' \
+            > detect-secrets-results.json
+
+          python3 << 'PYEOF'
+          import json
+          import sys
+
+          with open("detect-secrets-results.json", "r") as f:
+              scan_results = json.load(f)
+
+          baseline = {}
+          baseline_secrets = set()
+
+          try:
+              with open(".secrets.baseline", "r") as f:
+                  baseline = json.load(f)
+              for filepath, secrets_list in baseline.get("results", {}).items():
+                  for secret in secrets_list:
+                      baseline_secrets.add((filepath, secret.get("hashed_secret", "")))
+              print("Using .secrets.baseline for comparison.")
+          except FileNotFoundError:
+              print("No .secrets.baseline found; scanning without baseline.")
+
+          new_secrets_in_src = False
+          scan_findings = scan_results.get("results", {})
+
+          for filepath, secrets_list in scan_findings.items():
+              if not filepath.startswith("src/"):
+                  continue
+
+              for secret in secrets_list:
+                  hashed = secret.get("hashed_secret", "")
+                  if (filepath, hashed) in baseline_secrets:
+                      continue
+
+                  new_secrets_in_src = True
+                  line = secret.get("line_number", 0)
+                  secret_type = secret.get("type", "unknown")
+                  print(f"::error file={filepath},line={line}::New secret detected ({secret_type})")
+
+          if new_secrets_in_src:
+              print("::error::New secrets detected in src/ files. Failing the build.")
+              sys.exit(1)
+
+          print("Secret detection: no new secrets found in src/.")
+          PYEOF

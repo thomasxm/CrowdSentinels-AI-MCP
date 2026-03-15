@@ -437,16 +437,19 @@ def _safe_extract_tar(archive_path, dest_dir):
     """Safely extract a tar archive with path traversal protection (CWE-22)."""
     import tarfile
     dest_dir = str(dest_dir)
+    # nosemgrep: tarfile-extractall-traversal — members validated via data_filter or manual path check
     with tarfile.open(str(archive_path), "r:gz") as tar:
         if hasattr(tarfile, "data_filter"):
             tar.extractall(path=dest_dir, filter="data")
         else:
-            # Fallback for Python < 3.10.12: manual path validation
+            # Fallback for Python < 3.10.12: extract members individually
+            # after validating each path to prevent path traversal
+            real_dest = os.path.realpath(dest_dir)
             for member in tar.getmembers():
                 member_path = os.path.realpath(os.path.join(dest_dir, member.name))
-                if not member_path.startswith(os.path.realpath(dest_dir) + os.sep):
+                if not member_path.startswith(real_dest + os.sep) and member_path != real_dest:
                     raise ValueError(f"Path traversal detected in tar member: {member.name!r}")
-            tar.extractall(path=dest_dir)  # nosec B202 - members validated above
+                tar.extract(member, path=dest_dir)  # nosec B202
 
 
 def _safe_extract_zip(archive_path, dest_dir):

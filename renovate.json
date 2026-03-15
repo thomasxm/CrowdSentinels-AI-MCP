@@ -1,0 +1,48 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "timezone": "UTC",
+  "schedule": [
+    "after 10pm and before 6am every weekday",
+    "every weekend"
+  ],
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 2,
+  "automerge": false,
+  "platformAutomerge": false,
+  "labels": ["dependencies"],
+  "assignees": ["thomasxm"],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 6am on Monday"]
+  },
+  "packageRules": [
+    {
+      "description": "Group all patch updates with 7 day stabilization period",
+      "matchUpdateTypes": ["patch"],
+      "groupName": "patch updates",
+      "minimumReleaseAge": "7 days"
+    },
+    {
+      "description": "Group all minor updates with 7 day stabilization period",
+      "matchUpdateTypes": ["minor"],
+      "groupName": "minor updates",
+      "minimumReleaseAge": "7 days"
+    },
+    {
+      "description": "Major updates require dependency dashboard approval before PR is created",
+      "matchUpdateTypes": ["major"],
+      "dependencyDashboardApproval": true
+    },
+    {
+      "description": "Security-sensitive packages get extended stabilization period",
+      "matchPackageNames": [
+        "anthropic",
+        "elasticsearch",
+        "opensearch-py",
+        "mcp"
+      ],
+      "minimumReleaseAge": "14 days"
+    }
+  ]
+}
