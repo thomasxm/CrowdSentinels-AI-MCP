@@ -255,20 +255,27 @@ class OpenAICompatibleProvider(LLMProvider):
 class CodexProvider(LLMProvider):
     """Provider for OpenAI Codex via chatgpt.com/backend-api (OAuth subscription tokens).
 
-    Uses the Responses API format at https://chatgpt.com/backend-api/codex/responses
-    which accepts Codex OAuth JWT tokens from the Device Code flow.
+    Uses the Responses API streaming format at
+    https://chatgpt.com/backend-api/codex/responses.
+
+    Requirements:
+        - Model must be a Codex model (gpt-5.2-codex, gpt-5.3-codex, etc.)
+        - System prompt goes in `instructions` field (not in input)
+        - `stream: true` is mandatory
+        - `store: false` is required
     """
 
     CODEX_BASE_URL = "https://chatgpt.com/backend-api/codex/responses"
+    DEFAULT_MODEL = "gpt-5.2-codex"
 
     def __init__(self, model: str, access_token: str):
-        super().__init__(model)
+        super().__init__(model if "codex" in model else self.DEFAULT_MODEL)
         import httpx
         self.access_token = access_token
         self.http = httpx.Client(timeout=300)
 
     def convert_tool_schema(self, mcp_tool: Dict[str, Any]) -> Dict[str, Any]:
-        """MCP tool → OpenAI Responses API function format."""
+        """MCP tool → Codex Responses API function format."""
         input_schema = mcp_tool.get("inputSchema", mcp_tool.get("parameters", {}))
         return {
             "type": "function",
@@ -284,8 +291,8 @@ class CodexProvider(LLMProvider):
         tools: List[Dict[str, Any]],
         max_tokens: int = 8192,
     ) -> LLMResponse:
-        # Build Responses API input items
-        input_items = [{"type": "message", "role": "system", "content": system}]
+        # Build input items (system goes in instructions, not input)
+        input_items = []
 
         for msg in messages:
             role = msg["role"]
@@ -294,7 +301,6 @@ class CodexProvider(LLMProvider):
             if role == "user" and isinstance(content, str):
                 input_items.append({"type": "message", "role": "user", "content": content})
             elif role == "user" and isinstance(content, list):
-                # Tool results
                 for block in content:
                     if isinstance(block, dict) and block.get("type") == "tool_result":
                         result_content = block.get("content", "")
@@ -305,10 +311,9 @@ class CodexProvider(LLMProvider):
                         input_items.append({
                             "type": "function_call_output",
                             "call_id": block.get("tool_use_id", ""),
-                            "output": str(result_content),
+                            "output": str(result_content)[:50000],
                         })
             elif role == "assistant" and isinstance(content, list):
-                # Assistant text + tool calls
                 for block in content:
                     if isinstance(block, dict):
                         if block.get("type") == "text" and block.get("text"):
@@ -335,34 +340,47 @@ class CodexProvider(LLMProvider):
 
         body = {
             "model": self.model,
+            "instructions": system,
             "input": input_items,
             "store": False,
+            "stream": True,
         }
         if tools:
             body["tools"] = tools
 
-        resp = self.http.post(
+        # Stream SSE response and collect the final response.completed event
+        with self.http.stream(
+            "POST",
             self.CODEX_BASE_URL,
             json=body,
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {self.access_token}",
             },
-        )
-        resp.raise_for_status()
-        data = resp.json()
+        ) as resp:
+            resp.raise_for_status()
+            completed_data = None
+            for line in resp.iter_lines():
+                if line.startswith("data: "):
+                    try:
+                        event_data = json.loads(line[6:])
+                        if event_data.get("type") == "response.completed":
+                            completed_data = event_data.get("response", {})
+                    except json.JSONDecodeError:
+                        continue
 
-        # Parse Responses API output
+        if not completed_data:
+            return LLMResponse(text="No response received from Codex", stop_reason="error")
+
+        # Parse completed response
         text_parts = []
         tool_calls = []
 
-        for item in data.get("output", []):
+        for item in completed_data.get("output", []):
             item_type = item.get("type", "")
             if item_type == "message":
                 for content_block in item.get("content", []):
                     if content_block.get("type") == "output_text":
-                        text_parts.append(content_block.get("text", ""))
-                    elif content_block.get("type") == "text":
                         text_parts.append(content_block.get("text", ""))
             elif item_type == "function_call":
                 try:
@@ -375,12 +393,13 @@ class CodexProvider(LLMProvider):
                     arguments=args,
                 ))
 
-        usage = data.get("usage", {})
+        usage = completed_data.get("usage", {})
+        status = completed_data.get("status", "completed")
 
         return LLMResponse(
             text="\n".join(text_parts),
             tool_calls=tool_calls,
-            stop_reason=data.get("status", "completed"),
+            stop_reason=status,
             usage={
                 "input_tokens": usage.get("input_tokens", 0),
                 "output_tokens": usage.get("output_tokens", 0),
