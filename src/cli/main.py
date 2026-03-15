@@ -818,11 +818,81 @@ def _cmd_analyse(args):
         print(f"Error: invalid JSON on stdin: {exc}", file=sys.stderr)
         return 1
 
+    # Agent mode: use AI + MCP tools for investigation
+    if getattr(args, "mcp", False):
+        return _cmd_analyse_mcp(args, search_results)
+
     client = _create_client()
     result = client.analyze_search_results(
         search_results=search_results,
         context=args.context or "",
     )
+    _emit(result, args.output)
+    return 0
+
+
+def _cmd_analyse_mcp(args, search_results):
+    """Run the AI agent investigation loop with MCP tools."""
+    from src.agent.providers import create_provider
+    from src.agent.config import load_mcp_config
+    from src.agent.mcp_bridge import MCPBridge
+    from src.agent.loop import run_agent
+
+    # Create LLM provider
+    try:
+        provider = create_provider(
+            model=getattr(args, "model", None),
+            model_url=getattr(args, "model_url", None),
+        )
+    except (RuntimeError, Exception) as exc:
+        exc_str = str(exc)
+        if "401" in exc_str or "Unauthorized" in exc_str:
+            print(
+                "LLM API authentication failed.\n"
+                "Check your API key:\n"
+                '  export ANTHROPIC_API_KEY="sk-ant-..."    # Claude\n'
+                '  export OPENAI_API_KEY="sk-..."           # OpenAI\n',
+                file=sys.stderr,
+            )
+        else:
+            print(f"Agent error: {exc}", file=sys.stderr)
+        return 1
+
+    # Load external MCP server configs
+    external_configs = load_mcp_config(
+        cli_add=getattr(args, "mcp_server", None),
+        cli_exclude=getattr(args, "no_mcp_server", None),
+    )
+
+    # Create CrowdSentinel MCP server instance (in-process)
+    from src.server import SearchMCPServer
+    cs_server = SearchMCPServer(engine_type="elasticsearch")
+
+    # Run agent
+    try:
+        with MCPBridge(cs_server, external_configs) as bridge:
+            result = run_agent(
+                provider=provider,
+                bridge=bridge,
+                hunt_data=search_results,
+                context=args.context or "",
+                max_steps=getattr(args, "max_steps", 30),
+                timeout=getattr(args, "timeout", 300),
+            )
+    except Exception as exc:
+        exc_str = str(exc)
+        if "401" in exc_str or "Unauthorized" in exc_str or "AuthenticationException" in exc_str:
+            print(
+                "LLM API authentication failed.\n"
+                "Check your API key:\n"
+                '  export ANTHROPIC_API_KEY="sk-ant-..."    # Claude\n'
+                '  export OPENAI_API_KEY="sk-..."           # OpenAI\n',
+                file=sys.stderr,
+            )
+        else:
+            print(f"Agent error: {exc}", file=sys.stderr)
+        return 1
+
     _emit(result, args.output)
     return 0
 
@@ -1016,13 +1086,30 @@ def _build_parser() -> argparse.ArgumentParser:
         epilog=(
             "Examples:\n"
             "  cat results.json | crowdsentinel analyse\n"
-            "  crowdsentinel hunt 'event.code:4625' -i winlogbeat-* | crowdsentinel analyse --context 'brute force'\n"
-            "  echo '{\"hits\":[]}' | crowdsentinel analyse --context 'testing'"
+            "  crowdsentinel hunt 'query' -i idx | crowdsentinel analyse -c 'context'\n"
+            "  crowdsentinel hunt 'query' -i idx | crowdsentinel analyse --mcp -c 'context'\n"
+            "  crowdsentinel hunt 'query' -i idx | crowdsentinel analyse --mcp --model claude-opus-4-20250514 -c 'deep'\n"
+            "  crowdsentinel hunt 'query' -i idx | crowdsentinel analyse --mcp --mcp-server 'vt:uvx virustotal-mcp' -c 'ioc check'"
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     sp.add_argument("--context", "-c", default="",
                     help="Context about what was searched for")
+    # Agent mode flags
+    sp.add_argument("--mcp", action="store_true",
+                    help="Use AI agent with MCP tools instead of deterministic analysis")
+    sp.add_argument("--mcp-server", dest="mcp_server", action="append",
+                    help="Add external MCP server (format: name:command args). Repeatable.")
+    sp.add_argument("--no-mcp-server", dest="no_mcp_server", action="append",
+                    help="Exclude a configured MCP server by name. Repeatable.")
+    sp.add_argument("--model", default=None,
+                    help="LLM model to use (default: auto-detect from API key)")
+    sp.add_argument("--model-url", dest="model_url", default=None,
+                    help="OpenAI-compatible API base URL (for Ollama, vLLM, etc.)")
+    sp.add_argument("--max-steps", dest="max_steps", type=int, default=30,
+                    help="Maximum tool calls before stopping (default: 30)")
+    sp.add_argument("--timeout", type=int, default=300,
+                    help="Maximum seconds for the agent run (default: 300)")
     sp.set_defaults(func=_cmd_analyse)
 
     # --- pcap ------------------------------------------------------------
