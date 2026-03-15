@@ -1,6 +1,16 @@
 # Changelog
 
-## [unreleased]
+## [0.5.3](https://github.com/thomasxm/CrowdSentinels-AI-MCP/compare/v0.5.2..v0.5.3) - 2026-03-15
+
+### ⛰️  Features
+
+- add CHANGELOG auto-generation and 43 CLI integration tests - ([cbff596](https://github.com/thomasxm/CrowdSentinels-AI-MCP/commit/cbff5967105e429e5d75b6490c5bcfb7ff0bb26a)) - @Your Name
+
+### 🐛 Bug Fixes
+
+- sort imports in CLI test files - ([61e14e3](https://github.com/thomasxm/CrowdSentinels-AI-MCP/commit/61e14e3069e50972fd308a4f1fa8c740e4ab099f)) - @Your Name
+- CLI subprocess tests use sys.argv injection for CI compatibility - ([4174e7a](https://github.com/thomasxm/CrowdSentinels-AI-MCP/commit/4174e7a6f9f8a703918423aded5e64b60e3e0f7d)) - @Your Name
+- skip analyse CLI tests when no Elasticsearch available - ([ebd7de3](https://github.com/thomasxm/CrowdSentinels-AI-MCP/commit/ebd7de37fa78ec625b1a7f950a03f130f2975bf9)) - @Your Name
 
 ### 📚 Documentation
 
@@ -10,6 +20,10 @@
 
 - add linting and type checking to CI pipeline - ([16bcf1d](https://github.com/thomasxm/CrowdSentinels-AI-MCP/commit/16bcf1da75c8f07ca7976f34dcb77f78079fdfc4)) - @Your Name
 - add ruff linting, fix undefined ChainsawClient, auto-format codebase - ([eb78777](https://github.com/thomasxm/CrowdSentinels-AI-MCP/commit/eb787771fbda00ebdd61f135386a49bf2229cb46)) - @Your Name
+
+### Release
+
+- update version to 0.5.3 - ([ccd511c](https://github.com/thomasxm/CrowdSentinels-AI-MCP/commit/ccd511ce72347289c0d25982812dab16c7f9ff47)) - @Your Name
 
 ## [0.5.2](https://github.com/thomasxm/CrowdSentinels-AI-MCP/compare/v0.5.1..v0.5.2) - 2026-03-15
 
