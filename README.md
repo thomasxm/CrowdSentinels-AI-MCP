@@ -70,6 +70,15 @@ Detection rules (6,060 Lucene + EQL + ES|QL) are **bundled with the package** �
 
 Downloaded tools are stored in `~/.crowdsentinel/` and persist across package upgrades.
 
+**System dependency for PCAP analysis:**
+
+```bash
+# Required for network traffic analysis and cross-tool IoC correlation
+sudo apt install tshark    # Debian/Ubuntu/Kali
+sudo dnf install wireshark-cli  # Fedora/RHEL
+brew install wireshark     # macOS
+```
+
 ### Run directly with uvx (no install needed)
 
 ```bash
@@ -96,6 +105,52 @@ The setup script will:
 - Prompt for Elasticsearch credentials (never hardcoded)
 - Configure the MCP server with Claude Code
 - Validate your connection
+
+### Installed Size
+
+CrowdSentinel bundles 6,060 detection rules and integrates with external analysis tools. Below is the full disk space breakdown so you can plan accordingly.
+
+**Core package (via `pip` or `uvx`):**
+
+| Component | Size | Notes |
+|---|---|---|
+| **CrowdSentinel package** | **49 MB** | The server itself |
+| — Bundled Sigma rules (`src/rules/`) | 30 MB | 6,060 pre-converted detection rules |
+| — Elastic TOML rules (`src/detection-rules/`) | 17 MB | Original TOML format rules + hunting queries |
+| — Python code (clients, tools, etc.) | 2 MB | Actual application code |
+| **Dependencies** | **64 MB** | All transitive deps |
+| — `cryptography` | 14 MB | Largest dependency (TLS) |
+| — `elasticsearch` | 8.3 MB | ES Python client |
+| — `pygments` | 5.2 MB | Syntax highlighting |
+| — `pydantic_core` | 5 MB | Validation engine |
+| — `opensearchpy` | 3.6 MB | OpenSearch client |
+| — Others (27 packages) | ~28 MB | mcp, fastmcp, httpx, anthropic, etc. |
+| **Core total** | **113 MB** | `pip install crowdsentinel-mcp-server` |
+
+**Additional tools (via `crowdsentinel setup`):**
+
+| Component | Download | Installed | Notes |
+|---|---|---|---|
+| Chainsaw binary (v2.13.1) | ~3 MB | ~15 MB | EVTX log analysis engine |
+| Sigma rules (SigmaHQ) | ~3 MB | ~30 MB | 3,000+ Sigma rules for Chainsaw |
+| Chainsaw mappings | — | <1 MB | Event log source mappings |
+| **Setup total** | **~6 MB** | **~46 MB** | Stored in `~/.crowdsentinel/` |
+
+**System dependency (via package manager):**
+
+| Component | Installed | Install Command | Notes |
+|---|---|---|---|
+| tshark + Wireshark libs | ~132 MB | `sudo apt install tshark` | PCAP network analysis — required for cross-tool IoC correlation |
+
+**Full installation summary:**
+
+| Scenario | Total Disk Space |
+|---|---|
+| Core only (`pip install`) | ~113 MB |
+| Core + setup (`crowdsentinel setup`) | ~159 MB |
+| Full platform (+ tshark) | **~291 MB** |
+
+> **Note:** PyPI download size is only **8.9 MB** (wheel) thanks to compression of the bundled detection rules.
 
 ---
 

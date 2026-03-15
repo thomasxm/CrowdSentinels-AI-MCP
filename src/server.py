@@ -38,7 +38,7 @@ class SearchMCPServer:
     def __init__(self, engine_type):
         # Set engine type
         self.engine_type = engine_type
-        self.name = f"{self.engine_type}-mcp-server"
+        self.name = "crowdsentinel-mcp-server"
         self.mcp = FastMCP(self.name)
 
         # Configure logging with file output for debugging
