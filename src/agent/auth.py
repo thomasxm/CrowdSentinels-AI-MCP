@@ -127,7 +127,7 @@ def get_access_token() -> Optional[tuple]:
     """Get a valid access token. Returns (token, provider) or None.
 
     Resolution order:
-        1. Stored OAuth token (auto-refreshed if expired)
+        1. Stored CrowdSentinel token (~/.crowdsentinel/auth.json)
         2. ANTHROPIC_API_KEY env var
         3. OPENAI_API_KEY env var
     """
@@ -154,18 +154,27 @@ def get_access_token() -> Optional[tuple]:
 # ---------------------------------------------------------------------------
 
 def login_openai() -> bool:
-    """Authenticate with OpenAI using the Device Code flow.
+    """Authenticate with OpenAI — Device Code (subscription) or API key."""
+    print("OpenAI authentication\n")
+    print("  1. Sign in with ChatGPT (Device Code — uses your subscription)")
+    print("  2. Paste an API key (usage-based billing)\n")
 
-    This is the same flow used by Codex CLI and OpenClaw:
-    1. Request a device code from OpenAI
-    2. User opens a URL and enters the code
-    3. CLI polls until the user authorises
-    4. Exchange the authorisation code for tokens
-    """
+    choice = input("Choose [1/2]: ").strip()
+
+    if choice == "1":
+        return _login_openai_device_code()
+    elif choice == "2":
+        return _login_openai_api_key()
+    else:
+        print("Invalid choice.", file=sys.stderr)
+        return False
+
+
+def _login_openai_device_code() -> bool:
+    """OpenAI Device Code OAuth flow (ChatGPT subscription)."""
     client = httpx.Client(timeout=30)
 
-    # Step 1: Request device code
-    print("Requesting device code from OpenAI...")
+    print("\nRequesting device code from OpenAI...")
     try:
         resp = client.post(
             OPENAI_DEVICE_USERCODE_URL,
@@ -179,15 +188,16 @@ def login_openai() -> bool:
         resp.raise_for_status()
         device_data = resp.json()
     except httpx.HTTPStatusError as exc:
-        if exc.response.status_code == 404:
-            print(
-                "Device code login is not enabled for your account.\n"
-                "Enable it at: https://chatgpt.com/settings/security\n"
-                "Look for 'Device Code Login' and turn it on.",
-                file=sys.stderr,
-            )
-        else:
-            print(f"Failed to request device code: {exc}", file=sys.stderr)
+        status = exc.response.status_code
+        print(
+            f"\nDevice Code request failed (HTTP {status}).\n\n"
+            "This requires:\n"
+            "  - ChatGPT Plus, Pro, or Team subscription\n"
+            "  - Device Code Login enabled in ChatGPT settings\n"
+            "    (chatgpt.com → Settings → Security → Device Code Login)\n\n"
+            "If this doesn't work, use option 2 (API key) instead.",
+            file=sys.stderr,
+        )
         return False
     except Exception as exc:
         print(f"Failed to request device code: {exc}", file=sys.stderr)
@@ -201,21 +211,18 @@ def login_openai() -> bool:
         print(f"Unexpected response: {device_data}", file=sys.stderr)
         return False
 
-    # Step 2: Show code and open browser
     print(f"\n  Your code: {user_code}\n")
-    print(f"  Open this URL and enter the code above:")
-    print(f"  {OPENAI_DEVICE_AUTH_PAGE}\n")
+    print(f"  Open: {OPENAI_DEVICE_AUTH_PAGE}")
+    print(f"  Enter the code above and sign in with your ChatGPT account.\n")
 
     try:
         webbrowser.open(OPENAI_DEVICE_AUTH_PAGE)
     except Exception:
-        pass  # Browser may not be available (headless)
+        pass
 
-    # Step 3: Poll for authorisation
     print("Waiting for authorisation", end="", flush=True)
-    max_wait = 15 * 60  # 15 minutes
+    max_wait = 15 * 60
     start = time.time()
-
     auth_code = None
     code_verifier = None
 
@@ -226,17 +233,13 @@ def login_openai() -> bool:
         try:
             resp = client.post(
                 OPENAI_DEVICE_TOKEN_URL,
-                json={
-                    "device_auth_id": device_auth_id,
-                    "user_code": user_code,
-                },
+                json={"device_auth_id": device_auth_id, "user_code": user_code},
                 headers={
                     "Content-Type": "application/json",
                     "User-Agent": "crowdsentinel-mcp-server/1.0",
                     "Accept": "application/json",
                 },
             )
-
             if resp.status_code == 200:
                 token_data = resp.json()
                 auth_code = token_data.get("authorization_code")
@@ -244,19 +247,17 @@ def login_openai() -> bool:
                 print(" Authorised!")
                 break
             elif resp.status_code in (403, 404):
-                continue  # Still pending
+                continue
             else:
-                print(f"\nPolling error: {resp.status_code} {resp.text}", file=sys.stderr)
+                print(f"\nPolling error: {resp.status_code}", file=sys.stderr)
                 return False
         except Exception:
             print("!", end="", flush=True)
-            continue
 
     if not auth_code:
-        print("\nAuthorisation timed out after 15 minutes.", file=sys.stderr)
+        print("\nTimed out after 15 minutes.", file=sys.stderr)
         return False
 
-    # Step 4: Exchange code for tokens
     print("Exchanging code for tokens...")
     try:
         exchange_data = {
@@ -279,15 +280,53 @@ def login_openai() -> bool:
         print(f"Token exchange failed: {exc}", file=sys.stderr)
         return False
 
-    auth_data = {
+    _save_auth({
         "provider": "openai",
         "access_token": tokens["access_token"],
         "refresh_token": tokens.get("refresh_token", ""),
         "expires_at": int(time.time()) + tokens.get("expires_in", 3600),
-    }
+    })
+    print(f"OpenAI authentication successful! Token stored in {AUTH_FILE}")
+    return True
 
-    _save_auth(auth_data)
-    print("OpenAI authentication successful! Token stored in ~/.crowdsentinel/auth.json")
+
+def _login_openai_api_key() -> bool:
+    """OpenAI API key authentication."""
+    print("\nOpening OpenAI Platform...\n")
+    webbrowser.open("https://platform.openai.com/api-keys")
+
+    print("  1. Sign in to your OpenAI account")
+    print("  2. Click 'Create new secret key'")
+    print("  3. Copy and paste below\n")
+
+    key = input("Paste API key (sk-...): ").strip()
+    if not key:
+        print("No key provided.", file=sys.stderr)
+        return False
+
+    print("Validating key...")
+    try:
+        resp = httpx.get(
+            "https://api.openai.com/v1/models",
+            headers={"Authorization": f"Bearer {key}"},
+            timeout=15,
+        )
+        if resp.status_code == 200:
+            print("Key validated!")
+        elif resp.status_code == 401:
+            print("Warning: key returned 401.", file=sys.stderr)
+            if input("Store anyway? [y/N]: ").strip().lower() != "y":
+                return False
+    except Exception as exc:
+        print(f"Warning: could not validate ({exc}).")
+
+    _save_auth({
+        "provider": "openai",
+        "access_token": key,
+        "refresh_token": "",
+        "expires_at": 0,
+    })
+    print(f"OpenAI API key stored in {AUTH_FILE}")
     return True
 
 
@@ -296,56 +335,51 @@ def login_openai() -> bool:
 # ---------------------------------------------------------------------------
 
 def login_anthropic() -> bool:
-    """Authenticate with Anthropic via setup-token or API key.
+    """Authenticate with Anthropic via API key.
 
-    For subscription auth (Pro/Max), use `claude setup-token` to generate
-    a token, then paste it here. For API key auth, paste the key from
-    https://console.anthropic.com/settings/keys.
+    Opens the Anthropic Console in the browser for key creation,
+    then stores the key locally. One-step flow.
     """
-    print("Anthropic authentication\n")
-    print("  Option 1: Run `claude setup-token` in another terminal, then paste the token here")
-    print("  Option 2: Paste an API key from https://console.anthropic.com/settings/keys")
-    print("  Option 3: Open Anthropic Console in browser to create a key\n")
+    print("Opening Anthropic Console to create an API key...\n")
+    webbrowser.open("https://console.anthropic.com/settings/keys")
 
-    choice = input("Choose [1/2/3]: ").strip()
+    print("  1. Sign in to your Anthropic account (or create one)")
+    print("  2. Click 'Create Key'")
+    print("  3. Copy the key and paste it below\n")
 
-    if choice == "3":
-        webbrowser.open("https://console.anthropic.com/settings/keys")
-        print("\nAfter creating your key, paste it below:")
-        choice = "2"
-
-    if choice == "1":
-        print("\nRun this in another terminal:")
-        print("  claude setup-token\n")
-        token = input("Paste the setup-token: ").strip()
-        if not token:
-            print("No token provided.", file=sys.stderr)
-            return False
-
-        _save_auth({
-            "provider": "anthropic",
-            "access_token": token,
-            "refresh_token": "",
-            "expires_at": 0,
-        })
-        print("Anthropic setup-token stored in ~/.crowdsentinel/auth.json")
-        return True
-
-    elif choice == "2":
-        key = input("Paste API key (sk-ant-...): ").strip()
-        if not key:
-            print("No key provided.", file=sys.stderr)
-            return False
-
-        _save_auth({
-            "provider": "anthropic",
-            "access_token": key,
-            "refresh_token": "",
-            "expires_at": 0,
-        })
-        print("Anthropic API key stored in ~/.crowdsentinel/auth.json")
-        return True
-
-    else:
-        print("Invalid choice.", file=sys.stderr)
+    key = input("Paste API key (sk-ant-...): ").strip()
+    if not key:
+        print("No key provided.", file=sys.stderr)
         return False
+
+    # Validate the key works
+    print("Validating key...")
+    try:
+        resp = httpx.get(
+            "https://api.anthropic.com/v1/models",
+            headers={
+                "x-api-key": key,
+                "anthropic-version": "2023-06-01",
+            },
+            timeout=15,
+        )
+        if resp.status_code == 200:
+            print("Key validated successfully!")
+        elif resp.status_code == 401:
+            print("Warning: key returned 401 — it may be invalid or expired.", file=sys.stderr)
+            confirm = input("Store it anyway? [y/N]: ").strip().lower()
+            if confirm != "y":
+                return False
+        else:
+            print(f"Warning: validation returned {resp.status_code}. Storing anyway.")
+    except Exception as exc:
+        print(f"Warning: could not validate key ({exc}). Storing anyway.")
+
+    _save_auth({
+        "provider": "anthropic",
+        "access_token": key,
+        "refresh_token": "",
+        "expires_at": 0,
+    })
+    print(f"Anthropic API key stored in {AUTH_FILE}")
+    return True
