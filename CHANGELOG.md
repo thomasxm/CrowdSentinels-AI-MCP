@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.5.4](https://github.com/thomasxm/CrowdSentinels-AI-MCP/compare/v0.5.3..v0.5.4) - 2026-03-15
+
+### 🐛 Bug Fixes
+
+- extract results from last tool output when max_steps reached - ([a37902c](https://github.com/thomasxm/CrowdSentinels-AI-MCP/commit/a37902cbfe6ae0449bdfa927142afec4d41ee56c)) - @Your Name
+
+### 📚 Documentation
+
+- update CHANGELOG.md for v0.5.3 - ([efc3700](https://github.com/thomasxm/CrowdSentinels-AI-MCP/commit/efc37003c724732f252c605ea676bb966968671c)) - @github-actions[bot]
+
+### Release
+
+- update version to 0.5.4 - ([8e45a54](https://github.com/thomasxm/CrowdSentinels-AI-MCP/commit/8e45a542b9a4a4c5cf275b0b77bc4e9cf0820660)) - @Your Name
+
 ## [0.5.3](https://github.com/thomasxm/CrowdSentinels-AI-MCP/compare/v0.5.2..v0.5.3) - 2026-03-15
 
 ### ⛰️  Features
