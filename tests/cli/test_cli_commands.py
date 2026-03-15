@@ -10,8 +10,19 @@ import sys
 
 
 def run_cli(*args, stdin_data=None, timeout=30):
-    """Run crowdsentinel CLI and return (returncode, stdout, stderr)."""
-    cmd = [sys.executable, "-m", "src.cli.main", *args]
+    """Run crowdsentinel CLI via the main() function in a subprocess.
+
+    Works in both installed (pipx) and development (uv) environments.
+    """
+    # Build a small script that imports and calls main with sys.argv set
+    arg_list = list(args)
+    script = (
+        "import sys; "
+        f"sys.argv = ['crowdsentinel'] + {arg_list!r}; "
+        "from src.cli.main import main; main()"
+    )
+    cmd = [sys.executable, "-c", script]
+
     result = subprocess.run(
         cmd,
         input=stdin_data,
@@ -20,7 +31,6 @@ def run_cli(*args, stdin_data=None, timeout=30):
         timeout=timeout,
         env={
             **__import__("os").environ,
-            # Prevent ES connection attempts in tests without live ES
             "CROWDSENTINEL_RULES_DIR": "rules",
         },
     )
@@ -126,8 +136,13 @@ class TestCLIAgentModeErrors:
         """Agent mode without API key should error clearly."""
         import os
         env = {k: v for k, v in os.environ.items() if k not in ("ANTHROPIC_API_KEY", "OPENAI_API_KEY")}
+        script = (
+            "import sys; "
+            "sys.argv = ['crowdsentinel', 'analyse', '--mcp', '-c', 'test']; "
+            "from src.cli.main import main; main()"
+        )
         result = subprocess.run(
-            [sys.executable, "-m", "src.cli.main", "analyse", "--mcp", "-c", "test"],
+            [sys.executable, "-c", script],
             input="{}",
             capture_output=True,
             text=True,
