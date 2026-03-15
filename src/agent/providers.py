@@ -252,6 +252,142 @@ class OpenAICompatibleProvider(LLMProvider):
         )
 
 
+class CodexProvider(LLMProvider):
+    """Provider for OpenAI Codex via chatgpt.com/backend-api (OAuth subscription tokens).
+
+    Uses the Responses API format at https://chatgpt.com/backend-api/codex/responses
+    which accepts Codex OAuth JWT tokens from the Device Code flow.
+    """
+
+    CODEX_BASE_URL = "https://chatgpt.com/backend-api/codex/responses"
+
+    def __init__(self, model: str, access_token: str):
+        super().__init__(model)
+        import httpx
+        self.access_token = access_token
+        self.http = httpx.Client(timeout=300)
+
+    def convert_tool_schema(self, mcp_tool: Dict[str, Any]) -> Dict[str, Any]:
+        """MCP tool → OpenAI Responses API function format."""
+        input_schema = mcp_tool.get("inputSchema", mcp_tool.get("parameters", {}))
+        return {
+            "type": "function",
+            "name": mcp_tool["name"],
+            "description": mcp_tool.get("description", ""),
+            "parameters": input_schema,
+        }
+
+    def create_message(
+        self,
+        system: str,
+        messages: List[Dict[str, Any]],
+        tools: List[Dict[str, Any]],
+        max_tokens: int = 8192,
+    ) -> LLMResponse:
+        # Build Responses API input items
+        input_items = [{"type": "message", "role": "system", "content": system}]
+
+        for msg in messages:
+            role = msg["role"]
+            content = msg["content"]
+
+            if role == "user" and isinstance(content, str):
+                input_items.append({"type": "message", "role": "user", "content": content})
+            elif role == "user" and isinstance(content, list):
+                # Tool results
+                for block in content:
+                    if isinstance(block, dict) and block.get("type") == "tool_result":
+                        result_content = block.get("content", "")
+                        if isinstance(result_content, list):
+                            result_content = "\n".join(
+                                b.get("text", "") for b in result_content if isinstance(b, dict)
+                            )
+                        input_items.append({
+                            "type": "function_call_output",
+                            "call_id": block.get("tool_use_id", ""),
+                            "output": str(result_content),
+                        })
+            elif role == "assistant" and isinstance(content, list):
+                # Assistant text + tool calls
+                for block in content:
+                    if isinstance(block, dict):
+                        if block.get("type") == "text" and block.get("text"):
+                            input_items.append({"type": "message", "role": "assistant", "content": block["text"]})
+                        elif block.get("type") == "tool_use":
+                            input_items.append({
+                                "type": "function_call",
+                                "call_id": block["id"],
+                                "name": block["name"],
+                                "arguments": json.dumps(block.get("input", {})),
+                            })
+                    elif hasattr(block, "type"):
+                        if block.type == "text" and block.text:
+                            input_items.append({"type": "message", "role": "assistant", "content": block.text})
+                        elif block.type == "tool_use":
+                            input_items.append({
+                                "type": "function_call",
+                                "call_id": block.id,
+                                "name": block.name,
+                                "arguments": json.dumps(block.input),
+                            })
+            elif role == "assistant" and isinstance(content, str):
+                input_items.append({"type": "message", "role": "assistant", "content": content})
+
+        body = {
+            "model": self.model,
+            "input": input_items,
+            "store": False,
+        }
+        if tools:
+            body["tools"] = tools
+
+        resp = self.http.post(
+            self.CODEX_BASE_URL,
+            json=body,
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {self.access_token}",
+            },
+        )
+        resp.raise_for_status()
+        data = resp.json()
+
+        # Parse Responses API output
+        text_parts = []
+        tool_calls = []
+
+        for item in data.get("output", []):
+            item_type = item.get("type", "")
+            if item_type == "message":
+                for content_block in item.get("content", []):
+                    if content_block.get("type") == "output_text":
+                        text_parts.append(content_block.get("text", ""))
+                    elif content_block.get("type") == "text":
+                        text_parts.append(content_block.get("text", ""))
+            elif item_type == "function_call":
+                try:
+                    args = json.loads(item.get("arguments", "{}"))
+                except (json.JSONDecodeError, TypeError):
+                    args = {}
+                tool_calls.append(ToolCall(
+                    id=item.get("call_id", item.get("id", "")),
+                    name=item.get("name", ""),
+                    arguments=args,
+                ))
+
+        usage = data.get("usage", {})
+
+        return LLMResponse(
+            text="\n".join(text_parts),
+            tool_calls=tool_calls,
+            stop_reason=data.get("status", "completed"),
+            usage={
+                "input_tokens": usage.get("input_tokens", 0),
+                "output_tokens": usage.get("output_tokens", 0),
+            },
+        )
+
+
 def create_provider(
     model: Optional[str] = None,
     model_url: Optional[str] = None,
@@ -293,10 +429,18 @@ def create_provider(
                 api_key=token,
             )
         elif provider == "openai":
-            return OpenAICompatibleProvider(
-                model=model or os.environ.get("CROWDSENTINEL_MODEL", "gpt-4o"),
-                api_key=token,
-            )
+            # Detect if this is a Codex OAuth JWT (starts with eyJ) or an API key (starts with sk-)
+            if token.startswith("eyJ"):
+                # Codex OAuth token → use Codex backend-api endpoint
+                return CodexProvider(
+                    model=model or os.environ.get("CROWDSENTINEL_MODEL", "gpt-4o"),
+                    access_token=token,
+                )
+            else:
+                return OpenAICompatibleProvider(
+                    model=model or os.environ.get("CROWDSENTINEL_MODEL", "gpt-4o"),
+                    api_key=token,
+                )
 
     # Env var fallbacks
     if anthropic_key:
