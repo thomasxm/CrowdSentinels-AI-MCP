@@ -716,8 +716,8 @@ class WiresharkTools:
     def _detect_beaconing(
         self,
         pcap_path: str,
-        min_connections: int = 10,
-        max_jitter_percent: float = 15.0
+        min_connections: int = 5,
+        max_jitter_percent: float = 90.0
     ) -> Dict[str, Any]:
         """Internal implementation of detect_beaconing."""
         try:

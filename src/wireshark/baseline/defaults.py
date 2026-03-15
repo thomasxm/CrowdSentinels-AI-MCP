@@ -68,7 +68,7 @@ DEFAULT_BASELINE: Dict[str, Any] = {
         "dns_nxdomain_threshold": 10,     # Per minute - excessive may indicate DGA
 
         # Beaconing detection
-        "beacon_interval_tolerance": 0.15, # 15% jitter tolerance
+        "beacon_interval_tolerance": 0.90, # 90% jitter — real C2 beacons use sleep jitter to evade detection
         "min_beacon_count": 5,             # Minimum intervals to flag
         "beacon_min_interval": 10,         # Seconds - ignore faster
         "beacon_max_interval": 3600,       # Seconds - ignore slower

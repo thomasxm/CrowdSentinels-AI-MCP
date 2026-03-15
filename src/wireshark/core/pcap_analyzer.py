@@ -214,8 +214,11 @@ class PcapAnalyzer:
             return talkers
 
         # Parse endpoints output
-        # Format: "192.168.1.1    123    45678    67    89012"
-        #         IP            Packets Bytes   TxPkts TxBytes
+        # tshark format with units:
+        #   10.0.2.16       12589   2,500 kB     7778   1,275 kB    4811   1,224 kB
+        #   173.194.70.106   3153   570 kB       1588   400 kB      1565   169 kB
+        #   66.235.168.5      185   35 kB          36   4,854 bytes  149   30 kB
+        # Columns: IP  Packets  Bytes+Unit  TxPkts  TxBytes+Unit  RxPkts  RxBytes+Unit
         in_data = False
         for line in stdout.split("\n"):
             if "Filter:" in line or "=" * 10 in line:
@@ -231,8 +234,9 @@ class PcapAnalyzer:
                     # Validate IP format
                     if not re.match(r"\d+\.\d+\.\d+\.\d+", ip):
                         continue
-                    packets = int(parts[1])
-                    bytes_count = int(parts[2]) if len(parts) > 2 else 0
+                    packets = int(parts[1].replace(",", ""))
+                    # Parse byte value with unit: "570 kB", "2,500 kB", "4,854 bytes"
+                    bytes_count = self._parse_tshark_bytes(parts[2:]) if len(parts) > 2 else 0
 
                     # Check if internal
                     is_internal = (
@@ -261,6 +265,34 @@ class PcapAnalyzer:
         # Sort by packet count and limit
         talkers.sort(key=lambda x: x.packet_count, reverse=True)
         return talkers[:limit]
+
+    @staticmethod
+    def _parse_tshark_bytes(parts: list) -> int:
+        """Parse a tshark byte value with unit from split parts.
+
+        Handles formats like:
+            ["570", "kB", ...]       -> 570 * 1024
+            ["2,500", "kB", ...]     -> 2500 * 1024
+            ["4,854", "bytes", ...]  -> 4854
+            ["1.2", "MB", ...]       -> 1258291 (approx)
+            ["570"]                  -> 570
+        """
+        if not parts:
+            return 0
+        try:
+            value = float(parts[0].replace(",", ""))
+        except (ValueError, IndexError):
+            return 0
+
+        unit = parts[1].lower() if len(parts) > 1 else "bytes"
+        if unit == "kb":
+            return int(value * 1024)
+        elif unit == "mb":
+            return int(value * 1024 * 1024)
+        elif unit == "gb":
+            return int(value * 1024 * 1024 * 1024)
+        else:
+            return int(value)
 
     def get_conversations(
         self,
