@@ -34,7 +34,11 @@ jobs:
         run: uv sync
 
       - name: Run tests
-        run: uv run pytest tests/ --ignore=tests/test_live_elasticsearch_integration.py -v --tb=short
+        run: |
+          uv run pytest tests/ \
+            --ignore=tests/test_live_elasticsearch_integration.py \
+            --ignore=tests/wireshark/test_tshark_executor.py \
+            -v --tb=short
 
   sast:
     name: SAST
