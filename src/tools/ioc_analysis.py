@@ -1,6 +1,7 @@
 """IoC Analysis and Decision-Making Tools for incident response."""
-from typing import Dict, List, Optional
+from typing import Annotated, Dict, List, Optional
 from fastmcp import FastMCP
+from pydantic import Field
 
 
 class IoCAnalysisTools:
@@ -9,7 +10,10 @@ class IoCAnalysisTools:
 
     def register_tools(self, mcp: FastMCP):
         @mcp.tool()
-        def analyze_search_results(search_results: Dict, context: str = "") -> Dict:
+        def analyze_search_results(
+            search_results: Annotated[Dict, Field(description='Search results dict. Accepts ES format {"hits":{"hits":[...]}}, simplified {"hits":[...]}, or hunt output {"sample_events":[...], "summary":{"total_hits": N}}')],
+            context: str = "",
+        ) -> Dict:
             """
             Analyze search results and provide intelligent insights with follow-up recommendations.
             This is a critical tool for incident response - it acts like an experienced analyst
@@ -105,7 +109,10 @@ class IoCAnalysisTools:
             )
 
         @mcp.tool()
-        def analyze_kill_chain_stage(iocs: List[Dict], include_hunting_suggestions: bool = True) -> Dict:
+        def analyze_kill_chain_stage(
+            iocs: Annotated[List[Dict], Field(description='List of IoC dicts, each with "type" and "value" keys. Types: ip, domain, file_path, hostname, commandline, hash, registry_key, c2_domain. Example: [{"type": "hostname", "value": "MSEDGEWIN10"}, {"type": "ip", "value": "10.0.2.16"}]')],
+            include_hunting_suggestions: bool = True,
+        ) -> Dict:
             """
             Analyze IoCs to identify which Cyber Kill Chain stage(s) an attack is in.
 
@@ -237,7 +244,9 @@ class IoCAnalysisTools:
             return CyberKillChainClient.get_full_kill_chain_overview()
 
         @mcp.tool()
-        def map_events_to_kill_chain(events: List[Dict]) -> Dict:
+        def map_events_to_kill_chain(
+            events: Annotated[List[Dict], Field(description='List of event dicts from search results. Each should have fields like "@timestamp", "event.code"/"code", "message", "host.name"/"name", etc.')],
+        ) -> Dict:
             """
             Map Elasticsearch events to Cyber Kill Chain stages.
 
