@@ -27,6 +27,9 @@ jobs:
 
       - uses: astral-sh/setup-uv@v4
 
+      - name: Clone detection-rules (required by hatchling build)
+        run: git clone --depth 1 https://github.com/elastic/detection-rules.git detection-rules
+
       - name: Install dependencies
         run: uv sync
 
