@@ -372,7 +372,7 @@ crowdsentinel --help
 | `eql` | Execute an EQL query | `crowdsentinel eql "process where process.name == 'cmd.exe'" -i winlogbeat-*` |
 | `esql` | Execute an ES\|QL query | `crowdsentinel esql "FROM logs-* \| LIMIT 10"` |
 | `detect` | Execute a detection rule by ID | `crowdsentinel detect win_susp_logon -i winlogbeat-*` |
-| `rules` | List available detection rules | `crowdsentinel rules -p windows --tactic credential_access` |
+| `rules` | List available detection rules | `crowdsentinel rules -p windows --tactic credential_access --type eql` |
 | `schema` | Detect schema for an index pattern | `crowdsentinel schema -i winlogbeat-*` |
 | `ioc` | Hunt for a specific Indicator of Compromise | `crowdsentinel ioc 203.0.113.42 --type ip -i winlogbeat-*` |
 | `analyse` | Analyse search results from stdin (JSON) | `cat results.json \| crowdsentinel analyse -c "context"` |

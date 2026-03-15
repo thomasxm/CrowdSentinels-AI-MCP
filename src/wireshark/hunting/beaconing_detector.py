@@ -278,13 +278,22 @@ class BeaconingDetector:
     def detect_from_pcap(
         self,
         pcap_path: str,
-        executor=None
+        executor=None,
+        min_count: Optional[int] = None,
+        max_jitter: Optional[float] = None,
     ) -> List[BeaconPattern]:
         """Detect beaconing patterns from a PCAP file.
+
+        Uses TCP SYN packets (connection initiations) rather than all packets
+        to measure the interval between sessions — not between individual
+        packets within a single TCP stream.  Falls back to all TCP/UDP if
+        no SYN packets are found (e.g. UDP-only traffic).
 
         Args:
             pcap_path: Path to PCAP file
             executor: Optional TSharkExecutor instance
+            min_count: Minimum connections to consider as beaconing
+            max_jitter: Maximum jitter percentage threshold
 
         Returns:
             List of detected BeaconPattern objects
@@ -294,11 +303,19 @@ class BeaconingDetector:
         if executor is None:
             executor = TSharkExecutor()
 
-        # Extract connection data
+        # Try SYN-only first (TCP connection initiations) for accurate intervals
         results = executor.execute_and_parse_fields(
             pcap_path=pcap_path,
-            fields=["frame.time_epoch", "ip.src", "ip.dst", "tcp.dstport", "udp.dstport"],
-            display_filter="tcp or udp",
+            fields=["frame.time_epoch", "ip.src", "ip.dst", "tcp.dstport"],
+            display_filter="tcp.flags.syn==1 and tcp.flags.ack==0",
+            timeout=300
+        )
+
+        # Also include UDP packets (no SYN concept)
+        udp_results = executor.execute_and_parse_fields(
+            pcap_path=pcap_path,
+            fields=["frame.time_epoch", "ip.src", "ip.dst", "udp.dstport"],
+            display_filter="udp",
             timeout=300
         )
 
@@ -308,7 +325,7 @@ class BeaconingDetector:
             timestamp = row.get("frame.time_epoch")
             src_ip = row.get("ip.src")
             dst_ip = row.get("ip.dst")
-            dst_port = row.get("tcp.dstport") or row.get("udp.dstport")
+            dst_port = row.get("tcp.dstport")
 
             if timestamp and src_ip and dst_ip and dst_port:
                 try:
@@ -321,4 +338,21 @@ class BeaconingDetector:
                 except (ValueError, TypeError):
                     continue
 
-        return self.detect_patterns(connections)
+        for row in udp_results:
+            timestamp = row.get("frame.time_epoch")
+            src_ip = row.get("ip.src")
+            dst_ip = row.get("ip.dst")
+            dst_port = row.get("udp.dstport")
+
+            if timestamp and src_ip and dst_ip and dst_port:
+                try:
+                    connections.append({
+                        "timestamp": float(timestamp),
+                        "src_ip": src_ip,
+                        "dst_ip": dst_ip,
+                        "dst_port": int(dst_port)
+                    })
+                except (ValueError, TypeError):
+                    continue
+
+        return self.detect_patterns(connections, min_count=min_count, max_jitter=max_jitter)

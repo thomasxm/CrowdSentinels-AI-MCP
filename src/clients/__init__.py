@@ -23,7 +23,13 @@ def _build_config(engine_type: str):
     Returns:
         config dict
     """
-    load_dotenv()
+    # Load .env from current directory first, then from ~/.crowdsentinel/.env
+    # so the tool works regardless of where the user runs it from.
+    load_dotenv()  # current dir / parent dirs
+    from src.paths import get_user_data_dir
+    user_env = get_user_data_dir() / ".env"
+    if user_env.is_file():
+        load_dotenv(user_env, override=False)  # don't override already-set vars
 
     prefix = engine_type.upper()
     hosts_env = os.environ.get(f"{prefix}_HOSTS")

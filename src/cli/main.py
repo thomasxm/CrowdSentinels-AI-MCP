@@ -27,38 +27,205 @@ def _format_json(data: Any) -> str:
 
 
 def _format_table(data: Any) -> str:
-    """Return a simple human-readable table representation."""
-    if isinstance(data, dict):
-        lines = []
+    """Return a human-readable table representation of hunt/search results."""
+    if not isinstance(data, dict):
+        return _format_json(data)
+
+    lines: list[str] = []
+
+    # --- Summary section ---
+    summary = data.get("summary", {})
+    if isinstance(summary, dict) and summary:
+        lines.append("=== Summary ===")
+        for k, v in summary.items():
+            lines.append(f"  {k}: {v}")
+        lines.append("")
+
+    # --- Cluster health (for `crowdsentinel health`) ---
+    if "cluster_name" in data:
+        lines.append("=== Cluster Health ===")
+        for k, v in data.items():
+            lines.append(f"  {k}: {v}")
+        return "\n".join(lines)
+
+    # --- IoCs ---
+    iocs = data.get("iocs", {})
+    if isinstance(iocs, dict) and iocs:
+        lines.append("=== IoCs ===")
+        for ioc_type, items in iocs.items():
+            if isinstance(items, list):
+                values = [i["value"] if isinstance(i, dict) else str(i) for i in items]
+                lines.append(f"  {ioc_type}: {', '.join(values)}")
+            else:
+                lines.append(f"  {ioc_type}: {items}")
+        lines.append("")
+
+    # --- MITRE ATT&CK ---
+    mitre = data.get("mitre_techniques", [])
+    if isinstance(mitre, list) and mitre:
+        lines.append("=== MITRE ATT&CK ===")
+        for t in mitre:
+            if isinstance(t, dict):
+                tid = t.get("technique_id", "?")
+                name = t.get("technique_name", "?")
+                tactic = t.get("tactic", "?")
+                count = t.get("count", "")
+                count_str = f" (x{count})" if count else ""
+                lines.append(f"  {tid} {name} [{tactic}]{count_str}")
+        lines.append("")
+
+    # --- Insights ---
+    insights = data.get("insights", [])
+    if isinstance(insights, list) and insights:
+        lines.append("=== Insights ===")
+        for insight in insights:
+            lines.append(f"  - {insight}")
+        lines.append("")
+
+    # --- Sample events ---
+    events = data.get("sample_events", data.get("events", []))
+    if isinstance(events, list) and events:
+        lines.append(f"=== Sample Events ({len(events)}) ===")
+        for evt in events:
+            if isinstance(evt, dict):
+                ts = evt.get("@timestamp", "")
+                host = evt.get("name", evt.get("host.name", ""))
+                code = evt.get("code", evt.get("event.code", ""))
+                msg = evt.get("message", "")
+                if len(msg) > 120:
+                    msg = msg[:120] + "..."
+                lines.append(f"  [{ts}] host={host} code={code} {msg}")
+            else:
+                lines.append(f"  {evt}")
+        lines.append("")
+
+    # --- Rules (for `crowdsentinel rules`) ---
+    rules = data.get("rules", [])
+    if isinstance(rules, list) and rules:
+        lines.append(f"=== Rules ({data.get('total_matching', data.get('total_found', len(rules)))}) ===")
+        for r in rules:
+            if isinstance(r, dict):
+                rid = r.get("rule_id", "?")
+                name = r.get("name", "?")
+                rtype = r.get("type", "?")
+                tactics = ", ".join(r.get("mitre_tactics", []))
+                lines.append(f"  [{rtype}] {name}  ({tactics})")
+        lines.append("")
+
+    # --- Pagination ---
+    pagination = data.get("pagination", {})
+    if isinstance(pagination, dict) and pagination.get("has_more"):
+        remaining = pagination.get("guidance", "")
+        lines.append(f"  [more results available] {remaining}")
+
+    # --- Workflow hint ---
+    hint = data.get("workflow_hint", {})
+    if isinstance(hint, dict) and hint.get("next_step"):
+        lines.append(f"  Next step: {hint['next_step']} — {hint.get('instruction', '')}")
+
+    # Fallback: if nothing was formatted, dump as key: value
+    if not lines:
         for key, value in data.items():
             if isinstance(value, (dict, list)):
                 lines.append(f"{key}:")
                 lines.append(f"  {_format_json(value)}")
             else:
                 lines.append(f"{key}: {value}")
-        return "\n".join(lines)
-    return _format_json(data)
+
+    return "\n".join(lines)
 
 
 def _format_summary(data: Any) -> str:
-    """Return a compact one-line summary where possible."""
-    if isinstance(data, dict):
-        # Try to extract meaningful summary fields
-        summary_parts = []
+    """Return a compact multi-line summary of the most important findings."""
+    if not isinstance(data, dict):
+        return str(data)
+
+    parts: list[str] = []
+
+    # Extract summary from nested or top-level fields
+    summary = data.get("summary", {})
+    if isinstance(summary, dict):
+        hits = summary.get("total_hits", data.get("total_hits"))
+        severity = summary.get("severity", data.get("severity"))
+        timeframe = summary.get("timeframe", "")
+    else:
+        hits = data.get("total_hits", data.get("total_found"))
+        severity = data.get("severity")
+        timeframe = ""
+
+    # Cluster health
+    if "cluster_name" in data:
+        status = data.get("status", "?")
+        nodes = data.get("number_of_nodes", "?")
+        shards = data.get("active_shards", "?")
+        unassigned = data.get("unassigned_shards", 0)
+        parts.append(f"cluster={data['cluster_name']} status={status} nodes={nodes} shards={shards} unassigned={unassigned}")
+        return " | ".join(parts)
+
+    if hits is not None:
+        parts.append(f"hits={hits}")
+    if severity:
+        parts.append(f"severity={severity}")
+
+    # IoCs count
+    iocs = data.get("iocs", {})
+    if isinstance(iocs, dict):
+        total_iocs = sum(len(v) for v in iocs.values() if isinstance(v, list))
+        if total_iocs:
+            ioc_types = ", ".join(f"{k}={len(v)}" for k, v in iocs.items() if isinstance(v, list) and v)
+            parts.append(f"iocs={total_iocs} ({ioc_types})")
+
+    # MITRE
+    mitre = data.get("mitre_techniques", [])
+    if isinstance(mitre, list) and mitre:
+        techniques = [t.get("technique_id", "?") for t in mitre if isinstance(t, dict)]
+        parts.append(f"mitre={','.join(techniques)}")
+
+    # Insights
+    insights = data.get("insights", [])
+    if isinstance(insights, list) and insights:
+        for insight in insights:
+            parts.append(insight)
+
+    # Rules count
+    rules = data.get("rules", [])
+    if isinstance(rules, list) and rules:
+        parts.append(f"rules={data.get('total_matching', data.get('total_found', len(rules)))}")
+
+    # Timeframe
+    if timeframe:
+        parts.append(f"timeframe={timeframe}")
+
+    # Pagination
+    pagination = data.get("pagination", {})
+    if isinstance(pagination, dict) and pagination.get("has_more"):
+        parts.append("has_more=true")
+
+    if not parts:
+        # Fallback for unknown data shapes
         for key in ("status", "cluster_name", "total_hits", "total_found",
                      "total", "count", "hits_count", "detected"):
             if key in data:
-                summary_parts.append(f"{key}={data[key]}")
-        if summary_parts:
-            return " | ".join(summary_parts)
-        # Fallback: show top-level keys
-        return " | ".join(f"{k}={v}" for k, v in list(data.items())[:8]
-                          if not isinstance(v, (dict, list)))
-    return str(data)
+                parts.append(f"{key}={data[key]}")
+        if not parts:
+            return " | ".join(f"{k}={v}" for k, v in list(data.items())[:8]
+                              if not isinstance(v, (dict, list)))
+
+    return "\n".join(parts)
 
 
 def _emit(data: Any, output_mode: str) -> None:
     """Write *data* to stdout in the requested format."""
+    # Normalise ES client response objects (ObjectApiResponse) to plain dicts
+    # so the formatters can inspect keys reliably.
+    if hasattr(data, "body"):
+        data = data.body
+    elif not isinstance(data, (dict, list, str, int, float, bool, type(None))):
+        try:
+            data = dict(data)
+        except (TypeError, ValueError):
+            pass
+
     # If the result is an error dict from the exception handler, raise it
     # so the top-level handler can translate it into an actionable message.
     if isinstance(data, dict) and "error" in data:
@@ -256,14 +423,19 @@ def _cmd_rules(args):
         print("Error: detection rules directory not found.", file=sys.stderr)
         return 1
 
-    rules = loader.search_rules(
+    effective_limit = min(args.limit, 200)
+
+    # Get total matching count (uncapped) then apply limit
+    all_matching = loader.search_rules(
         platform=args.platform,
         log_source=args.log_source,
         rule_type=args.rule_type,
         search_term=args.search,
         mitre_tactic=args.tactic,
-        limit=min(args.limit, 200),
+        limit=999999,
     )
+    total_matching = len(all_matching)
+    rules = all_matching[:effective_limit]
 
     stats = loader.get_statistics()
     summaries = []
@@ -278,7 +450,7 @@ def _cmd_rules(args):
         })
 
     result = {
-        "total_found": len(rules),
+        "total_matching": total_matching,
         "showing": len(summaries),
         "rules": summaries,
         "statistics": {
@@ -739,7 +911,7 @@ def _build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--platform", "-p", help="Filter by platform (windows, linux, macos, ...)")
     sp.add_argument("--tactic", help="Filter by MITRE ATT&CK tactic (e.g. credential_access)")
     sp.add_argument("--log-source", dest="log_source", help="Filter by log source")
-    sp.add_argument("--rule-type", dest="rule_type", choices=["lucene", "eql", "esql"], help="Filter by rule type")
+    sp.add_argument("--rule-type", "--type", "-t", dest="rule_type", choices=["lucene", "eql", "esql"], help="Filter by rule type")
     sp.add_argument("--search", "-s", help="Search term (name, tags, description)")
     sp.add_argument("--limit", "-l", type=int, default=50, help="Max results (default: 50, max: 200)")
     sp.set_defaults(func=_cmd_rules)

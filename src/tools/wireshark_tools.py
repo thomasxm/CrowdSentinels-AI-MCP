@@ -421,8 +421,8 @@ class WiresharkTools:
                 "time_start": str(metadata.time_start) if metadata.time_start else None,
                 "time_end": str(metadata.time_end) if metadata.time_end else None,
                 "file_size_bytes": metadata.file_size_bytes,
-                "protocols": protocols,
-                "top_talkers": top_talkers,
+                "protocols": [p.model_dump() if hasattr(p, "model_dump") else p for p in protocols],
+                "top_talkers": [t.model_dump() if hasattr(t, "model_dump") else t for t in top_talkers],
             }
         except Exception as e:
             logger.error(f"Error in pcap_overview: {e}")
@@ -725,16 +725,13 @@ class WiresharkTools:
                 return {"error": f"PCAP file not found: {pcap_path}"}
 
             # detect_from_pcap returns List[BeaconPattern]
-            beacon_patterns = self.beaconing_detector.detect_from_pcap(
+            # Pass user thresholds directly so detection uses them
+            filtered_patterns = self.beaconing_detector.detect_from_pcap(
                 pcap_path=pcap_path,
-                executor=self.executor
+                executor=self.executor,
+                min_count=min_connections,
+                max_jitter=max_jitter_percent,
             )
-
-            # Filter by min_connections and max_jitter_percent
-            filtered_patterns = [
-                p for p in beacon_patterns
-                if p.occurrence_count >= min_connections and p.jitter_percent <= max_jitter_percent
-            ]
 
             # Convert BeaconPattern objects to dicts
             patterns = []

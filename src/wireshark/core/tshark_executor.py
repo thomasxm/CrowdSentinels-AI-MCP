@@ -150,7 +150,7 @@ class TSharkExecutor:
         Returns:
             Command as list of strings
         """
-        cmd = [self.tshark_path, "-r", pcap_path, "-q", "-z", stat_type]
+        cmd = [self.tshark_path, "-r", pcap_path, "-n", "-q", "-z", stat_type]
 
         if display_filter:
             cmd.extend(["-Y", display_filter])
