@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.5.5](https://github.com/thomasxm/CrowdSentinels-AI-MCP/compare/v0.5.4..v0.5.5) - 2026-03-15
+
+### 🐛 Bug Fixes
+
+- make frequently-failed tool params optional with guards - ([305f5ea](https://github.com/thomasxm/CrowdSentinels-AI-MCP/commit/305f5ea13c111dff69139cdb2363ea4e737d2350)) - @Your Name
+
+### 📚 Documentation
+
+- update CHANGELOG.md for v0.5.4 - ([4fe3393](https://github.com/thomasxm/CrowdSentinels-AI-MCP/commit/4fe3393a1f0f90f86451df9427a2f025c922749d)) - @github-actions[bot]
+
+### Release
+
+- update version to 0.5.5 - ([23f3ab1](https://github.com/thomasxm/CrowdSentinels-AI-MCP/commit/23f3ab1b8c2ac35e1c5891b9101aec35c8801fa8)) - @Your Name
+
 ## [0.5.4](https://github.com/thomasxm/CrowdSentinels-AI-MCP/compare/v0.5.3..v0.5.4) - 2026-03-15
 
 ### 🐛 Bug Fixes
