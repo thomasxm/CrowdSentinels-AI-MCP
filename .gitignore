@@ -5,6 +5,7 @@
 
 # Claude Code
 .claude/
+CLAUDE.md
 
 # Python
 .venv
