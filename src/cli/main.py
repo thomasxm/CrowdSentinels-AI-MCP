@@ -33,6 +33,58 @@ def _format_table(data: Any) -> str:
 
     lines: list[str] = []
 
+    # --- Analyse output (severity_assessment is the marker) ---
+    if "severity_assessment" in data:
+        lines.append("=== Analysis ===")
+        lines.append(f"  severity: {data['severity_assessment']}")
+        if data.get("context"):
+            lines.append(f"  context: {data['context']}")
+        summary = data.get("summary", {})
+        if isinstance(summary, dict):
+            for k, v in summary.items():
+                lines.append(f"  {k}: {v}")
+        lines.append("")
+
+        # MITRE from analyse
+        mitre = data.get("mitre_attack_techniques", [])
+        if isinstance(mitre, list) and mitre:
+            lines.append("=== MITRE ATT&CK ===")
+            for t in mitre:
+                if isinstance(t, dict):
+                    lines.append(f"  {t.get('technique_id','?')} {t.get('technique_name','?')} [{t.get('tactic','?')}] (x{t.get('count','')})")
+            lines.append("")
+
+        # IoCs from analyse (piped from hunt)
+        piped_iocs = data.get("piped_iocs", {})
+        if isinstance(piped_iocs, dict) and piped_iocs:
+            lines.append("=== IoCs ===")
+            for ioc_type, items in piped_iocs.items():
+                if isinstance(items, list):
+                    values = [i["value"] if isinstance(i, dict) else str(i) for i in items]
+                    lines.append(f"  {ioc_type}: {', '.join(values)}")
+            lines.append("")
+
+        # Insights
+        raw_insights = data.get("raw_insights", [])
+        if isinstance(raw_insights, list) and raw_insights:
+            lines.append("=== Insights ===")
+            for insight in raw_insights:
+                lines.append(f"  - {insight}")
+            lines.append("")
+
+        # Recommended follow-up
+        followup = data.get("recommended_followup", [])
+        if isinstance(followup, list) and followup:
+            lines.append("=== Recommended Follow-up ===")
+            for f in followup:
+                if isinstance(f, dict):
+                    lines.append(f"  - {f.get('description', f)}")
+                else:
+                    lines.append(f"  - {f}")
+            lines.append("")
+
+        return "\n".join(lines)
+
     # --- Summary section ---
     summary = data.get("summary", {})
     if isinstance(summary, dict) and summary:
@@ -145,12 +197,12 @@ def _format_summary(data: Any) -> str:
     # Extract summary from nested or top-level fields
     summary = data.get("summary", {})
     if isinstance(summary, dict):
-        hits = summary.get("total_hits", data.get("total_hits"))
-        severity = summary.get("severity", data.get("severity"))
+        hits = summary.get("total_hits", summary.get("total_events", data.get("total_hits")))
+        severity = summary.get("severity", data.get("severity") or data.get("severity_assessment"))
         timeframe = summary.get("timeframe", "")
     else:
         hits = data.get("total_hits", data.get("total_found"))
-        severity = data.get("severity")
+        severity = data.get("severity") or data.get("severity_assessment")
         timeframe = ""
 
     # Cluster health
@@ -167,22 +219,25 @@ def _format_summary(data: Any) -> str:
     if severity:
         parts.append(f"severity={severity}")
 
-    # IoCs count
-    iocs = data.get("iocs", {})
-    if isinstance(iocs, dict):
+    # IoCs count — check both hunt format (iocs) and analyse format (iocs_found, piped_iocs)
+    iocs = data.get("iocs") or data.get("piped_iocs", {})
+    if isinstance(iocs, dict) and iocs:
         total_iocs = sum(len(v) for v in iocs.values() if isinstance(v, list))
         if total_iocs:
             ioc_types = ", ".join(f"{k}={len(v)}" for k, v in iocs.items() if isinstance(v, list) and v)
             parts.append(f"iocs={total_iocs} ({ioc_types})")
+    iocs_found = data.get("iocs_found", [])
+    if isinstance(iocs_found, list) and iocs_found:
+        parts.append(f"iocs_extracted={len(iocs_found)}")
 
-    # MITRE
-    mitre = data.get("mitre_techniques", [])
+    # MITRE — check both hunt format (mitre_techniques) and analyse format (mitre_attack_techniques)
+    mitre = data.get("mitre_techniques") or data.get("mitre_attack_techniques", [])
     if isinstance(mitre, list) and mitre:
         techniques = [t.get("technique_id", "?") for t in mitre if isinstance(t, dict)]
         parts.append(f"mitre={','.join(techniques)}")
 
-    # Insights
-    insights = data.get("insights", [])
+    # Insights — check both hunt format (insights) and analyse format (raw_insights)
+    insights = data.get("insights") or data.get("raw_insights", [])
     if isinstance(insights, list) and insights:
         for insight in insights:
             parts.append(insight)
