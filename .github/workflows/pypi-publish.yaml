@@ -43,7 +43,9 @@ jobs:
       run: uv sync
 
     - name: Build package
-      run: uv build
+      run: |
+        uv build --sdist
+        uv build --wheel
 
     - name: Publish to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
