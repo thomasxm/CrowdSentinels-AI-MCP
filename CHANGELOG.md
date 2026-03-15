@@ -2,6 +2,24 @@
 
 All notable changes to the Elasticsearch Threat Hunting MCP Server will be documented in this file.
 
+## [0.3.2] - 2026-03-14
+
+### Fixed - PyPI Package Path Resolution
+- **Detection rules now bundled with package** — 6,060 rules (Lucene + EQL + ES|QL) ship inside the wheel, no separate download needed
+- **Centralised path resolution** — new `src/paths.py` module resolves data directories correctly in both development and PyPI-installed modes
+- **TOML detection rules support** — 131 ES|QL + 882 EQL rules from Elastic's detection-rules loaded via `toml_rules_directory`
+- **Chainsaw path resolution** — falls back to `~/.crowdsentinel/chainsaw/` and system PATH when not in project tree
+- **Asset discovery path** — uses `~/.crowdsentinel/assets/` instead of writing into site-packages
+- **`crowdsentinel setup`** — downloads Chainsaw and Sigma rules to `~/.crowdsentinel/` (writable, persists across upgrades)
+- **CLI error handling** — connection, TLS, and authentication errors now show actionable messages instead of raw tracebacks
+- **CLI `--rule-type esql`** — added ES|QL to argparse choices
+
+### Changed
+- `pyproject.toml` — added `[tool.hatch.build.targets.wheel.force-include]` to bundle rules and detection-rules in wheel
+- `RuleLoader` — accepts `toml_rules_directory` parameter for Elastic TOML detection rules
+- `ChainsawClient` — uses `get_chainsaw_dir()` and `get_binary_path()` instead of hardcoded `PROJECT_ROOT`
+- `AssetDiscoveryClient` — uses `get_assets_dir()` instead of `Path(__file__).parent...`
+
 ## [0.2.2] - 2025-12-20
 
 ### Added - Response Size Management

@@ -58,6 +58,15 @@ def _format_summary(data: Any) -> str:
 
 def _emit(data: Any, output_mode: str) -> None:
     """Write *data* to stdout in the requested format."""
+    # If the result is an error dict from the exception handler, raise it
+    # so the top-level handler can translate it into an actionable message.
+    if isinstance(data, dict) and "error" in data:
+        err = str(data["error"])
+        if any(s in err for s in ("ConnectionError", "Connection refused",
+                                   "TLS error", "SSL", "AuthenticationException",
+                                   "AuthorizationException")):
+            raise RuntimeError(err)
+
     formatters = {
         "json": _format_json,
         "table": _format_table,
@@ -79,40 +88,40 @@ def _create_client():
 
 
 def _get_data_dir() -> Path:
-    """Return the CrowdSentinel data directory.
+    """Return the writable CrowdSentinel data directory.
 
-    Resolution order:
-    1. CROWDSENTINEL_DATA_DIR environment variable
-    2. Project root (when running from source checkout)
-    3. ~/.crowdsentinel/ (pip install default)
+    This is where ``crowdsentinel setup`` downloads chainsaw, sigma rules,
+    and other mutable data.  Bundled read-only data (detection rules) are
+    resolved separately via ``src.paths.get_rules_dir()`` etc.
     """
     import os
     env_dir = os.environ.get("CROWDSENTINEL_DATA_DIR")
     if env_dir:
         return Path(env_dir)
 
-    # Check if running from source (rules/ exists at project root)
-    project_root = Path(__file__).parent.parent.parent
-    if (project_root / "rules").exists():
-        return project_root
-
-    # Default: ~/.crowdsentinel/
-    return Path.home() / ".crowdsentinel"
+    from src.paths import get_user_data_dir
+    return get_user_data_dir()
 
 
 def _create_rule_loader():
     """Create and load the detection rule loader."""
     from src.clients.common.rule_loader import RuleLoader
+    from src.paths import get_rules_dir, get_toml_rules_dir
 
-    rules_dir = _get_data_dir() / "rules"
-    if not rules_dir.exists():
+    rules_dir = get_rules_dir()
+    toml_rules_dir = get_toml_rules_dir()
+
+    if rules_dir is None and toml_rules_dir is None:
         print(
             "Error: detection rules not found.\n"
             "Run 'crowdsentinel setup' to download detection rules and Chainsaw.",
             file=sys.stderr,
         )
         return None
-    loader = RuleLoader(str(rules_dir))
+    loader = RuleLoader(
+        str(rules_dir) if rules_dir else "",
+        toml_rules_directory=str(toml_rules_dir) if toml_rules_dir else None,
+    )
     loader.load_all_rules()
     return loader
 
@@ -370,8 +379,8 @@ def _cmd_chainsaw(args):
     # Set env vars so ChainsawClient finds the right paths
     if not os.environ.get("CHAINSAW_PATH") and (chainsaw_dir / "chainsaw").exists():
         os.environ["CHAINSAW_PATH"] = str(chainsaw_dir / "chainsaw")
-    if not os.environ.get("SIGMA_RULES_PATH") and (chainsaw_dir / "sigma").exists():
-        os.environ["SIGMA_RULES_PATH"] = str(chainsaw_dir / "sigma")
+    if not os.environ.get("CHAINSAW_SIGMA_PATH") and (chainsaw_dir / "sigma").exists():
+        os.environ["CHAINSAW_SIGMA_PATH"] = str(chainsaw_dir / "sigma")
 
     from src.clients.common.chainsaw_client import ChainsawClient
     client = ChainsawClient()
@@ -387,9 +396,9 @@ def _cmd_chainsaw(args):
                 file=sys.stderr,
             )
             return 1
-        # Resolve mapping path relative to chainsaw binary if not found at project root
+        # Resolve mapping path relative to chainsaw binary if not found
         mapping_path = args.mapping
-        if not mapping_path and not client.mappings.exists():
+        if not mapping_path and (client.mappings is None or not client.mappings.exists()):
             chainsaw_dir = client.chainsaw_path.parent
             fallback = chainsaw_dir / "mappings" / "sigma-event-logs-all.yml"
             if fallback.exists():
@@ -411,8 +420,8 @@ def _cmd_chainsaw(args):
         result = {
             "chainsaw_path": str(client.chainsaw_path),
             "installed": client.chainsaw_path.exists(),
-            "sigma_rules_path": str(client.sigma_rules),
-            "sigma_rules_exist": client.sigma_rules.exists(),
+            "sigma_rules_path": str(client.sigma_rules) if client.sigma_rules else "not configured",
+            "sigma_rules_exist": client.sigma_rules.exists() if client.sigma_rules else False,
             "data_dir": str(data_dir),
         }
     else:
@@ -438,8 +447,13 @@ def _cmd_setup(args):
     print(f"CrowdSentinel data directory: {data_dir}")
 
     # --- Detection Rules ---
+    from src.paths import get_rules_dir
+    bundled_rules = get_rules_dir()
     rules_dir = data_dir / "rules"
-    if rules_dir.exists() and any(rules_dir.iterdir()):
+    if bundled_rules is not None:
+        rule_count = sum(1 for _ in bundled_rules.rglob("*.eql")) + sum(1 for _ in bundled_rules.rglob("*.lucene"))
+        print(f"  Detection rules: bundled with package ({rule_count} rules)")
+    elif rules_dir.exists() and any(rules_dir.iterdir()):
         print(f"  Detection rules: already installed ({rules_dir})")
     else:
         print("  Downloading detection rules...")
@@ -525,8 +539,7 @@ def _cmd_setup(args):
         (mappings_dir / "sigma-event-logs-all.yml").write_text(mapping_content)
         print(f"  Chainsaw mappings: created ({mappings_dir})")
 
-    print("\nSetup complete. Set this in your shell profile for persistence:")
-    print(f'  export CROWDSENTINEL_DATA_DIR="{data_dir}"')
+    print(f"\nSetup complete. Data stored in: {data_dir}")
     return 0
 
 
@@ -691,7 +704,7 @@ def _build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--platform", "-p", help="Filter by platform (windows, linux, macos, ...)")
     sp.add_argument("--tactic", help="Filter by MITRE ATT&CK tactic (e.g. credential_access)")
     sp.add_argument("--log-source", dest="log_source", help="Filter by log source")
-    sp.add_argument("--rule-type", dest="rule_type", choices=["lucene", "eql"], help="Filter by rule type")
+    sp.add_argument("--rule-type", dest="rule_type", choices=["lucene", "eql", "esql"], help="Filter by rule type")
     sp.add_argument("--search", "-s", help="Search term (name, tags, description)")
     sp.add_argument("--limit", "-l", type=int, default=50, help="Max results (default: 50, max: 200)")
     sp.set_defaults(func=_cmd_rules)
@@ -823,6 +836,54 @@ def _build_parser() -> argparse.ArgumentParser:
 # Entry point
 # ---------------------------------------------------------------------------
 
+def _handle_cli_error(exc: Exception) -> None:
+    """Translate raw exceptions into actionable user messages, then exit."""
+    import os
+
+    msg = str(exc)
+    hosts = os.environ.get("ELASTICSEARCH_HOSTS", "https://localhost:9200")
+
+    # Connection refused / unreachable
+    if "ConnectionError" in type(exc).__name__ or "Connection refused" in msg or "NewConnectionError" in msg:
+        print(
+            f"Cannot connect to Elasticsearch at {hosts}\n"
+            "Check that Elasticsearch is running and ELASTICSEARCH_HOSTS is correct.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    # TLS / SSL failures
+    if "TLS" in msg or "SSL" in msg or "CERTIFICATE_VERIFY_FAILED" in msg:
+        print(
+            f"TLS/SSL error connecting to {hosts}\n"
+            "For self-signed certificates, set: export VERIFY_CERTS=false",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    # Authentication failures
+    if "AuthenticationException" in type(exc).__name__ or "401" in msg:
+        print(
+            "Authentication failed.\n"
+            "Set ELASTICSEARCH_API_KEY or ELASTICSEARCH_USERNAME + ELASTICSEARCH_PASSWORD.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    # Authorisation failures
+    if "AuthorizationException" in type(exc).__name__ or "403" in msg:
+        print(
+            "Access denied — insufficient permissions.\n"
+            "Check the API key or user has the required cluster/index privileges.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    # Fallback: print the raw error
+    print(f"Error: {exc}", file=sys.stderr)
+    sys.exit(1)
+
+
 def main():
     """CLI entry point — parse arguments and dispatch to subcommand."""
     # Graceful Ctrl+C handling
@@ -840,8 +901,7 @@ def main():
     except KeyboardInterrupt:
         sys.exit(130)
     except Exception as exc:
-        print(f"Error: {exc}", file=sys.stderr)
-        sys.exit(1)
+        _handle_cli_error(exc)
 
     sys.exit(exit_code)
 

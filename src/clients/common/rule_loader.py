@@ -49,6 +49,13 @@ class DetectionRule:
     # Hunting tips and guidance (from hunting rules)
     notes: List[str] = field(default_factory=list)
 
+    # TOML rule metadata (from detection-rules/rules/)
+    description: str = ""
+    severity: str = ""
+    risk_score: int = 0
+    references: List[str] = field(default_factory=list)
+    investigation_notes: str = ""
+
     @property
     def display_name(self) -> str:
         """Generate a human-readable display name."""
@@ -89,16 +96,22 @@ class DetectionRule:
 class RuleLoader:
     """Loads and manages detection rules from the rules directory."""
 
-    def __init__(self, rules_directory: str, hunting_directory: Optional[str] = None):
+    # Languages accepted from TOML detection rules
+    TOML_ALLOWED_LANGUAGES = {"eql", "esql"}
+
+    def __init__(self, rules_directory: str, hunting_directory: Optional[str] = None,
+                 toml_rules_directory: Optional[str] = None):
         """
-        Initialize the rule loader.
+        Initialise the rule loader.
 
         Args:
             rules_directory: Path to the directory containing rule files
             hunting_directory: Optional path to detection-rules/hunting/ for EQL hunting rules
+            toml_rules_directory: Optional path to detection-rules/rules/ for TOML detection rules
         """
         self.rules_directory = Path(rules_directory)
         self.hunting_directory = Path(hunting_directory) if hunting_directory else None
+        self.toml_rules_directory = Path(toml_rules_directory) if toml_rules_directory else None
         self.rules: Dict[str, DetectionRule] = {}
         self.rules_by_platform: Dict[str, List[str]] = {}
         self.rules_by_type: Dict[str, List[str]] = {}
@@ -128,47 +141,53 @@ class RuleLoader:
         Returns:
             Number of rules successfully loaded
         """
-        if not self.rules_directory.exists():
-            self.logger.error(f"Rules directory not found: {self.rules_directory}")
-            return 0
-
         loaded_count = 0
         error_count = 0
 
-        # Find all .lucene and .eql files
-        lucene_files = list(self.rules_directory.glob("*.lucene"))
-        eql_files = list(self.rules_directory.glob("*.eql"))
+        # Load Lucene + EQL rules from filesystem rules directory
+        rules_dir_str = str(self.rules_directory)
+        if rules_dir_str and self.rules_directory.exists() and self.rules_directory.is_dir():
+            # Find all .lucene and .eql files
+            lucene_files = list(self.rules_directory.glob("*.lucene"))
+            eql_files = list(self.rules_directory.glob("*.eql"))
 
-        self.logger.info(f"Found {len(lucene_files)} Lucene rules and {len(eql_files)} EQL rules")
+            self.logger.info(f"Found {len(lucene_files)} Lucene rules and {len(eql_files)} EQL rules")
 
-        # Load Lucene rules
-        for rule_file in lucene_files:
-            try:
-                rule = self._load_rule_file(rule_file, "lucene")
-                if rule:
-                    self._index_rule(rule)
-                    loaded_count += 1
-            except Exception as e:
-                self.logger.warning(f"Failed to load rule {rule_file.name}: {e}")
-                error_count += 1
+            # Load Lucene rules
+            for rule_file in lucene_files:
+                try:
+                    rule = self._load_rule_file(rule_file, "lucene")
+                    if rule:
+                        self._index_rule(rule)
+                        loaded_count += 1
+                except Exception as e:
+                    self.logger.warning(f"Failed to load rule {rule_file.name}: {e}")
+                    error_count += 1
 
-        # Load EQL rules
-        for rule_file in eql_files:
-            try:
-                rule = self._load_rule_file(rule_file, "eql")
-                if rule:
-                    self._index_rule(rule)
-                    loaded_count += 1
-            except Exception as e:
-                self.logger.warning(f"Failed to load rule {rule_file.name}: {e}")
-                error_count += 1
+            # Load EQL rules
+            for rule_file in eql_files:
+                try:
+                    rule = self._load_rule_file(rule_file, "eql")
+                    if rule:
+                        self._index_rule(rule)
+                        loaded_count += 1
+                except Exception as e:
+                    self.logger.warning(f"Failed to load rule {rule_file.name}: {e}")
+                    error_count += 1
 
-        self.logger.info(f"Loaded {loaded_count} Sigma rules successfully ({error_count} errors)")
+            self.logger.info(f"Loaded {loaded_count} Sigma rules successfully ({error_count} errors)")
+        elif rules_dir_str:
+            self.logger.warning(f"Rules directory not found: {self.rules_directory}")
 
         # Load hunting EQL rules if hunting directory is configured
         if self.hunting_directory and self.hunting_directory.exists():
             hunting_count = self._load_hunting_eql_rules()
             loaded_count += hunting_count
+
+        # Load TOML detection rules if directory is configured
+        if self.toml_rules_directory and self.toml_rules_directory.exists():
+            toml_count = self._load_toml_detection_rules()
+            loaded_count += toml_count
 
         return loaded_count
 
@@ -291,6 +310,142 @@ class RuleLoader:
                 tactics.add(technique_tactics[base])
 
         return tactics
+
+    def _load_toml_detection_rules(self) -> int:
+        """Load EQL and ES|QL detection rules from TOML files in detection-rules/rules/."""
+        loaded_count = 0
+
+        for toml_file in self.toml_rules_directory.rglob("*.toml"):
+            # Skip deprecated rules
+            if "_deprecated" in toml_file.parts:
+                continue
+            try:
+                rule = self._parse_toml_detection_rule(toml_file)
+                if rule:
+                    self._index_rule(rule)
+                    loaded_count += 1
+            except Exception as e:
+                self.logger.debug(f"Failed to load TOML rule {toml_file}: {e}")
+
+        self.logger.info(f"Loaded {loaded_count} TOML detection rules (EQL + ES|QL)")
+        return loaded_count
+
+    def _parse_toml_detection_rule(self, toml_file: Path) -> Optional[DetectionRule]:
+        """Parse a [rule]-format TOML detection rule file."""
+        with open(toml_file, "rb") as f:
+            data = tomllib.load(f)
+
+        rule_data = data.get("rule", {})
+        if not rule_data:
+            return None
+
+        # Filter: only EQL and ES|QL
+        language = rule_data.get("language", "").lower()
+        if language not in self.TOML_ALLOWED_LANGUAGES:
+            return None
+
+        query = rule_data.get("query", "").strip()
+        if not query:
+            return None
+
+        uuid = rule_data.get("rule_id", "")
+        name = rule_data.get("name", "")
+        if not uuid or not name:
+            return None
+
+        # Map language to rule_type
+        rule_type = language  # "eql" or "esql"
+
+        # Detect platform from directory structure or tags
+        platform = self._detect_toml_platform(toml_file, rule_data.get("tags", []))
+
+        # Extract log source from integration metadata
+        metadata = data.get("metadata", {})
+        integrations = metadata.get("integration", [])
+        log_source = integrations[0] if integrations else "elastic"
+
+        # Extract MITRE from structured [[rule.threat]] sections
+        mitre_tactics, mitre_techniques = self._extract_mitre_from_threat(
+            rule_data.get("threat", [])
+        )
+
+        # Build tags
+        tags = set()
+        tags.add(platform)
+        tags.add(rule_type)
+        tags.add(log_source)
+        tags.add("elastic")
+        tags.add("toml")
+        for tag in rule_data.get("tags", []):
+            if ":" in tag:
+                tags.add(tag.split(":", 1)[1].strip().lower())
+            else:
+                tags.add(tag.lower())
+        tags.update(mitre_tactics)
+
+        return DetectionRule(
+            rule_id=f"elastic_{uuid}",
+            name=name,
+            rule_type=rule_type,
+            query=query,
+            platform=platform,
+            log_source=log_source,
+            category=next(iter(mitre_tactics), ""),
+            file_path=str(toml_file),
+            tags=tags,
+            mitre_tactics=mitre_tactics,
+            mitre_techniques=mitre_techniques,
+            description=rule_data.get("description", "").strip(),
+            severity=rule_data.get("severity", ""),
+            risk_score=rule_data.get("risk_score", 0),
+            references=rule_data.get("references", []),
+            investigation_notes=rule_data.get("note", "").strip(),
+        )
+
+    def _detect_toml_platform(self, toml_file: Path, tags: list) -> str:
+        """Detect platform from TOML rule directory structure or tags."""
+        known_platforms = {
+            "windows", "linux", "macos", "cross-platform",
+            "network", "ml", "integrations",
+        }
+        for part in toml_file.parts:
+            if part.lower() in known_platforms:
+                return part.lower()
+
+        for tag in tags:
+            tag_lower = tag.lower()
+            if "windows" in tag_lower:
+                return "windows"
+            if "linux" in tag_lower:
+                return "linux"
+            if "macos" in tag_lower:
+                return "macos"
+
+        return "cross-platform"
+
+    def _extract_mitre_from_threat(self, threat_list: list) -> tuple:
+        """Extract MITRE tactics and techniques from [[rule.threat]] TOML sections."""
+        tactics = set()
+        techniques = set()
+
+        for threat_entry in threat_list:
+            if not isinstance(threat_entry, dict):
+                continue
+            if threat_entry.get("framework") != "MITRE ATT&CK":
+                continue
+
+            tactic = threat_entry.get("tactic", {})
+            if tactic.get("name"):
+                tactics.add(tactic["name"].lower().replace(" ", "_"))
+
+            for technique in threat_entry.get("technique", []):
+                if technique.get("id"):
+                    techniques.add(technique["id"])
+                for sub in technique.get("subtechnique", []):
+                    if sub.get("id"):
+                        techniques.add(sub["id"])
+
+        return tactics, techniques
 
     def _load_rule_file(self, file_path: Path, rule_type: str) -> Optional[DetectionRule]:
         """Load a single rule file and parse its metadata."""

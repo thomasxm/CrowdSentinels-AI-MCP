@@ -31,6 +31,7 @@ from src.tools.esql_hunting import ESQLHuntingTools
 from src.tools.workflow_guidance import WorkflowGuidanceTools
 from src.tools.schema_resources import SchemaTools
 from src.tools.register import ToolsRegister
+from src.paths import get_rules_dir, get_hunting_rules_dir, get_toml_rules_dir
 from src.version import __version__ as VERSION
 
 class SearchMCPServer:
@@ -63,39 +64,42 @@ class SearchMCPServer:
         self._register_tools()
 
     def _initialize_rule_loader(self):
-        """Initialize the detection rule loader."""
-        # Find rules directory (relative to server.py location)
-        server_dir = Path(__file__).parent.parent  # Go up to project root
-        rules_dir = server_dir / "rules"
+        """Initialise the detection rule loader."""
+        rules_dir = get_rules_dir()
+        toml_rules_dir = get_toml_rules_dir()
 
-        self.logger.info(f"Loading detection rules from: {rules_dir}")
-
-        if not rules_dir.exists():
-            self.logger.warning(f"Rules directory not found: {rules_dir}")
+        if rules_dir is None and toml_rules_dir is None:
+            self.logger.warning("Rules directory not found in any candidate location")
             self.logger.warning("Detection rules will not be available")
             return None
 
+        self.logger.info(f"Loading detection rules from: {rules_dir}")
+        if toml_rules_dir:
+            self.logger.info(f"Loading TOML detection rules from: {toml_rules_dir}")
+
         # Create and load rules
-        rule_loader = RuleLoader(str(rules_dir))
+        rule_loader = RuleLoader(
+            str(rules_dir) if rules_dir else "",
+            toml_rules_directory=str(toml_rules_dir) if toml_rules_dir else None,
+        )
         loaded_count = rule_loader.load_all_rules()
 
         if loaded_count > 0:
             stats = rule_loader.get_statistics()
             self.logger.info(f"Loaded {loaded_count} detection rules")
             self.logger.info(f"  - Platforms: {', '.join(stats['platforms'][:10])}")
-            self.logger.info(f"  - Types: Lucene={stats['by_type'].get('lucene', 0)}, EQL={stats['by_type'].get('eql', 0)}")
+            self.logger.info(f"  - Types: Lucene={stats['by_type'].get('lucene', 0)}, EQL={stats['by_type'].get('eql', 0)}, ES|QL={stats['by_type'].get('esql', 0)}")
         else:
             self.logger.warning("No detection rules loaded")
 
         return rule_loader
 
     def _initialize_esql_components(self):
-        """Initialize ES|QL hunting components (Elasticsearch 8.11+ only)."""
-        server_dir = Path(__file__).parent.parent  # Go up to project root
-        hunting_dir = server_dir / "detection-rules" / "hunting"
+        """Initialise ES|QL hunting components (Elasticsearch 8.11+ only)."""
+        hunting_dir = get_hunting_rules_dir()
 
-        # Initialize hunting rule loader
-        if hunting_dir.exists():
+        # Initialise hunting rule loader
+        if hunting_dir is not None:
             self.logger.info(f"Loading ES|QL hunting rules from: {hunting_dir}")
             self.hunting_loader = HuntingRuleLoader(str(hunting_dir))
             stats = self.hunting_loader.get_statistics()
@@ -103,7 +107,7 @@ class SearchMCPServer:
             if stats.get('platforms'):
                 self.logger.info(f"  - Platforms: {', '.join(stats['platforms'].keys())}")
         else:
-            self.logger.warning(f"Hunting rules directory not found: {hunting_dir}")
+            self.logger.warning("Hunting rules directory not found in any candidate location")
             self.logger.warning("ES|QL hunting tools will have no curated rules")
 
         # Initialize ES|QL client - share config from search client

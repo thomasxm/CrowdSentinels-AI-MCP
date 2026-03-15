@@ -6,6 +6,7 @@ from typing import Dict, List, Optional
 from pathlib import Path
 
 from src.clients.base import SearchClientBase
+from src.paths import get_assets_dir
 
 
 class AssetDiscoveryClient(SearchClientBase):
@@ -13,8 +14,7 @@ class AssetDiscoveryClient(SearchClientBase):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.assets_dir = Path(__file__).parent.parent.parent.parent / "assets"
-        self.assets_dir.mkdir(exist_ok=True)
+        self.assets_dir = get_assets_dir()
 
     def discover_all_assets(self) -> Dict:
         """

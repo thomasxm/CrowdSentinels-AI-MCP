@@ -2,14 +2,15 @@
 
 ## Overview
 
-The Elasticsearch Threat Hunting MCP Server now includes a comprehensive detection rules library with **5,000+ community detection rules** for threat hunting and incident response.
+The Elasticsearch Threat Hunting MCP Server now includes a comprehensive detection rules library with **6,000+ community detection rules** for threat hunting and incident response, bundled directly with the PyPI package.
 
 ### Rule Library Statistics
 
-- **Total Rules**: 5,048+ detection rules
-- **Lucene Rules**: 1,967 rules
-- **EQL Rules**: 3,081 rules
-- **Platforms**: Windows, Linux, macOS, Cloud, Network, Applications
+- **Total Rules**: 6,060+ detection rules
+- **Lucene Rules**: 1,966 rules (Sigma-converted)
+- **EQL Rules**: 3,963 rules (Sigma-converted + Elastic TOML)
+- **ES|QL Rules**: 131 rules (Elastic TOML, requires ES 8.11+)
+- **Platforms**: Windows, Linux, macOS, Cloud, Network, Identity, Applications
 - **Coverage**: MITRE ATT&CK framework mapped
 
 ---
@@ -621,8 +622,8 @@ hunt_with_rule_category(
 
 The Detection Rules System provides:
 
-✅ **5,000+ community detection rules**
-✅ **Lucene and EQL query support**
+✅ **6,000+ community detection rules (bundled with PyPI package)**
+✅ **Lucene, EQL, and ES|QL query support**
 ✅ **MITRE ATT&CK framework mapping**
 ✅ **Platform and log source filtering**
 ✅ **Batch rule execution**

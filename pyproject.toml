@@ -1,7 +1,7 @@
 [project]
 name = "crowdsentinel-mcp-server"
 version = "0.3.2"
-description = "AI-powered threat hunting and incident response MCP server for Elasticsearch/OpenSearch with 79 tools, 5,049 detection rules, and baseline behaviour analysis"
+description = "AI-powered threat hunting and incident response MCP server for Elasticsearch/OpenSearch with 79 tools, 6,060 detection rules, and baseline behaviour analysis"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "GPL-3.0-only"}
@@ -73,10 +73,17 @@ packages = [
     "src",
 ]
 
+[tool.hatch.build.targets.wheel.force-include]
+rules = "src/rules"
+"detection-rules/hunting" = "src/detection-rules/hunting"
+"detection-rules/rules" = "src/detection-rules/rules"
+
 [tool.hatch.build.targets.sdist]
 include = [
     "src/",
     "rules/",
+    "detection-rules/hunting/",
+    "detection-rules/rules/",
     "LICENSE",
     "README.md",
 ]

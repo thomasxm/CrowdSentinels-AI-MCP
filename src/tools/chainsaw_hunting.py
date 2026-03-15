@@ -3,11 +3,6 @@ from typing import Dict, List, Optional
 from fastmcp import FastMCP
 
 from src.storage.auto_capture import auto_capture_chainsaw_results
-from src.clients.common.chainsaw_client import (
-    DEFAULT_CHAINSAW_PATH,
-    DEFAULT_SIGMA_RULES_PATH,
-    DEFAULT_EVTX_SAMPLES_PATH,
-)
 
 
 class ChainsawHuntingTools:

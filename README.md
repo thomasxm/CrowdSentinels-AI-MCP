@@ -13,7 +13,7 @@
 [![License](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](LICENSE)
 [![MCP](https://img.shields.io/badge/MCP-Compatible-purple.svg)](https://modelcontextprotocol.io/)
 [![Tools](https://img.shields.io/badge/MCP%20Tools-79-brightgreen.svg)](https://github.com/thomasxm/CrowdSentinels-AI-MCP)
-[![Rules](https://img.shields.io/badge/Detection%20Rules-5%2C049-blue.svg)](https://github.com/thomasxm/CrowdSentinels-AI-MCP)
+[![Rules](https://img.shields.io/badge/Detection%20Rules-6%2C060-blue.svg)](https://github.com/thomasxm/CrowdSentinels-AI-MCP)
 
 [![Install from PyPI](https://img.shields.io/badge/Install-pip%20install%20crowdsentinel--mcp--server-3775A9?style=for-the-badge&logo=pypi&logoColor=white)](https://pypi.org/project/crowdsentinel-mcp-server/)
 
@@ -64,10 +64,11 @@ uv pip install crowdsentinel-mcp-server
 crowdsentinel setup
 ```
 
-The `setup` command downloads everything needed for offline threat hunting into `~/.crowdsentinel/`:
-- 5,049 detection rules (EQL + Lucene)
+Detection rules (6,060 Lucene + EQL + ES|QL) are **bundled with the package** — no download needed. The `setup` command downloads additional tools:
 - Chainsaw binary for EVTX analysis
 - 3,000+ Sigma rules for Chainsaw
+
+Downloaded tools are stored in `~/.crowdsentinel/` and persist across package upgrades.
 
 ### Run directly with uvx (no install needed)
 
@@ -91,7 +92,7 @@ chmod +x setup.sh && ./setup.sh
 
 The setup script will:
 - Install dependencies (pipx, uv, Claude Code CLI if needed)
-- Download 5,049 detection rules and Chainsaw binary
+- Bundle 6,060 detection rules and download Chainsaw binary
 - Prompt for Elasticsearch credentials (never hardcoded)
 - Configure the MCP server with Claude Code
 - Validate your connection
@@ -353,8 +354,8 @@ crowdsentinel hunt "powershell encoded" -i winlogbeat-* -o json | \
 ### 79 MCP Tools
 Threat hunting, detection rules, forensics, network analysis — all accessible via natural language
 
-### 5,049 Detection Rules
-Pre-built Lucene & EQL rules with automatic MITRE ATT&CK mapping
+### 6,060 Detection Rules
+Pre-built Lucene, EQL & ES|QL rules with automatic MITRE ATT&CK mapping
 
 ### Investigation State
 Persistent IoC tracking across tools and sessions with FIFO storage
@@ -391,7 +392,7 @@ Persistent IoC tracking across tools and sessions with FIFO storage
 ┌─────────────────────────────────────────────────────────────────┐
 │                    CrowdSentinel MCP Server                      │
 │  ┌───────────────┐ ┌───────────────┐ ┌───────────────────────┐  │
-│  │   79 Tools    │ │ 5,049 Rules   │ │ Security Frameworks   │  │
+│  │   79 Tools    │ │ 6,060 Rules   │ │ Security Frameworks   │  │
 │  │ - Hunting     │ │ - Lucene      │ │ - Cyber Kill Chain    │  │
 │  │ - Detection   │ │ - EQL         │ │ - Pyramid of Pain     │  │
 │  │ - Forensics   │ │ - Sigma       │ │ - Diamond Model       │  │
@@ -427,7 +428,7 @@ Persistent IoC tracking across tools and sessions with FIFO storage
 |:---------|:-----:|:------------|
 | **Elasticsearch Core** | 18 | Index, document, cluster, alias, data stream operations |
 | **Threat Hunting** | 12 | Attack pattern detection, IoC hunting, timeline analysis |
-| **Detection Rules** | 9 | 5,049 rule library — list, execute, validate, suggest |
+| **Detection Rules** | 9 | 6,060 rule library — list, execute, validate, suggest |
 | **Kill Chain Analysis** | 5 | Stage hunting, progression tracking, adjacent stage prediction |
 | **Investigation Prompts** | 5 | Fast triage spine — 10 critical IR questions |
 | **Chainsaw (EVTX)** | 6 | Sigma rule hunting, iterative IoC discovery |
@@ -443,14 +444,15 @@ Persistent IoC tracking across tools and sessions with FIFO storage
 | **Diamond Model** | Map adversary, capability, infrastructure, victim relationships |
 | **MITRE ATT&CK** | Automatic technique mapping for all detections |
 
-### Detection Rules (5,049 Rules)
+### Detection Rules (6,060 Rules)
 
-| Type | Count | Description |
-|:-----|------:|:------------|
-| **Lucene** | 1,968 | Fast pattern matching queries |
-| **EQL** | 3,081 | Event sequences and correlations |
+| Type | Count | Source | Description |
+|:-----|------:|:-------|:------------|
+| **Lucene** | 1,966 | Sigma-converted | Fast pattern matching queries |
+| **EQL** | 3,963 | Sigma-converted + Elastic | Event sequences and correlations |
+| **ES\|QL** | 131 | Elastic TOML rules | Pipe-based query language (ES 8.11+) |
 
-**Platforms:** Windows, Linux, macOS, Cloud (AWS/Azure/GCP), Network
+**Platforms:** Windows, Linux, macOS, Cloud (AWS/Azure/GCP), Network, Identity
 
 **Log Sources:** PowerShell, Sysmon, Security Events, Process Creation, Audit logs
 
@@ -695,7 +697,7 @@ crowdsentinel-mcp-server/
 │       ├── extraction/           # File carving from traffic
 │       └── reporting/            # NCSC-style reports, timelines
 │
-├── rules/                        # 5,049 detection rules (EQL + Lucene)
+├── rules/                        # 6,060 detection rules (EQL + Lucene)
 ├── chainsaw/                     # Chainsaw binary + 3,000+ Sigma rules
 ├── skills/                       # Claude Code agent skills
 └── tests/                        # Test suites
@@ -827,7 +829,7 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed version history.
 | Document | Description |
 |:---------|:------------|
 | [THREAT_HUNTING_GUIDE.md](THREAT_HUNTING_GUIDE.md) | Threat hunting workflows |
-| [DETECTION_RULES_GUIDE.md](DETECTION_RULES_GUIDE.md) | Using 5,049 detection rules |
+| [DETECTION_RULES_GUIDE.md](DETECTION_RULES_GUIDE.md) | Using 6,060 detection rules |
 | [CYBER_KILL_CHAIN_GUIDE.md](CYBER_KILL_CHAIN_GUIDE.md) | Kill chain analysis |
 | [CHAINSAW_GUIDE.md](CHAINSAW_GUIDE.md) | EVTX log analysis with Sigma |
 | [INVESTIGATION_PROMPTS_GUIDE.md](INVESTIGATION_PROMPTS_GUIDE.md) | Fast triage spine |

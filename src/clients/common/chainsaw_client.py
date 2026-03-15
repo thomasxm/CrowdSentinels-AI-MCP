@@ -8,19 +8,9 @@ from pathlib import Path
 from datetime import datetime
 from dataclasses import dataclass, field
 
+from src.paths import get_chainsaw_dir, get_binary_path
+
 logger = logging.getLogger(__name__)
-
-# Default Chainsaw paths - relative to project root
-# The setup.sh installs Chainsaw to: <project_root>/chainsaw/chainsaw
-PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
-DEFAULT_CHAINSAW_PATH = PROJECT_ROOT / "chainsaw" / "chainsaw"
-DEFAULT_SIGMA_RULES_PATH = PROJECT_ROOT / "chainsaw" / "sigma"
-DEFAULT_MAPPINGS_PATH = PROJECT_ROOT / "chainsaw" / "mappings"
-DEFAULT_EVTX_SAMPLES_PATH = PROJECT_ROOT / "chainsaw" / "EVTX-ATTACK-SAMPLES"
-
-# Legacy/fallback paths (from older setup.sh versions with extraction bug)
-LEGACY_CHAINSAW_PATH = PROJECT_ROOT / "chainsaw" / "chainsaw" / "chainsaw_binary"
-LEGACY_CHAINSAW_PATH_2 = PROJECT_ROOT / "chainsaw" / "chainsaw" / "chainsaw_x86_64-unknown-linux-gnu"
 
 # Environment variable overrides
 ENV_CHAINSAW_PATH = os.environ.get("CHAINSAW_PATH")
@@ -127,38 +117,56 @@ class ChainsawClient:
             chainsaw_path: Path to chainsaw binary. Resolution order:
                 1. Explicit chainsaw_path argument
                 2. CHAINSAW_PATH environment variable
-                3. Default: <project_root>/chainsaw/chainsaw
+                3. Resolved chainsaw directory (installed package or project root)
                 4. Legacy fallback paths (from older setup.sh)
+                5. System PATH via shutil.which
         """
-        # Resolve chainsaw binary path
+        # Resolve the chainsaw root directory via the centralised path helper
+        chainsaw_dir = get_chainsaw_dir()
+
+        # Resolve chainsaw binary path (env var → project dir → legacy → system PATH)
         if chainsaw_path:
             self.chainsaw_path = Path(chainsaw_path)
         elif ENV_CHAINSAW_PATH:
             self.chainsaw_path = Path(ENV_CHAINSAW_PATH)
-        elif DEFAULT_CHAINSAW_PATH.exists():
-            self.chainsaw_path = DEFAULT_CHAINSAW_PATH
-        elif LEGACY_CHAINSAW_PATH.exists():
-            # Fallback to legacy path from old setup.sh with extraction bug
-            logger.info(f"Using legacy Chainsaw path: {LEGACY_CHAINSAW_PATH}")
-            self.chainsaw_path = LEGACY_CHAINSAW_PATH
-        elif LEGACY_CHAINSAW_PATH_2.exists():
-            logger.info(f"Using legacy Chainsaw path: {LEGACY_CHAINSAW_PATH_2}")
-            self.chainsaw_path = LEGACY_CHAINSAW_PATH_2
+        elif chainsaw_dir is not None:
+            default_binary = chainsaw_dir / "chainsaw"
+            legacy_binary = chainsaw_dir / "chainsaw" / "chainsaw_binary"
+            legacy_binary_2 = chainsaw_dir / "chainsaw" / "chainsaw_x86_64-unknown-linux-gnu"
+
+            if default_binary.exists():
+                self.chainsaw_path = default_binary
+            elif legacy_binary.exists():
+                logger.info(f"Using legacy Chainsaw path: {legacy_binary}")
+                self.chainsaw_path = legacy_binary
+            elif legacy_binary_2.exists():
+                logger.info(f"Using legacy Chainsaw path: {legacy_binary_2}")
+                self.chainsaw_path = legacy_binary_2
+            else:
+                self.chainsaw_path = default_binary
         else:
-            self.chainsaw_path = DEFAULT_CHAINSAW_PATH
+            # No project chainsaw directory — try system PATH
+            system_binary = get_binary_path("chainsaw")
+            self.chainsaw_path = system_binary or Path("chainsaw")
 
         # Validate chainsaw exists
         if not self.chainsaw_path.exists():
             logger.warning(f"Chainsaw binary not found at: {self.chainsaw_path}")
-            logger.warning("Run ./setup.sh to install Chainsaw")
+            logger.warning("Install chainsaw (https://github.com/WithSecureLabs/chainsaw) or run ./setup.sh")
 
-        # Set default paths using constants
-        self.repo_root = PROJECT_ROOT
-        self.chainsaw_dir = PROJECT_ROOT / "chainsaw"
-        self.sigma_rules = Path(ENV_SIGMA_RULES_PATH) if ENV_SIGMA_RULES_PATH else DEFAULT_SIGMA_RULES_PATH
-        self.custom_rules = self.chainsaw_dir / "rules"
-        self.mappings = DEFAULT_MAPPINGS_PATH
-        self.sample_evtx = Path(ENV_EVTX_SAMPLES_PATH) if ENV_EVTX_SAMPLES_PATH else DEFAULT_EVTX_SAMPLES_PATH
+        # Set default paths using the resolved chainsaw directory
+        self.chainsaw_dir = chainsaw_dir
+        if chainsaw_dir is not None:
+            self.sigma_rules = Path(ENV_SIGMA_RULES_PATH) if ENV_SIGMA_RULES_PATH else chainsaw_dir / "sigma"
+            self.custom_rules = chainsaw_dir / "rules"
+            self.mappings = chainsaw_dir / "mappings"
+            self.sample_evtx = Path(ENV_EVTX_SAMPLES_PATH) if ENV_EVTX_SAMPLES_PATH else chainsaw_dir / "EVTX-ATTACK-SAMPLES"
+        else:
+            # No chainsaw directory — use env vars or None
+            self.sigma_rules = Path(ENV_SIGMA_RULES_PATH) if ENV_SIGMA_RULES_PATH else None
+            self.custom_rules = None
+            self.mappings = None
+            self.sample_evtx = Path(ENV_EVTX_SAMPLES_PATH) if ENV_EVTX_SAMPLES_PATH else None
 
     def hunt(self,
              evtx_path: str,
