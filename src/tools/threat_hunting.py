@@ -531,11 +531,12 @@ class ThreatHuntingTools:
             }
 
             # Hunt for previous stage (how did they get to current stage?)
+            # Call the client method directly, not the MCP-decorated wrapper
             if hunt_previous and adjacent['previous']:
                 prev_stage_name = adjacent['previous'].name
                 print(f"Hunting for previous stage: {prev_stage_name}")
 
-                prev_hunt = hunt_by_kill_chain_stage(
+                prev_hunt = self.search_client.hunt_by_kill_chain_stage(
                     index=index,
                     stage=prev_stage_name,
                     timeframe_minutes=timeframe_minutes,
@@ -550,11 +551,12 @@ class ThreatHuntingTools:
                 }
 
             # Hunt for next stage (what are they doing next?)
+            # Call the client method directly, not the MCP-decorated wrapper
             if hunt_next and adjacent['next']:
                 next_stage_name = adjacent['next'].name
                 print(f"Hunting for next stage: {next_stage_name}")
 
-                next_hunt = hunt_by_kill_chain_stage(
+                next_hunt = self.search_client.hunt_by_kill_chain_stage(
                     index=index,
                     stage=next_stage_name,
                     timeframe_minutes=timeframe_minutes,
