@@ -12,7 +12,7 @@ class IoCAnalysisTools:
     def register_tools(self, mcp: FastMCP):
         @mcp.tool()
         def analyze_search_results(
-            search_results: Annotated[dict, Field(description='Search results dict. Accepts ES format {"hits":{"hits":[...]}}, simplified {"hits":[...]}, or hunt output {"sample_events":[...], "summary":{"total_hits": N}}')],
+            search_results: Annotated[dict, Field(description='REQUIRED. Search results dict. Accepts ES format {"hits":{"hits":[...]}}, simplified {"hits":[...]}, or hunt output {"sample_events":[...], "summary":{"total_hits": N}}')] = None,
             context: str = "",
         ) -> dict:
             """
@@ -54,14 +54,16 @@ class IoCAnalysisTools:
                 - Tools (priority 5 - challenging to change)
                 - TTPs/Behaviors (priority 6 - tough to change) ← Focus here!
             """
+            if not search_results:
+                return {"error": "search_results parameter is required. Pass the output from threat_hunt_search, search_with_lucene, or search_documents."}
             return self.search_client.analyze_search_results(
                 search_results=search_results,
                 context=context
             )
 
         @mcp.tool()
-        def generate_investigation_report(analysis_results: list[dict],
-                                          investigation_context: str) -> dict:
+        def generate_investigation_report(analysis_results: list[dict] = None,
+                                          investigation_context: str = "") -> dict:
             """
             Generate a comprehensive investigation report from multiple analyses.
             This tool aggregates results from multiple queries and analyses to create
@@ -104,6 +106,8 @@ class IoCAnalysisTools:
                     investigation_context="Investigating potential data exfiltration incident"
                 )
             """
+            if not analysis_results:
+                return {"error": "analysis_results parameter is required. Pass a list of results from analyze_search_results."}
             return self.search_client.generate_investigation_report(
                 analysis_results=analysis_results,
                 investigation_context=investigation_context
@@ -111,7 +115,7 @@ class IoCAnalysisTools:
 
         @mcp.tool()
         def analyze_kill_chain_stage(
-            iocs: Annotated[list[dict], Field(description='List of IoC dicts, each with "type" and "value" keys. Types: ip, domain, file_path, hostname, commandline, hash, registry_key, c2_domain. Example: [{"type": "hostname", "value": "MSEDGEWIN10"}, {"type": "ip", "value": "10.0.2.16"}]')],
+            iocs: Annotated[list[dict], Field(description='REQUIRED. List of IoC dicts, each with "type" and "value" keys. Types: ip, domain, file_path, hostname, commandline, hash, registry_key, c2_domain. Example: [{"type": "hostname", "value": "MSEDGEWIN10"}, {"type": "ip", "value": "10.0.2.16"}]')] = None,
             include_hunting_suggestions: bool = True,
         ) -> dict:
             """
@@ -177,6 +181,9 @@ class IoCAnalysisTools:
                 #   - Previous stage (Installation) - how did malware get installed?
                 #   - Next stage (Actions on Objectives) - what are they doing?
             """
+            if not iocs:
+                return {"error": "iocs parameter is required. Pass a list of IoC dicts, e.g. [{\"type\": \"hostname\", \"value\": \"MSEDGEWIN10\"}]"}
+
             from src.clients.common.cyber_kill_chain import CyberKillChainClient
 
             # Identify stages from IoCs
@@ -246,7 +253,7 @@ class IoCAnalysisTools:
 
         @mcp.tool()
         def map_events_to_kill_chain(
-            events: Annotated[list[dict], Field(description='List of event dicts from search results. Each should have fields like "@timestamp", "event.code"/"code", "message", "host.name"/"name", etc.')],
+            events: Annotated[list[dict], Field(description='REQUIRED. List of event dicts from search results. Each should have fields like "@timestamp", "event.code"/"code", "message", "host.name"/"name", etc.')] = None,
         ) -> dict:
             """
             Map Elasticsearch events to Cyber Kill Chain stages.
@@ -286,6 +293,9 @@ class IoCAnalysisTools:
                 # Step 3: Analyze stage progression
                 # Shows: Reconnaissance → Delivery → Exploitation → Installation → C2
             """
+            if not events:
+                return {"error": "events parameter is required. Pass a list of event dicts from search results."}
+
             from src.clients.common.cyber_kill_chain import CyberKillChainClient
 
             stage_events = {}
