@@ -85,6 +85,92 @@ def _format_table(data: Any) -> str:
 
         return "\n".join(lines)
 
+    # --- PCAP overview (packet_count is the marker) ---
+    if "packet_count" in data and "protocols" in data:
+        lines.append("=== PCAP Overview ===")
+        lines.append(f"  file: {data.get('pcap_path', '?')}")
+        lines.append(f"  packets: {data.get('packet_count', '?')}")
+        lines.append(f"  duration: {data.get('duration_seconds', 0):.0f}s")
+        lines.append(f"  size: {data.get('file_size_bytes', 0):,} bytes")
+        lines.append(f"  time: {data.get('time_start', '?')} → {data.get('time_end', '?')}")
+        lines.append("")
+
+        protocols = data.get("protocols", [])
+        if protocols:
+            lines.append("=== Top Protocols ===")
+            for p in protocols[:10]:
+                if isinstance(p, dict):
+                    lines.append(f"  {p.get('protocol','?'):15s} pkts={p.get('packet_count',0):>6}  bytes={p.get('byte_count',0):>10}  ({p.get('percentage',0):.1f}%)")
+            lines.append("")
+
+        talkers = data.get("top_talkers", [])
+        if talkers:
+            lines.append("=== Top Talkers ===")
+            for t in talkers[:10]:
+                if isinstance(t, dict):
+                    internal = " [internal]" if t.get("is_internal") else ""
+                    lines.append(f"  {t.get('ip','?'):20s} pkts={t.get('packet_count',0):>6}  bytes={t.get('byte_count',0):>10}{internal}")
+            lines.append("")
+
+        return "\n".join(lines)
+
+    # --- PCAP beaconing (beacons is the marker) ---
+    if "beacons" in data or "patterns" in data:
+        summary = data.get("summary", {})
+        lines.append("=== Beaconing Analysis ===")
+        lines.append(f"  total patterns: {summary.get('total_patterns', 0)}")
+        lines.append(f"  high confidence: {summary.get('high_confidence', 0)}")
+        lines.append(f"  medium confidence: {summary.get('medium_confidence', 0)}")
+        lines.append(f"  low confidence: {summary.get('low_confidence', 0)}")
+        lines.append("")
+
+        patterns = data.get("patterns", data.get("beacons", []))
+        if patterns:
+            lines.append("=== Detected Patterns ===")
+            for p in patterns:
+                if isinstance(p, dict):
+                    lines.append(f"  {p.get('src_ip','?')} → {p.get('dst_ip','?')}:{p.get('dst_port','?')}")
+                    lines.append(f"    interval={p.get('interval_mean',0):.0f}s  jitter={p.get('jitter_percent',0):.1f}%  count={p.get('occurrence_count',0)}  confidence={p.get('confidence','?')}")
+            lines.append("")
+
+        timeline = data.get("timeline", "")
+        if timeline:
+            lines.append("=== Timeline ===")
+            lines.append(timeline)
+
+        return "\n".join(lines)
+
+    # --- Detect output (rule_info is the marker) ---
+    if "rule_info" in data:
+        rule = data.get("rule_info", {})
+        resp = data.get("response", {})
+        lines.append("=== Detection Rule ===")
+        lines.append(f"  rule: {rule.get('name', '?')}")
+        lines.append(f"  id: {rule.get('rule_id', '?')}")
+        lines.append(f"  type: {rule.get('type', '?')}")
+        lines.append(f"  tactics: {', '.join(rule.get('mitre_tactics', []))}")
+        lines.append(f"  hits: {resp.get('total_hits', 0)}")
+        lines.append("")
+
+        subs = data.get("field_substitutions", {})
+        if subs.get("count", 0) > 0:
+            lines.append(f"  field substitutions: {subs.get('substitutions', {})}")
+            lines.append("")
+
+        events = resp.get("events", [])
+        if events:
+            lines.append(f"=== Events ({len(events)}) ===")
+            for evt in events[:10]:
+                if isinstance(evt, dict):
+                    src = evt.get("_source", evt)
+                    ts = src.get("@timestamp", "")
+                    msg = src.get("message", "")[:120]
+                    lines.append(f"  [{ts}] {msg}")
+        else:
+            lines.append("  No matching events found.")
+
+        return "\n".join(lines)
+
     # --- Summary section ---
     summary = data.get("summary", {})
     if isinstance(summary, dict) and summary:
@@ -213,6 +299,37 @@ def _format_summary(data: Any) -> str:
         unassigned = data.get("unassigned_shards", 0)
         parts.append(f"cluster={data['cluster_name']} status={status} nodes={nodes} shards={shards} unassigned={unassigned}")
         return " | ".join(parts)
+
+    # PCAP overview
+    if "packet_count" in data and "protocols" in data:
+        parts.append(f"packets={data['packet_count']}")
+        parts.append(f"duration={data.get('duration_seconds', 0):.0f}s")
+        parts.append(f"protocols={len(data.get('protocols', []))}")
+        talkers = data.get("top_talkers", [])
+        if talkers:
+            top = talkers[0] if isinstance(talkers[0], dict) else {}
+            parts.append(f"top_talker={top.get('ip','?')} ({top.get('packet_count',0)} pkts)")
+        return "\n".join(parts)
+
+    # PCAP beaconing
+    if "beacons" in data or "patterns" in data:
+        summary = data.get("summary", {})
+        patterns = data.get("patterns", data.get("beacons", []))
+        parts.append(f"patterns={summary.get('total_patterns', len(patterns))}")
+        parts.append(f"high={summary.get('high_confidence', 0)} medium={summary.get('medium_confidence', 0)} low={summary.get('low_confidence', 0)}")
+        for p in patterns[:3]:
+            if isinstance(p, dict):
+                parts.append(f"{p.get('src_ip','?')} → {p.get('dst_ip','?')}:{p.get('dst_port','?')} interval={p.get('interval_mean',0):.0f}s jitter={p.get('jitter_percent',0):.1f}% ({p.get('confidence','?')})")
+        return "\n".join(parts)
+
+    # Detect output
+    if "rule_info" in data:
+        rule = data.get("rule_info", {})
+        resp = data.get("response", {})
+        parts.append(f"rule={rule.get('name', '?')}")
+        parts.append(f"hits={resp.get('total_hits', 0)}")
+        parts.append(f"tactics={','.join(rule.get('mitre_tactics', []))}")
+        return "\n".join(parts)
 
     if hits is not None:
         parts.append(f"hits={hits}")
