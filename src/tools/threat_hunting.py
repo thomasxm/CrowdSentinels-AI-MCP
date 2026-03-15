@@ -424,6 +424,48 @@ class ThreatHuntingTools:
                 query_description=f"Kill chain hunt: {stage} stage in {index}",
             )
 
+        def _hunt_stage(index: str, stage: str, timeframe_minutes: int = 60,
+                        host: Optional[str] = None, size: int = 100) -> Dict:
+            """Internal helper: execute kill chain stage hunt without MCP wrapper."""
+            stage_upper = stage.upper().replace(' ', '_')
+            kill_chain_stage = None
+            for kc_stage in KillChainStage:
+                if kc_stage.name == stage_upper:
+                    kill_chain_stage = kc_stage
+                    break
+            if not kill_chain_stage:
+                return {"error": f"Invalid stage: {stage}"}
+
+            hunting_queries = CyberKillChainClient.get_hunting_queries_for_stage(kill_chain_stage)
+            stage_info = CyberKillChainClient.get_stage_info(kill_chain_stage)
+
+            if not hunting_queries:
+                return {"stage": stage_info.name, "total_hits": 0}
+
+            results = {
+                "kill_chain_stage": {"name": stage_info.name},
+                "hunting_results": {},
+                "total_hits": 0,
+            }
+            for query_name, lucene_query in hunting_queries.items():
+                try:
+                    final_query = f"({lucene_query}) AND host.name:{host}" if host else lucene_query
+                    qr = self.search_client.search_with_lucene(
+                        index=index, lucene_query=final_query,
+                        timeframe_minutes=timeframe_minutes, size=size,
+                    )
+                    hits = qr.get("total_hits", 0)
+                    results["hunting_results"][query_name] = {"total_hits": hits}
+                    results["total_hits"] += hits
+                except Exception as e:
+                    results["hunting_results"][query_name] = {"error": str(e)}
+
+            if results["total_hits"] > 0:
+                results["assessment"] = f"Found {results['total_hits']} indicators of {stage_info.name}"
+            else:
+                results["assessment"] = f"No indicators of {stage_info.name} found"
+            return results
+
         @mcp.tool()
         def hunt_adjacent_stages(index: str, current_stage: str,
                                 timeframe_minutes: int = 120,
@@ -531,16 +573,16 @@ class ThreatHuntingTools:
             }
 
             # Hunt for previous stage (how did they get to current stage?)
-            # Call the client method directly, not the MCP-decorated wrapper
+            # Use _hunt_stage helper to avoid calling the MCP-decorated wrapper
             if hunt_previous and adjacent['previous']:
                 prev_stage_name = adjacent['previous'].name
                 print(f"Hunting for previous stage: {prev_stage_name}")
 
-                prev_hunt = self.search_client.hunt_by_kill_chain_stage(
+                prev_hunt = _hunt_stage(
                     index=index,
                     stage=prev_stage_name,
                     timeframe_minutes=timeframe_minutes,
-                    host=host
+                    host=host,
                 )
 
                 results["previous_stage_hunt"] = {
@@ -551,16 +593,16 @@ class ThreatHuntingTools:
                 }
 
             # Hunt for next stage (what are they doing next?)
-            # Call the client method directly, not the MCP-decorated wrapper
+            # Use _hunt_stage helper to avoid calling the MCP-decorated wrapper
             if hunt_next and adjacent['next']:
                 next_stage_name = adjacent['next'].name
                 print(f"Hunting for next stage: {next_stage_name}")
 
-                next_hunt = self.search_client.hunt_by_kill_chain_stage(
+                next_hunt = _hunt_stage(
                     index=index,
                     stage=next_stage_name,
                     timeframe_minutes=timeframe_minutes,
-                    host=host
+                    host=host,
                 )
 
                 results["next_stage_hunt"] = {

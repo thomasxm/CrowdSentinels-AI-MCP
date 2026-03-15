@@ -6,6 +6,43 @@ from fastmcp import FastMCP
 class RuleManagementTools:
     """Tools for managing and executing detection rules."""
 
+    def _execute_single_rule(self, rule_id: str, index: str,
+                             timeframe_minutes: int = 15, size: int = 100) -> Dict:
+        """Execute a single detection rule (internal, no MCP wrapper)."""
+        rule = self.rule_loader.get_rule(rule_id)
+        if not rule:
+            return {"error": f"Rule not found: {rule_id}"}
+
+        try:
+            if rule.rule_type == "lucene":
+                result = self.search_client.search_with_lucene(
+                    index=index,
+                    lucene_query=rule.query,
+                    timeframe_minutes=timeframe_minutes if timeframe_minutes > 0 else None,
+                    size=min(size, 1000),
+                )
+            elif rule.rule_type == "eql":
+                result = self.search_client.eql_search(
+                    index=index,
+                    query=rule.query,
+                    start_time=f"now-{timeframe_minutes}m" if timeframe_minutes > 0 else None,
+                    size=min(size, 1000),
+                )
+            else:
+                return {"error": f"Unsupported rule type: {rule.rule_type}"}
+
+            result["rule_info"] = {
+                "rule_id": rule.rule_id,
+                "name": rule.display_name,
+                "platform": rule.platform,
+                "log_source": rule.log_source,
+                "type": rule.rule_type,
+                "mitre_tactics": list(rule.mitre_tactics),
+            }
+            return result
+        except Exception as e:
+            return {"error": f"Failed to execute rule {rule_id}: {e}"}
+
     def __init__(self, rule_loader, search_client):
         """
         Initialize rule management tools.
@@ -296,12 +333,12 @@ class RuleManagementTools:
             }
 
             for rule_id in rule_ids:
-                # Execute each rule
-                rule_result = execute_detection_rule(
+                # Execute each rule via internal method (not MCP wrapper)
+                rule_result = self._execute_single_rule(
                     rule_id=rule_id,
                     index=index,
                     timeframe_minutes=timeframe_minutes,
-                    size=max_results_per_rule
+                    size=max_results_per_rule,
                 )
 
                 results["total_rules_executed"] += 1
@@ -456,12 +493,17 @@ class RuleManagementTools:
             # Execute all rules
             rule_ids = [rule.rule_id for rule in rules]
 
-            return execute_multiple_rules(
-                rule_ids=rule_ids,
-                index=index,
-                timeframe_minutes=timeframe_minutes,
-                max_results_per_rule=20  # Limit per-rule results for batch execution
-            )
+            # Call internal method directly (not MCP wrapper)
+            all_results = {"total_rules_executed": 0, "total_detections": 0, "results_by_rule": {}}
+            for rid in rule_ids:
+                r = self._execute_single_rule(rule_id=rid, index=index, timeframe_minutes=timeframe_minutes, size=20)
+                all_results["total_rules_executed"] += 1
+                if "error" not in r:
+                    hits = r.get("response", {}).get("total_hits", 0)
+                    if hits > 0:
+                        all_results["total_detections"] += hits
+                        all_results["results_by_rule"][rid] = r
+            return all_results
 
         @mcp.tool()
         def validate_rule_for_data(

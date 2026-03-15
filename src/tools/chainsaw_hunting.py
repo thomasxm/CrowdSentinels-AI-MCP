@@ -328,12 +328,25 @@ class ChainsawHuntingTools:
 
             for iteration in range(max_iterations):
                 # Search for current IoC
-                result = search_ioc_in_evtx(
+                # Call chainsaw search directly (not via MCP wrapper)
+                search_result = tools_instance.chainsaw.search(
                     evtx_path=evtx_path,
-                    ioc=current_ioc,
-                    ioc_type=current_ioc_type,
-                    case_insensitive=True
+                    search_term=current_ioc,
+                    case_insensitive=True,
+                    output_format="json",
                 )
+                if "error" in search_result:
+                    result = search_result
+                else:
+                    matches = search_result.get("matches", [])
+                    pyramid_info = ChainsawClient.categorize_ioc_by_pyramid(current_ioc_type, current_ioc)
+                    result = {
+                        "ioc_searched": current_ioc,
+                        "ioc_type": current_ioc_type,
+                        "pyramid_of_pain": pyramid_info,
+                        "total_matches": len(matches),
+                        "matches": matches[:20],
+                    }
 
                 if "error" in result:
                     iterations.append({
