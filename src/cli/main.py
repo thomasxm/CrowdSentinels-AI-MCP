@@ -970,6 +970,32 @@ def _cmd_setup(args):
         (mappings_dir / "sigma-event-logs-all.yml").write_text(mapping_content)
         print(f"  Chainsaw mappings: created ({mappings_dir})")
 
+    # --- EVTX Attack Samples (for Chainsaw testing) ---
+    evtx_dir = chainsaw_dir / "EVTX-ATTACK-SAMPLES"
+    if evtx_dir.exists() and any(evtx_dir.rglob("*.evtx")):
+        evtx_count = sum(1 for _ in evtx_dir.rglob("*.evtx"))
+        print(f"  EVTX samples: already installed ({evtx_count} files)")
+    else:
+        print("  Downloading EVTX attack samples...")
+        try:
+            evtx_url = "https://github.com/sbousseaden/EVTX-ATTACK-SAMPLES/archive/refs/heads/master.zip"
+            evtx_archive = data_dir / "evtx-samples.zip"
+            urllib.request.urlretrieve(_validate_download_url(evtx_url), str(evtx_archive))
+            _safe_extract_zip(evtx_archive, str(chainsaw_dir))
+            evtx_archive.unlink()
+            # The zip extracts to EVTX-ATTACK-SAMPLES-master — rename
+            extracted = chainsaw_dir / "EVTX-ATTACK-SAMPLES-master"
+            if extracted.exists() and not evtx_dir.exists():
+                extracted.rename(evtx_dir)
+            if evtx_dir.exists():
+                evtx_count = sum(1 for _ in evtx_dir.rglob("*.evtx"))
+                print(f"  EVTX samples: installed ({evtx_count} files)")
+            else:
+                print("  EVTX samples: extraction completed")
+        except Exception as exc:
+            print(f"  EVTX samples: download failed ({exc})", file=sys.stderr)
+            print("  You can download manually: https://github.com/sbousseaden/EVTX-ATTACK-SAMPLES", file=sys.stderr)
+
     print(f"\nSetup complete. Data stored in: {data_dir}")
     return 0
 

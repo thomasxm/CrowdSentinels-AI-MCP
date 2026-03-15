@@ -168,6 +168,44 @@ class ChainsawClient:
             self.mappings = None
             self.sample_evtx = Path(ENV_EVTX_SAMPLES_PATH) if ENV_EVTX_SAMPLES_PATH else None
 
+    def _resolve_evtx_path(self, evtx_path: str) -> str:
+        """Resolve an EVTX path, trying multiple locations if relative.
+
+        Resolution order:
+            1. As given (absolute or relative to cwd)
+            2. Under ~/.crowdsentinel/ (e.g., chainsaw/EVTX-ATTACK-SAMPLES)
+            3. Under the chainsaw directory (e.g., EVTX-ATTACK-SAMPLES)
+            4. Return as-is and let chainsaw report the error
+        """
+        p = Path(evtx_path)
+        if p.exists():
+            return str(p.resolve())
+
+        from src.paths import get_user_data_dir
+        user_dir = get_user_data_dir()
+
+        # Try under ~/.crowdsentinel/
+        candidate = user_dir / evtx_path
+        if candidate.exists():
+            logger.info("Resolved EVTX path: %s → %s", evtx_path, candidate)
+            return str(candidate)
+
+        # Try under chainsaw directory
+        if self.chainsaw_dir:
+            candidate = self.chainsaw_dir / evtx_path
+            if candidate.exists():
+                logger.info("Resolved EVTX path: %s → %s", evtx_path, candidate)
+                return str(candidate)
+
+            # Try just the basename under chainsaw dir
+            candidate = self.chainsaw_dir / Path(evtx_path).name
+            if candidate.exists():
+                logger.info("Resolved EVTX path: %s → %s", evtx_path, candidate)
+                return str(candidate)
+
+        logger.warning("EVTX path not found: %s", evtx_path)
+        return evtx_path
+
     def hunt(self,
              evtx_path: str,
              sigma_path: Optional[str] = None,
@@ -200,8 +238,11 @@ class ChainsawClient:
                 "install_command": "See CHAINSAW_GUIDE.md for installation"
             }
 
+        # Resolve EVTX path (handles relative paths from LLM agent)
+        resolved_evtx = self._resolve_evtx_path(evtx_path)
+
         # Build command
-        cmd = [str(self.chainsaw_path), "hunt", evtx_path]
+        cmd = [str(self.chainsaw_path), "hunt", resolved_evtx]
 
         # Add sigma rules path
         if sigma_path:
@@ -346,8 +387,8 @@ class ChainsawClient:
         else:
             cmd.append(search_term)
 
-        # Add EVTX path as positional argument
-        cmd.append(evtx_path)
+        # Add EVTX path as positional argument (resolve relative paths)
+        cmd.append(self._resolve_evtx_path(evtx_path))
 
         # Case insensitive (-i or --ignore-case)
         if case_insensitive:
