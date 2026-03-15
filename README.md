@@ -376,6 +376,8 @@ crowdsentinel --help
 | `schema` | Detect schema for an index pattern | `crowdsentinel schema -i winlogbeat-*` |
 | `ioc` | Hunt for a specific Indicator of Compromise | `crowdsentinel ioc 203.0.113.42 --type ip -i winlogbeat-*` |
 | `analyse` | Analyse search results from stdin (JSON) | `cat results.json \| crowdsentinel analyse -c "context"` |
+| `analyse --mcp` | AI agent analysis using all 97 MCP tools | `crowdsentinel hunt "query" \| crowdsentinel analyse --mcp -c "context"` |
+| `auth` | Manage LLM authentication for agent mode | `crowdsentinel auth login` |
 | `pcap` | Analyse PCAP files (overview, beaconing, lateral movement) | `crowdsentinel pcap beaconing capture.pcap` |
 | `chainsaw` | Hunt EVTX logs with Chainsaw and Sigma rules | `crowdsentinel chainsaw hunt /path/to/evtx/` |
 
@@ -389,10 +391,46 @@ crowdsentinel hunt "failed login" -i winlogbeat-* -o table    # Human-readable t
 crowdsentinel hunt "failed login" -i winlogbeat-* -o summary  # Condensed summary
 ```
 
-### Pipeline Examples
+### Agent Mode (`--mcp`)
+
+The `analyse --mcp` flag replaces deterministic analysis with an AI agent that autonomously uses all 97 MCP tools to investigate. The agent follows the 4-phase IR methodology: hunt, analyse, correlate, report.
+
+**Authentication:**
 
 ```bash
-# Hunt then analyse (mirrors the MCP investigation workflow)
+# Option 1: Browser sign-in (ChatGPT subscription — no API billing)
+crowdsentinel auth login
+
+# Option 2: Anthropic (setup-token or API key)
+crowdsentinel auth login --provider anthropic
+
+# Option 3: Environment variable
+export ANTHROPIC_API_KEY="sk-ant-..."   # or OPENAI_API_KEY
+
+# Option 4: Local models (Ollama, vLLM — free)
+crowdsentinel analyse --mcp --model-url http://localhost:11434/v1 --model llama3.1
+
+# Check auth status
+crowdsentinel auth status
+```
+
+**Agent flags:**
+
+| Flag | Default | Description |
+|:-----|:--------|:------------|
+| `--mcp` | off | Enable AI agent with MCP tools |
+| `--mcp-server NAME:CMD` | none | Add external MCP server (e.g., VirusTotal) |
+| `--model` | auto-detect | LLM model to use |
+| `--model-url` | none | OpenAI-compatible API endpoint |
+| `--max-steps` | 30 | Maximum tool calls |
+| `--timeout` | 300 | Maximum seconds |
+
+### Pipeline Examples
+
+**Deterministic analysis (no API key needed):**
+
+```bash
+# Hunt then analyse
 crowdsentinel hunt "powershell encoded" -i winlogbeat-* -o json | \
   crowdsentinel analyse -c "Encoded PowerShell commands" -o summary
 
@@ -403,6 +441,35 @@ crowdsentinel hunt "event.code:4625" -i winlogbeat-* -o json | \
 # Triage process execution and privilege escalation
 crowdsentinel hunt "event.code:4688 OR event.code:4672 OR event.code:1" -i winlogbeat-* -o json | \
   crowdsentinel analyse -c "Process execution and privilege escalation" -o summary
+```
+
+**AI agent investigation (requires auth):**
+
+```bash
+# Credential dumping investigation — agent hunts, analyses kill chain, checks adjacent stages
+crowdsentinel hunt "mimikatz OR lsass OR procdump" -i winlogbeat-* -o json | \
+  crowdsentinel analyse --mcp -c "Credential dumping tools investigation" --max-steps 15 -o summary
+
+# Encoded PowerShell — full IR workflow with kill chain and adjacent stage hunting
+crowdsentinel hunt "powershell -enc OR FromBase64String" -i winlogbeat-* -o json | \
+  crowdsentinel analyse --mcp -c "Full IR workflow: encoded PowerShell" --max-steps 30 -o table
+
+# Process execution with detection rules
+crowdsentinel hunt "event.code:4688" -i winlogbeat-* -o json | \
+  crowdsentinel analyse --mcp -c "Execute detection rules against process creation" --max-steps 20 -o summary
+
+# PCAP beaconing — agent generates IoCs and maps to kill chain
+crowdsentinel pcap beaconing capture.pcap -o json | \
+  crowdsentinel analyse --mcp -c "Investigate beaconing for C2 infrastructure" --max-steps 10 -o summary
+
+# Anti-forensics investigation
+crowdsentinel hunt "event.code:1102" -i winlogbeat-* -o json | \
+  crowdsentinel analyse --mcp -c "Security log cleared - anti-forensics" --max-steps 10 -o summary
+
+# With external MCP server (e.g., VirusTotal)
+crowdsentinel hunt "powershell" -i winlogbeat-* -o json | \
+  crowdsentinel analyse --mcp --mcp-server "vt:uvx virustotal-mcp-server" \
+  -c "Check IoCs against VirusTotal" -o summary
 ```
 
 ---
