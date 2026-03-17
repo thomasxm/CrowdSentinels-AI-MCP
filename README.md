@@ -32,9 +32,7 @@
 
 ## Demo
 
-[![CrowdSentinel Demo](https://raw.githubusercontent.com/thomasxm/crowdsentinel-assets/main/demo_thumb.jpg)](https://github.com/thomasxm/CrowdSentinels-AI-MCP/blob/main/demo.mp4)
-
-> Click the image above to watch the full demo video.
+https://github.com/thomasxm/CrowdSentinels-AI-MCP/raw/main/demo.mp4
 
 ---
 
