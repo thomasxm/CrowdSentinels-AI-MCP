@@ -1,8 +1,8 @@
 """Authentication for Anthropic and OpenAI.
 
 Supports:
-    - Anthropic -- setup-token from `claude setup-token` or API key
-    - OpenAI -- API key
+    - Anthropic -- setup-token (subscription) or API key
+    - OpenAI -- ChatGPT subscription (PKCE OAuth) or API key
     - API key fallback -- env vars
 
 Multi-profile storage in ~/.crowdsentinel/auth-profiles.json.
@@ -86,13 +86,17 @@ def remove_profile(profile_id: str) -> bool:
 def get_profile_for_provider(provider: str) -> dict | None:
     """Return the best profile matching *provider*.
 
+    Matches profiles whose ``provider`` field equals *provider* or starts
+    with ``provider + "-"`` (e.g. ``"openai-codex"`` matches ``"openai"``).
+
     Priority: ``oauth`` / ``token`` types are preferred over ``api_key``.
     """
     profiles = load_profiles()
     api_key_match: dict | None = None
 
     for _pid, prof in profiles.items():
-        if prof.get("provider") != provider:
+        prof_provider = prof.get("provider", "")
+        if prof_provider != provider and prof_provider.split("-")[0] != provider:
             continue
         ptype = prof.get("type", "")
         if ptype in ("oauth", "token"):
@@ -355,12 +359,51 @@ def get_access_token() -> tuple | None:
 
 
 # ---------------------------------------------------------------------------
-# OpenAI (API key only)
+# OpenAI (ChatGPT subscription via PKCE OAuth, or API key)
 # ---------------------------------------------------------------------------
 
 def login_openai() -> bool:
-    """Authenticate with OpenAI via API key."""
-    print("OpenAI authentication (API key)\n")
+    """Authenticate with OpenAI -- ChatGPT subscription (PKCE OAuth) or API key."""
+    print("OpenAI authentication\n")
+    print("  1. Sign in with ChatGPT (uses your subscription -- no API billing)")
+    print("  2. Paste an API key (usage-based billing)\n")
+
+    choice = input("Choose [1/2]: ").strip()
+    if choice == "1":
+        return _login_openai_subscription()
+    if choice == "2":
+        return _login_openai_api_key()
+    print("Invalid choice.", file=sys.stderr)
+    return False
+
+
+def _login_openai_subscription() -> bool:
+    """OpenAI PKCE OAuth flow for ChatGPT subscription."""
+    from src.agent.oauth_pkce import run_pkce_flow
+    try:
+        tokens = run_pkce_flow()
+    except RuntimeError as exc:
+        print(f"\nOAuth failed: {exc}", file=sys.stderr)
+        return False
+    except OSError as exc:
+        print(f"\nCould not start local auth server: {exc}", file=sys.stderr)
+        print("Port 1455 may be in use. Try: crowdsentinel auth login --provider openai", file=sys.stderr)
+        return False
+
+    save_profile("openai-codex:default", {
+        "type": "oauth",
+        "provider": "openai-codex",
+        "access": tokens["access_token"],
+        "refresh": tokens.get("refresh_token", ""),
+        "expires": int(time.time() + tokens.get("expires_in", 3600)) * 1000,
+    })
+    print(f"OpenAI subscription auth stored in {AUTH_PROFILES_FILE}")
+    return True
+
+
+def _login_openai_api_key() -> bool:
+    """OpenAI API key auth."""
+    print("\nOpening OpenAI API keys page...\n")
     print("  Get your key from: https://platform.openai.com/api-keys\n")
 
     try:
