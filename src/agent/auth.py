@@ -1,11 +1,12 @@
-"""OAuth authentication for OpenAI and Anthropic.
+"""Authentication for Anthropic and OpenAI.
 
 Supports:
-    - OpenAI Device Code flow — sign in with ChatGPT subscription (works headless)
-    - Anthropic — setup-token from `claude setup-token` or API key
-    - API key fallback — env vars
+    - Anthropic -- setup-token from `claude setup-token` or API key
+    - OpenAI -- API key
+    - API key fallback -- env vars
 
-Tokens stored in ~/.crowdsentinel/auth.json and auto-refreshed.
+Multi-profile storage in ~/.crowdsentinel/auth-profiles.json.
+Legacy single-profile auth.json is auto-migrated on first access.
 """
 
 import json
@@ -21,122 +22,272 @@ import httpx
 
 logger = logging.getLogger("crowdsentinel.agent.auth")
 
-AUTH_FILE = Path.home() / ".crowdsentinel" / "auth.json"
+AUTH_PROFILES_FILE = Path.home() / ".crowdsentinel" / "auth-profiles.json"
+LEGACY_AUTH_FILE = Path.home() / ".crowdsentinel" / "auth.json"
 
-# OpenAI Codex OAuth configuration (same as Codex CLI / OpenClaw)
-OPENAI_CLIENT_ID = "app_EMoamEEZ73f0CkXaXp7hrann"
-OPENAI_AUTH_BASE = "https://auth.openai.com"
-OPENAI_DEVICE_USERCODE_URL = f"{OPENAI_AUTH_BASE}/api/accounts/deviceauth/usercode"
-OPENAI_DEVICE_TOKEN_URL = f"{OPENAI_AUTH_BASE}/api/accounts/deviceauth/token"
-OPENAI_TOKEN_URL = f"{OPENAI_AUTH_BASE}/oauth/token"
-OPENAI_DEVICE_CALLBACK_URI = f"{OPENAI_AUTH_BASE}/deviceauth/callback"
-OPENAI_DEVICE_AUTH_PAGE = "https://auth.openai.com/codex/device"
+# Backward-compat alias used by tests (e.g. test_cli_agent.py imports AUTH_FILE)
+AUTH_FILE = AUTH_PROFILES_FILE
 
+
+# ---------------------------------------------------------------------------
+# Multi-profile storage
+# ---------------------------------------------------------------------------
+
+def load_profiles() -> dict[str, dict]:
+    """Read auth-profiles.json and return the ``profiles`` dict.
+
+    Returns an empty dict if the file is missing or corrupted.
+    """
+    if not AUTH_PROFILES_FILE.is_file():
+        return {}
+    try:
+        data = json.loads(AUTH_PROFILES_FILE.read_text(encoding="utf-8"))
+        if isinstance(data, dict) and isinstance(data.get("profiles"), dict):
+            return data["profiles"]
+        return {}
+    except (json.JSONDecodeError, OSError):
+        return {}
+
+
+def save_profile(profile_id: str, profile: dict) -> None:
+    """Upsert a single profile into auth-profiles.json.
+
+    Creates the file (with ``version: 1`` wrapper) if it does not exist.
+    File permissions are set to ``0o600``.
+    """
+    profiles = load_profiles()
+    profiles[profile_id] = profile
+
+    AUTH_PROFILES_FILE.parent.mkdir(parents=True, exist_ok=True)
+    AUTH_PROFILES_FILE.write_text(
+        json.dumps({"version": 1, "profiles": profiles}, indent=2),
+        encoding="utf-8",
+    )
+    AUTH_PROFILES_FILE.chmod(0o600)
+    logger.info("Profile '%s' saved to %s", profile_id, AUTH_PROFILES_FILE)
+
+
+def remove_profile(profile_id: str) -> bool:
+    """Remove a single profile.  Returns *True* if it existed."""
+    profiles = load_profiles()
+    if profile_id not in profiles:
+        return False
+    del profiles[profile_id]
+
+    AUTH_PROFILES_FILE.write_text(
+        json.dumps({"version": 1, "profiles": profiles}, indent=2),
+        encoding="utf-8",
+    )
+    AUTH_PROFILES_FILE.chmod(0o600)
+    return True
+
+
+def get_profile_for_provider(provider: str) -> dict | None:
+    """Return the best profile matching *provider*.
+
+    Priority: ``oauth`` / ``token`` types are preferred over ``api_key``.
+    """
+    profiles = load_profiles()
+    api_key_match: dict | None = None
+
+    for _pid, prof in profiles.items():
+        if prof.get("provider") != provider:
+            continue
+        ptype = prof.get("type", "")
+        if ptype in ("oauth", "token"):
+            return prof
+        if ptype == "api_key" and api_key_match is None:
+            api_key_match = prof
+
+    return api_key_match
+
+
+# ---------------------------------------------------------------------------
+# Legacy migration
+# ---------------------------------------------------------------------------
+
+def _migrate_legacy_auth() -> None:
+    """One-time migration from ``auth.json`` to ``auth-profiles.json``.
+
+    If ``auth-profiles.json`` already exists the migration is skipped.
+    After migration the old file is renamed to ``.json.bak``.
+    """
+    if AUTH_PROFILES_FILE.is_file():
+        return
+    if not LEGACY_AUTH_FILE.is_file():
+        return
+
+    try:
+        data = json.loads(LEGACY_AUTH_FILE.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return
+
+    if not isinstance(data, dict) or "provider" not in data:
+        return
+
+    provider = data["provider"]
+    token = data.get("access_token", "")
+
+    # Determine profile id and shape based on the stored token
+    if provider == "anthropic":
+        if token.startswith("sk-ant-oat01-"):
+            pid = "anthropic:subscription"
+            profile = {
+                "type": "token",
+                "provider": "anthropic",
+                "access": token,
+                "expires": data.get("expires_at", 0),
+            }
+        else:
+            pid = "anthropic:default"
+            profile = {
+                "type": "api_key",
+                "provider": "anthropic",
+                "key": token,
+            }
+    elif provider == "openai":
+        pid = "openai:default"
+        profile = {
+            "type": "api_key",
+            "provider": "openai",
+            "key": token,
+        }
+    else:
+        pid = f"{provider}:default"
+        profile = {
+            "type": "api_key",
+            "provider": provider,
+            "key": token,
+        }
+
+    save_profile(pid, profile)
+    try:
+        LEGACY_AUTH_FILE.rename(LEGACY_AUTH_FILE.with_suffix(".json.bak"))
+        logger.info("Legacy auth.json migrated and renamed to .json.bak")
+    except OSError:
+        logger.warning("Could not rename legacy auth.json after migration")
+
+
+# ---------------------------------------------------------------------------
+# Existing public API (updated to delegate to profiles)
+# ---------------------------------------------------------------------------
 
 def _save_auth(data: dict[str, Any]) -> None:
-    """Save auth tokens to ~/.crowdsentinel/auth.json."""
-    AUTH_FILE.parent.mkdir(parents=True, exist_ok=True)
-    AUTH_FILE.write_text(json.dumps(data, indent=2), encoding="utf-8")
-    AUTH_FILE.chmod(0o600)
-    logger.info("Auth tokens saved to %s", AUTH_FILE)
+    """Save auth tokens.  *Deprecated* -- delegates to :func:`save_profile`."""
+    provider = data.get("provider", "unknown")
+    token = data.get("access_token", "")
+
+    if provider == "anthropic" and token.startswith("sk-ant-oat01-"):
+        pid = "anthropic:subscription"
+        profile = {
+            "type": "token",
+            "provider": "anthropic",
+            "access": token,
+            "expires": data.get("expires_at", 0),
+        }
+    elif provider == "anthropic":
+        pid = "anthropic:default"
+        profile = {"type": "api_key", "provider": "anthropic", "key": token}
+    elif provider == "openai":
+        pid = "openai:default"
+        profile = {"type": "api_key", "provider": "openai", "key": token}
+    else:
+        pid = f"{provider}:default"
+        profile = {"type": "api_key", "provider": provider, "key": token}
+
+    save_profile(pid, profile)
 
 
 def load_auth() -> dict[str, Any] | None:
-    """Load auth tokens from ~/.crowdsentinel/auth.json."""
-    if not AUTH_FILE.is_file():
+    """Load auth tokens.  Delegates to the profile store.
+
+    Returns the legacy-shaped dict ``{provider, access_token, ...}`` so
+    callers that haven't been updated yet keep working.
+    """
+    _migrate_legacy_auth()
+    profiles = load_profiles()
+    if not profiles:
         return None
-    try:
-        data = json.loads(AUTH_FILE.read_text(encoding="utf-8"))
-        return data if isinstance(data, dict) and "provider" in data else None
-    except (json.JSONDecodeError, OSError):
-        return None
+
+    # Pick best profile: prefer anthropic, then openai
+    for provider in ("anthropic", "openai"):
+        prof = get_profile_for_provider(provider)
+        if prof:
+            token = prof.get("access") or prof.get("key") or ""
+            return {
+                "provider": prof["provider"],
+                "access_token": token,
+                "refresh_token": prof.get("refresh", ""),
+                "expires_at": prof.get("expires", 0),
+            }
+
+    # Fallback: return any first profile
+    first = next(iter(profiles.values()))
+    token = first.get("access") or first.get("key") or ""
+    return {
+        "provider": first.get("provider", "unknown"),
+        "access_token": token,
+        "refresh_token": first.get("refresh", ""),
+        "expires_at": first.get("expires", 0),
+    }
 
 
 def remove_auth() -> bool:
-    """Remove stored auth tokens."""
-    if AUTH_FILE.is_file():
-        AUTH_FILE.unlink()
+    """Remove stored auth tokens (deletes auth-profiles.json)."""
+    if AUTH_PROFILES_FILE.is_file():
+        AUTH_PROFILES_FILE.unlink()
         return True
     return False
 
 
 def get_auth_status() -> dict[str, Any]:
     """Check authentication status."""
-    auth = load_auth()
-    if not auth:
-        if os.environ.get("ANTHROPIC_API_KEY"):
-            return {"authenticated": True, "method": "env:ANTHROPIC_API_KEY", "provider": "anthropic"}
-        if os.environ.get("OPENAI_API_KEY"):
-            return {"authenticated": True, "method": "env:OPENAI_API_KEY", "provider": "openai"}
-        return {"authenticated": False, "method": None}
+    _migrate_legacy_auth()
+    profiles = load_profiles()
 
-    provider = auth.get("provider", "unknown")
-    expires_at = auth.get("expires_at", 0)
-    expired = expires_at > 0 and time.time() > expires_at
+    if profiles:
+        # Summarise first matching profile
+        for provider in ("anthropic", "openai"):
+            prof = get_profile_for_provider(provider)
+            if prof:
+                expires_at = prof.get("expires", 0)
+                expired = expires_at > 0 and time.time() > expires_at
+                return {
+                    "authenticated": True,
+                    "method": f"{prof.get('type', 'unknown')}:{provider}",
+                    "provider": provider,
+                    "expired": expired,
+                    "expires_at": expires_at,
+                    "token_file": str(AUTH_PROFILES_FILE),
+                    "profile_count": len(profiles),
+                }
 
-    return {
-        "authenticated": True,
-        "method": f"oauth:{provider}",
-        "provider": provider,
-        "expired": expired,
-        "expires_at": expires_at,
-        "token_file": str(AUTH_FILE),
-    }
+    # Env-var fallback
+    if os.environ.get("ANTHROPIC_API_KEY"):
+        return {"authenticated": True, "method": "env:ANTHROPIC_API_KEY", "provider": "anthropic"}
+    if os.environ.get("OPENAI_API_KEY"):
+        return {"authenticated": True, "method": "env:OPENAI_API_KEY", "provider": "openai"}
 
-
-def refresh_token_if_needed(auth: dict[str, Any]) -> dict[str, Any]:
-    """Refresh OAuth token proactively.
-
-    Always refreshes if a refresh token is available, because Codex
-    tokens can be revoked server-side before their JWT expiry.
-    """
-    if auth.get("provider") != "openai":
-        return auth
-
-    refresh_token = auth.get("refresh_token")
-    if not refresh_token:
-        return auth
-
-    try:
-        resp = httpx.post(
-            OPENAI_TOKEN_URL,
-            data={
-                "grant_type": "refresh_token",
-                "refresh_token": refresh_token,
-                "client_id": OPENAI_CLIENT_ID,
-            },
-            timeout=60,
-        )
-        resp.raise_for_status()
-        tokens = resp.json()
-
-        auth["access_token"] = tokens["access_token"]
-        if "refresh_token" in tokens:
-            auth["refresh_token"] = tokens["refresh_token"]
-        auth["expires_at"] = int(time.time()) + tokens.get("expires_in", 3600)
-
-        _save_auth(auth)
-        logger.info("OpenAI token refreshed")
-    except Exception as exc:
-        logger.warning("Token refresh failed: %s", exc)
-
-    return auth
+    return {"authenticated": False, "method": None}
 
 
 def get_access_token() -> tuple | None:
-    """Get a valid access token. Returns (token, provider) or None.
+    """Get a valid access token.  Returns ``(token, provider)`` or *None*.
 
     Resolution order:
-        1. Stored CrowdSentinel token (~/.crowdsentinel/auth.json)
+        1. Stored profiles (~/.crowdsentinel/auth-profiles.json) -- anthropic first
         2. ANTHROPIC_API_KEY env var
         3. OPENAI_API_KEY env var
     """
-    auth = load_auth()
-    if auth:
-        auth = refresh_token_if_needed(auth)
-        token = auth.get("access_token")
-        if token:
-            return token, auth["provider"]
+    _migrate_legacy_auth()
+    profiles = load_profiles()
+
+    for provider in ("anthropic", "openai"):
+        prof = get_profile_for_provider(provider)
+        if prof:
+            token = prof.get("access") or prof.get("key") or ""
+            if token:
+                return token, provider
 
     anthropic_key = os.environ.get("ANTHROPIC_API_KEY")
     if anthropic_key:
@@ -150,148 +301,18 @@ def get_access_token() -> tuple | None:
 
 
 # ---------------------------------------------------------------------------
-# OpenAI Device Code Flow
+# OpenAI (API key only)
 # ---------------------------------------------------------------------------
 
 def login_openai() -> bool:
-    """Authenticate with OpenAI — Device Code (subscription) or API key."""
-    print("OpenAI authentication\n")
-    print("  1. Sign in with ChatGPT (Device Code — uses your subscription)")
-    print("  2. Paste an API key (usage-based billing)\n")
-
-    choice = input("Choose [1/2]: ").strip()
-
-    if choice == "1":
-        return _login_openai_device_code()
-    if choice == "2":
-        return _login_openai_api_key()
-    print("Invalid choice.", file=sys.stderr)
-    return False
-
-
-def _login_openai_device_code() -> bool:
-    """OpenAI Device Code OAuth flow (ChatGPT subscription)."""
-    client = httpx.Client(timeout=30)
-
-    print("\nRequesting device code from OpenAI...")
-    try:
-        resp = client.post(
-            OPENAI_DEVICE_USERCODE_URL,
-            json={"client_id": OPENAI_CLIENT_ID},
-            headers={
-                "Content-Type": "application/json",
-                "User-Agent": "crowdsentinel-mcp-server/1.0",
-                "Accept": "application/json",
-            },
-        )
-        resp.raise_for_status()
-        device_data = resp.json()
-    except httpx.HTTPStatusError as exc:
-        status = exc.response.status_code
-        print(
-            f"\nDevice Code request failed (HTTP {status}).\n\n"
-            "This requires:\n"
-            "  - ChatGPT Plus, Pro, or Team subscription\n"
-            "  - Device Code Login enabled in ChatGPT settings\n"
-            "    (chatgpt.com → Settings → Security → Device Code Login)\n\n"
-            "If this doesn't work, use option 2 (API key) instead.",
-            file=sys.stderr,
-        )
-        return False
-    except Exception as exc:
-        print(f"Failed to request device code: {exc}", file=sys.stderr)
-        return False
-
-    device_auth_id = device_data.get("device_auth_id")
-    user_code = device_data.get("user_code") or device_data.get("usercode")
-    interval = int(device_data.get("interval", 5))
-
-    if not device_auth_id or not user_code:
-        print(f"Unexpected response: {device_data}", file=sys.stderr)
-        return False
-
-    print(f"\n  Your code: {user_code}\n")
-    print(f"  Open: {OPENAI_DEVICE_AUTH_PAGE}")
-    print("  Enter the code above and sign in with your ChatGPT account.\n")
+    """Authenticate with OpenAI via API key."""
+    print("OpenAI authentication (API key)\n")
+    print("  Get your key from: https://platform.openai.com/api-keys\n")
 
     try:
-        webbrowser.open(OPENAI_DEVICE_AUTH_PAGE)
+        webbrowser.open("https://platform.openai.com/api-keys")
     except Exception:
         pass
-
-    print("Waiting for authorisation", end="", flush=True)
-    max_wait = 15 * 60
-    start = time.time()
-    auth_code = None
-    code_verifier = None
-
-    while time.time() - start < max_wait:
-        time.sleep(interval)
-        print(".", end="", flush=True)
-
-        try:
-            resp = client.post(
-                OPENAI_DEVICE_TOKEN_URL,
-                json={"device_auth_id": device_auth_id, "user_code": user_code},
-                headers={
-                    "Content-Type": "application/json",
-                    "User-Agent": "crowdsentinel-mcp-server/1.0",
-                    "Accept": "application/json",
-                },
-            )
-            if resp.status_code == 200:
-                token_data = resp.json()
-                auth_code = token_data.get("authorization_code")
-                code_verifier = token_data.get("code_verifier")
-                print(" Authorised!")
-                break
-            if resp.status_code in (403, 404):
-                continue
-            print(f"\nPolling error: {resp.status_code}", file=sys.stderr)
-            return False
-        except Exception:
-            print("!", end="", flush=True)
-
-    if not auth_code:
-        print("\nTimed out after 15 minutes.", file=sys.stderr)
-        return False
-
-    print("Exchanging code for tokens...")
-    try:
-        exchange_data = {
-            "grant_type": "authorization_code",
-            "client_id": OPENAI_CLIENT_ID,
-            "code": auth_code,
-            "redirect_uri": OPENAI_DEVICE_CALLBACK_URI,
-        }
-        if code_verifier:
-            exchange_data["code_verifier"] = code_verifier
-
-        resp = client.post(
-            OPENAI_TOKEN_URL,
-            data=exchange_data,
-            headers={"Content-Type": "application/x-www-form-urlencoded"},
-        )
-        resp.raise_for_status()
-        tokens = resp.json()
-    except Exception as exc:
-        print(f"Token exchange failed: {exc}", file=sys.stderr)
-        return False
-
-    _save_auth({
-        "provider": "openai",
-        "access_token": tokens["access_token"],
-        "refresh_token": tokens.get("refresh_token", ""),
-        "expires_at": int(time.time()) + tokens.get("expires_in", 3600),
-    })
-    print(f"OpenAI authentication successful! Token stored in {AUTH_FILE}")
-    return True
-
-
-def _login_openai_api_key() -> bool:
-    """OpenAI API key authentication."""
-    print("\nOpening OpenAI Platform...\n")
-    webbrowser.open("https://platform.openai.com/api-keys")
 
     print("  1. Sign in to your OpenAI account")
     print("  2. Click 'Create new secret key'")
@@ -318,13 +339,12 @@ def _login_openai_api_key() -> bool:
     except Exception as exc:
         print(f"Warning: could not validate ({exc}).")
 
-    _save_auth({
+    save_profile("openai:default", {
+        "type": "api_key",
         "provider": "openai",
-        "access_token": key,
-        "refresh_token": "",
-        "expires_at": 0,
+        "key": key,
     })
-    print(f"OpenAI API key stored in {AUTH_FILE}")
+    print(f"OpenAI API key stored in {AUTH_PROFILES_FILE}")
     return True
 
 
@@ -333,10 +353,10 @@ def _login_openai_api_key() -> bool:
 # ---------------------------------------------------------------------------
 
 def login_anthropic() -> bool:
-    """Authenticate with Anthropic — setup-token (subscription) or API key."""
+    """Authenticate with Anthropic -- setup-token (subscription) or API key."""
     print("Anthropic authentication\n")
-    print("  1. Paste a setup-token (from `claude setup-token` — uses your subscription)")
-    print("  2. Paste an API key (from console.anthropic.com — usage-based billing)\n")
+    print("  1. Paste a setup-token (from `claude setup-token` -- uses your subscription)")
+    print("  2. Paste an API key (from console.anthropic.com -- usage-based billing)\n")
 
     choice = input("Choose [1/2]: ").strip()
 
@@ -380,7 +400,7 @@ def _login_anthropic_setup_token() -> bool:
         if resp.status_code == 200:
             print("Token validated successfully!")
         elif resp.status_code == 401:
-            print("Warning: token returned 401 — it may be expired. Run `claude setup-token` again.", file=sys.stderr)
+            print("Warning: token returned 401 -- it may be expired. Run `claude setup-token` again.", file=sys.stderr)
             if input("Store anyway? [y/N]: ").strip().lower() != "y":
                 return False
         else:
@@ -388,13 +408,13 @@ def _login_anthropic_setup_token() -> bool:
     except Exception as exc:
         print(f"Warning: could not validate ({exc}). Storing anyway.")
 
-    _save_auth({
+    save_profile("anthropic:subscription", {
+        "type": "token",
         "provider": "anthropic",
-        "access_token": token,
-        "refresh_token": "",
-        "expires_at": 0,
+        "access": token,
+        "expires": 0,
     })
-    print(f"Anthropic setup-token stored in {AUTH_FILE}")
+    print(f"Anthropic setup-token stored in {AUTH_PROFILES_FILE}")
     return True
 
 
@@ -428,11 +448,10 @@ def _login_anthropic_api_key() -> bool:
     except Exception as exc:
         print(f"Warning: could not validate ({exc}).")
 
-    _save_auth({
+    save_profile("anthropic:default", {
+        "type": "api_key",
         "provider": "anthropic",
-        "access_token": key,
-        "refresh_token": "",
-        "expires_at": 0,
+        "key": key,
     })
-    print(f"Anthropic API key stored in {AUTH_FILE}")
+    print(f"Anthropic API key stored in {AUTH_PROFILES_FILE}")
     return True
