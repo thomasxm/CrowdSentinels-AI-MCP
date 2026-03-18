@@ -9,6 +9,7 @@ Multi-profile storage in ~/.crowdsentinel/auth-profiles.json.
 Legacy single-profile auth.json is auto-migrated on first access.
 """
 
+import fcntl
 import json
 import logging
 import os
@@ -100,6 +101,59 @@ def get_profile_for_provider(provider: str) -> dict | None:
             api_key_match = prof
 
     return api_key_match
+
+
+def refresh_if_needed(profile_id: str) -> dict[str, Any]:
+    """Refresh an OAuth profile if expired. Uses file lock to prevent races.
+
+    Only refreshes profiles with type='oauth' that have a refresh token.
+    Returns the (possibly refreshed) profile dict.
+    """
+    profiles = load_profiles()
+    profile = profiles.get(profile_id)
+    if not profile:
+        return {}
+
+    # Only OAuth profiles with refresh tokens need refreshing
+    if profile.get("type") != "oauth" or not profile.get("refresh"):
+        return profile
+
+    from src.agent.oauth_pkce import is_token_expired, refresh_access_token
+
+    if not is_token_expired(profile.get("expires", 0)):
+        return profile
+
+    # Acquire file lock before refreshing
+    lock_path = AUTH_PROFILES_FILE.with_suffix(".lock")
+    try:
+        lock_fd = open(lock_path, "w")
+        fcntl.flock(lock_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except (BlockingIOError, OSError):
+        # Another process is refreshing — reload and return
+        logger.info("Token refresh lock held by another process, reloading")
+        return load_profiles().get(profile_id, profile)
+
+    try:
+        # Re-check after acquiring lock (another process may have refreshed)
+        profiles = load_profiles()
+        profile = profiles.get(profile_id, profile)
+        if not is_token_expired(profile.get("expires", 0)):
+            return profile
+
+        tokens = refresh_access_token(profile["refresh"])
+        profile["access"] = tokens["access_token"]
+        if "refresh_token" in tokens:
+            profile["refresh"] = tokens["refresh_token"]
+        profile["expires"] = int(time.time() + tokens.get("expires_in", 3600)) * 1000
+        save_profile(profile_id, profile)
+        logger.info("Refreshed OAuth token for %s", profile_id)
+    except Exception as exc:
+        logger.warning("Token refresh failed for %s: %s", profile_id, exc)
+    finally:
+        fcntl.flock(lock_fd, fcntl.LOCK_UN)
+        lock_fd.close()
+
+    return profile
 
 
 # ---------------------------------------------------------------------------
