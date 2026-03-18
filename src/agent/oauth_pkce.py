@@ -214,7 +214,8 @@ def run_pkce_flow() -> dict[str, Any]:
     server = HTTPServer((CALLBACK_HOST, CALLBACK_PORT), _CallbackHandler)
 
     def _serve() -> None:
-        server.handle_request()
+        while _CallbackHandler.auth_code is None and _CallbackHandler.error is None:
+            server.handle_request()
 
     thread = threading.Thread(target=_serve, daemon=True)
     thread.start()

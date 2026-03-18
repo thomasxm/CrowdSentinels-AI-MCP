@@ -290,6 +290,13 @@ def create_provider(
         token = openai_key
         profile = get_profile_for_provider("openai")
         if profile:
+            # Lazy refresh for OAuth profiles
+            if profile.get("type") == "oauth" and profile.get("refresh"):
+                profiles = load_profiles()
+                for pid, p in profiles.items():
+                    if p.get("access") == profile.get("access"):
+                        profile = refresh_if_needed(pid)
+                        break
             token = profile.get("key") or profile.get("access") or token
         return OpenAICompatibleProvider(
             model=model or os.environ.get("CROWDSENTINEL_MODEL", "gpt-4o"),

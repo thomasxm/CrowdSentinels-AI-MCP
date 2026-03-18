@@ -9,7 +9,6 @@ Multi-profile storage in ~/.crowdsentinel/auth-profiles.json.
 Legacy single-profile auth.json is auto-migrated on first access.
 """
 
-import fcntl
 import json
 import logging
 import os
@@ -129,11 +128,20 @@ def refresh_if_needed(profile_id: str) -> dict[str, Any]:
 
     # Acquire file lock before refreshing
     lock_path = AUTH_PROFILES_FILE.with_suffix(".lock")
+    lock_fd = None
     try:
+        import fcntl
         lock_fd = open(lock_path, "w")
         fcntl.flock(lock_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except ImportError:
+        # Windows — no file locking, proceed without
+        if lock_fd is not None:
+            lock_fd.close()
+        lock_fd = None
     except (BlockingIOError, OSError):
         # Another process is refreshing — reload and return
+        if lock_fd is not None:
+            lock_fd.close()
         logger.info("Token refresh lock held by another process, reloading")
         return load_profiles().get(profile_id, profile)
 
@@ -154,8 +162,13 @@ def refresh_if_needed(profile_id: str) -> dict[str, Any]:
     except Exception as exc:
         logger.warning("Token refresh failed for %s: %s", profile_id, exc)
     finally:
-        fcntl.flock(lock_fd, fcntl.LOCK_UN)
-        lock_fd.close()
+        if lock_fd is not None:
+            try:
+                import fcntl
+                fcntl.flock(lock_fd, fcntl.LOCK_UN)
+            except ImportError:
+                pass
+            lock_fd.close()
 
     return profile
 
@@ -309,7 +322,7 @@ def get_auth_status() -> dict[str, Any]:
             prof = get_profile_for_provider(provider)
             if prof:
                 expires_at = prof.get("expires", 0)
-                expired = expires_at > 0 and time.time() > expires_at
+                expired = expires_at > 0 and (time.time() * 1000) > expires_at
                 return {
                     "authenticated": True,
                     "method": f"{prof.get('type', 'unknown')}:{provider}",
@@ -343,6 +356,13 @@ def get_access_token() -> tuple | None:
     for provider in ("anthropic", "openai"):
         prof = get_profile_for_provider(provider)
         if prof:
+            # Lazy refresh for expired OAuth tokens
+            if prof.get("type") == "oauth" and prof.get("refresh"):
+                all_profiles = load_profiles()
+                for pid, p in all_profiles.items():
+                    if p.get("access") == prof.get("access"):
+                        prof = refresh_if_needed(pid)
+                        break
             token = prof.get("access") or prof.get("key") or ""
             if token:
                 return token, provider
