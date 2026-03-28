@@ -1,0 +1,25 @@
+{
+  "cpes": [
+    "cpe:/a:google:dns",
+    "cpe:/a:isc:bind:9.11.4"
+  ],
+  "hostnames": [
+    "dns.google",
+    "dns.google.com"
+  ],
+  "ip": "8.8.8.8",
+  "ports": [
+    53,
+    443
+  ],
+  "tags": [
+    "dns",
+    "resolver",
+    "cloud"
+  ],
+  "vulns": [
+    "CVE-2021-25216",
+    "CVE-2020-8617",
+    "CVE-2020-8625"
+  ]
+}

@@ -5,7 +5,7 @@
 repos:
   # Ruff — fast Python linter + formatter (replaces flake8, isort, black)
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.11.6
+    rev: v0.15.8
     hooks:
       - id: ruff
         name: ruff check (lint + fix)

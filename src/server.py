@@ -28,6 +28,7 @@ from src.tools.rule_management import RuleManagementTools
 from src.tools.schema_resources import SchemaTools
 from src.tools.smart_search import SmartSearchTools
 from src.tools.threat_hunting import ThreatHuntingTools
+from src.tools.threat_intel import ThreatIntelTools
 from src.tools.wireshark_tools import WiresharkTools
 from src.tools.workflow_guidance import WorkflowGuidanceTools
 from src.version import __version__ as VERSION
@@ -189,6 +190,13 @@ class SearchMCPServer:
         wireshark_tools.logger = self.logger
 
         with_exception_handling(wireshark_tools, self.mcp)
+
+        # Register Threat Intelligence enrichment tools
+        self.logger.info("Registering Threat Intelligence tools")
+        threat_intel_tools = ThreatIntelTools()
+        threat_intel_tools.logger = self.logger
+
+        with_exception_handling(threat_intel_tools, self.mcp)
 
         # Register ES|QL hunting tools (Elasticsearch only)
         if self.hunting_loader and self.esql_client:

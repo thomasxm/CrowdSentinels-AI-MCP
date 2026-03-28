@@ -485,8 +485,8 @@ crowdsentinel hunt "powershell" -i winlogbeat-* -o json | \
 <tr>
 <td width="50%">
 
-### 79 MCP Tools
-Threat hunting, detection rules, forensics, network analysis — all accessible via natural language
+### 82 MCP Tools
+Threat hunting, detection rules, forensics, network analysis, and IoC enrichment — all accessible via natural language
 
 ### 6,060 Detection Rules
 Pre-built Lucene, EQL & ES|QL rules with automatic MITRE ATT&CK mapping
@@ -503,10 +503,11 @@ Persistent IoC tracking across tools and sessions with FIFO storage
 - Diamond Model (4 vertices)
 - MITRE ATT&CK (automatic mapping)
 
-### 3 Data Sources
+### 3 Data Sources + Threat Intel
 - Elasticsearch / OpenSearch
 - EVTX logs (Chainsaw + Sigma)
 - PCAP files (Wireshark/TShark)
+- IoC enrichment (Shodan, VirusTotal, AbuseIPDB, ThreatFox)
 
 </td>
 </tr>
@@ -526,37 +527,46 @@ Persistent IoC tracking across tools and sessions with FIFO storage
 ┌─────────────────────────────────────────────────────────────────┐
 │                    CrowdSentinel MCP Server                      │
 │  ┌───────────────┐ ┌───────────────┐ ┌───────────────────────┐  │
-│  │   79 Tools    │ │ 6,060 Rules   │ │ Security Frameworks   │  │
+│  │   82 Tools    │ │ 6,060 Rules   │ │ Security Frameworks   │  │
 │  │ - Hunting     │ │ - Lucene      │ │ - Cyber Kill Chain    │  │
 │  │ - Detection   │ │ - EQL         │ │ - Pyramid of Pain     │  │
 │  │ - Forensics   │ │ - Sigma       │ │ - Diamond Model       │  │
 │  │ - Network     │ │               │ │ - MITRE ATT&CK        │  │
+│  │ - Enrichment  │ │               │ │                       │  │
 │  └───────────────┘ └───────────────┘ └───────────────────────┘  │
 │  ┌─────────────────────────────────────────────────────────────┐│
 │  │              Investigation State (Persistent)                ││
-│  │         Cross-tool IoC sharing, timeline, reporting         ││
+│  │    Cross-tool IoC sharing, enrichment, STIX 2.1 export      ││
 │  └─────────────────────────────────────────────────────────────┘│
-└─────────────────────────────┬───────────────────────────────────┘
-                              │
-        ┌─────────────────────┼─────────────────────┐
-        ▼                     ▼                     ▼
-┌───────────────┐    ┌───────────────┐    ┌───────────────┐
-│ Elasticsearch │    │   Chainsaw    │    │   Wireshark   │
-│  /OpenSearch  │    │  (EVTX/Sigma) │    │    (PCAP)     │
-└───────────────┘    └───────────────┘    └───────────────┘
-                              │
-                              ▼ (Roadmap)
-┌───────────────┐    ┌───────────────┐    ┌───────────────┐
-│    Splunk     │    │ Velociraptor  │    │     Zeek      │
-│               │    │  (EDR/DFIR)   │    │   (NSM/IDS)   │
-└───────────────┘    └───────────────┘    └───────────────┘
+└─────────────────────────┬───────────────────┬───────────────────┘
+                          │                   │
+        ┌─────────────────┼───────────────┐   │
+        ▼                 ▼               ▼   ▼
+┌───────────────┐ ┌───────────────┐ ┌───────────────┐
+│ Elasticsearch │ │   Chainsaw    │ │   Wireshark   │
+│  /OpenSearch  │ │  (EVTX/Sigma) │ │    (PCAP)     │
+└───────────────┘ └───────────────┘ └───────────────┘
+                          │
+  ┌───────────────────────┼───────────────────────┐
+  ▼                       ▼                       ▼
+┌───────────────┐ ┌───────────────┐ ┌───────────────┐
+│ Shodan        │ │  VirusTotal   │ │  AbuseIPDB    │
+│ InternetDB    │ │     (v3)      │ │  + ThreatFox  │
+│  (free/no key)│ │  (free tier)  │ │  (free tier)  │
+└───────────────┘ └───────────────┘ └───────────────┘
+                          │
+                          ▼ (Roadmap)
+┌───────────────┐ ┌───────────────┐ ┌───────────────┐
+│    Splunk     │ │ Velociraptor  │ │     Zeek      │
+│               │ │  (EDR/DFIR)   │ │   (NSM/IDS)   │
+└───────────────┘ └───────────────┘ └───────────────┘
 ```
 
 ---
 
 ## What's Included
 
-### Tool Categories (79 Tools)
+### Tool Categories (82 Tools)
 
 | Category | Tools | Description |
 |:---------|:-----:|:------------|
@@ -567,7 +577,8 @@ Persistent IoC tracking across tools and sessions with FIFO storage
 | **Investigation Prompts** | 5 | Fast triage spine — 10 critical IR questions |
 | **Chainsaw (EVTX)** | 6 | Sigma rule hunting, iterative IoC discovery |
 | **Wireshark (PCAP)** | 11 | Network forensics, beaconing, lateral movement detection |
-| **Investigation State** | 13 | Persistent IoCs, cross-tool sharing, export, reporting |
+| **Threat Intelligence** | 3 | IoC enrichment via Shodan, VirusTotal, AbuseIPDB, ThreatFox |
+| **Investigation State** | 13 | Persistent IoCs, cross-tool sharing, STIX 2.1 export, reporting |
 
 ### Security Frameworks
 
@@ -618,6 +629,11 @@ VERIFY_CERTS="true"                                # Verify against system CA bu
 # Options
 REQUEST_TIMEOUT="30"                               # Request timeout in seconds
 DISABLE_HIGH_RISK_OPERATIONS="true"                # Block all write operations
+
+# Threat Intelligence (optional — Shodan InternetDB works without any key)
+VIRUSTOTAL_API_KEY="your_vt_key"                   # Free: 500 lookups/day
+ABUSEIPDB_API_KEY="your_abuse_key"                 # Free: 1,000 lookups/day
+THREATFOX_API_KEY="your_tf_key"                    # Free: unlimited
 ```
 
 > **Security Warning:** Never use `VERIFY_CERTS="false"` or plain-text passwords in production. Use API keys or service tokens with TLS certificate verification enabled. For self-signed certificates, set `ELASTICSEARCH_CA_CERT` to your CA certificate path.
@@ -938,7 +954,7 @@ docker-compose -f docker-compose-opensearch.yml up -d
 | **Zeek Integration** | Planned | Network security monitoring — parse Zeek logs (conn, dns, http, ssl, x509) for threat hunting |
 | **Splunk Integration** | Planned | Add Splunk as a data source alongside Elasticsearch |
 | **Sigma Rule Converter** | Planned | Convert Sigma rules to native ES/Splunk queries |
-| **Threat Intel Feeds** | Planned | Automatic IoC enrichment from MISP, OTX, etc. |
+| **Threat Intel Enrichment** | **Done** | IoC enrichment via Shodan InternetDB, VirusTotal, AbuseIPDB, ThreatFox + STIX 2.1 export |
 | **Case Management** | Planned | Export investigations to TheHive, JIRA |
 | **Custom Rule Builder** | Planned | Create detection rules via natural language |
 

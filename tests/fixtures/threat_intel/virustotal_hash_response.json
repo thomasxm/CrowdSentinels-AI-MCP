@@ -1,0 +1,103 @@
+{
+  "data": {
+    "type": "file",
+    "id": "275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f",
+    "attributes": {
+      "meaningful_name": "trojan_sample.exe",
+      "type_description": "Win32 EXE",
+      "type_tag": "peexe",
+      "size": 184320,
+      "sha256": "275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f",
+      "sha1": "3395856ce81f2b7382dee72602f798b642f14140",
+      "md5": "44d88612fea8a8f36de82e1278abb02f",
+      "ssdeep": "3:a+JraNvsgzsVqSwHq9:tJuOgzsko",
+      "tlsh": "T1D1F01221B889C2F5788000028000800A0000400400800E10001904A00880200B00600E",
+      "magic": "PE32 executable (GUI) Intel 80386, for MS Windows",
+      "reputation": -98,
+      "total_votes": {
+        "harmless": 0,
+        "malicious": 67
+      },
+      "last_analysis_stats": {
+        "harmless": 0,
+        "type_unsupported": 4,
+        "suspicious": 1,
+        "confirmed_timeout": 0,
+        "timeout": 1,
+        "failure": 0,
+        "malicious": 62,
+        "undetected": 7
+      },
+      "last_analysis_results": {
+        "CrowdStrike": {
+          "category": "malicious",
+          "engine_name": "CrowdStrike Falcon",
+          "engine_version": "1.0",
+          "result": "Win.Test.EICAR_HDB-1",
+          "method": "blacklist",
+          "engine_update": "20260328"
+        },
+        "Microsoft": {
+          "category": "malicious",
+          "engine_name": "Microsoft",
+          "engine_version": "1.1.25030.1",
+          "result": "Virus:DOS/EICAR_Test_File",
+          "method": "blacklist",
+          "engine_update": "20260328"
+        },
+        "Sophos": {
+          "category": "malicious",
+          "engine_name": "Sophos",
+          "engine_version": "2.5.2",
+          "result": "EICAR-AV-Test",
+          "method": "blacklist",
+          "engine_update": "20260328"
+        },
+        "Symantec": {
+          "category": "malicious",
+          "engine_name": "Symantec",
+          "engine_version": "1.22.0.0",
+          "result": "EICAR Test String",
+          "method": "blacklist",
+          "engine_update": "20260328"
+        }
+      },
+      "last_analysis_date": 1711584000,
+      "first_submission_date": 1172166000,
+      "last_submission_date": 1711584000,
+      "times_submitted": 48291,
+      "popular_threat_classification": {
+        "suggested_threat_label": "trojan.eicar/test",
+        "popular_threat_category": [
+          {
+            "count": 38,
+            "value": "trojan"
+          }
+        ],
+        "popular_threat_name": [
+          {
+            "count": 27,
+            "value": "eicar"
+          }
+        ]
+      },
+      "sandbox_verdicts": {
+        "Tencent HABO": {
+          "category": "malicious",
+          "malware_classification": [
+            "trojan"
+          ]
+        }
+      },
+      "tags": [
+        "peexe",
+        "overlay",
+        "eicar",
+        "test-file"
+      ]
+    },
+    "links": {
+      "self": "https://www.virustotal.com/api/v3/files/275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f"
+    }
+  }
+}
