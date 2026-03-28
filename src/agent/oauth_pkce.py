@@ -238,6 +238,7 @@ def run_pkce_flow() -> dict[str, Any]:
     if _CallbackHandler.auth_code is None:
         raise RuntimeError("PKCE flow timed out — no callback received within 300 seconds")
 
+    # Validate state BEFORE exchanging the code — prevents auth code injection
     if _CallbackHandler.auth_state != state:
         raise RuntimeError(
             f"PKCE flow failed: state mismatch (expected {state!r}, got {_CallbackHandler.auth_state!r})"
