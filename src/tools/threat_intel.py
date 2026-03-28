@@ -33,7 +33,7 @@ class ThreatIntelTools:
             ioc_types: list[str] | None = None,
             min_priority: int = 2,
             providers: list[str] | None = None,
-            max_iocs: int = 50,
+            max_iocs: int = 20,
         ) -> dict[str, Any]:
             """
             Enrich IoCs from the active investigation with external threat intelligence.
@@ -44,6 +44,9 @@ class ThreatIntelTools:
 
             Shodan InternetDB works without any API key. Other providers require
             environment variables (VIRUSTOTAL_API_KEY, ABUSEIPDB_API_KEY, THREATFOX_API_KEY).
+
+            Note: VirusTotal free tier allows 4 requests/minute. Enriching many IoCs
+            with VT enabled may take several minutes (15s delay per lookup).
 
             Args:
                 investigation_id: Target investigation (defaults to active)
@@ -117,13 +120,15 @@ class ThreatIntelTools:
             return {"error": "No investigation found. Create one first with create_investigation()."}
 
         # Filter IoCs
-        iocs = investigation.iocs.get_by_priority(min_priority)
+        iocs = investigation.iocs.get_by_priority(max(1, min_priority))
         if ioc_types:
-            type_set = {IoCType(t) for t in ioc_types if t in IoCType.__members__.values() or t in [e.value for e in IoCType]}
-            iocs = [i for i in iocs if i.type in type_set or i.type.value in (ioc_types or [])]
+            valid_types = {e.value for e in IoCType}
+            type_filter = {t for t in ioc_types if t in valid_types}
+            iocs = [i for i in iocs if i.type.value in type_filter]
 
-        # Limit
-        iocs = iocs[:max_iocs]
+        # Hard cap to prevent runaway enrichment (VT rate limit: 4/min)
+        hard_limit = min(max_iocs, 200)
+        iocs = iocs[:hard_limit]
 
         if not iocs:
             return {

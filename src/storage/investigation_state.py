@@ -572,6 +572,9 @@ class InvestigationStateClient:
         links_added = 0
         iocs = investigation.iocs.iocs
 
+        # Build lookup map: IoC ID → IoC object (O(n) total instead of O(n²))
+        ioc_map: dict[str, Any] = {ioc.id: ioc for ioc in iocs}
+
         # Build mapping: source_tool:query_context → set of IoC IDs
         tool_to_iocs: dict[str, set[str]] = {}
         for ioc in iocs:
@@ -583,10 +586,11 @@ class InvestigationStateClient:
         for _key, ioc_ids in tool_to_iocs.items():
             if len(ioc_ids) < 2:
                 continue
-            for ioc in iocs:
-                if ioc.id not in ioc_ids:
+            for ioc_id in ioc_ids:
+                ioc = ioc_map.get(ioc_id)
+                if ioc is None:
                     continue
-                new_related = ioc_ids - {ioc.id}
+                new_related = ioc_ids - {ioc_id}
                 before = len(ioc.related_iocs)
                 ioc.related_iocs = list(set(ioc.related_iocs) | new_related)
                 links_added += len(ioc.related_iocs) - before
