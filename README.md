@@ -485,7 +485,7 @@ crowdsentinel hunt "powershell" -i winlogbeat-* -o json | \
 <tr>
 <td width="50%">
 
-### 82 MCP Tools
+### 84 MCP Tools
 Threat hunting, detection rules, forensics, network analysis, and IoC enrichment — all accessible via natural language
 
 ### 6,060 Detection Rules
@@ -527,7 +527,7 @@ Persistent IoC tracking across tools and sessions with FIFO storage
 ┌─────────────────────────────────────────────────────────────────┐
 │                    CrowdSentinel MCP Server                      │
 │  ┌───────────────┐ ┌───────────────┐ ┌───────────────────────┐  │
-│  │   82 Tools    │ │ 6,060 Rules   │ │ Security Frameworks   │  │
+│  │   84 Tools    │ │ 6,060 Rules   │ │ Security Frameworks   │  │
 │  │ - Hunting     │ │ - Lucene      │ │ - Cyber Kill Chain    │  │
 │  │ - Detection   │ │ - EQL         │ │ - Pyramid of Pain     │  │
 │  │ - Forensics   │ │ - Sigma       │ │ - Diamond Model       │  │
@@ -566,7 +566,7 @@ Persistent IoC tracking across tools and sessions with FIFO storage
 
 ## What's Included
 
-### Tool Categories (82 Tools)
+### Tool Categories (84 Tools)
 
 | Category | Tools | Description |
 |:---------|:-----:|:------------|
@@ -577,7 +577,7 @@ Persistent IoC tracking across tools and sessions with FIFO storage
 | **Investigation Prompts** | 5 | Fast triage spine — 10 critical IR questions |
 | **Chainsaw (EVTX)** | 6 | Sigma rule hunting, iterative IoC discovery |
 | **Wireshark (PCAP)** | 11 | Network forensics, beaconing, lateral movement detection |
-| **Threat Intelligence** | 3 | IoC enrichment via Shodan, VirusTotal, AbuseIPDB, ThreatFox |
+| **Threat Intelligence** | 5 | IoC enrichment (Shodan, VirusTotal, AbuseIPDB, ThreatFox) + MISP export/search |
 | **Investigation State** | 13 | Persistent IoCs, cross-tool sharing, STIX 2.1 export, reporting |
 
 ### Security Frameworks
@@ -634,6 +634,11 @@ DISABLE_HIGH_RISK_OPERATIONS="true"                # Block all write operations
 VIRUSTOTAL_API_KEY="your_vt_key"                   # Free: 500 lookups/day
 ABUSEIPDB_API_KEY="your_abuse_key"                 # Free: 1,000 lookups/day
 THREATFOX_API_KEY="your_tf_key"                    # Free: unlimited
+
+# MISP Integration (optional — offline JSON export works without a server)
+MISP_URL="https://misp.example.org"                # MISP instance URL
+MISP_API_KEY="your_misp_key"                       # MISP API key (40-char hex)
+# MISP_SSL_VERIFY="true"                           # Set "false" for self-signed (dev only)
 ```
 
 > **Security Warning:** Never use `VERIFY_CERTS="false"` or plain-text passwords in production. Use API keys or service tokens with TLS certificate verification enabled. For self-signed certificates, set `ELASTICSEARCH_CA_CERT` to your CA certificate path.

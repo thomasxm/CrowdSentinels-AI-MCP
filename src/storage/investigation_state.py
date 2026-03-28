@@ -748,6 +748,9 @@ class InvestigationStateClient:
         if format == "stix":
             return self._export_stix(iocs, investigation)
 
+        if format == "misp":
+            return self._export_misp(iocs, investigation)
+
         return {"error": f"Unknown format: {format}"}
 
     def _export_stix(self, iocs: list, investigation) -> dict:
@@ -848,6 +851,31 @@ class InvestigationStateClient:
 
         # Unsupported type
         return None
+
+    def _export_misp(self, iocs: list, investigation) -> dict:
+        """Export IoCs as a MISP event dict (offline JSON, no server needed)."""
+        from src.clients.common.misp_client import build_misp_event
+
+        severity = investigation.manifest.severity.value if hasattr(investigation.manifest.severity, "value") else "medium"
+
+        event_dict = build_misp_event(
+            investigation_name=investigation.manifest.name,
+            investigation_id=investigation.manifest.id,
+            iocs=iocs,
+            severity=severity,
+            tags=investigation.manifest.tags,
+        )
+
+        if isinstance(event_dict, dict) and "error" in event_dict:
+            return event_dict
+
+        return {
+            "format": "misp",
+            "investigation_id": investigation.manifest.id,
+            "exported_at": datetime.utcnow().isoformat(),
+            "total_iocs": len(iocs),
+            "event": event_dict,
+        }
 
     def close_investigation(
         self,

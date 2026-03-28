@@ -1,10 +1,12 @@
-"""Threat intelligence enrichment MCP tools.
+"""Threat intelligence enrichment and sharing MCP tools.
 
 Provides IoC enrichment via Shodan InternetDB, AbuseIPDB, VirusTotal,
-and ThreatFox. Works with or without an active investigation.
+and ThreatFox. MISP integration for IoC sharing (offline JSON export
+or live push). Works with or without an active investigation.
 """
 
 import logging
+import os
 from typing import Any
 
 from fastmcp import FastMCP
@@ -101,6 +103,57 @@ class ThreatIntelTools:
             """
             return self._get_enrichment_status()
 
+        @mcp.tool()
+        def export_to_misp(
+            investigation_id: str | None = None,
+            min_priority: int = 2,
+            push: bool = False,
+            tags: list[str] | None = None,
+        ) -> dict[str, Any]:
+            """
+            Export investigation IoCs as a MISP event.
+
+            Always produces a MISP JSON event (offline, no server needed).
+            If push=True and MISP_URL + MISP_API_KEY are configured, also
+            pushes the event to the live MISP instance.
+
+            Args:
+                investigation_id: Target investigation (defaults to active)
+                min_priority: Minimum Pyramid of Pain priority (default: 2)
+                push: Whether to push to a live MISP instance (default: False)
+                tags: Additional tags for the MISP event
+
+            Returns:
+                MISP event dict, optionally with push result
+
+            Example:
+                export_to_misp(push=True, tags=["tlp:amber"])
+            """
+            return self._export_to_misp(investigation_id, min_priority, push, tags)
+
+        @mcp.tool()
+        def search_misp(
+            ioc_value: str,
+            ioc_type: str | None = None,
+        ) -> dict[str, Any]:
+            """
+            Search a live MISP instance for a specific IoC.
+
+            Requires MISP_URL and MISP_API_KEY environment variables.
+            Returns matching attributes with event context.
+
+            Args:
+                ioc_value: The indicator value to search for
+                ioc_type: Optional IoC type hint (ip, domain, hash, url)
+
+            Returns:
+                List of matching MISP attributes with event metadata
+
+            Example:
+                search_misp(ioc_value="203.0.113.42", ioc_type="ip")
+            """
+            return self._search_misp(ioc_value, ioc_type)
+
     # ------------------------------------------------------------------
     # Internal implementations
     # ------------------------------------------------------------------
@@ -194,13 +247,15 @@ class ThreatIntelTools:
                 verdicts_summary["unknown"] += 1
                 verdict_label = "unknown"
 
-            enriched_iocs.append({
-                "type": ioc_type_str,
-                "value": ioc.value,
-                "verdict": verdict_label,
-                "confidence": confidence,
-                "providers": {r.provider: r.context for r in results if not r.error and r.context},
-            })
+            enriched_iocs.append(
+                {
+                    "type": ioc_type_str,
+                    "value": ioc.value,
+                    "verdict": verdict_label,
+                    "confidence": confidence,
+                    "providers": {r.provider: r.context for r in results if not r.error and r.context},
+                }
+            )
 
         # Update statistics and save
         investigation.manifest.statistics.total_iocs = investigation.iocs.total_count
@@ -257,13 +312,16 @@ class ThreatIntelTools:
             "ioc": {"type": ioc_type, "value": ioc_value},
             "verdict": verdict_label,
             "confidence": confidence,
-            "details": {r.provider: {
-                "is_malicious": r.is_malicious,
-                "confidence": r.confidence,
-                "context": r.context,
-                "tags": r.tags,
-                "error": r.error,
-            } for r in results},
+            "details": {
+                r.provider: {
+                    "is_malicious": r.is_malicious,
+                    "confidence": r.confidence,
+                    "context": r.context,
+                    "tags": r.tags,
+                    "error": r.error,
+                }
+                for r in results
+            },
         }
 
     def _get_enrichment_status(self) -> dict[str, Any]:
@@ -284,13 +342,90 @@ class ThreatIntelTools:
             )
         if not providers["threatfox"]["key_set"]:
             recommendations.append(
-                "Set THREATFOX_API_KEY for IoC-to-malware-family mapping "
-                "(free, unlimited — https://auth.abuse.ch/)"
+                "Set THREATFOX_API_KEY for IoC-to-malware-family mapping (free, unlimited — https://auth.abuse.ch/)"
             )
 
         return {
             "providers": providers,
             "total_configured": total_configured,
             "total_available": len(providers),
+            "misp_configured": bool(os.environ.get("MISP_URL") and os.environ.get("MISP_API_KEY")),
             "recommendations": recommendations if recommendations else ["All providers configured."],
+        }
+
+    def _export_to_misp(
+        self,
+        investigation_id: str | None,
+        min_priority: int,
+        push: bool,
+        tags: list[str] | None,
+    ) -> dict[str, Any]:
+        """Export investigation IoCs as a MISP event."""
+        from src.clients.common.misp_client import build_misp_event, push_to_misp
+
+        client = get_investigation_client()
+        investigation = client._get_investigation(investigation_id)
+        if not investigation:
+            return {"error": "No investigation found. Create one first with create_investigation()."}
+
+        iocs = investigation.iocs.get_by_priority(max(1, min_priority))
+        if not iocs:
+            return {"error": "No IoCs to export", "investigation_id": investigation.manifest.id}
+
+        severity = (
+            investigation.manifest.severity.value if hasattr(investigation.manifest.severity, "value") else "medium"
+        )
+
+        event_dict = build_misp_event(
+            investigation_name=investigation.manifest.name,
+            investigation_id=investigation.manifest.id,
+            iocs=iocs,
+            severity=severity,
+            tags=tags,
+        )
+
+        if isinstance(event_dict, dict) and "error" in event_dict:
+            return event_dict
+
+        result: dict[str, Any] = {
+            "investigation_id": investigation.manifest.id,
+            "total_iocs": len(iocs),
+            "event": event_dict,
+        }
+
+        if push:
+            push_result = push_to_misp(event_dict)
+            result["push_result"] = push_result
+        else:
+            result["push_result"] = {
+                "pushed": False,
+                "reason": "push=False (set push=True to push to live MISP instance)",
+            }
+
+        result["workflow_hint"] = {
+            "next_step": "generate_investigation_report" if not push else "close_investigation",
+            "description": "Generate a final investigation report" if not push else "Close the investigation",
+        }
+
+        return result
+
+    def _search_misp(self, ioc_value: str, ioc_type: str | None) -> dict[str, Any]:
+        """Search a live MISP instance for an IoC."""
+        from src.clients.common.misp_client import search_misp_iocs
+
+        misp_url = os.environ.get("MISP_URL", "")
+        if not misp_url:
+            return {
+                "error": "MISP not configured. Set MISP_URL and MISP_API_KEY environment variables.",
+                "searched": False,
+            }
+
+        matches = search_misp_iocs(ioc_value, ioc_type)
+
+        return {
+            "searched": True,
+            "ioc": {"type": ioc_type, "value": ioc_value},
+            "matches": matches,
+            "total_matches": len(matches),
+            "misp_instance": misp_url,
         }
