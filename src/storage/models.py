@@ -53,6 +53,7 @@ class SourceType(str, Enum):
     ELASTICSEARCH = "elasticsearch"
     CHAINSAW = "chainsaw"
     WIRESHARK = "wireshark"
+    THREAT_INTEL = "threat_intel"
     MANUAL = "manual"
     OTHER = "other"
 

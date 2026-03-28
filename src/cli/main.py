@@ -909,6 +909,20 @@ def _cmd_auth(args):
             else:
                 print("Authenticated: no")
                 print("Run: crowdsentinel auth login")
+
+        # Threat intelligence provider status
+        print("\nThreat Intelligence:")
+        print("  Shodan InternetDB: active (no key required)")
+        ti_providers = {
+            "VirusTotal": os.environ.get("VIRUSTOTAL_API_KEY"),
+            "AbuseIPDB": os.environ.get("ABUSEIPDB_API_KEY"),
+            "ThreatFox": os.environ.get("THREATFOX_API_KEY"),
+        }
+        for name, key in ti_providers.items():
+            if key:
+                print(f"  {name}: active")
+            else:
+                print(f"  {name}: not configured")
         return 0
 
     if action == "logout":

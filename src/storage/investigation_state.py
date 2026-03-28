@@ -551,10 +551,51 @@ class InvestigationStateClient:
         stats.affected_hosts = len(hosts)
         stats.affected_users = len(users)
 
+        # Populate related_iocs based on co-occurrence
+        related_links = self._populate_related_iocs(investigation)
+        summary["related_iocs_linked"] = related_links
+
         investigation.manifest.update_timestamp()
         self.save_state()
 
         return summary
+
+    def _populate_related_iocs(self, investigation: Investigation) -> int:
+        """Link IoCs that co-occur in the same source findings.
+
+        Two IoCs are considered related if they were found by the same
+        tool in the same query context. This is called after add_findings()
+        to keep related_iocs up to date.
+
+        Returns the number of new relationship links created.
+        """
+        links_added = 0
+        iocs = investigation.iocs.iocs
+
+        # Build lookup map: IoC ID → IoC object (O(n) total instead of O(n²))
+        ioc_map: dict[str, Any] = {ioc.id: ioc for ioc in iocs}
+
+        # Build mapping: source_tool:query_context → set of IoC IDs
+        tool_to_iocs: dict[str, set[str]] = {}
+        for ioc in iocs:
+            for source in ioc.sources:
+                key = f"{source.tool}:{source.query_context or 'default'}"
+                tool_to_iocs.setdefault(key, set()).add(ioc.id)
+
+        # IoCs from the same tool+query context are related
+        for _key, ioc_ids in tool_to_iocs.items():
+            if len(ioc_ids) < 2:
+                continue
+            for ioc_id in ioc_ids:
+                ioc = ioc_map.get(ioc_id)
+                if ioc is None:
+                    continue
+                new_related = ioc_ids - {ioc_id}
+                before = len(ioc.related_iocs)
+                ioc.related_iocs = list(set(ioc.related_iocs) | new_related)
+                links_added += len(ioc.related_iocs) - before
+
+        return links_added
 
     def get_summary(
         self,
@@ -704,7 +745,109 @@ class InvestigationStateClient:
             # Simple list of values for use in other tools
             return "\n".join(ioc.value for ioc in iocs)
 
+        if format == "stix":
+            return self._export_stix(iocs, investigation)
+
         return {"error": f"Unknown format: {format}"}
+
+    def _export_stix(self, iocs: list, investigation) -> dict:
+        """Export IoCs as a STIX 2.1 Bundle."""
+        try:
+            import stix2
+        except ImportError:
+            return {
+                "error": "stix2 library not installed. Run: pip install stix2",
+            }
+
+        stix_objects = []
+
+        # Identity for CrowdSentinel
+        identity = stix2.Identity(
+            name="CrowdSentinel",
+            identity_class="system",
+            description=f"Investigation: {investigation.manifest.name}",
+        )
+        stix_objects.append(identity)
+
+        for ioc in iocs:
+            ioc_type = ioc.type.value if isinstance(ioc.type, IoCType) else str(ioc.type)
+            pattern = self._ioc_to_stix_pattern(ioc_type, ioc.value)
+            if not pattern:
+                continue
+
+            labels = ioc.tags[:5] if ioc.tags else ["malicious-activity"]
+            confidence_int = max(1, min(100, int(ioc.confidence * 100)))
+
+            try:
+                indicator = stix2.Indicator(
+                    name=f"{ioc_type}: {ioc.value}",
+                    pattern=pattern,
+                    pattern_type="stix",
+                    valid_from=ioc.first_seen.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                    confidence=confidence_int,
+                    created_by_ref=identity.id,
+                    labels=labels,
+                    description=f"Priority {ioc.pyramid_priority}/6, seen {ioc.total_occurrences} times",
+                )
+                stix_objects.append(indicator)
+            except Exception as exc:
+                logger.warning("Failed to create STIX indicator for %s: %s", ioc.value, exc)
+                continue
+
+        bundle = stix2.Bundle(objects=stix_objects)
+        return json.loads(bundle.serialize())
+
+    @staticmethod
+    def _ioc_to_stix_pattern(ioc_type: str, value: str) -> str | None:
+        """Convert an IoC type+value to a STIX 2.1 pattern string."""
+        # Escape single quotes in value
+        safe_value = value.replace("\\", "\\\\").replace("'", "\\'")
+
+        if ioc_type == "ip":
+            # Detect IPv6 vs IPv4
+            import ipaddress
+
+            try:
+                addr = ipaddress.ip_address(value)
+                if isinstance(addr, ipaddress.IPv6Address):
+                    return f"[ipv6-addr:value = '{safe_value}']"
+            except ValueError:
+                pass
+            return f"[ipv4-addr:value = '{safe_value}']"
+
+        if ioc_type in ("domain", "hostname"):
+            return f"[domain-name:value = '{safe_value}']"
+
+        if ioc_type == "url":
+            return f"[url:value = '{safe_value}']"
+
+        if ioc_type == "hash":
+            length = len(value)
+            if length == 32:
+                return f"[file:hashes.MD5 = '{safe_value}']"
+            if length == 40:
+                return f"[file:hashes.'SHA-1' = '{safe_value}']"
+            if length == 64:
+                return f"[file:hashes.'SHA-256' = '{safe_value}']"
+            return f"[file:hashes.'SHA-256' = '{safe_value}']"
+
+        if ioc_type == "email":
+            return f"[email-addr:value = '{safe_value}']"
+
+        if ioc_type == "file_path":
+            return f"[file:name = '{safe_value}']"
+
+        if ioc_type == "registry_key":
+            return f"[windows-registry-key:key = '{safe_value}']"
+
+        if ioc_type == "user":
+            return f"[user-account:account_login = '{safe_value}']"
+
+        if ioc_type in ("process", "commandline"):
+            return f"[process:command_line = '{safe_value}']"
+
+        # Unsupported type
+        return None
 
     def close_investigation(
         self,

@@ -1,0 +1,44 @@
+{
+  "query_status": "ok",
+  "data": [
+    {
+      "id": "1104823",
+      "ioc": "185.220.101.34:443",
+      "ioc_type": "ip:port",
+      "threat_type": "botnet_cc",
+      "threat_type_desc": "Indicator that identifies a botnet command&control server (C&C)",
+      "malware": "win.cobalt_strike",
+      "malware_printable": "Cobalt Strike",
+      "malware_alias": [
+        "Agentemis",
+        "CobaltStrike",
+        "BEACON"
+      ],
+      "malware_malpedia": "https://malpedia.caad.fkie.fraunhofer.de/details/win.cobalt_strike",
+      "confidence_level": 90,
+      "first_seen": "2026-02-14 18:22:00 UTC",
+      "last_seen": null,
+      "reporter": "abuse_ch",
+      "reference": "https://bazaar.abuse.ch/sample/275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f/",
+      "tags": [
+        "CobaltStrike",
+        "C2",
+        "beacon"
+      ],
+      "mitre_attack": [
+        {
+          "tactic_id": "TA0011",
+          "tactic": "Command and Control",
+          "technique_id": "T1071",
+          "technique": "Application Layer Protocol"
+        },
+        {
+          "tactic_id": "TA0011",
+          "tactic": "Command and Control",
+          "technique_id": "T1573",
+          "technique": "Encrypted Channel"
+        }
+      ]
+    }
+  ]
+}

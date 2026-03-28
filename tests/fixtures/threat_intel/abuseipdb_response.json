@@ -1,0 +1,21 @@
+{
+  "data": {
+    "ipAddress": "185.220.101.34",
+    "isPublic": true,
+    "ipVersion": 4,
+    "isWhitelisted": false,
+    "abuseConfidenceScore": 92,
+    "countryCode": "DE",
+    "countryName": "Germany",
+    "usageType": "Data Center/Web Hosting/Transit",
+    "isp": "Zwiebelfreunde e.V.",
+    "domain": "torservers.net",
+    "hostnames": [
+      "tor-exit-relay.torservers.net"
+    ],
+    "isTor": true,
+    "totalReports": 1847,
+    "numDistinctUsers": 312,
+    "lastReportedAt": "2026-03-28T09:14:22+00:00"
+  }
+}

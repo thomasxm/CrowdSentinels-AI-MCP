@@ -1,0 +1,62 @@
+{
+  "data": {
+    "type": "ip_address",
+    "id": "185.220.101.34",
+    "attributes": {
+      "network": "185.220.101.0/24",
+      "as_owner": "Zwiebelfreunde e.V.",
+      "asn": 60729,
+      "country": "DE",
+      "continent": "EU",
+      "regional_internet_registry": "RIPE NCC",
+      "reputation": -47,
+      "total_votes": {
+        "harmless": 2,
+        "malicious": 31
+      },
+      "last_analysis_stats": {
+        "harmless": 28,
+        "malicious": 42,
+        "suspicious": 3,
+        "undetected": 15,
+        "timeout": 2
+      },
+      "last_analysis_results": {
+        "Fortinet": {
+          "category": "malicious",
+          "result": "malware",
+          "method": "blacklist",
+          "engine_name": "Fortinet"
+        },
+        "BitDefender": {
+          "category": "malicious",
+          "result": "malicious",
+          "method": "blacklist",
+          "engine_name": "BitDefender"
+        },
+        "Kaspersky": {
+          "category": "malicious",
+          "result": "malware",
+          "method": "blacklist",
+          "engine_name": "Kaspersky"
+        },
+        "Google Safebrowsing": {
+          "category": "harmless",
+          "result": "clean",
+          "method": "blacklist",
+          "engine_name": "Google Safebrowsing"
+        }
+      },
+      "last_analysis_date": 1711584000,
+      "last_https_certificate_date": 1711497600,
+      "whois": "netname: ZWIEBELFREUNDE\ndescr: Zwiebelfreunde e.V.\ncountry: DE",
+      "tags": [
+        "tor-exit-node",
+        "malware-distribution"
+      ]
+    },
+    "links": {
+      "self": "https://www.virustotal.com/api/v3/ip_addresses/185.220.101.34"
+    }
+  }
+}

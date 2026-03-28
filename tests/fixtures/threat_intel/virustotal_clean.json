@@ -1,0 +1,59 @@
+{
+  "data": {
+    "type": "ip_address",
+    "id": "8.8.8.8",
+    "attributes": {
+      "network": "8.8.8.0/24",
+      "as_owner": "Google LLC",
+      "asn": 15169,
+      "country": "US",
+      "continent": "NA",
+      "regional_internet_registry": "ARIN",
+      "reputation": 12,
+      "total_votes": {
+        "harmless": 45,
+        "malicious": 0
+      },
+      "last_analysis_stats": {
+        "harmless": 72,
+        "malicious": 0,
+        "suspicious": 0,
+        "undetected": 18,
+        "timeout": 0
+      },
+      "last_analysis_results": {
+        "Fortinet": {
+          "category": "harmless",
+          "result": "clean",
+          "method": "blacklist",
+          "engine_name": "Fortinet"
+        },
+        "BitDefender": {
+          "category": "harmless",
+          "result": "clean",
+          "method": "blacklist",
+          "engine_name": "BitDefender"
+        },
+        "Kaspersky": {
+          "category": "undetected",
+          "result": "unrated",
+          "method": "blacklist",
+          "engine_name": "Kaspersky"
+        },
+        "Google Safebrowsing": {
+          "category": "harmless",
+          "result": "clean",
+          "method": "blacklist",
+          "engine_name": "Google Safebrowsing"
+        }
+      },
+      "last_analysis_date": 1711584000,
+      "last_https_certificate_date": 1711497600,
+      "whois": "NetName: LVLT-GOGL-8-8-8\nOrgName: Google LLC\nCountry: US",
+      "tags": []
+    },
+    "links": {
+      "self": "https://www.virustotal.com/api/v3/ip_addresses/8.8.8.8"
+    }
+  }
+}

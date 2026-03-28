@@ -7,6 +7,8 @@ from typing import Any
 
 from fastmcp import FastMCP
 
+from src.storage.auto_capture import auto_capture_wireshark_results
+
 logger = logging.getLogger(__name__)
 
 
@@ -148,7 +150,10 @@ class WiresharkTools:
             Example:
                 pcap_overview("/path/to/capture.pcap")
             """
-            return tools_instance._pcap_overview(pcap_path)
+            result = tools_instance._pcap_overview(pcap_path)
+            return auto_capture_wireshark_results(
+                result, "pcap_overview", query_description=f"PCAP overview: {pcap_path}"
+            )
 
         # Tool 2: Build Baseline
         @mcp.tool()
@@ -173,7 +178,10 @@ class WiresharkTools:
                     baseline_name="corporate_baseline"
                 )
             """
-            return tools_instance._build_baseline(pcap_path, baseline_name, description)
+            result = tools_instance._build_baseline(pcap_path, baseline_name, description)
+            return auto_capture_wireshark_results(
+                result, "build_baseline", query_description=f"Baseline: {baseline_name}"
+            )
 
         # Tool 3: Hunt IoCs
         @mcp.tool()
@@ -198,7 +206,10 @@ class WiresharkTools:
                     iocs=["1.2.3.4", "evil.com", "abc123hash"]
                 )
             """
-            return tools_instance._hunt_iocs(pcap_path, iocs, ioc_type)
+            result = tools_instance._hunt_iocs(pcap_path, iocs, ioc_type)
+            return auto_capture_wireshark_results(
+                result, "hunt_iocs", query_description=f"IoC hunt: {len(iocs)} indicators"
+            )
 
         # Tool 4: Hunt Anomalies
         @mcp.tool()
@@ -219,7 +230,10 @@ class WiresharkTools:
             Example:
                 hunt_anomalies("/path/to/suspicious.pcap")
             """
-            return tools_instance._hunt_anomalies(pcap_path, baseline_name)
+            result = tools_instance._hunt_anomalies(pcap_path, baseline_name)
+            return auto_capture_wireshark_results(
+                result, "hunt_anomalies", query_description=f"Anomaly hunt: {pcap_path}"
+            )
 
         # Tool 5: Track Sessions
         @mcp.tool()
@@ -243,7 +257,10 @@ class WiresharkTools:
             Example:
                 track_sessions("/path/to/capture.pcap", protocol="tcp")
             """
-            return tools_instance._track_sessions(pcap_path, protocol, port_filter)
+            result = tools_instance._track_sessions(pcap_path, protocol, port_filter)
+            return auto_capture_wireshark_results(
+                result, "track_sessions", query_description=f"Session tracking: {protocol}"
+            )
 
         # Tool 6: Extract Objects
         @mcp.tool()
@@ -265,7 +282,10 @@ class WiresharkTools:
             Example:
                 extract_objects("/path/to/capture.pcap", protocol="http")
             """
-            return tools_instance._extract_objects(pcap_path, protocol, store_files)
+            result = tools_instance._extract_objects(pcap_path, protocol, store_files)
+            return auto_capture_wireshark_results(
+                result, "extract_objects", query_description=f"Object extraction: {protocol}"
+            )
 
         # Tool 7: Detect Beaconing
         @mcp.tool()
@@ -289,7 +309,8 @@ class WiresharkTools:
             Example:
                 detect_beaconing("/path/to/suspicious.pcap")
             """
-            return tools_instance._detect_beaconing(pcap_path, min_connections, max_jitter_percent)
+            result = tools_instance._detect_beaconing(pcap_path, min_connections, max_jitter_percent)
+            return auto_capture_wireshark_results(result, "detect_beaconing", query_description="Beaconing detection")
 
         # Tool 8: Detect Lateral Movement
         @mcp.tool()
@@ -310,7 +331,10 @@ class WiresharkTools:
             Example:
                 detect_lateral_movement("/path/to/internal_traffic.pcap")
             """
-            return tools_instance._detect_lateral_movement(pcap_path, internal_only)
+            result = tools_instance._detect_lateral_movement(pcap_path, internal_only)
+            return auto_capture_wireshark_results(
+                result, "detect_lateral_movement", query_description="Lateral movement detection"
+            )
 
         # Tool 9: Generate IoCs
         @mcp.tool()
@@ -331,7 +355,8 @@ class WiresharkTools:
             Example:
                 generate_iocs("/path/to/analyzed.pcap", min_confidence=7)
             """
-            return tools_instance._generate_iocs(pcap_path, min_confidence)
+            result = tools_instance._generate_iocs(pcap_path, min_confidence)
+            return auto_capture_wireshark_results(result, "generate_iocs", query_description="IoC generation")
 
         # Tool 10: Generate Report
         @mcp.tool()
@@ -355,7 +380,8 @@ class WiresharkTools:
             Example:
                 generate_report("/path/to/analyzed.pcap", investigation_id="INV-2024-001")
             """
-            return tools_instance._generate_report(pcap_path, findings, investigation_id)
+            result = tools_instance._generate_report(pcap_path, findings, investigation_id)
+            return auto_capture_wireshark_results(result, "generate_report", query_description="Report generation")
 
         # Tool 11: Decode Traffic (Utility)
         @mcp.tool()
@@ -377,7 +403,10 @@ class WiresharkTools:
             Example:
                 decode_traffic("/path/to/capture.pcap", port=8080, protocol="http")
             """
-            return tools_instance._decode_traffic(pcap_path, port, protocol)
+            result = tools_instance._decode_traffic(pcap_path, port, protocol)
+            return auto_capture_wireshark_results(
+                result, "decode_traffic", query_description=f"Decode {protocol} on port {port}"
+            )
 
     # Internal implementation methods
 

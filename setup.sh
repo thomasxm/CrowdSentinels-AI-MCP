@@ -1202,6 +1202,80 @@ setup_claude_auth() {
 
 
 ################################################################################
+# Threat Intelligence API Keys (Optional)
+################################################################################
+
+configure_threat_intel() {
+    print_header "Threat Intelligence API Keys (Optional)"
+
+    echo "CrowdSentinel can enrich IoCs using external threat intelligence services."
+    echo "All services offer free API tiers. You can skip this and configure later."
+    echo ""
+    echo "  Shodan InternetDB  FREE, no key required (always active)"
+    echo "  VirusTotal         FREE tier: 500 lookups/day (hash, URL, domain, IP)"
+    echo "  AbuseIPDB          FREE tier: 1,000 lookups/day (IP reputation)"
+    echo "  ThreatFox          FREE, unlimited (IoC to malware family mapping)"
+    echo ""
+
+    VIRUSTOTAL_API_KEY=""
+    ABUSEIPDB_API_KEY=""
+    THREATFOX_API_KEY=""
+
+    if ! confirm "Configure threat intelligence API keys now?"; then
+        print_info "Skipped. Shodan InternetDB will still work (no key needed)."
+        print_info "Configure later by setting environment variables:"
+        print_info "  export VIRUSTOTAL_API_KEY='your-key'"
+        print_info "  export ABUSEIPDB_API_KEY='your-key'"
+        print_info "  export THREATFOX_API_KEY='your-key'"
+        return 0
+    fi
+
+    # VirusTotal
+    echo ""
+    echo -e "${CYAN}VirusTotal${NC} — Get a free key at: https://www.virustotal.com/gui/join-us"
+    read -sp "  Paste VirusTotal API key (or Enter to skip): " vt_key
+    echo ""
+    if [ -n "$vt_key" ]; then
+        VIRUSTOTAL_API_KEY="$vt_key"
+        print_success "VirusTotal key saved"
+    else
+        print_info "Skipped VirusTotal"
+    fi
+
+    # AbuseIPDB
+    echo ""
+    echo -e "${CYAN}AbuseIPDB${NC} — Get a free key at: https://www.abuseipdb.com/account/api"
+    read -sp "  Paste AbuseIPDB API key (or Enter to skip): " abuse_key
+    echo ""
+    if [ -n "$abuse_key" ]; then
+        ABUSEIPDB_API_KEY="$abuse_key"
+        print_success "AbuseIPDB key saved"
+    else
+        print_info "Skipped AbuseIPDB"
+    fi
+
+    # ThreatFox
+    echo ""
+    echo -e "${CYAN}ThreatFox (abuse.ch)${NC} — Get a free key at: https://auth.abuse.ch/"
+    read -sp "  Paste ThreatFox API key (or Enter to skip): " tf_key
+    echo ""
+    if [ -n "$tf_key" ]; then
+        THREATFOX_API_KEY="$tf_key"
+        print_success "ThreatFox key saved"
+    else
+        print_info "Skipped ThreatFox"
+    fi
+
+    local count=0
+    [ -n "$VIRUSTOTAL_API_KEY" ] && count=$((count + 1))
+    [ -n "$ABUSEIPDB_API_KEY" ] && count=$((count + 1))
+    [ -n "$THREATFOX_API_KEY" ] && count=$((count + 1))
+
+    echo ""
+    print_success "Threat intelligence: Shodan InternetDB + $count additional provider(s) configured"
+}
+
+################################################################################
 # MCP Server Configuration
 ################################################################################
 
@@ -1284,6 +1358,18 @@ configure_mcp_server() {
 
         mcp_cmd="$mcp_cmd -e VERIFY_CERTS=\"$VERIFY_CERTS\""
         mcp_cmd="$mcp_cmd -e DISABLE_HIGH_RISK_OPERATIONS=\"$DISABLE_HIGH_RISK\""
+
+        # Threat intelligence API keys (optional)
+        if [ -n "$VIRUSTOTAL_API_KEY" ]; then
+            mcp_cmd="$mcp_cmd -e VIRUSTOTAL_API_KEY=\"$VIRUSTOTAL_API_KEY\""
+        fi
+        if [ -n "$ABUSEIPDB_API_KEY" ]; then
+            mcp_cmd="$mcp_cmd -e ABUSEIPDB_API_KEY=\"$ABUSEIPDB_API_KEY\""
+        fi
+        if [ -n "$THREATFOX_API_KEY" ]; then
+            mcp_cmd="$mcp_cmd -e THREATFOX_API_KEY=\"$THREATFOX_API_KEY\""
+        fi
+
         mcp_cmd="$mcp_cmd -- uv --directory \"$SCRIPT_DIR\" run crowdsentinel-mcp-server"
 
         if [ "$DRY_RUN" = true ]; then
@@ -1325,6 +1411,20 @@ configure_mcp_server() {
         env_section="$env_section
         \"VERIFY_CERTS\": \"$VERIFY_CERTS\",
         \"DISABLE_HIGH_RISK_OPERATIONS\": \"$DISABLE_HIGH_RISK\""
+
+        # Threat intelligence API keys (optional)
+        if [ -n "$VIRUSTOTAL_API_KEY" ]; then
+            env_section="$env_section,
+        \"VIRUSTOTAL_API_KEY\": \"$VIRUSTOTAL_API_KEY\""
+        fi
+        if [ -n "$ABUSEIPDB_API_KEY" ]; then
+            env_section="$env_section,
+        \"ABUSEIPDB_API_KEY\": \"$ABUSEIPDB_API_KEY\""
+        fi
+        if [ -n "$THREATFOX_API_KEY" ]; then
+            env_section="$env_section,
+        \"THREATFOX_API_KEY\": \"$THREATFOX_API_KEY\""
+        fi
 
         local config_content='{
   "mcpServers": {
@@ -1632,6 +1732,27 @@ print_summary() {
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo ""
 
+    echo "Threat Intelligence:"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "  Shodan InternetDB: Active (no key required)"
+    if [ -n "$VIRUSTOTAL_API_KEY" ]; then
+        echo "  VirusTotal:        Active"
+    else
+        echo "  VirusTotal:        Not configured (export VIRUSTOTAL_API_KEY)"
+    fi
+    if [ -n "$ABUSEIPDB_API_KEY" ]; then
+        echo "  AbuseIPDB:         Active"
+    else
+        echo "  AbuseIPDB:         Not configured (export ABUSEIPDB_API_KEY)"
+    fi
+    if [ -n "$THREATFOX_API_KEY" ]; then
+        echo "  ThreatFox:         Active"
+    else
+        echo "  ThreatFox:         Not configured (export THREATFOX_API_KEY)"
+    fi
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo ""
+
     echo "Available Tools: 90+"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo "  • Threat Hunting (20 tools)"
@@ -1799,6 +1920,7 @@ EOF
     fi
 
     setup_claude_auth
+    configure_threat_intel
     configure_mcp_server
     install_crowdsentinel_skills
     print_summary
