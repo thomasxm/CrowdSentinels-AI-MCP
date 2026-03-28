@@ -99,4 +99,82 @@ dev = [
     "pytest>=9.0.2",
     "pytest-asyncio>=1.3.0",
     "pytest-cov>=7.0.0",
+    "ruff>=0.11.0",
+    "pre-commit>=4.0.0",
+    "bandit>=1.8.0",
+    "detect-secrets>=1.5.0",
 ]
+
+# ---------------------------------------------------------------------------
+# Ruff — linter + formatter (mirrors CI rules in .github/workflows/ci.yml)
+# ---------------------------------------------------------------------------
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "W",   # pycodestyle warnings
+    "I",   # isort
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "SIM", # flake8-simplify
+    "C4",  # flake8-comprehensions
+    "PIE", # flake8-pie
+    "PT",  # flake8-pytest-style
+    "RET", # flake8-return
+    "ERA", # eradicate (commented-out code)
+]
+ignore = [
+    "E501",   # line too long (handled by formatter)
+    "E402",   # module-level import not at top
+    "F841",   # local variable assigned but never used
+    "B904",   # raise without from inside except
+    "B011",   # do not assert False
+    "B905",   # zip without strict
+    "PT011",  # pytest.raises too broad
+    "PT015",  # assert always fails
+    "PT017",  # assert in except
+    "PT018",  # composite assert
+    "SIM102", # collapsible if
+    "SIM103", # return bool directly
+    "SIM105", # use contextlib.suppress
+    "SIM108", # use ternary operator
+    "SIM115", # use context manager for open
+    "SIM118", # use key in dict
+    "B007",   # unused loop variable
+    "B024",   # abstract class without abstract method
+    "C414",   # unnecessary list call within sorted
+    "C401",   # unnecessary generator, use set comprehension
+    "ERA001", # commented-out code
+    "W293",   # whitespace before ':'
+    "RET504", # unnecessary assignment before return
+    "PIE790", # unnecessary pass
+    "PIE810", # unnecessary spread unpacking
+    "PT003",  # scope='function' is implied
+    "PT006",  # wrong type for parametrize
+    "PT009",  # use regular assert
+    "PT019",  # fixture without value
+    "PT027",  # use pytest.raises instead of assertRaises
+    "RET505", # unnecessary else after return
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["src"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+# ---------------------------------------------------------------------------
+# Bandit — SAST (mirrors CI bandit config)
+# ---------------------------------------------------------------------------
+
+[tool.bandit]
+targets = ["src"]
+exclude_dirs = ["tests", "detection-rules", ".venv"]
+skips = ["B101"]  # assert used in non-test code (acceptable for CLI tool)
