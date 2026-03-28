@@ -55,6 +55,7 @@ dependencies = [
     "tomli==2.2.1",
     "tomli-w==1.2.0",
     "stix2>=3.0.0,<4.0.0",
+    "pymisp>=2.4.190",
 ]
 
 [project.urls]

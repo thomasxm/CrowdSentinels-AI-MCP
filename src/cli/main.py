@@ -923,6 +923,11 @@ def _cmd_auth(args):
                 print(f"  {name}: active")
             else:
                 print(f"  {name}: not configured")
+        misp_url = os.environ.get("MISP_URL")
+        if misp_url:
+            print(f"  MISP: active ({misp_url})")
+        else:
+            print("  MISP: not configured (export works offline)")
         return 0
 
     if action == "logout":
