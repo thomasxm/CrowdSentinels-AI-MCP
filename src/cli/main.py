@@ -9,6 +9,7 @@ import json
 import os
 import signal
 import sys
+import time
 from pathlib import Path
 from typing import Any
 
@@ -843,22 +844,38 @@ def _cmd_auth(args):
         return 0 if success else 1
 
     if action == "status":
-        status = get_auth_status()
-        if status["authenticated"]:
-            print("Authenticated: yes")
-            print(f"Method: {status['method']}")
-            print(f"Provider: {status['provider']}")
-            if status.get("expired"):
-                print("Token: expired (will auto-refresh on next use)")
-            elif status.get("expires_at"):
-                remaining = status["expires_at"] - __import__("time").time()
-                if remaining > 0:
-                    print(f"Expires in: {remaining/3600:.1f} hours")
-            if status.get("token_file"):
-                print(f"Token file: {status['token_file']}")
+        from src.agent.auth import load_profiles, _migrate_legacy_auth
+        _migrate_legacy_auth()
+        profiles = load_profiles()
+
+        if profiles:
+            print(f"Authenticated: yes")
+            print(f"Profiles: {len(profiles)}")
+            for pid, p in profiles.items():
+                ptype = p.get("type", "unknown")
+                provider = p.get("provider", "unknown")
+                if ptype == "oauth":
+                    expires = p.get("expires", 0)
+                    if expires > 0:
+                        remaining = (expires / 1000) - time.time()
+                        if remaining > 0:
+                            print(f"  {pid}: type={ptype}, provider={provider}, expires in {remaining/3600:.1f}h")
+                        else:
+                            print(f"  {pid}: type={ptype}, provider={provider}, expired (will refresh on next use)")
+                    else:
+                        print(f"  {pid}: type={ptype}, provider={provider}")
+                else:
+                    print(f"  {pid}: type={ptype}, provider={provider}")
         else:
-            print("Authenticated: no")
-            print("Run: crowdsentinel auth login")
+            # Check env vars
+            status = get_auth_status()
+            if status["authenticated"]:
+                print("Authenticated: yes")
+                print(f"Method: {status['method']}")
+                print(f"Provider: {status['provider']}")
+            else:
+                print("Authenticated: no")
+                print("Run: crowdsentinel auth login")
         return 0
 
     if action == "logout":
@@ -1044,8 +1061,8 @@ def _cmd_analyse_mcp(args, search_results):
         if "No LLM" in str(exc):
             # No auth at all — offer inline login
             print("No LLM authentication found. Starting sign-in...\n", file=sys.stderr)
-            from src.agent.auth import login_openai
-            if not login_openai():
+            from src.agent.auth import login_anthropic
+            if not login_anthropic():
                 print("Authentication failed.", file=sys.stderr)
                 return 1
             # Retry after login
@@ -1400,8 +1417,9 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Manage LLM authentication for agent mode (--mcp)",
         epilog=(
             "Examples:\n"
-            "  crowdsentinel auth login                       # OpenAI browser sign-in\n"
-            "  crowdsentinel auth login --provider anthropic  # Anthropic sign-in\n"
+            "  crowdsentinel auth login                       # Anthropic (default)\n"
+            "  crowdsentinel auth login --provider openai     # OpenAI (subscription or API key)\n"
+            "  crowdsentinel auth login --provider anthropic  # Anthropic (setup-token or API key)\n"
             "  crowdsentinel auth status                      # Check auth status\n"
             "  crowdsentinel auth logout                      # Remove stored tokens"
         ),
@@ -1409,8 +1427,8 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     sp.add_argument("action", choices=["login", "status", "logout"],
                     help="Auth action to perform")
-    sp.add_argument("--provider", choices=["openai", "anthropic"], default="openai",
-                    help="LLM provider (default: openai)")
+    sp.add_argument("--provider", choices=["openai", "anthropic"], default="anthropic",
+                    help="LLM provider (default: anthropic)")
     sp.set_defaults(func=_cmd_auth)
 
     return parser
