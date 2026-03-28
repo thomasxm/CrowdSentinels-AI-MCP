@@ -50,21 +50,34 @@ def load_profiles() -> dict[str, dict]:
         return {}
 
 
+def _atomic_write_json(path: Path, data: dict) -> None:
+    """Write JSON to a file atomically with 0o600 permissions from creation.
+
+    Writes to a temporary file first, then renames into place. This avoids
+    TOCTOU where the file is briefly world-readable between write and chmod.
+    """
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp_path = path.with_suffix(".tmp")
+    fd = os.open(str(tmp_path), os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as fh:
+            json.dump(data, fh, indent=2)
+    except BaseException:
+        tmp_path.unlink(missing_ok=True)
+        raise
+    tmp_path.rename(path)
+
+
 def save_profile(profile_id: str, profile: dict) -> None:
     """Upsert a single profile into auth-profiles.json.
 
     Creates the file (with ``version: 1`` wrapper) if it does not exist.
-    File permissions are set to ``0o600``.
+    File permissions are set to ``0o600`` from creation (no TOCTOU window).
     """
     profiles = load_profiles()
     profiles[profile_id] = profile
 
-    AUTH_PROFILES_FILE.parent.mkdir(parents=True, exist_ok=True)
-    AUTH_PROFILES_FILE.write_text(
-        json.dumps({"version": 1, "profiles": profiles}, indent=2),
-        encoding="utf-8",
-    )
-    AUTH_PROFILES_FILE.chmod(0o600)
+    _atomic_write_json(AUTH_PROFILES_FILE, {"version": 1, "profiles": profiles})
     logger.info("Profile '%s' saved to %s", profile_id, AUTH_PROFILES_FILE)
 
 
@@ -75,11 +88,7 @@ def remove_profile(profile_id: str) -> bool:
         return False
     del profiles[profile_id]
 
-    AUTH_PROFILES_FILE.write_text(
-        json.dumps({"version": 1, "profiles": profiles}, indent=2),
-        encoding="utf-8",
-    )
-    AUTH_PROFILES_FILE.chmod(0o600)
+    _atomic_write_json(AUTH_PROFILES_FILE, {"version": 1, "profiles": profiles})
     return True
 
 
@@ -155,11 +164,15 @@ def refresh_if_needed(profile_id: str) -> dict[str, Any]:
             return profile
 
         tokens = refresh_access_token(profile["refresh"])
-        profile["access"] = tokens["access_token"]
-        if "refresh_token" in tokens:
-            profile["refresh"] = tokens["refresh_token"]
-        profile["expires"] = int(time.time() + tokens.get("expires_in", 3600)) * 1000
-        save_profile(profile_id, profile)
+        # Build updated profile as a new dict — do not mutate before save succeeds
+        updated = {
+            **profile,
+            "access": tokens["access_token"],
+            "refresh": tokens.get("refresh_token", profile["refresh"]),
+            "expires": int(time.time() + tokens.get("expires_in", 3600)) * 1000,
+        }
+        save_profile(profile_id, updated)
+        profile = updated
         logger.info("Refreshed OAuth token for %s", profile_id)
     except Exception as exc:
         logger.warning("Token refresh failed for %s: %s", profile_id, exc)
