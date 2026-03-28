@@ -111,10 +111,16 @@ dev = [
 # Ruff — linter + formatter (mirrors CI rules in .github/workflows/ci.yml)
 # ---------------------------------------------------------------------------
 
+[tool.pytest.ini_options]
+markers = [
+    "system: Full MCP protocol tests requiring real Elasticsearch and internet access",
+    "expects_tool_failure: Suppress log-capture failure for tests that deliberately provoke tool errors",
+]
+
 [tool.ruff]
 target-version = "py310"
 line-length = 120
-src = ["src", "tests"]
+src = ["src", "tests", "harness"]
 
 [tool.ruff.lint]
 select = [
