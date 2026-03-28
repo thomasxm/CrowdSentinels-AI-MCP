@@ -5,13 +5,9 @@ from src.utils import limit_response_size, summarize_search_response
 
 logger = logging.getLogger(__name__)
 
+
 class DocumentClient(SearchClientBase):
-    def search_documents(
-        self,
-        index: str,
-        body: dict,
-        raw: bool = False
-    ) -> dict:
+    def search_documents(self, index: str, body: dict, raw: bool = False) -> dict:
         """
         Search for documents in the index.
 
@@ -28,7 +24,7 @@ class DocumentClient(SearchClientBase):
         response = self.client.search(index=index, body=body)
 
         # Convert ObjectApiResponse to dict if needed
-        if hasattr(response, 'body'):
+        if hasattr(response, "body"):
             response = response.body
 
         # If raw mode requested, return without size limiting
@@ -72,4 +68,3 @@ class DocumentClient(SearchClientBase):
     def delete_by_query(self, index: str, body: dict) -> dict:
         """Deletes documents matching the provided query."""
         return self.client.delete_by_query(index=index, body=body)
-

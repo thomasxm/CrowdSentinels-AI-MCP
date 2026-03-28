@@ -1,5 +1,6 @@
 # tests/wireshark/test_report_generator.py
 """Tests for NCSC-style report generator."""
+
 from datetime import datetime
 
 
@@ -13,18 +14,12 @@ class TestReportGenerator:
         generator = ReportGenerator()
 
         findings = {
-            "beaconing": [
-                {"src_ip": "192.168.1.100", "dst_ip": "203.0.113.42", "confidence": "high"}
-            ],
-            "anomalies": [
-                {"type": "unusual_port", "port": 4444, "count": 10}
-            ]
+            "beaconing": [{"src_ip": "192.168.1.100", "dst_ip": "203.0.113.42", "confidence": "high"}],
+            "anomalies": [{"type": "unusual_port", "port": 4444, "count": 10}],
         }
 
         report = generator.generate_report(
-            pcap_path="/tmp/test.pcap",
-            findings=findings,
-            investigation_id="INV-20241228-143052"
+            pcap_path="/tmp/test.pcap", findings=findings, investigation_id="INV-20241228-143052"
         )
 
         assert "INV-20241228-143052" in report
@@ -44,7 +39,7 @@ class TestReportGenerator:
         findings = {
             "beaconing": [{"src_ip": "192.168.1.100", "confidence": "high"}],
             "anomalies": [],
-            "iocs": [{"type": "ip", "value": "203.0.113.42"}]
+            "iocs": [{"type": "ip", "value": "203.0.113.42"}],
         }
 
         summary = generator.generate_executive_summary(findings)
@@ -94,7 +89,7 @@ class TestReportGenerator:
 
         findings = {
             "beaconing": [{"src_ip": "192.168.1.100", "dst_ip": "203.0.113.42"}],
-            "lateral_movement": [{"movement_type": "psexec_pattern"}]
+            "lateral_movement": [{"movement_type": "psexec_pattern"}],
         }
 
         recommendations = generator.generate_recommendations(findings)
@@ -120,10 +115,7 @@ class TestReportGenerator:
 
         generator = ReportGenerator()
 
-        findings = {
-            "beaconing": [{"dst_ip": "203.0.113.42"}],
-            "lateral_movement": [{"dst_ip": "192.168.1.50"}]
-        }
+        findings = {"beaconing": [{"dst_ip": "203.0.113.42"}], "lateral_movement": [{"dst_ip": "192.168.1.50"}]}
 
         steps = generator.generate_containment_steps(findings)
 
@@ -136,15 +128,9 @@ class TestReportGenerator:
 
         generator = ReportGenerator()
 
-        findings = {
-            "beaconing": [{"src_ip": "192.168.1.100"}],
-            "iocs": [{"type": "ip", "value": "203.0.113.42"}]
-        }
+        findings = {"beaconing": [{"src_ip": "192.168.1.100"}], "iocs": [{"type": "ip", "value": "203.0.113.42"}]}
 
-        json_export = generator.export_to_json(
-            investigation_id="INV-20241228-143052",
-            findings=findings
-        )
+        json_export = generator.export_to_json(investigation_id="INV-20241228-143052", findings=findings)
 
         assert "investigation_id" in json_export
         assert "iocs" in json_export
@@ -228,4 +214,3 @@ class TestTimelineVisualizer:
 
         assert "RECON" in timeline or "recon" in timeline.lower()
         assert "DELIVER" in timeline or "deliver" in timeline.lower()
-

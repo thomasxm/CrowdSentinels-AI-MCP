@@ -14,7 +14,7 @@ WINDOWS_SECURITY_SCHEMA = LogSourceSchema(
     schema_id="windows_security",
     source_type=LogSourceType.WINDOWS_SECURITY,
     description="Windows Security event log events collected via Winlogbeat. "
-                "Covers authentication, process creation, service installation, etc.",
+    "Covers authentication, process creation, service installation, etc.",
     index_patterns=[
         "winlogbeat-*",
         "logs-windows.security*",
@@ -56,9 +56,8 @@ WINDOWS_SECURITY_SCHEMA = LogSourceSchema(
                 "impersonation_level": "ImpersonationLevel",
                 "restricted_admin_mode": "RestrictedAdminMode",
                 "virtual_account": "VirtualAccount",
-            }
+            },
         ),
-
         # Event ID 4625: Failed logon
         "logon_failure": EventTypeDefinition(
             event_code="4625",
@@ -80,9 +79,8 @@ WINDOWS_SECURITY_SCHEMA = LogSourceSchema(
                 "subject_user": "SubjectUserName",
                 "subject_domain": "SubjectDomainName",
                 "subject_logon_id": "SubjectLogonId",
-            }
+            },
         ),
-
         # Event ID 4634: Logoff
         "logoff": EventTypeDefinition(
             event_code="4634",
@@ -94,9 +92,8 @@ WINDOWS_SECURITY_SCHEMA = LogSourceSchema(
                 "user_sid": "TargetUserSid",
                 "logon_id": "TargetLogonId",
                 "logon_type": "LogonType",
-            }
+            },
         ),
-
         # Event ID 4648: Explicit credential logon
         "explicit_credential_logon": EventTypeDefinition(
             event_code="4648",
@@ -114,9 +111,8 @@ WINDOWS_SECURITY_SCHEMA = LogSourceSchema(
                 "source_process": "ProcessName",
                 "source_ip": "IpAddress",
                 "source_port": "IpPort",
-            }
+            },
         ),
-
         # Event ID 4672: Special privileges assigned
         "special_privileges": EventTypeDefinition(
             event_code="4672",
@@ -128,9 +124,8 @@ WINDOWS_SECURITY_SCHEMA = LogSourceSchema(
                 "user_sid": "SubjectUserSid",
                 "logon_id": "SubjectLogonId",
                 "privileges": "PrivilegeList",
-            }
+            },
         ),
-
         # Event ID 4688: Process creation
         "process_create": EventTypeDefinition(
             event_code="4688",
@@ -151,9 +146,8 @@ WINDOWS_SECURITY_SCHEMA = LogSourceSchema(
                 "target_user": "TargetUserName",
                 "target_domain": "TargetDomainName",
                 "target_logon_id": "TargetLogonId",
-            }
+            },
         ),
-
         # Event ID 4689: Process termination
         "process_terminate": EventTypeDefinition(
             event_code="4689",
@@ -166,9 +160,8 @@ WINDOWS_SECURITY_SCHEMA = LogSourceSchema(
                 "subject_user": "SubjectUserName",
                 "subject_domain": "SubjectDomainName",
                 "subject_logon_id": "SubjectLogonId",
-            }
+            },
         ),
-
         # Event ID 4697: Service installed
         "service_install": EventTypeDefinition(
             event_code="4697",
@@ -183,9 +176,8 @@ WINDOWS_SECURITY_SCHEMA = LogSourceSchema(
                 "subject_user": "SubjectUserName",
                 "subject_domain": "SubjectDomainName",
                 "subject_logon_id": "SubjectLogonId",
-            }
+            },
         ),
-
         # Event ID 4698: Scheduled task created
         "scheduled_task_create": EventTypeDefinition(
             event_code="4698",
@@ -197,9 +189,8 @@ WINDOWS_SECURITY_SCHEMA = LogSourceSchema(
                 "subject_user": "SubjectUserName",
                 "subject_domain": "SubjectDomainName",
                 "subject_logon_id": "SubjectLogonId",
-            }
+            },
         ),
-
         # Event ID 4699: Scheduled task deleted
         "scheduled_task_delete": EventTypeDefinition(
             event_code="4699",
@@ -210,9 +201,8 @@ WINDOWS_SECURITY_SCHEMA = LogSourceSchema(
                 "subject_user": "SubjectUserName",
                 "subject_domain": "SubjectDomainName",
                 "subject_logon_id": "SubjectLogonId",
-            }
+            },
         ),
-
         # Event ID 4700: Scheduled task enabled
         "scheduled_task_enable": EventTypeDefinition(
             event_code="4700",
@@ -223,9 +213,8 @@ WINDOWS_SECURITY_SCHEMA = LogSourceSchema(
                 "subject_user": "SubjectUserName",
                 "subject_domain": "SubjectDomainName",
                 "subject_logon_id": "SubjectLogonId",
-            }
+            },
         ),
-
         # Event ID 4701: Scheduled task disabled
         "scheduled_task_disable": EventTypeDefinition(
             event_code="4701",
@@ -236,9 +225,8 @@ WINDOWS_SECURITY_SCHEMA = LogSourceSchema(
                 "subject_user": "SubjectUserName",
                 "subject_domain": "SubjectDomainName",
                 "subject_logon_id": "SubjectLogonId",
-            }
+            },
         ),
-
         # Event ID 4702: Scheduled task updated
         "scheduled_task_update": EventTypeDefinition(
             event_code="4702",
@@ -250,9 +238,8 @@ WINDOWS_SECURITY_SCHEMA = LogSourceSchema(
                 "subject_user": "SubjectUserName",
                 "subject_domain": "SubjectDomainName",
                 "subject_logon_id": "SubjectLogonId",
-            }
+            },
         ),
-
         # Event ID 4720: User account created
         "user_account_create": EventTypeDefinition(
             event_code="4720",
@@ -283,9 +270,8 @@ WINDOWS_SECURITY_SCHEMA = LogSourceSchema(
                 "user_parameters": "UserParameters",
                 "sid_history": "SidHistory",
                 "logon_hours": "LogonHours",
-            }
+            },
         ),
-
         # Event ID 4722: User account enabled
         "user_account_enable": EventTypeDefinition(
             event_code="4722",
@@ -298,9 +284,8 @@ WINDOWS_SECURITY_SCHEMA = LogSourceSchema(
                 "subject_user": "SubjectUserName",
                 "subject_domain": "SubjectDomainName",
                 "subject_logon_id": "SubjectLogonId",
-            }
+            },
         ),
-
         # Event ID 4723: Password change attempt
         "password_change_attempt": EventTypeDefinition(
             event_code="4723",
@@ -313,9 +298,8 @@ WINDOWS_SECURITY_SCHEMA = LogSourceSchema(
                 "subject_user": "SubjectUserName",
                 "subject_domain": "SubjectDomainName",
                 "subject_logon_id": "SubjectLogonId",
-            }
+            },
         ),
-
         # Event ID 4724: Password reset attempt
         "password_reset_attempt": EventTypeDefinition(
             event_code="4724",
@@ -328,9 +312,8 @@ WINDOWS_SECURITY_SCHEMA = LogSourceSchema(
                 "subject_user": "SubjectUserName",
                 "subject_domain": "SubjectDomainName",
                 "subject_logon_id": "SubjectLogonId",
-            }
+            },
         ),
-
         # Event ID 4728: Member added to security-enabled global group
         "group_member_add_global": EventTypeDefinition(
             event_code="4728",
@@ -345,9 +328,8 @@ WINDOWS_SECURITY_SCHEMA = LogSourceSchema(
                 "subject_user": "SubjectUserName",
                 "subject_domain": "SubjectDomainName",
                 "subject_logon_id": "SubjectLogonId",
-            }
+            },
         ),
-
         # Event ID 4732: Member added to security-enabled local group
         "group_member_add_local": EventTypeDefinition(
             event_code="4732",
@@ -362,9 +344,8 @@ WINDOWS_SECURITY_SCHEMA = LogSourceSchema(
                 "subject_user": "SubjectUserName",
                 "subject_domain": "SubjectDomainName",
                 "subject_logon_id": "SubjectLogonId",
-            }
+            },
         ),
-
         # Event ID 4768: Kerberos TGT request
         "kerberos_tgt_request": EventTypeDefinition(
             event_code="4768",
@@ -385,9 +366,8 @@ WINDOWS_SECURITY_SCHEMA = LogSourceSchema(
                 "cert_issuer_name": "CertIssuerName",
                 "cert_serial_number": "CertSerialNumber",
                 "cert_thumbprint": "CertThumbprint",
-            }
+            },
         ),
-
         # Event ID 4769: Kerberos service ticket request
         "kerberos_service_ticket": EventTypeDefinition(
             event_code="4769",
@@ -406,9 +386,8 @@ WINDOWS_SECURITY_SCHEMA = LogSourceSchema(
                 "source_port": "IpPort",
                 "logon_guid": "LogonGuid",
                 "transited_services": "TransitedServices",
-            }
+            },
         ),
-
         # Event ID 4776: Credential validation
         "credential_validation": EventTypeDefinition(
             event_code="4776",
@@ -420,9 +399,8 @@ WINDOWS_SECURITY_SCHEMA = LogSourceSchema(
                 "result_code": "Status",
                 "logon_account": "LogonAccount",
                 "source_workstation": "SourceWorkstation",
-            }
+            },
         ),
-
         # Event ID 5140: Network share access
         "network_share_access": EventTypeDefinition(
             event_code="5140",
@@ -437,9 +415,8 @@ WINDOWS_SECURITY_SCHEMA = LogSourceSchema(
                 "access_mask": "AccessMask",
                 "source_ip": "IpAddress",
                 "source_port": "IpPort",
-            }
+            },
         ),
-
         # Event ID 5145: Network share check
         "network_share_check": EventTypeDefinition(
             event_code="5145",
@@ -456,7 +433,7 @@ WINDOWS_SECURITY_SCHEMA = LogSourceSchema(
                 "access_list": "AccessList",
                 "source_ip": "IpAddress",
                 "source_port": "IpPort",
-            }
+            },
         ),
-    }
+    },
 )

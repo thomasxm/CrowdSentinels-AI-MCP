@@ -33,14 +33,16 @@ class MockProvider(LLMProvider):
             return self.responses.pop(0)
         # Default: return final response
         return LLMResponse(
-            text=json.dumps({
-                "severity_assessment": "high",
-                "summary": {"total_events": 1, "key_finding": "Mock finding"},
-                "mitre_attack_techniques": [],
-                "iocs_found": [],
-                "insights": ["Mock insight"],
-                "recommended_followup": [],
-            }),
+            text=json.dumps(
+                {
+                    "severity_assessment": "high",
+                    "summary": {"total_events": 1, "key_finding": "Mock finding"},
+                    "mitre_attack_techniques": [],
+                    "iocs_found": [],
+                    "insights": ["Mock insight"],
+                    "recommended_followup": [],
+                }
+            ),
             tool_calls=[],
             stop_reason="end_turn",
             usage={"input_tokens": 100, "output_tokens": 50},
@@ -53,21 +55,25 @@ class TestAgentLoop:
         from src.agent.loop import run_agent
         from src.agent.mcp_bridge import MCPBridge
 
-        provider = MockProvider([
-            LLMResponse(
-                text=json.dumps({
-                    "severity_assessment": "low",
-                    "summary": {"total_events": 0},
-                    "mitre_attack_techniques": [],
-                    "iocs_found": [],
-                    "insights": ["Nothing found"],
-                    "recommended_followup": [],
-                }),
-                tool_calls=[],
-                stop_reason="end_turn",
-                usage={"input_tokens": 50, "output_tokens": 30},
-            )
-        ])
+        provider = MockProvider(
+            [
+                LLMResponse(
+                    text=json.dumps(
+                        {
+                            "severity_assessment": "low",
+                            "summary": {"total_events": 0},
+                            "mitre_attack_techniques": [],
+                            "iocs_found": [],
+                            "insights": ["Nothing found"],
+                            "recommended_followup": [],
+                        }
+                    ),
+                    tool_calls=[],
+                    stop_reason="end_turn",
+                    usage={"input_tokens": 50, "output_tokens": 30},
+                )
+            ]
+        )
 
         # Create a minimal bridge with no tools
         bridge = MCPBridge.__new__(MCPBridge)
@@ -207,6 +213,7 @@ class TestProviderAutoDetection:
 
         # Also remove stored auth
         from src.agent.auth import AUTH_FILE
+
         auth_existed = AUTH_FILE.exists()
         if auth_existed:
             auth_backup = AUTH_FILE.read_text()
@@ -228,10 +235,12 @@ class TestMCPConfig:
     def test_parse_cli_servers(self):
         from src.agent.config import _parse_cli_servers
 
-        servers = _parse_cli_servers([
-            "vt:uvx virustotal-mcp-server",
-            "shodan:uvx shodan-mcp --api-key test",
-        ])
+        servers = _parse_cli_servers(
+            [
+                "vt:uvx virustotal-mcp-server",
+                "shodan:uvx shodan-mcp --api-key test",
+            ]
+        )
         assert "vt" in servers
         assert servers["vt"].command == "uvx"
         assert servers["vt"].args == ["virustotal-mcp-server"]

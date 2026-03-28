@@ -14,7 +14,7 @@ def test_extract_index_from_query():
     """Test extraction of index pattern from ES|QL FROM clause."""
     print("\n=== Testing Index Extraction ===")
 
-    with patch('src.clients.base.SearchClientBase.__init__', return_value=None):
+    with patch("src.clients.base.SearchClientBase.__init__", return_value=None):
         client = ESQLClient({"hosts": ["http://localhost:9200"]}, engine_type="elasticsearch")
 
         # Test basic index extraction
@@ -47,7 +47,7 @@ def test_extract_fields_from_query():
     """Test extraction of field names from ES|QL query."""
     print("\n=== Testing Field Extraction ===")
 
-    with patch('src.clients.base.SearchClientBase.__init__', return_value=None):
+    with patch("src.clients.base.SearchClientBase.__init__", return_value=None):
         client = ESQLClient({"hosts": ["http://localhost:9200"]}, engine_type="elasticsearch")
 
         # Test basic field extraction
@@ -91,7 +91,7 @@ def test_substitute_index():
     """Test index substitution in ES|QL queries."""
     print("\n=== Testing Index Substitution ===")
 
-    with patch('src.clients.base.SearchClientBase.__init__', return_value=None):
+    with patch("src.clients.base.SearchClientBase.__init__", return_value=None):
         client = ESQLClient({"hosts": ["http://localhost:9200"]}, engine_type="elasticsearch")
 
         # Test basic substitution
@@ -121,7 +121,7 @@ def test_field_aliases():
     """Test that field aliases are properly defined."""
     print("\n=== Testing Field Aliases ===")
 
-    with patch('src.clients.base.SearchClientBase.__init__', return_value=None):
+    with patch("src.clients.base.SearchClientBase.__init__", return_value=None):
         client = ESQLClient({"hosts": ["http://localhost:9200"]}, engine_type="elasticsearch")
 
         # Check essential aliases exist
@@ -147,7 +147,7 @@ def test_calculate_field_match_score():
     """Test field match scoring with aliases."""
     print("\n=== Testing Field Match Scoring ===")
 
-    with patch('src.clients.base.SearchClientBase.__init__', return_value=None):
+    with patch("src.clients.base.SearchClientBase.__init__", return_value=None):
         client = ESQLClient({"hosts": ["http://localhost:9200"]}, engine_type="elasticsearch")
 
         # Test direct match
@@ -162,7 +162,7 @@ def test_calculate_field_match_score():
         available_winlog = {
             "winlog.event_data.Image",  # alias for process.name
             "winlog.event_data.CommandLine",  # alias for process.command_line
-            "winlog.event_id"
+            "winlog.event_id",
         }
         score_alias = client._calculate_field_match_score(required_ecs, available_winlog)
         assert score_alias == 2  # Both should match via aliases
@@ -182,7 +182,7 @@ def test_discover_compatible_indices_mock():
     """Test index discovery with mocked Elasticsearch responses."""
     print("\n=== Testing Index Discovery (Mocked) ===")
 
-    with patch('src.clients.base.SearchClientBase.__init__', return_value=None):
+    with patch("src.clients.base.SearchClientBase.__init__", return_value=None):
         client = ESQLClient({"hosts": ["http://localhost:9200"]}, engine_type="elasticsearch")
         client.client = MagicMock()
 
@@ -203,10 +203,7 @@ def test_discover_compatible_indices_mock():
                             "winlog": {
                                 "properties": {
                                     "event_data": {
-                                        "properties": {
-                                            "Image": {"type": "keyword"},
-                                            "CommandLine": {"type": "keyword"}
-                                        }
+                                        "properties": {"Image": {"type": "keyword"}, "CommandLine": {"type": "keyword"}}
                                     }
                                 }
                             }
@@ -214,15 +211,7 @@ def test_discover_compatible_indices_mock():
                     }
                 }
             },
-            {
-                "filebeat-2024.01.01": {
-                    "mappings": {
-                        "properties": {
-                            "message": {"type": "text"}
-                        }
-                    }
-                }
-            }
+            {"filebeat-2024.01.01": {"mappings": {"properties": {"message": {"type": "text"}}}}},
         ]
 
         # Test discovery
@@ -243,7 +232,7 @@ def test_execute_with_auto_discovery_mock():
     """Test adaptive execution with mocked Elasticsearch responses."""
     print("\n=== Testing Adaptive Execution (Mocked) ===")
 
-    with patch('src.clients.base.SearchClientBase.__init__', return_value=None):
+    with patch("src.clients.base.SearchClientBase.__init__", return_value=None):
         client = ESQLClient({"hosts": ["http://localhost:9200"]}, engine_type="elasticsearch")
         client.client = MagicMock()
         client._version_checked = True
@@ -256,29 +245,19 @@ def test_execute_with_auto_discovery_mock():
                 raise Exception("Unknown index [logs-endpoint.events.process-*]")
             return {
                 "columns": [{"name": "process.name"}, {"name": "count"}],
-                "values": [["powershell.exe", 10], ["cmd.exe", 5]]
+                "values": [["powershell.exe", 10], ["cmd.exe", 5]],
             }
 
         client.client.esql.query.side_effect = esql_query_side_effect
 
         # Mock index discovery
-        client.client.cat.indices.return_value = [
-            {"index": "winlogbeat-2024.01.01", "docs.count": "10000"}
-        ]
+        client.client.cat.indices.return_value = [{"index": "winlogbeat-2024.01.01", "docs.count": "10000"}]
 
         client.client.indices.get_mapping.return_value = {
             "winlogbeat-2024.01.01": {
                 "mappings": {
                     "properties": {
-                        "winlog": {
-                            "properties": {
-                                "event_data": {
-                                    "properties": {
-                                        "Image": {"type": "keyword"}
-                                    }
-                                }
-                            }
-                        }
+                        "winlog": {"properties": {"event_data": {"properties": {"Image": {"type": "keyword"}}}}}
                     }
                 }
             }

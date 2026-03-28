@@ -62,7 +62,7 @@ def _parse_structured_output(text: str) -> dict[str, Any]:
                     depth -= 1
                     if depth == 0:
                         try:
-                            return json.loads(text[i:j + 1])
+                            return json.loads(text[i : j + 1])
                         except json.JSONDecodeError:
                             break
             break
@@ -164,12 +164,14 @@ def run_agent(
         if response.text:
             assistant_content.append({"type": "text", "text": response.text})
         for tc in response.tool_calls:
-            assistant_content.append({
-                "type": "tool_use",
-                "id": tc.id,
-                "name": tc.name,
-                "input": tc.arguments,
-            })
+            assistant_content.append(
+                {
+                    "type": "tool_use",
+                    "id": tc.id,
+                    "name": tc.name,
+                    "input": tc.arguments,
+                }
+            )
 
         messages.append({"role": "assistant", "content": assistant_content})
 
@@ -188,11 +190,13 @@ def run_agent(
                 result_text = json.dumps({"error": str(exc)})
                 _stderr(f"[step {step}/{max_steps}] Error: {exc}")
 
-            tool_results.append({
-                "type": "tool_result",
-                "tool_use_id": tc.id,
-                "content": [{"type": "text", "text": result_text}],
-            })
+            tool_results.append(
+                {
+                    "type": "tool_result",
+                    "tool_use_id": tc.id,
+                    "content": [{"type": "text", "text": result_text}],
+                }
+            )
 
         messages.append({"role": "user", "content": tool_results})
 

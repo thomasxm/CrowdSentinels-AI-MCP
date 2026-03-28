@@ -1,5 +1,6 @@
 # src/wireshark/models.py
 """Data models for Wireshark network analysis module."""
+
 from datetime import datetime
 from enum import IntEnum
 
@@ -8,16 +9,18 @@ from pydantic import BaseModel, Field
 
 class PyramidLevel(IntEnum):
     """Pyramid of Pain levels for IoC prioritization."""
-    HASH = 1        # Trivial to change
-    IP = 2          # Easy to change
-    DOMAIN = 3      # Simple to change
-    ARTIFACTS = 4   # Annoying to change
-    TOOLS = 5       # Challenging to change
-    TTPS = 6        # Tough to change
+
+    HASH = 1  # Trivial to change
+    IP = 2  # Easy to change
+    DOMAIN = 3  # Simple to change
+    ARTIFACTS = 4  # Annoying to change
+    TOOLS = 5  # Challenging to change
+    TTPS = 6  # Tough to change
 
 
 class NetworkIoC(BaseModel):
     """Network-based Indicator of Compromise."""
+
     id: str
     type: str  # ip, domain, port, hash, user_agent, ja3, etc.
     value: str
@@ -33,6 +36,7 @@ class NetworkIoC(BaseModel):
 
 class PcapMetadata(BaseModel):
     """Metadata about analyzed PCAP file."""
+
     file_path: str
     file_size_bytes: int
     file_hash_sha256: str
@@ -45,6 +49,7 @@ class PcapMetadata(BaseModel):
 
 class TopTalker(BaseModel):
     """Top communicating host."""
+
     ip: str
     packet_count: int = 0
     byte_count: int = 0
@@ -55,6 +60,7 @@ class TopTalker(BaseModel):
 
 class ProtocolStats(BaseModel):
     """Protocol distribution statistics."""
+
     protocol: str
     packet_count: int
     byte_count: int
@@ -63,6 +69,7 @@ class ProtocolStats(BaseModel):
 
 class BeaconPattern(BaseModel):
     """Detected beaconing pattern."""
+
     source_ip: str
     dest_ip: str
     dest_port: int
@@ -76,6 +83,7 @@ class BeaconPattern(BaseModel):
 
 class Session(BaseModel):
     """Reconstructed network session."""
+
     stream_id: int
     protocol: str
     src_ip: str
@@ -92,6 +100,7 @@ class Session(BaseModel):
 
 class ExtractedObject(BaseModel):
     """Extracted network object."""
+
     id: str
     source_pcap: str
     protocol: str  # http, smb, ftp
@@ -108,6 +117,7 @@ class ExtractedObject(BaseModel):
 
 class DnsQuery(BaseModel):
     """DNS query record."""
+
     query_name: str
     query_type: str
     response_code: str | None = None
@@ -120,6 +130,7 @@ class DnsQuery(BaseModel):
 
 class AnomalyFinding(BaseModel):
     """Detected anomaly."""
+
     id: str
     type: str  # unusual_port, dns_tunnel, tls_no_sni, etc.
     severity: str  # critical, high, medium, low, info
@@ -135,6 +146,7 @@ class AnomalyFinding(BaseModel):
 
 class AnalysisResult(BaseModel):
     """Complete analysis result container."""
+
     pcap_metadata: PcapMetadata
     top_talkers: list[TopTalker] = Field(default_factory=list)
     protocol_stats: list[ProtocolStats] = Field(default_factory=list)

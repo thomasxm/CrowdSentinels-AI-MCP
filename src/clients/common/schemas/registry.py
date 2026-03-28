@@ -69,19 +69,14 @@ def detect_schema_from_index(index_pattern: str) -> LogSourceSchema | None:
     """
     for schema in SCHEMA_REGISTRY.values():
         if schema.matches_index(index_pattern):
-            logger.debug(
-                f"Detected schema '{schema.schema_id}' for index '{index_pattern}'"
-            )
+            logger.debug(f"Detected schema '{schema.schema_id}' for index '{index_pattern}'")
             return schema
 
     logger.debug(f"No schema detected for index '{index_pattern}'")
     return None
 
 
-def detect_schema_from_fields(
-    fields: set[str],
-    min_confidence: float = 0.3
-) -> tuple[LogSourceSchema | None, float]:
+def detect_schema_from_fields(fields: set[str], min_confidence: float = 0.3) -> tuple[LogSourceSchema | None, float]:
     """Detect the appropriate schema by analysing available fields.
 
     Calculates a confidence score for each schema based on how many
@@ -106,19 +101,14 @@ def detect_schema_from_fields(
             best_schema = schema
 
     if best_score >= min_confidence:
-        logger.info(
-            f"Detected schema '{best_schema.schema_id}' with confidence {best_score:.2f}"
-        )
+        logger.info(f"Detected schema '{best_schema.schema_id}' with confidence {best_score:.2f}")
         return best_schema, best_score
 
     logger.debug(f"No schema matched with confidence >= {min_confidence}")
     return None, 0.0
 
 
-def _calculate_field_match_score(
-    schema: LogSourceSchema,
-    available_fields: set[str]
-) -> float:
+def _calculate_field_match_score(schema: LogSourceSchema, available_fields: set[str]) -> float:
     """Calculate how well a set of fields matches a schema.
 
     Args:
@@ -228,12 +218,7 @@ class SchemaResolver:
         self.es_client = es_client
         self._cache: dict[str, LogSourceSchema] = {}
 
-    def resolve(
-        self,
-        index: str,
-        schema_hint: str | None = None,
-        use_cache: bool = True
-    ) -> LogSourceSchema | None:
+    def resolve(self, index: str, schema_hint: str | None = None, use_cache: bool = True) -> LogSourceSchema | None:
         """Resolve the schema for an index.
 
         Resolution order:
@@ -276,19 +261,14 @@ class SchemaResolver:
                 schema, confidence = detect_schema_from_fields(fields)
                 if schema:
                     logger.info(
-                        f"Auto-detected schema '{schema.schema_id}' for '{index}' "
-                        f"(confidence: {confidence:.2f})"
+                        f"Auto-detected schema '{schema.schema_id}' for '{index}' (confidence: {confidence:.2f})"
                     )
                     self._cache[index] = schema
                     return schema
 
         return None
 
-    def _sample_index_fields(
-        self,
-        index: str,
-        sample_size: int = 100
-    ) -> set[str]:
+    def _sample_index_fields(self, index: str, sample_size: int = 100) -> set[str]:
         """Sample fields from an Elasticsearch index.
 
         Args:
@@ -307,11 +287,7 @@ class SchemaResolver:
 
             fields = set()
             for idx_name, idx_mapping in mapping.items():
-                self._extract_fields(
-                    idx_mapping.get("mappings", {}),
-                    "",
-                    fields
-                )
+                self._extract_fields(idx_mapping.get("mappings", {}), "", fields)
 
             return fields
 
@@ -319,12 +295,7 @@ class SchemaResolver:
             logger.warning(f"Failed to sample fields from '{index}': {e}")
             return set()
 
-    def _extract_fields(
-        self,
-        obj: dict,
-        prefix: str,
-        fields: set[str]
-    ) -> None:
+    def _extract_fields(self, obj: dict, prefix: str, fields: set[str]) -> None:
         """Recursively extract field names from mapping."""
         if "properties" in obj:
             for name, defn in obj["properties"].items():

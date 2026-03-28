@@ -17,7 +17,7 @@ def test_version_check_passes_8_11():
     config = {"hosts": ["http://localhost:9200"]}
 
     # Mock the ES client
-    with patch('src.clients.base.SearchClientBase.__init__', return_value=None):
+    with patch("src.clients.base.SearchClientBase.__init__", return_value=None):
         client = ESQLClient(config, engine_type="elasticsearch")
         client.client = MagicMock()
         client.client.info.return_value = {"version": {"number": "8.15.0"}}
@@ -40,7 +40,7 @@ def test_version_check_fails_8_10():
 
     config = {"hosts": ["http://localhost:9200"]}
 
-    with patch('src.clients.base.SearchClientBase.__init__', return_value=None):
+    with patch("src.clients.base.SearchClientBase.__init__", return_value=None):
         client = ESQLClient(config, engine_type="elasticsearch")
         client.client = MagicMock()
         client.client.info.return_value = {"version": {"number": "8.10.0"}}
@@ -61,7 +61,7 @@ def test_version_check_fails_7_x():
 
     config = {"hosts": ["http://localhost:9200"]}
 
-    with patch('src.clients.base.SearchClientBase.__init__', return_value=None):
+    with patch("src.clients.base.SearchClientBase.__init__", return_value=None):
         client = ESQLClient(config, engine_type="elasticsearch")
         client.client = MagicMock()
         client.client.info.return_value = {"version": {"number": "7.17.0"}}
@@ -82,7 +82,7 @@ def test_opensearch_rejected():
     config = {"hosts": ["http://localhost:9200"]}
 
     try:
-        with patch('src.clients.base.SearchClientBase.__init__', return_value=None):
+        with patch("src.clients.base.SearchClientBase.__init__", return_value=None):
             client = ESQLClient(config, engine_type="opensearch")
             assert False, "Should have raised ESQLNotSupportedError"
     except ESQLNotSupportedError as e:
@@ -97,7 +97,7 @@ def test_extract_index_single():
 
     config = {"hosts": ["http://localhost:9200"]}
 
-    with patch('src.clients.base.SearchClientBase.__init__', return_value=None):
+    with patch("src.clients.base.SearchClientBase.__init__", return_value=None):
         client = ESQLClient(config, engine_type="elasticsearch")
 
         # Single index
@@ -125,7 +125,7 @@ def test_extract_index_multi():
 
     config = {"hosts": ["http://localhost:9200"]}
 
-    with patch('src.clients.base.SearchClientBase.__init__', return_value=None):
+    with patch("src.clients.base.SearchClientBase.__init__", return_value=None):
         client = ESQLClient(config, engine_type="elasticsearch")
 
         # Multi-index with spaces after comma (the bug case!)
@@ -155,7 +155,7 @@ def test_substitute_index_single():
 
     config = {"hosts": ["http://localhost:9200"]}
 
-    with patch('src.clients.base.SearchClientBase.__init__', return_value=None):
+    with patch("src.clients.base.SearchClientBase.__init__", return_value=None):
         client = ESQLClient(config, engine_type="elasticsearch")
 
         # Single index
@@ -179,7 +179,7 @@ def test_substitute_index_multi():
 
     config = {"hosts": ["http://localhost:9200"]}
 
-    with patch('src.clients.base.SearchClientBase.__init__', return_value=None):
+    with patch("src.clients.base.SearchClientBase.__init__", return_value=None):
         client = ESQLClient(config, engine_type="elasticsearch")
 
         # Multi-index with spaces after comma - THIS WAS THE BUG!
@@ -214,7 +214,7 @@ def test_timeframe_substitution():
 
     config = {"hosts": ["http://localhost:9200"]}
 
-    with patch('src.clients.base.SearchClientBase.__init__', return_value=None):
+    with patch("src.clients.base.SearchClientBase.__init__", return_value=None):
         client = ESQLClient(config, engine_type="elasticsearch")
 
         # Test basic substitution
@@ -243,7 +243,7 @@ def test_clean_query():
 
     config = {"hosts": ["http://localhost:9200"]}
 
-    with patch('src.clients.base.SearchClientBase.__init__', return_value=None):
+    with patch("src.clients.base.SearchClientBase.__init__", return_value=None):
         client = ESQLClient(config, engine_type="elasticsearch")
 
         # Test removing single-line comments
@@ -274,16 +274,11 @@ def test_token_counting():
 
     config = {"hosts": ["http://localhost:9200"]}
 
-    with patch('src.clients.base.SearchClientBase.__init__', return_value=None):
+    with patch("src.clients.base.SearchClientBase.__init__", return_value=None):
         client = ESQLClient(config, engine_type="elasticsearch")
 
         # Test token counting (4 chars = 1 token)
-        result = {
-            "results": [
-                {"process.name": "powershell.exe", "count": 10},
-                {"process.name": "cmd.exe", "count": 5}
-            ]
-        }
+        result = {"results": [{"process.name": "powershell.exe", "count": 10}, {"process.name": "cmd.exe", "count": 5}]}
 
         tokens = client._count_tokens(result)
 
@@ -301,20 +296,13 @@ def test_parse_response():
 
     config = {"hosts": ["http://localhost:9200"]}
 
-    with patch('src.clients.base.SearchClientBase.__init__', return_value=None):
+    with patch("src.clients.base.SearchClientBase.__init__", return_value=None):
         client = ESQLClient(config, engine_type="elasticsearch")
 
         # Mock ES|QL response format
         mock_response = {
-            "columns": [
-                {"name": "process.name", "type": "keyword"},
-                {"name": "count", "type": "long"}
-            ],
-            "values": [
-                ["powershell.exe", 10],
-                ["cmd.exe", 5],
-                ["python.exe", 3]
-            ]
+            "columns": [{"name": "process.name", "type": "keyword"}, {"name": "count", "type": "long"}],
+            "values": [["powershell.exe", 10], ["cmd.exe", 5], ["python.exe", 3]],
         }
 
         result = client._parse_response(mock_response)
@@ -337,7 +325,7 @@ def test_lean_mode_summarization():
 
     config = {"hosts": ["http://localhost:9200"]}
 
-    with patch('src.clients.base.SearchClientBase.__init__', return_value=None):
+    with patch("src.clients.base.SearchClientBase.__init__", return_value=None):
         client = ESQLClient(config, engine_type="elasticsearch")
 
         # Create a result with many rows
@@ -352,7 +340,8 @@ def test_lean_mode_summarization():
                 {"process.name": "node.exe", "count": 5},
                 {"process.name": "ruby.exe", "count": 3},
                 {"process.name": "perl.exe", "count": 2},
-            ] * 10  # 60 rows
+            ]
+            * 10,  # 60 rows
         }
 
         summarized = client._summarize(result)
@@ -376,7 +365,7 @@ def test_execution_tracking():
 
     config = {"hosts": ["http://localhost:9200"]}
 
-    with patch('src.clients.base.SearchClientBase.__init__', return_value=None):
+    with patch("src.clients.base.SearchClientBase.__init__", return_value=None):
         client = ESQLClient(config, engine_type="elasticsearch")
 
         # Track a few executions
@@ -405,7 +394,7 @@ def test_execution_history_limit():
 
     config = {"hosts": ["http://localhost:9200"]}
 
-    with patch('src.clients.base.SearchClientBase.__init__', return_value=None):
+    with patch("src.clients.base.SearchClientBase.__init__", return_value=None):
         client = ESQLClient(config, engine_type="elasticsearch")
 
         # Add 150 executions

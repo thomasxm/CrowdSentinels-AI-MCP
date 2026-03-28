@@ -7,6 +7,7 @@ Tests cover:
 - SchemaResolver with caching
 - SchemaAwareQueryBuilder integration
 """
+
 from unittest.mock import MagicMock
 
 
@@ -26,10 +27,7 @@ class TestLogSourceSchema:
                 event_code="1",
                 description="Process creation",
                 category="process",
-                fields={
-                    "source_process": "Image",
-                    "command_line": "CommandLine"
-                }
+                fields={"source_process": "Image", "command_line": "CommandLine"},
             )
         }
 
@@ -43,7 +41,7 @@ class TestLogSourceSchema:
             timestamp_field="@timestamp",
             host_field="host.name",
             event_code_field="event.code",
-            event_types=event_types
+            event_types=event_types,
         )
 
         assert schema.schema_id == "test"
@@ -60,10 +58,7 @@ class TestLogSourceSchema:
 
         event_types = {
             "process_create": EventTypeDefinition(
-                event_code="1",
-                description="Process creation",
-                category="process",
-                fields={"source_process": "Image"}
+                event_code="1", description="Process creation", category="process", fields={"source_process": "Image"}
             )
         }
 
@@ -77,7 +72,7 @@ class TestLogSourceSchema:
             timestamp_field="@timestamp",
             host_field="host.name",
             event_code_field="event.code",
-            event_types=event_types
+            event_types=event_types,
         )
 
         assert schema.has_event_type("process_create") is True
@@ -96,10 +91,7 @@ class TestLogSourceSchema:
                 event_code="1",
                 description="Process creation",
                 category="process",
-                fields={
-                    "source_process": "Image",
-                    "command_line": "CommandLine"
-                }
+                fields={"source_process": "Image", "command_line": "CommandLine"},
             )
         }
 
@@ -113,7 +105,7 @@ class TestLogSourceSchema:
             timestamp_field="@timestamp",
             host_field="host.name",
             event_code_field="event.code",
-            event_types=event_types
+            event_types=event_types,
         )
 
         # With prefix
@@ -145,7 +137,7 @@ class TestLogSourceSchema:
             timestamp_field="@timestamp",
             host_field="host.name",
             event_code_field="event.code",
-            event_types={}
+            event_types={},
         )
 
         assert schema.matches_index("winlogbeat-*") is True
@@ -163,17 +155,11 @@ class TestLogSourceSchema:
 
         event_types = {
             "process_create": EventTypeDefinition(
-                event_code="1",
-                description="Process creation",
-                category="process",
-                fields={}
+                event_code="1", description="Process creation", category="process", fields={}
             ),
             "network_connection": EventTypeDefinition(
-                event_code="3",
-                description="Network connection",
-                category="network",
-                fields={}
-            )
+                event_code="3", description="Network connection", category="network", fields={}
+            ),
         }
 
         schema = LogSourceSchema(
@@ -186,7 +172,7 @@ class TestLogSourceSchema:
             timestamp_field="@timestamp",
             host_field="host.name",
             event_code_field="event.code",
-            event_types=event_types
+            event_types=event_types,
         )
 
         assert schema.get_event_code("process_create") == "1"
@@ -373,22 +359,14 @@ class TestSchemaRegistry:
         from src.clients.common.schemas.registry import detect_schema_from_fields
 
         # Sysmon fields - use low confidence threshold for testing
-        sysmon_fields = {
-            "winlog.event_data.Image",
-            "winlog.event_data.CommandLine",
-            "winlog.event_data.ParentImage"
-        }
+        sysmon_fields = {"winlog.event_data.Image", "winlog.event_data.CommandLine", "winlog.event_data.ParentImage"}
         schema, confidence = detect_schema_from_fields(sysmon_fields, min_confidence=0.01)
         assert schema is not None
         # Should detect sysmon or at least return best match
         assert confidence > 0.0
 
         # ECS fields
-        ecs_fields = {
-            "process.executable",
-            "process.command_line",
-            "process.parent.executable"
-        }
+        ecs_fields = {"process.executable", "process.command_line", "process.parent.executable"}
         schema, confidence = detect_schema_from_fields(ecs_fields, min_confidence=0.01)
         assert schema is not None
         assert confidence > 0.0
@@ -479,10 +457,7 @@ class TestSchemaResolver:
                         "winlog": {
                             "properties": {
                                 "event_data": {
-                                    "properties": {
-                                        "Image": {"type": "keyword"},
-                                        "CommandLine": {"type": "text"}
-                                    }
+                                    "properties": {"Image": {"type": "keyword"}, "CommandLine": {"type": "text"}}
                                 }
                             }
                         }
@@ -544,7 +519,7 @@ class TestSchemaAwareQueryBuilder:
             parent_process_name="malware.exe",
             host="HOST1",
             start_time="2024-01-01T00:00:00",
-            end_time="2024-01-01T01:00:00"
+            end_time="2024-01-01T01:00:00",
         )
 
         assert isinstance(result, QueryResult)
@@ -561,10 +536,7 @@ class TestSchemaAwareQueryBuilder:
 
         builder = SchemaAwareQueryBuilder(SYSMON_SCHEMA, "winlogbeat-*")
         result = builder.build_network_connections_query(
-            process_name="malware.exe",
-            host="HOST1",
-            start_time="2024-01-01T00:00:00",
-            end_time="2024-01-01T01:00:00"
+            process_name="malware.exe", host="HOST1", start_time="2024-01-01T00:00:00", end_time="2024-01-01T01:00:00"
         )
 
         assert isinstance(result, QueryResult)
@@ -581,10 +553,7 @@ class TestSchemaAwareQueryBuilder:
 
         builder = SchemaAwareQueryBuilder(SYSMON_SCHEMA, "winlogbeat-*")
         result = builder.build_file_operations_query(
-            process_name="malware.exe",
-            host="HOST1",
-            start_time="2024-01-01T00:00:00",
-            end_time="2024-01-01T01:00:00"
+            process_name="malware.exe", host="HOST1", start_time="2024-01-01T00:00:00", end_time="2024-01-01T01:00:00"
         )
 
         assert isinstance(result, QueryResult)
@@ -615,10 +584,7 @@ class TestSchemaAwareQueryBuilder:
 
         builder = SchemaAwareQueryBuilder(SYSMON_SCHEMA, "winlogbeat-*")
         result = builder.build_registry_operations_query(
-            process_name="malware.exe",
-            host="HOST1",
-            start_time="2024-01-01T00:00:00",
-            end_time="2024-01-01T01:00:00"
+            process_name="malware.exe", host="HOST1", start_time="2024-01-01T00:00:00", end_time="2024-01-01T01:00:00"
         )
 
         assert isinstance(result, QueryResult)
@@ -635,10 +601,7 @@ class TestSchemaAwareQueryBuilder:
 
         builder = SchemaAwareQueryBuilder(SYSMON_SCHEMA, "winlogbeat-*")
         result = builder.build_dns_query(
-            process_name="malware.exe",
-            host="HOST1",
-            start_time="2024-01-01T00:00:00",
-            end_time="2024-01-01T01:00:00"
+            process_name="malware.exe", host="HOST1", start_time="2024-01-01T00:00:00", end_time="2024-01-01T01:00:00"
         )
 
         assert isinstance(result, QueryResult)

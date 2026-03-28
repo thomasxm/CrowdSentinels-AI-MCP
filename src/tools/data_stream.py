@@ -13,10 +13,10 @@ class DataStreamTools:
         @mcp.tool()
         def create_data_stream(name: str) -> dict:
             """Create a new data stream.
-            
+
             This creates a new data stream with the specified name.
             The data stream must have a matching index template before creation.
-            
+
             Args:
                 name: Name of the data stream to create
             """
@@ -25,10 +25,10 @@ class DataStreamTools:
         @mcp.tool()
         def get_data_stream(name: str | None = None) -> dict:
             """Get information about one or more data streams.
-            
+
             Retrieves configuration, mappings, settings, and other information
             about the specified data streams.
-            
+
             Args:
                 name: Name of the data stream(s) to retrieve.
                       Can be a comma-separated list or wildcard pattern.
@@ -39,9 +39,9 @@ class DataStreamTools:
         @mcp.tool()
         def delete_data_stream(name: str) -> dict:
             """Delete one or more data streams.
-            
+
             Permanently deletes the specified data streams and all their backing indices.
-            
+
             Args:
                 name: Name of the data stream(s) to delete.
                       Can be a comma-separated list or wildcard pattern.

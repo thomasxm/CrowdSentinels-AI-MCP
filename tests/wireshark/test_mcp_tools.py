@@ -1,5 +1,6 @@
 # tests/wireshark/test_mcp_tools.py
 """Tests for Wireshark MCP tools."""
+
 from pathlib import Path
 from unittest.mock import MagicMock
 
@@ -63,10 +64,7 @@ class TestBuildBaselineTool:
             pytest.skip("No test pcap files available")
 
         tools = WiresharkTools()
-        result = tools._build_baseline(
-            pcap_path=str(pcap_files[0]),
-            baseline_name="test_baseline"
-        )
+        result = tools._build_baseline(pcap_path=str(pcap_files[0]), baseline_name="test_baseline")
 
         assert "baseline_name" in result or "error" in result
 
@@ -134,10 +132,7 @@ class TestExtractObjectsTool:
             pytest.skip("No test pcap files available")
 
         tools = WiresharkTools()
-        result = tools._extract_objects(
-            pcap_path=str(pcap_files[0]),
-            protocol="http"
-        )
+        result = tools._extract_objects(pcap_path=str(pcap_files[0]), protocol="http")
 
         assert "objects" in result or "total_objects" in result or "error" in result
 
@@ -155,13 +150,10 @@ class TestGenerateReportTool:
         findings = {
             "beaconing": [{"src_ip": "192.168.1.100", "dst_ip": "1.2.3.4", "confidence": "high"}],
             "anomalies": [],
-            "iocs": []
+            "iocs": [],
         }
 
-        result = tools._generate_report(
-            pcap_path="/tmp/test.pcap",
-            findings=findings
-        )
+        result = tools._generate_report(pcap_path="/tmp/test.pcap", findings=findings)
 
         assert "report" in result
         assert "IDENTIFY" in result["report"]
@@ -197,10 +189,6 @@ class TestHuntIoCsTool:
             pytest.skip("No test pcap files available")
 
         tools = WiresharkTools()
-        result = tools._hunt_iocs(
-            pcap_path=str(pcap_files[0]),
-            iocs=["192.168.1.1", "8.8.8.8"]
-        )
+        result = tools._hunt_iocs(pcap_path=str(pcap_files[0]), iocs=["192.168.1.1", "8.8.8.8"])
 
         assert "matches" in result or "found" in result or "error" in result
-

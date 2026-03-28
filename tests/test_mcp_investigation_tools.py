@@ -36,6 +36,7 @@ def test_investigation_state_tools():
     from src.tools.investigation_state_tools import (
         get_investigation_client,
     )
+
     tools_module._investigation_client = None
 
     client = get_investigation_client()
@@ -50,6 +51,7 @@ def test_investigation_state_tools():
     # Test 2: Create investigation
     print("\n--- Test 2: Create investigation ---")
     from src.storage.models import Severity
+
     investigation = client.create_investigation(
         name="Test MCP Investigation",
         description="Testing MCP tools",
@@ -63,6 +65,7 @@ def test_investigation_state_tools():
     # Test 3: Add IoCs manually
     print("\n--- Test 3: Add IoCs manually ---")
     from src.storage.models import IoC, IoCSource, IoCType, SourceType
+
     ioc1 = IoC(
         type=IoCType.IP,
         value="10.0.0.50",
@@ -88,7 +91,7 @@ def test_investigation_state_tools():
             "hits": [
                 {"_source": {"source.ip": "192.168.1.100", "user.name": "attacker"}},
                 {"_source": {"destination.ip": "203.0.113.42", "host.name": "SERVER-01"}},
-            ]
+            ],
         }
     }
     summary = client.add_findings(
@@ -157,6 +160,7 @@ def test_investigation_state_tools():
     client2.close_investigation(resolution="Test completed successfully")
     loaded_closed = client2.load_investigation(inv_id)
     from src.storage.models import InvestigationStatus
+
     assert loaded_closed.manifest.status == InvestigationStatus.CLOSED
     print("  Investigation closed")
     print("  [PASS] Close investigation works")
@@ -166,7 +170,7 @@ def test_investigation_state_tools():
     stats = client2.get_storage_stats()
     print(f"  Usage: {stats['current_usage_bytes']} bytes")
     print(f"  Max: {stats['max_size_bytes']} bytes ({stats['max_size_gb']} GB)")
-    assert stats['max_size_bytes'] == 8 * 1024 * 1024 * 1024, "Should be 8GB"
+    assert stats["max_size_bytes"] == 8 * 1024 * 1024 * 1024, "Should be 8GB"
     print("  [PASS] Storage stats works")
 
     print("\n" + "=" * 50)

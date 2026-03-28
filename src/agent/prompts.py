@@ -65,7 +65,7 @@ def build_system_prompt(tool_names_by_server: dict[str, list[str]]) -> str:
         tools_section += f"\n**{server}** ({len(names)} tools):\n"
         # Group in rows of 4 for readability
         for i in range(0, len(names), 4):
-            chunk = names[i:i + 4]
+            chunk = names[i : i + 4]
             tools_section += "  " + ", ".join(chunk) + "\n"
 
     return SYSTEM_PROMPT + tools_section
@@ -96,6 +96,8 @@ def build_user_message(hunt_data: dict[str, Any], context: str) -> str:
         tids = [t.get("technique_id", "?") for t in mitre if isinstance(t, dict)]
         parts.append(f"**MITRE techniques:** {', '.join(tids)}")
 
-    parts.append("\nInvestigate this data using the available tools. Follow the 4-phase methodology. Return your findings as the JSON structure specified in your instructions.")
+    parts.append(
+        "\nInvestigate this data using the available tools. Follow the 4-phase methodology. Return your findings as the JSON structure specified in your instructions."
+    )
 
     return "\n".join(parts)

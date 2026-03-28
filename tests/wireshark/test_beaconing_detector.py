@@ -75,7 +75,7 @@ class TestBeaconingDetector:
             interval_stddev=2.0,
             jitter_percent=3.3,
             occurrence_count=100,
-            confidence="HIGH"
+            confidence="HIGH",
         )
 
         timeline = detector.generate_ascii_timeline(pattern)

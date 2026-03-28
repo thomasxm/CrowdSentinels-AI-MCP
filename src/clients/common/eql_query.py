@@ -1,4 +1,5 @@
 """EQL (Event Query Language) Client for threat hunting and incident response."""
+
 from src.clients.base import SearchClientBase
 from src.clients.common.field_mapper import FieldMapper
 
@@ -25,12 +26,17 @@ class EQLQueryClient(SearchClientBase):
             self._field_mapper = FieldMapper(client=self.client)
         return self._field_mapper
 
-    def eql_search(self, index: str, query: str, size: int = 100,
-                   filter_query: dict | None = None,
-                   timestamp_field: str = "@timestamp",
-                   start_time: str | None = None,
-                   end_time: str | None = None,
-                   field_substitution: bool = True) -> dict:
+    def eql_search(
+        self,
+        index: str,
+        query: str,
+        size: int = 100,
+        filter_query: dict | None = None,
+        timestamp_field: str = "@timestamp",
+        start_time: str | None = None,
+        end_time: str | None = None,
+        field_substitution: bool = True,
+    ) -> dict:
         """
         Execute an EQL query for threat hunting with automatic field substitution.
 
@@ -65,11 +71,7 @@ class EQLQueryClient(SearchClientBase):
 
         # Build time filter if specified
         if start_time or end_time:
-            time_filter = {
-                "range": {
-                    timestamp_field: {}
-                }
-            }
+            time_filter = {"range": {timestamp_field: {}}}
 
             if start_time:
                 time_filter["range"][timestamp_field]["gte"] = start_time
@@ -90,11 +92,7 @@ class EQLQueryClient(SearchClientBase):
             else:
                 filter_query = time_filter
 
-        body = {
-            "query": query,
-            "size": size,
-            "timestamp_field": timestamp_field
-        }
+        body = {"query": query, "size": size, "timestamp_field": timestamp_field}
 
         if filter_query:
             body["filter"] = filter_query
@@ -104,11 +102,7 @@ class EQLQueryClient(SearchClientBase):
                 response = self.client.eql.search(index=index, body=body)
             else:
                 # OpenSearch might not support EQL, fall back to general client
-                response = self.general_client.request(
-                    method="POST",
-                    path=f"/{index}/_eql/search",
-                    body=body
-                )
+                response = self.general_client.request(method="POST", path=f"/{index}/_eql/search", body=body)
 
             # Format response to be consistent with regular search
             # EQL returns hits in response["hits"]["events"]
@@ -133,8 +127,8 @@ class EQLQueryClient(SearchClientBase):
                             "extract IoCs, map MITRE ATT&CK techniques, and get recommendations. "
                             "Then use analyze_kill_chain_stage() to position in kill chain."
                         ),
-                        "final_step": "Use generate_investigation_report() before presenting findings"
-                    }
+                        "final_step": "Use generate_investigation_report() before presenting findings",
+                    },
                 }
 
                 # Add field substitution metadata
@@ -142,14 +136,14 @@ class EQLQueryClient(SearchClientBase):
                     formatted_response["field_substitutions"] = {
                         "enabled": True,
                         "substitutions": field_substitutions,
-                        "count": len(field_substitutions)
+                        "count": len(field_substitutions),
                     }
                 elif field_substitution:
                     formatted_response["field_substitutions"] = {
                         "enabled": True,
                         "substitutions": {},
                         "count": 0,
-                        "note": "No field substitutions needed - fields already match"
+                        "note": "No field substitutions needed - fields already match",
                     }
 
                 return formatted_response

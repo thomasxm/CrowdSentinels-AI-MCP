@@ -29,6 +29,7 @@ logger = logging.getLogger("crowdsentinel.agent.config")
 @dataclass
 class MCPServerConfig:
     """Configuration for an external MCP server."""
+
     name: str
     command: str
     args: list[str] = field(default_factory=list)

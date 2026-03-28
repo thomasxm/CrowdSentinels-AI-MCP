@@ -1,5 +1,6 @@
 # tests/wireshark/test_hasher.py
 """Tests for file hasher module."""
+
 import tempfile
 from pathlib import Path
 
@@ -14,7 +15,7 @@ class TestFileHasher:
         hasher = FileHasher()
 
         # Create temp file with known content
-        with tempfile.NamedTemporaryFile(mode='wb', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="wb", delete=False) as f:
             f.write(b"test content for hashing")
             temp_path = f.name
 
@@ -32,7 +33,7 @@ class TestFileHasher:
 
         hasher = FileHasher()
 
-        with tempfile.NamedTemporaryFile(mode='wb', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="wb", delete=False) as f:
             f.write(b"test")
             temp_path = f.name
 
@@ -53,7 +54,7 @@ class TestFileHasher:
 
         hasher = FileHasher()
 
-        with tempfile.NamedTemporaryFile(mode='wb', suffix='.exe', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="wb", suffix=".exe", delete=False) as f:
             f.write(b"MZ" + b"\x00" * 100)  # Fake PE header
             temp_path = f.name
 
@@ -121,7 +122,7 @@ class TestFileHasher:
         temp_files = []
         try:
             for i in range(3):
-                with tempfile.NamedTemporaryFile(mode='wb', delete=False) as f:
+                with tempfile.NamedTemporaryFile(mode="wb", delete=False) as f:
                     f.write(f"content {i}".encode())
                     temp_files.append(f.name)
 
@@ -143,16 +144,13 @@ class TestFileHasher:
 
         hasher = FileHasher()
 
-        with tempfile.NamedTemporaryFile(mode='wb', suffix='.exe', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="wb", suffix=".exe", delete=False) as f:
             f.write(b"MZ" + b"\x00" * 100)
             temp_path = f.name
 
         try:
             record = hasher.create_hash_record(
-                file_path=temp_path,
-                source_ip="192.168.1.100",
-                dest_ip="203.0.113.42",
-                protocol="http"
+                file_path=temp_path, source_ip="192.168.1.100", dest_ip="203.0.113.42", protocol="http"
             )
 
             assert isinstance(record, HashRecord)
@@ -171,7 +169,7 @@ class TestFileHasher:
 
         hasher = FileHasher()
 
-        with tempfile.NamedTemporaryFile(mode='wb', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="wb", delete=False) as f:
             f.write(b"test content")
             temp_path = f.name
 
@@ -186,4 +184,3 @@ class TestFileHasher:
 
         finally:
             Path(temp_path).unlink()
-

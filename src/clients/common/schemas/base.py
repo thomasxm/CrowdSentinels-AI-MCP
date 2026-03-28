@@ -12,6 +12,7 @@ from typing import Any
 
 class LogSourceType(Enum):
     """Enumeration of supported log source types."""
+
     SYSMON = "sysmon"
     WINDOWS_SECURITY = "windows_security"
     ECS = "ecs"
@@ -34,6 +35,7 @@ class EventTypeDefinition:
             Example: {"source_process": "Image", "command_line": "CommandLine"}
         category: Optional event category for grouping
     """
+
     event_code: str
     description: str
     fields: dict[str, str]
@@ -89,6 +91,7 @@ class LogSourceSchema:
         host_field: The field containing hostname (default: "host.name")
         event_code_field: The field containing event codes (default: "event.code")
     """
+
     name: str
     schema_id: str
     source_type: LogSourceType
@@ -102,11 +105,7 @@ class LogSourceSchema:
     event_code_field: str = "event.code"
     event_code_alternatives: list[str] = field(default_factory=list)
 
-    def get_field(
-        self,
-        semantic_name: str,
-        event_type: str | None = None
-    ) -> str | None:
+    def get_field(self, semantic_name: str, event_type: str | None = None) -> str | None:
         """Get the actual field name for a semantic concept.
 
         Args:
@@ -248,10 +247,7 @@ class LogSourceSchema:
             "description": self.description,
             "index_patterns": self.index_patterns,
             "field_prefix": self.field_prefix,
-            "event_types": {
-                name: event_def.to_dict()
-                for name, event_def in self.event_types.items()
-            },
+            "event_types": {name: event_def.to_dict() for name, event_def in self.event_types.items()},
             "common_fields": self.common_fields,
             "timestamp_field": self.timestamp_field,
             "host_field": self.host_field,

@@ -1,4 +1,5 @@
 """Asset Discovery Tools for MCP."""
+
 from fastmcp import FastMCP
 
 

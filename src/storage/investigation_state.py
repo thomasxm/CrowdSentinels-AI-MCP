@@ -118,16 +118,12 @@ class InvestigationStateClient:
         try:
             # Load manifest
             manifest_path = inv_path / "manifest.json"
-            manifest = InvestigationManifest.model_validate(
-                json.loads(manifest_path.read_text())
-            )
+            manifest = InvestigationManifest.model_validate(json.loads(manifest_path.read_text()))
 
             # Load IoCs
             iocs_path = inv_path / "iocs" / "extracted.json"
             if iocs_path.exists():
-                iocs = IoCCollection.model_validate(
-                    json.loads(iocs_path.read_text())
-                )
+                iocs = IoCCollection.model_validate(json.loads(iocs_path.read_text()))
             else:
                 iocs = IoCCollection(investigation_id=investigation_id)
 
@@ -149,9 +145,7 @@ class InvestigationStateClient:
             if sources_path.exists():
                 for source_file in sources_path.glob("*.json"):
                     try:
-                        findings = SourceFindings.model_validate(
-                            json.loads(source_file.read_text())
-                        )
+                        findings = SourceFindings.model_validate(json.loads(source_file.read_text()))
                         key = f"{findings.source.value}_{findings.tool}"
                         source_findings[key] = findings
                     except Exception as e:
@@ -233,18 +227,20 @@ class InvestigationStateClient:
             # Save prioritized IoCs (top 20)
             prioritized_path = inv_path / "iocs" / "prioritized.json"
             prioritized = investigation.iocs.get_by_priority(min_priority=4)[:20]
-            prioritized_path.write_text(json.dumps(
-                [ioc.model_dump() for ioc in prioritized],
-                indent=2,
-                default=str
-            ))
+            prioritized_path.write_text(json.dumps([ioc.model_dump() for ioc in prioritized], indent=2, default=str))
 
             # Save timeline
             timeline_path = inv_path / "timeline" / "events.json"
-            timeline_path.write_text(json.dumps({
-                "total_events": len(investigation.timeline),
-                "events": [evt.model_dump() for evt in investigation.timeline],
-            }, indent=2, default=str))
+            timeline_path.write_text(
+                json.dumps(
+                    {
+                        "total_events": len(investigation.timeline),
+                        "events": [evt.model_dump() for evt in investigation.timeline],
+                    },
+                    indent=2,
+                    default=str,
+                )
+            )
 
             # Save source findings
             for key, findings in investigation.source_findings.items():
@@ -255,9 +251,7 @@ class InvestigationStateClient:
             self._save_summary(investigation)
 
             # Update index
-            investigation.manifest.size_bytes = self.storage.get_investigation_size(
-                investigation.manifest.id
-            )
+            investigation.manifest.size_bytes = self.storage.get_investigation_size(investigation.manifest.id)
             self.storage.index.add_investigation(investigation.manifest)
             self.storage._save_index()
 
@@ -282,8 +276,7 @@ class InvestigationStateClient:
             "",
             f"## {manifest.name}",
             "",
-            f"**Status:** {manifest.status.value.title()} | "
-            f"**Severity:** {manifest.severity.value.upper()}",
+            f"**Status:** {manifest.status.value.title()} | **Severity:** {manifest.severity.value.upper()}",
             f"**Created:** {manifest.created_at.strftime('%Y-%m-%d %H:%M:%S')} UTC",
             f"**Last Updated:** {manifest.updated_at.strftime('%Y-%m-%d %H:%M:%S')} UTC",
             f"**Sessions:** {manifest.session_count}",
@@ -307,47 +300,54 @@ class InvestigationStateClient:
 
         # Add kill chain stages if present
         if manifest.kill_chain_stages:
-            lines.extend([
-                "## Kill Chain Progress",
-                "",
-                f"**Stages Identified:** {' → '.join(manifest.kill_chain_stages)}",
-                "",
-            ])
+            lines.extend(
+                [
+                    "## Kill Chain Progress",
+                    "",
+                    f"**Stages Identified:** {' → '.join(manifest.kill_chain_stages)}",
+                    "",
+                ]
+            )
 
         # Add top IoCs
         priority_iocs = iocs.get_by_priority(min_priority=4)[:10]
         if priority_iocs:
-            lines.extend([
-                "## Priority IoCs (Top 10)",
-                "",
-                "| Type | Value | Priority | Occurrences | Sources |",
-                "|------|-------|----------|-------------|---------|",
-            ])
+            lines.extend(
+                [
+                    "## Priority IoCs (Top 10)",
+                    "",
+                    "| Type | Value | Priority | Occurrences | Sources |",
+                    "|------|-------|----------|-------------|---------|",
+                ]
+            )
             for ioc in priority_iocs:
                 value = ioc.value[:50] + "..." if len(ioc.value) > 50 else ioc.value
                 sources = ", ".join(s.tool for s in ioc.sources)
                 lines.append(
-                    f"| {ioc.type.value} | `{value}` | {ioc.pyramid_priority} | "
-                    f"{ioc.total_occurrences} | {sources} |"
+                    f"| {ioc.type.value} | `{value}` | {ioc.pyramid_priority} | {ioc.total_occurrences} | {sources} |"
                 )
             lines.append("")
 
         # Add IoC breakdown by type
         if iocs.by_type:
-            lines.extend([
-                "## IoC Breakdown by Type",
-                "",
-            ])
+            lines.extend(
+                [
+                    "## IoC Breakdown by Type",
+                    "",
+                ]
+            )
             for ioc_type, count in sorted(iocs.by_type.items(), key=lambda x: x[1], reverse=True):
                 lines.append(f"- **{ioc_type}:** {count}")
             lines.append("")
 
         # Add source findings summary
         if investigation.source_findings:
-            lines.extend([
-                "## Source Findings",
-                "",
-            ])
+            lines.extend(
+                [
+                    "## Source Findings",
+                    "",
+                ]
+            )
             for key, findings in investigation.source_findings.items():
                 lines.append(f"### {findings.source.value.title()} - {findings.tool}")
                 lines.append(f"- Events: {findings.total_events}")
@@ -360,19 +360,23 @@ class InvestigationStateClient:
 
         # Add tags
         if manifest.tags:
-            lines.extend([
-                "## Tags",
-                "",
-                ", ".join(f"`{tag}`" for tag in manifest.tags),
-                "",
-            ])
+            lines.extend(
+                [
+                    "## Tags",
+                    "",
+                    ", ".join(f"`{tag}`" for tag in manifest.tags),
+                    "",
+                ]
+            )
 
         # Add analyst notes
         if manifest.analyst_notes:
-            lines.extend([
-                "## Analyst Notes",
-                "",
-            ])
+            lines.extend(
+                [
+                    "## Analyst Notes",
+                    "",
+                ]
+            )
             for note in manifest.analyst_notes:
                 lines.append(f"- {note}")
             lines.append("")
@@ -406,11 +410,13 @@ class InvestigationStateClient:
         for ioc in iocs:
             # Ensure source is set
             if not ioc.sources:
-                ioc.sources.append(IoCSource(
-                    tool=source,
-                    source_type=source_type,
-                    investigation_id=investigation.manifest.id,
-                ))
+                ioc.sources.append(
+                    IoCSource(
+                        tool=source,
+                        source_type=source_type,
+                        investigation_id=investigation.manifest.id,
+                    )
+                )
 
             if investigation.iocs.add_ioc(ioc):
                 new_count += 1
@@ -451,22 +457,14 @@ class InvestigationStateClient:
 
         # Extract IoCs based on source type
         if source_type == SourceType.ELASTICSEARCH:
-            iocs = self.extractor.extract_iocs_from_elasticsearch(
-                results, source_tool, investigation.manifest.id
-            )
+            iocs = self.extractor.extract_iocs_from_elasticsearch(results, source_tool, investigation.manifest.id)
         elif source_type == SourceType.CHAINSAW:
-            iocs = self.extractor.extract_iocs_from_chainsaw(
-                results, source_tool, investigation.manifest.id
-            )
+            iocs = self.extractor.extract_iocs_from_chainsaw(results, source_tool, investigation.manifest.id)
         elif source_type == SourceType.WIRESHARK:
-            iocs = self.extractor.extract_iocs_from_wireshark(
-                results, source_tool, investigation.manifest.id
-            )
+            iocs = self.extractor.extract_iocs_from_wireshark(results, source_tool, investigation.manifest.id)
         else:
             # Generic extraction from hits
-            iocs = self.extractor.extract_iocs_from_elasticsearch(
-                results, source_tool, investigation.manifest.id
-            )
+            iocs = self.extractor.extract_iocs_from_elasticsearch(results, source_tool, investigation.manifest.id)
 
         return self.add_iocs(iocs, source_tool, source_type, investigation_id)
 
@@ -523,17 +521,13 @@ class InvestigationStateClient:
 
         # Extract and add IoCs
         if extract_iocs:
-            iocs_added = self.add_iocs_from_results(
-                results, source_type, source_tool, investigation.manifest.id
-            )
+            iocs_added = self.add_iocs_from_results(results, source_type, source_tool, investigation.manifest.id)
             findings.iocs_extracted = iocs_added
             summary["iocs_added"] = iocs_added
 
         # Extract and add timeline events
         if extract_timeline and events:
-            timeline_events = self.extractor.extract_timeline_events(
-                events, source_type, source_tool
-            )
+            timeline_events = self.extractor.extract_timeline_events(events, source_type, source_tool)
             for event in timeline_events:
                 investigation.add_timeline_event(event)
             summary["timeline_events_added"] = len(timeline_events)
@@ -544,10 +538,7 @@ class InvestigationStateClient:
         # Update statistics
         stats = investigation.manifest.statistics
         stats.total_events += findings.total_events
-        stats.mitre_techniques = len(set(
-            t for f in investigation.source_findings.values()
-            for t in f.mitre_techniques
-        ))
+        stats.mitre_techniques = len(set(t for f in investigation.source_findings.values() for t in f.mitre_techniques))
 
         # Count unique hosts and users
         hosts = set()
@@ -659,11 +650,7 @@ class InvestigationStateClient:
                     all_iocs[key] = ioc.model_copy(deep=True)
 
         # Sort by priority and occurrence
-        sorted_iocs = sorted(
-            all_iocs.values(),
-            key=lambda x: (x.pyramid_priority, x.total_occurrences),
-            reverse=True
-        )
+        sorted_iocs = sorted(all_iocs.values(), key=lambda x: (x.pyramid_priority, x.total_occurrences), reverse=True)
 
         return sorted_iocs[:limit]
 
@@ -806,12 +793,9 @@ class InvestigationStateClient:
             else:
                 age_str = f"{age.seconds // 60} minute(s) ago"
 
+            lines.append(f"{i}. [{entry.severity.value.upper()}] {entry.id} - {entry.name}")
             lines.append(
-                f"{i}. [{entry.severity.value.upper()}] {entry.id} - {entry.name}"
-            )
-            lines.append(
-                f"   Last updated: {age_str} | {entry.ioc_count} IoCs | "
-                f"Sources: {', '.join(entry.sources) or 'None'}"
+                f"   Last updated: {age_str} | {entry.ioc_count} IoCs | Sources: {', '.join(entry.sources) or 'None'}"
             )
             lines.append("")
 

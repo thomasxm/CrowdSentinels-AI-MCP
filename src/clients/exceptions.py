@@ -10,7 +10,7 @@ from mcp.types import TextContent
 
 from src.utils import limit_response_size_if_needed
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 # Get the tool logger
 _tool_logger = logging.getLogger("crowdsentinel.tools")
@@ -21,6 +21,7 @@ _GREEN = "\033[32m"
 _RED = "\033[31m"
 _RESET = "\033[0m"
 _BOLD = "\033[1m"
+
 
 def _direct_terminal_write(message: str, colour: str = "") -> None:
     """
@@ -37,7 +38,7 @@ def _direct_terminal_write(message: str, colour: str = "") -> None:
             formatted = f"{message}\n"
 
         # Write directly to stdout file descriptor (1)
-        os.write(1, formatted.encode('utf-8'))
+        os.write(1, formatted.encode("utf-8"))
     except Exception:
         # Silently fail if writing isn't possible
         pass
@@ -145,6 +146,7 @@ def handle_search_exceptions(func: Callable[..., T]) -> Callable[..., list[TextC
     Returns:
         Decorated function that handles exceptions and logs calls
     """
+
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         tool_name = func.__name__
@@ -183,10 +185,12 @@ def handle_search_exceptions(func: Callable[..., T]) -> Callable[..., list[TextC
 
     return wrapper
 
+
 def _is_text_content_list(value: object) -> bool:
     if not isinstance(value, list) or not value:
         return False
     return all(isinstance(item, TextContent) for item in value)
+
 
 def _is_response_limited(value: object) -> bool:
     if not isinstance(value, dict):
@@ -194,10 +198,12 @@ def _is_response_limited(value: object) -> bool:
     metadata = value.get("metadata")
     return isinstance(metadata, dict) and "truncated" in metadata and "response" in value
 
+
 def limit_tool_response(func: Callable[..., T]) -> Callable[..., T]:
     """
     Apply response size limiting only when outputs exceed the configured limits.
     """
+
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         result = func(*args, **kwargs)
@@ -209,13 +215,14 @@ def limit_tool_response(func: Callable[..., T]) -> Callable[..., T]:
 
     return wrapper
 
+
 def with_exception_handling(tool_instance: object, mcp: FastMCP) -> None:
     """
     Register tools from a tool instance with automatic exception handling applied to all tools.
-    
+
     This function temporarily replaces mcp.tool with a wrapped version that automatically
     applies the handle_search_exceptions decorator to all registered tool methods.
-    
+
     Args:
         tool_instance: The tool instance that has a register_tools method
         mcp: The FastMCP instance used for tool registration

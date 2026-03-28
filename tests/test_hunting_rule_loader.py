@@ -20,7 +20,7 @@ def create_test_hunting_directory():
     (test_dir / "linux" / "queries").mkdir(parents=True)
 
     # Create a Windows ES|QL hunting rule
-    windows_rule = '''
+    windows_rule = """
 [hunt]
 author = "Test"
 description = "Test hunting rule for suspicious PowerShell commands"
@@ -43,11 +43,11 @@ FROM logs-endpoint.events.process-*
 | LIMIT 20
 \'\'\'
 ]
-'''
+"""
     (test_dir / "windows" / "queries" / "powershell_hunting.toml").write_text(windows_rule)
 
     # Create a Linux ES|QL hunting rule with multiple queries
-    linux_rule = '''
+    linux_rule = """
 [hunt]
 author = "Test"
 description = "Test hunting rule for cron persistence"
@@ -70,11 +70,11 @@ FROM logs-endpoint.events.file-*
 process where process.name == "crontab" and process.args == "-e"
 \'\'\'
 ]
-'''
+"""
     (test_dir / "linux" / "queries" / "cron_persistence.toml").write_text(linux_rule)
 
     # Create a rule with only EQL (no ES|QL) - should be skipped
-    eql_only_rule = '''
+    eql_only_rule = """
 [hunt]
 author = "Test"
 description = "EQL only rule"
@@ -89,7 +89,7 @@ query = [
 process where process.name == "regsvr32.exe"
 \'\'\'
 ]
-'''
+"""
     (test_dir / "windows" / "queries" / "eql_only.toml").write_text(eql_only_rule)
 
     return test_dir
@@ -370,7 +370,7 @@ def test_short_description():
         mitre=[],
         notes=[],
         file_path="/test",
-        esql_queries=[]
+        esql_queries=[],
     )
 
     short = rule.short_description
@@ -388,7 +388,7 @@ def test_short_description():
         mitre=[],
         notes=[],
         file_path="/test",
-        esql_queries=[]
+        esql_queries=[],
     )
 
     assert rule2.short_description == "Short description"

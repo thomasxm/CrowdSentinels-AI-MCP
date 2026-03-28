@@ -87,7 +87,9 @@ class SearchMCPServer:
             stats = rule_loader.get_statistics()
             self.logger.info(f"Loaded {loaded_count} detection rules")
             self.logger.info(f"  - Platforms: {', '.join(stats['platforms'][:10])}")
-            self.logger.info(f"  - Types: Lucene={stats['by_type'].get('lucene', 0)}, EQL={stats['by_type'].get('eql', 0)}, ES|QL={stats['by_type'].get('esql', 0)}")
+            self.logger.info(
+                f"  - Types: Lucene={stats['by_type'].get('lucene', 0)}, EQL={stats['by_type'].get('eql', 0)}, ES|QL={stats['by_type'].get('esql', 0)}"
+            )
         else:
             self.logger.warning("No detection rules loaded")
 
@@ -102,8 +104,10 @@ class SearchMCPServer:
             self.logger.info(f"Loading ES|QL hunting rules from: {hunting_dir}")
             self.hunting_loader = HuntingRuleLoader(str(hunting_dir))
             stats = self.hunting_loader.get_statistics()
-            self.logger.info(f"Loaded {stats['total_rules']} ES|QL hunting rules with {stats['total_esql_queries']} queries")
-            if stats.get('platforms'):
+            self.logger.info(
+                f"Loaded {stats['total_rules']} ES|QL hunting rules with {stats['total_esql_queries']} queries"
+            )
+            if stats.get("platforms"):
                 self.logger.info(f"  - Platforms: {', '.join(stats['platforms'].keys())}")
         else:
             self.logger.warning("Hunting rules directory not found in any candidate location")
@@ -150,6 +154,7 @@ class SearchMCPServer:
 
             # Use the same registration pattern
             from src.clients.exceptions import with_exception_handling
+
             with_exception_handling(rule_tools, self.mcp)
         else:
             self.logger.warning("Rule management tools not registered (no rules loaded)")
@@ -161,6 +166,7 @@ class SearchMCPServer:
         investigation_tools.search_client = self.search_client
 
         from src.clients.exceptions import with_exception_handling
+
         with_exception_handling(investigation_tools, self.mcp)
 
         # Register Chainsaw hunting tools
@@ -209,7 +215,7 @@ class SearchMCPServer:
 
 def run_search_server(engine_type, transport, host, port, path):
     """Run search server with specified engine type and transport options.
-    
+
     Args:
         engine_type: Type of search engine to use ("elasticsearch" or "opensearch")
         transport: Transport protocol to use ("stdio", "streamable-http", or "sse")
@@ -231,33 +237,29 @@ def run_search_server(engine_type, transport, host, port, path):
         server.logger.info(f"View logs: tail -f {log_file}")
         server.mcp.run(transport=transport)
 
+
 def parse_server_args():
     """Parse command line arguments for the MCP server.
-    
+
     Returns:
         Parsed arguments
     """
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--transport", "-t",
+        "--transport",
+        "-t",
         default="stdio",
         choices=["stdio", "streamable-http", "sse"],
-        help="Transport protocol to use (default: stdio)"
+        help="Transport protocol to use (default: stdio)",
     )
     parser.add_argument(
-        "--host", "-H",
-        default="127.0.0.1",
-        help="Host to bind to when using HTTP transports (default: 127.0.0.1)"
+        "--host", "-H", default="127.0.0.1", help="Host to bind to when using HTTP transports (default: 127.0.0.1)"
     )
     parser.add_argument(
-        "--port", "-p",
-        type=int,
-        default=8000,
-        help="Port to bind to when using HTTP transports (default: 8000)"
+        "--port", "-p", type=int, default=8000, help="Port to bind to when using HTTP transports (default: 8000)"
     )
     parser.add_argument(
-        "--path", "-P",
-        help="URL path prefix for HTTP transports (default: /mcp/ for streamable-http, /sse/ for sse)"
+        "--path", "-P", help="URL path prefix for HTTP transports (default: /mcp/ for streamable-http, /sse/ for sse)"
     )
 
     args = parser.parse_args()
@@ -272,18 +274,16 @@ def parse_server_args():
 
     return args
 
+
 def elasticsearch_mcp_server():
     """Entry point for Elasticsearch MCP server."""
     args = parse_server_args()
 
     # Run the server with the specified options
     run_search_server(
-        engine_type="elasticsearch",
-        transport=args.transport,
-        host=args.host,
-        port=args.port,
-        path=args.path
+        engine_type="elasticsearch", transport=args.transport, host=args.host, port=args.port, path=args.path
     )
+
 
 def opensearch_mcp_server():
     """Entry point for OpenSearch MCP server."""
@@ -291,12 +291,9 @@ def opensearch_mcp_server():
 
     # Run the server with the specified options
     run_search_server(
-        engine_type="opensearch",
-        transport=args.transport,
-        host=args.host,
-        port=args.port,
-        path=args.path
+        engine_type="opensearch", transport=args.transport, host=args.host, port=args.port, path=args.path
     )
+
 
 if __name__ == "__main__":
     # Require crowdsentinel-mcp-server or crowdsentinel-opensearch-mcp-server as the first argument
@@ -316,10 +313,4 @@ if __name__ == "__main__":
     args = parse_server_args()
 
     # Run the server with the specified options
-    run_search_server(
-        engine_type=engine_type,
-        transport=args.transport,
-        host=args.host,
-        port=args.port,
-        path=args.path
-    )
+    run_search_server(engine_type=engine_type, transport=args.transport, host=args.host, port=args.port, path=args.path)

@@ -1,4 +1,5 @@
 """Asset Discovery Client for extracting and storing index metadata."""
+
 import json
 from datetime import datetime
 
@@ -65,18 +66,20 @@ class AssetDiscoveryClient(SearchClientBase):
                     # Analyze the index to determine metadata
                     metadata = self._analyze_index_metadata(index_name, mappings, settings)
 
-                    indices.append({
-                        "name": index_name,
-                        "health": idx.get("health"),
-                        "status": idx.get("status"),
-                        "doc_count": idx.get("docs.count"),
-                        "size": idx.get("store.size"),
-                        "primary_shards": idx.get("pri"),
-                        "replica_shards": idx.get("rep"),
-                        "metadata": metadata,
-                        "mappings": mappings,
-                        "settings": settings
-                    })
+                    indices.append(
+                        {
+                            "name": index_name,
+                            "health": idx.get("health"),
+                            "status": idx.get("status"),
+                            "doc_count": idx.get("docs.count"),
+                            "size": idx.get("store.size"),
+                            "primary_shards": idx.get("pri"),
+                            "replica_shards": idx.get("rep"),
+                            "metadata": metadata,
+                            "mappings": mappings,
+                            "settings": settings,
+                        }
+                    )
                 except Exception as e:
                     self.logger.warning(f"Failed to get details for index {index_name}: {e}")
                     continue
@@ -113,7 +116,7 @@ class AssetDiscoveryClient(SearchClientBase):
             "log_type": "unknown",
             "beat_type": None,
             "has_ecs": False,
-            "fields": []
+            "fields": [],
         }
 
         # Determine beat type from index name
@@ -184,7 +187,7 @@ class AssetDiscoveryClient(SearchClientBase):
                 "linux_syslog": [],
                 "application_logs": [],
                 "network_logs": [],
-                "metrics": []
+                "metrics": [],
             }
 
             for idx in indices:
@@ -262,7 +265,10 @@ class AssetDiscoveryClient(SearchClientBase):
                     matching_indices.append(idx["name"])
 
             # Match by log source
-            elif log_type.lower() in metadata.get("log_source", "").lower() or log_type.lower() in str(metadata.get("beat_type", "")).lower():
+            elif (
+                log_type.lower() in metadata.get("log_source", "").lower()
+                or log_type.lower() in str(metadata.get("beat_type", "")).lower()
+            ):
                 matching_indices.append(idx["name"])
 
         return matching_indices

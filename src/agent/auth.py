@@ -33,6 +33,7 @@ AUTH_FILE = AUTH_PROFILES_FILE
 # Multi-profile storage
 # ---------------------------------------------------------------------------
 
+
 def load_profiles() -> dict[str, dict]:
     """Read auth-profiles.json and return the ``profiles`` dict.
 
@@ -131,6 +132,7 @@ def refresh_if_needed(profile_id: str) -> dict[str, Any]:
     lock_fd = None
     try:
         import fcntl
+
         lock_fd = open(lock_path, "w")
         fcntl.flock(lock_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
     except ImportError:
@@ -165,6 +167,7 @@ def refresh_if_needed(profile_id: str) -> dict[str, Any]:
         if lock_fd is not None:
             try:
                 import fcntl
+
                 fcntl.flock(lock_fd, fcntl.LOCK_UN)
             except ImportError:
                 pass
@@ -176,6 +179,7 @@ def refresh_if_needed(profile_id: str) -> dict[str, Any]:
 # ---------------------------------------------------------------------------
 # Legacy migration
 # ---------------------------------------------------------------------------
+
 
 def _migrate_legacy_auth() -> None:
     """One-time migration from ``auth.json`` to ``auth-profiles.json``.
@@ -242,6 +246,7 @@ def _migrate_legacy_auth() -> None:
 # ---------------------------------------------------------------------------
 # Existing public API (updated to delegate to profiles)
 # ---------------------------------------------------------------------------
+
 
 def _save_auth(data: dict[str, Any]) -> None:
     """Save auth tokens.  *Deprecated* -- delegates to :func:`save_profile`."""
@@ -382,6 +387,7 @@ def get_access_token() -> tuple | None:
 # OpenAI (ChatGPT subscription via PKCE OAuth, or API key)
 # ---------------------------------------------------------------------------
 
+
 def login_openai() -> bool:
     """Authenticate with OpenAI -- ChatGPT subscription (PKCE OAuth) or API key."""
     print("OpenAI authentication\n")
@@ -400,6 +406,7 @@ def login_openai() -> bool:
 def _login_openai_subscription() -> bool:
     """OpenAI PKCE OAuth flow for ChatGPT subscription."""
     from src.agent.oauth_pkce import run_pkce_flow
+
     try:
         tokens = run_pkce_flow()
     except RuntimeError as exc:
@@ -410,13 +417,16 @@ def _login_openai_subscription() -> bool:
         print("Port 1455 may be in use. Try: crowdsentinel auth login --provider openai", file=sys.stderr)
         return False
 
-    save_profile("openai-codex:default", {
-        "type": "oauth",
-        "provider": "openai-codex",
-        "access": tokens["access_token"],
-        "refresh": tokens.get("refresh_token", ""),
-        "expires": int(time.time() + tokens.get("expires_in", 3600)) * 1000,
-    })
+    save_profile(
+        "openai-codex:default",
+        {
+            "type": "oauth",
+            "provider": "openai-codex",
+            "access": tokens["access_token"],
+            "refresh": tokens.get("refresh_token", ""),
+            "expires": int(time.time() + tokens.get("expires_in", 3600)) * 1000,
+        },
+    )
     print(f"OpenAI subscription auth stored in {AUTH_PROFILES_FILE}")
     return True
 
@@ -456,11 +466,14 @@ def _login_openai_api_key() -> bool:
     except Exception as exc:
         print(f"Warning: could not validate ({exc}).")
 
-    save_profile("openai:default", {
-        "type": "api_key",
-        "provider": "openai",
-        "key": key,
-    })
+    save_profile(
+        "openai:default",
+        {
+            "type": "api_key",
+            "provider": "openai",
+            "key": key,
+        },
+    )
     print(f"OpenAI API key stored in {AUTH_PROFILES_FILE}")
     return True
 
@@ -468,6 +481,7 @@ def _login_openai_api_key() -> bool:
 # ---------------------------------------------------------------------------
 # Anthropic (setup-token or API key)
 # ---------------------------------------------------------------------------
+
 
 def login_anthropic() -> bool:
     """Authenticate with Anthropic -- setup-token (subscription) or API key."""
@@ -525,12 +539,15 @@ def _login_anthropic_setup_token() -> bool:
     except Exception as exc:
         print(f"Warning: could not validate ({exc}). Storing anyway.")
 
-    save_profile("anthropic:subscription", {
-        "type": "token",
-        "provider": "anthropic",
-        "access": token,
-        "expires": 0,
-    })
+    save_profile(
+        "anthropic:subscription",
+        {
+            "type": "token",
+            "provider": "anthropic",
+            "access": token,
+            "expires": 0,
+        },
+    )
     print(f"Anthropic setup-token stored in {AUTH_PROFILES_FILE}")
     return True
 
@@ -565,10 +582,13 @@ def _login_anthropic_api_key() -> bool:
     except Exception as exc:
         print(f"Warning: could not validate ({exc}).")
 
-    save_profile("anthropic:default", {
-        "type": "api_key",
-        "provider": "anthropic",
-        "key": key,
-    })
+    save_profile(
+        "anthropic:default",
+        {
+            "type": "api_key",
+            "provider": "anthropic",
+            "key": key,
+        },
+    )
     print(f"Anthropic API key stored in {AUTH_PROFILES_FILE}")
     return True

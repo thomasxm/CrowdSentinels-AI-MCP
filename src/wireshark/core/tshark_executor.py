@@ -1,5 +1,6 @@
 # src/wireshark/core/tshark_executor.py
 """TShark command executor and builder."""
+
 import logging
 import shutil
 import subprocess
@@ -18,7 +19,7 @@ def build_ip_filter(ips: list[str], field: str = "ip.addr") -> str:
     """Build a filter for multiple IP addresses."""
     if not ips:
         return ""
-    conditions = [f'{field} == {ip}' for ip in ips]
+    conditions = [f"{field} == {ip}" for ip in ips]
     return " || ".join(conditions)
 
 
@@ -26,7 +27,7 @@ def build_port_filter(ports: list[int], protocol: str = "tcp") -> str:
     """Build a filter for multiple ports."""
     if not ports:
         return ""
-    conditions = [f'{protocol}.port == {port}' for port in ports]
+    conditions = [f"{protocol}.port == {port}" for port in ports]
     return " || ".join(conditions)
 
 
@@ -52,12 +53,7 @@ class TSharkExecutor:
     def is_available(self) -> bool:
         """Check if tshark is available."""
         try:
-            result = subprocess.run(
-                [self.tshark_path, "--version"],
-                capture_output=True,
-                text=True,
-                timeout=10
-            )
+            result = subprocess.run([self.tshark_path, "--version"], capture_output=True, text=True, timeout=10)
             return result.returncode == 0
         except (subprocess.SubprocessError, FileNotFoundError):
             return False
@@ -67,12 +63,7 @@ class TSharkExecutor:
         if self._version:
             return self._version
         try:
-            result = subprocess.run(
-                [self.tshark_path, "--version"],
-                capture_output=True,
-                text=True,
-                timeout=10
-            )
+            result = subprocess.run([self.tshark_path, "--version"], capture_output=True, text=True, timeout=10)
             if result.returncode == 0:
                 self._version = result.stdout.split("\n")[0]
                 return self._version
@@ -88,7 +79,7 @@ class TSharkExecutor:
         output_format: str = "fields",
         limit: int | None = None,
         no_resolve: bool = True,
-        additional_args: list[str] | None = None
+        additional_args: list[str] | None = None,
     ) -> list[str]:
         """Build a tshark command for reading pcap files.
 
@@ -131,12 +122,7 @@ class TSharkExecutor:
 
         return cmd
 
-    def build_stats_command(
-        self,
-        pcap_path: str,
-        stat_type: str,
-        display_filter: str | None = None
-    ) -> list[str]:
+    def build_stats_command(self, pcap_path: str, stat_type: str, display_filter: str | None = None) -> list[str]:
         """Build a tshark command for statistics.
 
         Args:
@@ -155,11 +141,7 @@ class TSharkExecutor:
         return cmd
 
     def build_follow_stream_command(
-        self,
-        pcap_path: str,
-        stream_type: str,
-        stream_index: int,
-        output_type: str = "ascii"
+        self, pcap_path: str, stream_type: str, stream_index: int, output_type: str = "ascii"
     ) -> list[str]:
         """Build command to follow a TCP/UDP stream.
 
@@ -172,17 +154,9 @@ class TSharkExecutor:
         Returns:
             Command as list of strings
         """
-        return [
-            self.tshark_path, "-r", pcap_path, "-q",
-            "-z", f"follow,{stream_type},{output_type},{stream_index}"
-        ]
+        return [self.tshark_path, "-r", pcap_path, "-q", "-z", f"follow,{stream_type},{output_type},{stream_index}"]
 
-    def build_export_objects_command(
-        self,
-        pcap_path: str,
-        protocol: str,
-        output_dir: str
-    ) -> list[str]:
+    def build_export_objects_command(self, pcap_path: str, protocol: str, output_dir: str) -> list[str]:
         """Build command to export objects (HTTP, SMB, etc.).
 
         Args:
@@ -193,16 +167,9 @@ class TSharkExecutor:
         Returns:
             Command as list of strings
         """
-        return [
-            self.tshark_path, "-r", pcap_path,
-            "--export-objects", f"{protocol},{output_dir}"
-        ]
+        return [self.tshark_path, "-r", pcap_path, "--export-objects", f"{protocol},{output_dir}"]
 
-    def execute(
-        self,
-        cmd: list[str],
-        timeout: int = 300
-    ) -> tuple[int, str, str]:
+    def execute(self, cmd: list[str], timeout: int = 300) -> tuple[int, str, str]:
         """Execute a tshark command.
 
         Args:
@@ -214,12 +181,7 @@ class TSharkExecutor:
         """
         logger.debug(f"Executing: {' '.join(cmd)}")
         try:
-            result = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                timeout=timeout
-            )
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
             return result.returncode, result.stdout, result.stderr
         except subprocess.TimeoutExpired:
             logger.error(f"Command timed out after {timeout}s: {' '.join(cmd)}")
@@ -234,7 +196,7 @@ class TSharkExecutor:
         fields: list[str],
         display_filter: str | None = None,
         limit: int | None = None,
-        timeout: int = 300
+        timeout: int = 300,
     ) -> list[dict[str, str]]:
         """Execute tshark and parse field output.
 
@@ -242,11 +204,7 @@ class TSharkExecutor:
             List of dicts mapping field names to values
         """
         cmd = self.build_command(
-            pcap_path=pcap_path,
-            display_filter=display_filter,
-            fields=fields,
-            output_format="fields",
-            limit=limit
+            pcap_path=pcap_path, display_filter=display_filter, fields=fields, output_format="fields", limit=limit
         )
 
         returncode, stdout, stderr = self.execute(cmd, timeout)

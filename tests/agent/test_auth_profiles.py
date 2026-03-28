@@ -7,17 +7,15 @@ module-level path constants so the real ~/.crowdsentinel/ is never touched.
 import json
 import os
 import stat
-from pathlib import Path
-from unittest.mock import patch
 
 import pytest
 
 from src.agent import auth
 
-
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
+
 
 @pytest.fixture(autouse=True)
 def _isolate_auth_paths(tmp_path, monkeypatch):
@@ -33,6 +31,7 @@ def _isolate_auth_paths(tmp_path, monkeypatch):
 # ---------------------------------------------------------------------------
 # save_profile / load_profiles round-trip
 # ---------------------------------------------------------------------------
+
 
 class TestSaveLoadProfiles:
     def test_roundtrip_api_key(self):
@@ -87,6 +86,7 @@ class TestSaveLoadProfiles:
 # File permissions
 # ---------------------------------------------------------------------------
 
+
 class TestFilePermissions:
     def test_save_profile_sets_0600(self):
         auth.save_profile("test:p", {"type": "api_key", "provider": "test", "key": "k"})
@@ -97,6 +97,7 @@ class TestFilePermissions:
 # ---------------------------------------------------------------------------
 # remove_profile
 # ---------------------------------------------------------------------------
+
 
 class TestRemoveProfile:
     def test_remove_existing(self):
@@ -121,6 +122,7 @@ class TestRemoveProfile:
 # get_profile_for_provider
 # ---------------------------------------------------------------------------
 
+
 class TestGetProfileForProvider:
     def test_matching_api_key(self):
         auth.save_profile("openai:default", {"type": "api_key", "provider": "openai", "key": "sk-test"})
@@ -136,30 +138,58 @@ class TestGetProfileForProvider:
         assert auth.get_profile_for_provider("anthropic") is None
 
     def test_oauth_preferred_over_api_key(self):
-        auth.save_profile("anthropic:default", {
-            "type": "api_key", "provider": "anthropic", "key": "sk-api",
-        })
-        auth.save_profile("anthropic:subscription", {
-            "type": "token", "provider": "anthropic", "access": "sk-oat-token", "expires": 0,
-        })
+        auth.save_profile(
+            "anthropic:default",
+            {
+                "type": "api_key",
+                "provider": "anthropic",
+                "key": "sk-api",
+            },
+        )
+        auth.save_profile(
+            "anthropic:subscription",
+            {
+                "type": "token",
+                "provider": "anthropic",
+                "access": "sk-oat-token",
+                "expires": 0,
+            },
+        )
         prof = auth.get_profile_for_provider("anthropic")
         assert prof["type"] == "token"
         assert prof["access"] == "sk-oat-token"
 
     def test_token_preferred_over_api_key(self):
-        auth.save_profile("anthropic:default", {
-            "type": "api_key", "provider": "anthropic", "key": "sk-api",
-        })
-        auth.save_profile("anthropic:oauth", {
-            "type": "oauth", "provider": "anthropic", "access": "eyJ", "refresh": "rt_", "expires": 999,
-        })
+        auth.save_profile(
+            "anthropic:default",
+            {
+                "type": "api_key",
+                "provider": "anthropic",
+                "key": "sk-api",
+            },
+        )
+        auth.save_profile(
+            "anthropic:oauth",
+            {
+                "type": "oauth",
+                "provider": "anthropic",
+                "access": "eyJ",
+                "refresh": "rt_",
+                "expires": 999,
+            },
+        )
         prof = auth.get_profile_for_provider("anthropic")
         assert prof["type"] == "oauth"
 
     def test_api_key_returned_when_no_oauth(self):
-        auth.save_profile("openai:default", {
-            "type": "api_key", "provider": "openai", "key": "sk-proj-test",
-        })
+        auth.save_profile(
+            "openai:default",
+            {
+                "type": "api_key",
+                "provider": "openai",
+                "key": "sk-proj-test",
+            },
+        )
         prof = auth.get_profile_for_provider("openai")
         assert prof["type"] == "api_key"
 
@@ -167,6 +197,7 @@ class TestGetProfileForProvider:
 # ---------------------------------------------------------------------------
 # Legacy migration
 # ---------------------------------------------------------------------------
+
 
 class TestMigrateLegacyAuth:
     def test_migrate_anthropic_api_key(self):
@@ -256,6 +287,7 @@ class TestMigrateLegacyAuth:
 # Corrupted profiles file
 # ---------------------------------------------------------------------------
 
+
 class TestCorruptedProfiles:
     def test_corrupted_json_returns_empty(self):
         auth.AUTH_PROFILES_FILE.parent.mkdir(parents=True, exist_ok=True)
@@ -280,22 +312,30 @@ class TestCorruptedProfiles:
 # Backward-compat: load_auth / _save_auth delegates
 # ---------------------------------------------------------------------------
 
+
 class TestBackwardCompat:
     def test_save_auth_delegates_to_save_profile(self):
-        auth._save_auth({
-            "provider": "openai",
-            "access_token": "sk-proj-compat",
-            "refresh_token": "",
-            "expires_at": 0,
-        })
+        auth._save_auth(
+            {
+                "provider": "openai",
+                "access_token": "sk-proj-compat",
+                "refresh_token": "",
+                "expires_at": 0,
+            }
+        )
         profiles = auth.load_profiles()
         assert "openai:default" in profiles
         assert profiles["openai:default"]["key"] == "sk-proj-compat"
 
     def test_load_auth_returns_legacy_shape(self):
-        auth.save_profile("anthropic:default", {
-            "type": "api_key", "provider": "anthropic", "key": "sk-ant-api03-x",
-        })
+        auth.save_profile(
+            "anthropic:default",
+            {
+                "type": "api_key",
+                "provider": "anthropic",
+                "key": "sk-ant-api03-x",
+            },
+        )
         result = auth.load_auth()
         assert result is not None
         assert result["provider"] == "anthropic"
@@ -324,6 +364,7 @@ class TestBackwardCompat:
 # remove_auth
 # ---------------------------------------------------------------------------
 
+
 class TestRemoveAuth:
     def test_remove_auth_deletes_profiles_file(self):
         auth.save_profile("a:b", {"type": "api_key", "provider": "a", "key": "k"})
@@ -338,11 +379,17 @@ class TestRemoveAuth:
 # get_auth_status
 # ---------------------------------------------------------------------------
 
+
 class TestGetAuthStatus:
     def test_status_with_profile(self):
-        auth.save_profile("anthropic:default", {
-            "type": "api_key", "provider": "anthropic", "key": "sk-ant-api03-x",
-        })
+        auth.save_profile(
+            "anthropic:default",
+            {
+                "type": "api_key",
+                "provider": "anthropic",
+                "key": "sk-ant-api03-x",
+            },
+        )
         status = auth.get_auth_status()
         assert status["authenticated"] is True
         assert status["provider"] == "anthropic"
@@ -365,11 +412,17 @@ class TestGetAuthStatus:
 # get_access_token
 # ---------------------------------------------------------------------------
 
+
 class TestGetAccessToken:
     def test_token_from_profile(self):
-        auth.save_profile("anthropic:default", {
-            "type": "api_key", "provider": "anthropic", "key": "sk-ant-api03-stored",
-        })
+        auth.save_profile(
+            "anthropic:default",
+            {
+                "type": "api_key",
+                "provider": "anthropic",
+                "key": "sk-ant-api03-stored",
+            },
+        )
         result = auth.get_access_token()
         assert result == ("sk-ant-api03-stored", "anthropic")
 
@@ -385,9 +438,14 @@ class TestGetAccessToken:
 
     def test_profile_preferred_over_env(self, monkeypatch):
         monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-env")
-        auth.save_profile("anthropic:default", {
-            "type": "api_key", "provider": "anthropic", "key": "sk-stored",
-        })
+        auth.save_profile(
+            "anthropic:default",
+            {
+                "type": "api_key",
+                "provider": "anthropic",
+                "key": "sk-stored",
+            },
+        )
         result = auth.get_access_token()
         assert result == ("sk-stored", "anthropic")
 
@@ -406,6 +464,7 @@ class TestGetAccessToken:
 # ---------------------------------------------------------------------------
 # AUTH_FILE alias
 # ---------------------------------------------------------------------------
+
 
 class TestAuthFileAlias:
     def test_auth_file_equals_profiles_file(self):

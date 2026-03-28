@@ -1,4 +1,5 @@
 """IoC Analysis and Decision-Making Tools for incident response."""
+
 from typing import Annotated
 
 from fastmcp import FastMCP
@@ -12,7 +13,12 @@ class IoCAnalysisTools:
     def register_tools(self, mcp: FastMCP):
         @mcp.tool()
         def analyze_search_results(
-            search_results: Annotated[dict, Field(description='REQUIRED. Search results dict. Accepts ES format {"hits":{"hits":[...]}}, simplified {"hits":[...]}, or hunt output {"sample_events":[...], "summary":{"total_hits": N}}')] = None,
+            search_results: Annotated[
+                dict,
+                Field(
+                    description='REQUIRED. Search results dict. Accepts ES format {"hits":{"hits":[...]}}, simplified {"hits":[...]}, or hunt output {"sample_events":[...], "summary":{"total_hits": N}}'
+                ),
+            ] = None,
             context: str = "",
         ) -> dict:
             """
@@ -55,15 +61,13 @@ class IoCAnalysisTools:
                 - TTPs/Behaviors (priority 6 - tough to change) ← Focus here!
             """
             if not search_results:
-                return {"error": "search_results parameter is required. Pass the output from threat_hunt_search, search_with_lucene, or search_documents."}
-            return self.search_client.analyze_search_results(
-                search_results=search_results,
-                context=context
-            )
+                return {
+                    "error": "search_results parameter is required. Pass the output from threat_hunt_search, search_with_lucene, or search_documents."
+                }
+            return self.search_client.analyze_search_results(search_results=search_results, context=context)
 
         @mcp.tool()
-        def generate_investigation_report(analysis_results: list[dict] = None,
-                                          investigation_context: str = "") -> dict:
+        def generate_investigation_report(analysis_results: list[dict] = None, investigation_context: str = "") -> dict:
             """
             Generate a comprehensive investigation report from multiple analyses.
             This tool aggregates results from multiple queries and analyses to create
@@ -107,15 +111,21 @@ class IoCAnalysisTools:
                 )
             """
             if not analysis_results:
-                return {"error": "analysis_results parameter is required. Pass a list of results from analyze_search_results."}
+                return {
+                    "error": "analysis_results parameter is required. Pass a list of results from analyze_search_results."
+                }
             return self.search_client.generate_investigation_report(
-                analysis_results=analysis_results,
-                investigation_context=investigation_context
+                analysis_results=analysis_results, investigation_context=investigation_context
             )
 
         @mcp.tool()
         def analyze_kill_chain_stage(
-            iocs: Annotated[list[dict], Field(description='REQUIRED. List of IoC dicts, each with "type" and "value" keys. Types: ip, domain, file_path, hostname, commandline, hash, registry_key, c2_domain. Example: [{"type": "hostname", "value": "MSEDGEWIN10"}, {"type": "ip", "value": "10.0.2.16"}]')] = None,
+            iocs: Annotated[
+                list[dict],
+                Field(
+                    description='REQUIRED. List of IoC dicts, each with "type" and "value" keys. Types: ip, domain, file_path, hostname, commandline, hash, registry_key, c2_domain. Example: [{"type": "hostname", "value": "MSEDGEWIN10"}, {"type": "ip", "value": "10.0.2.16"}]'
+                ),
+            ] = None,
             include_hunting_suggestions: bool = True,
         ) -> dict:
             """
@@ -182,24 +192,23 @@ class IoCAnalysisTools:
                 #   - Next stage (Actions on Objectives) - what are they doing?
             """
             if not iocs:
-                return {"error": "iocs parameter is required. Pass a list of IoC dicts, e.g. [{\"type\": \"hostname\", \"value\": \"MSEDGEWIN10\"}]"}
+                return {
+                    "error": 'iocs parameter is required. Pass a list of IoC dicts, e.g. [{"type": "hostname", "value": "MSEDGEWIN10"}]'
+                }
 
             from src.clients.common.cyber_kill_chain import CyberKillChainClient
 
             # Identify stages from IoCs
             stage_analysis = CyberKillChainClient.identify_stage_from_iocs(iocs)
 
-            result = {
-                "kill_chain_analysis": stage_analysis,
-                "framework": "Lockheed Martin Cyber Kill Chain"
-            }
+            result = {"kill_chain_analysis": stage_analysis, "framework": "Lockheed Martin Cyber Kill Chain"}
 
             # Add hunting suggestions if requested and we identified a stage
-            if include_hunting_suggestions and stage_analysis.get('most_likely_stage'):
+            if include_hunting_suggestions and stage_analysis.get("most_likely_stage"):
                 from src.clients.common.cyber_kill_chain import KillChainStage
 
                 # Get the most likely stage
-                stage_name = stage_analysis['most_likely_stage']
+                stage_name = stage_analysis["most_likely_stage"]
 
                 # Find the KillChainStage enum value
                 current_stage = None
@@ -210,7 +219,7 @@ class IoCAnalysisTools:
 
                 if current_stage:
                     hunting_suggestions = CyberKillChainClient.suggest_next_hunting_actions(current_stage)
-                    result['hunting_suggestions'] = hunting_suggestions
+                    result["hunting_suggestions"] = hunting_suggestions
 
             return result
 
@@ -253,7 +262,12 @@ class IoCAnalysisTools:
 
         @mcp.tool()
         def map_events_to_kill_chain(
-            events: Annotated[list[dict], Field(description='REQUIRED. List of event dicts from search results. Each should have fields like "@timestamp", "event.code"/"code", "message", "host.name"/"name", etc.')] = None,
+            events: Annotated[
+                list[dict],
+                Field(
+                    description='REQUIRED. List of event dicts from search results. Each should have fields like "@timestamp", "event.code"/"code", "message", "host.name"/"name", etc.'
+                ),
+            ] = None,
         ) -> dict:
             """
             Map Elasticsearch events to Cyber Kill Chain stages.
@@ -303,7 +317,7 @@ class IoCAnalysisTools:
 
             for event in events:
                 # Get the _source field if this is an Elasticsearch hit
-                event_data = event.get('_source', event)
+                event_data = event.get("_source", event)
 
                 # Map event to stages
                 stages = CyberKillChainClient.map_event_to_stage(event_data)
@@ -320,10 +334,8 @@ class IoCAnalysisTools:
 
             # Sort stages by stage number
             from src.clients.common.cyber_kill_chain import KillChainStage
-            sorted_stages = sorted(
-                stage_counts.keys(),
-                key=lambda name: KillChainStage[name].value
-            )
+
+            sorted_stages = sorted(stage_counts.keys(), key=lambda name: KillChainStage[name].value)
 
             return {
                 "total_events_analyzed": len(events),
@@ -332,7 +344,7 @@ class IoCAnalysisTools:
                     stage: {
                         "event_count": stage_counts[stage],
                         "percentage": round((stage_counts[stage] / len(events)) * 100, 2) if events else 0,
-                        "stage_number": KillChainStage[stage].value
+                        "stage_number": KillChainStage[stage].value,
                     }
                     for stage in sorted_stages
                 },
@@ -344,8 +356,8 @@ class IoCAnalysisTools:
                     {
                         "stage_number": KillChainStage[stage].value,
                         "stage_name": stage,
-                        "event_count": stage_counts[stage]
+                        "event_count": stage_counts[stage],
                     }
                     for stage in sorted_stages
-                ]
+                ],
             }

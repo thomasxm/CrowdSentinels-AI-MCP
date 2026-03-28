@@ -17,6 +17,7 @@ logger = logging.getLogger("crowdsentinel.agent.providers")
 @dataclass
 class ToolCall:
     """A tool call extracted from an LLM response."""
+
     id: str
     name: str
     arguments: dict[str, Any]
@@ -25,6 +26,7 @@ class ToolCall:
 @dataclass
 class LLMResponse:
     """Normalised response from any LLM provider."""
+
     text: str = ""
     tool_calls: list[ToolCall] = field(default_factory=list)
     stop_reason: str = ""
@@ -69,6 +71,7 @@ class AnthropicProvider(LLMProvider):
     def __init__(self, model: str, api_key: str | None = None):
         super().__init__(model)
         import anthropic
+
         key = api_key or os.environ.get("ANTHROPIC_API_KEY", "")
         self._is_oauth = "sk-ant-oat" in key
 
@@ -117,11 +120,13 @@ class AnthropicProvider(LLMProvider):
             if block.type == "text":
                 text_parts.append(block.text)
             elif block.type == "tool_use":
-                tool_calls.append(ToolCall(
-                    id=block.id,
-                    name=block.name,
-                    arguments=block.input,
-                ))
+                tool_calls.append(
+                    ToolCall(
+                        id=block.id,
+                        name=block.name,
+                        arguments=block.input,
+                    )
+                )
 
         return LLMResponse(
             text="\n".join(text_parts),
@@ -140,6 +145,7 @@ class OpenAICompatibleProvider(LLMProvider):
     def __init__(self, model: str, api_key: str | None = None, base_url: str | None = None):
         super().__init__(model)
         import httpx
+
         self.base_url = (base_url or os.environ.get("CROWDSENTINEL_MODEL_URL", "https://api.openai.com/v1")).rstrip("/")
         self.api_key = api_key or os.environ.get("OPENAI_API_KEY", "")
         self.http = httpx.Client(timeout=300)
@@ -179,26 +185,30 @@ class OpenAICompatibleProvider(LLMProvider):
                         if block.type == "text":
                             text_parts.append(block.text)
                         elif block.type == "tool_use":
-                            oai_tool_calls.append({
-                                "id": block.id,
-                                "type": "function",
-                                "function": {
-                                    "name": block.name,
-                                    "arguments": json.dumps(block.input),
-                                },
-                            })
+                            oai_tool_calls.append(
+                                {
+                                    "id": block.id,
+                                    "type": "function",
+                                    "function": {
+                                        "name": block.name,
+                                        "arguments": json.dumps(block.input),
+                                    },
+                                }
+                            )
                     elif isinstance(block, dict):
                         if block.get("type") == "text":
                             text_parts.append(block.get("text", ""))
                         elif block.get("type") == "tool_use":
-                            oai_tool_calls.append({
-                                "id": block["id"],
-                                "type": "function",
-                                "function": {
-                                    "name": block["name"],
-                                    "arguments": json.dumps(block.get("input", {})),
-                                },
-                            })
+                            oai_tool_calls.append(
+                                {
+                                    "id": block["id"],
+                                    "type": "function",
+                                    "function": {
+                                        "name": block["name"],
+                                        "arguments": json.dumps(block.get("input", {})),
+                                    },
+                                }
+                            )
 
                 oai_msg = {"role": "assistant", "content": "\n".join(text_parts) or None}
                 if oai_tool_calls:
@@ -211,14 +221,14 @@ class OpenAICompatibleProvider(LLMProvider):
                     if isinstance(block, dict) and block.get("type") == "tool_result":
                         result_content = block.get("content", "")
                         if isinstance(result_content, list):
-                            result_content = "\n".join(
-                                b.get("text", "") for b in result_content if isinstance(b, dict)
-                            )
-                        oai_messages.append({
-                            "role": "tool",
-                            "tool_call_id": block.get("tool_use_id", ""),
-                            "content": str(result_content),
-                        })
+                            result_content = "\n".join(b.get("text", "") for b in result_content if isinstance(b, dict))
+                        oai_messages.append(
+                            {
+                                "role": "tool",
+                                "tool_call_id": block.get("tool_use_id", ""),
+                                "content": str(result_content),
+                            }
+                        )
             else:
                 oai_messages.append({"role": role, "content": str(content) if content else ""})
 
@@ -252,11 +262,13 @@ class OpenAICompatibleProvider(LLMProvider):
                 args = json.loads(func["arguments"])
             except (json.JSONDecodeError, TypeError):
                 args = {}
-            tool_calls.append(ToolCall(
-                id=tc["id"],
-                name=func["name"],
-                arguments=args,
-            ))
+            tool_calls.append(
+                ToolCall(
+                    id=tc["id"],
+                    name=func["name"],
+                    arguments=args,
+                )
+            )
 
         usage = data.get("usage", {})
 
@@ -277,8 +289,10 @@ def create_provider(
 ) -> LLMProvider:
     """Create an LLM provider from stored profiles, env vars, or CLI overrides."""
     from src.agent.auth import (
-        get_profile_for_provider, refresh_if_needed,
-        load_profiles, _migrate_legacy_auth,
+        _migrate_legacy_auth,
+        get_profile_for_provider,
+        load_profiles,
+        refresh_if_needed,
     )
 
     _migrate_legacy_auth()

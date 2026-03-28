@@ -1,5 +1,6 @@
 # tests/wireshark/test_anomaly_detector.py
 """Tests for anomaly detector."""
+
 from pathlib import Path
 
 TEST_MALWARE_DIR = Path("/home/kali/Desktop/CTU/malware_traffics")
@@ -51,10 +52,6 @@ class TestAnomalyDetector:
         detector = AnomalyDetector()
 
         # TLS without SNI is suspicious
-        anomalies = detector.check_tls_anomaly(
-            has_sni=False,
-            server_ip="203.0.113.42",
-            ja3_hash="abc123"
-        )
+        anomalies = detector.check_tls_anomaly(has_sni=False, server_ip="203.0.113.42", ja3_hash="abc123")
 
         assert len(anomalies) > 0

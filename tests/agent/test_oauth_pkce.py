@@ -21,10 +21,10 @@ from src.agent.oauth_pkce import (
     parse_callback,
 )
 
-
 # ---------------------------------------------------------------------------
 # PKCE helper tests
 # ---------------------------------------------------------------------------
+
 
 class TestPKCEHelpers:
     def test_generate_code_verifier_length(self):
@@ -33,9 +33,7 @@ class TestPKCEHelpers:
 
     def test_generate_code_verifier_charset(self):
         verifier = generate_code_verifier()
-        assert re.fullmatch(r"[A-Za-z0-9\-._~]+", verifier), (
-            f"verifier contains invalid characters: {verifier!r}"
-        )
+        assert re.fullmatch(r"[A-Za-z0-9\-._~]+", verifier), f"verifier contains invalid characters: {verifier!r}"
 
     def test_generate_code_challenge(self):
         verifier = "test-verifier-for-challenge"
@@ -75,10 +73,7 @@ class TestPKCEHelpers:
             parse_callback(url)
 
     def test_parse_error_with_description(self):
-        url = (
-            "http://127.0.0.1:1455/auth/callback"
-            "?error=access_denied&error_description=User+cancelled"
-        )
+        url = "http://127.0.0.1:1455/auth/callback?error=access_denied&error_description=User+cancelled"
         with pytest.raises(ValueError, match="access_denied: User cancelled"):
             parse_callback(url)
 
@@ -86,6 +81,7 @@ class TestPKCEHelpers:
 # ---------------------------------------------------------------------------
 # Token expiry tests
 # ---------------------------------------------------------------------------
+
 
 class TestTokenExpiry:
     def test_not_expired_token(self):

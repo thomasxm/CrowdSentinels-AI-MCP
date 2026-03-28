@@ -143,7 +143,7 @@ class SchemaTools:
                 "total_schemas": len(schemas),
                 "schemas": schemas,
                 "usage_hint": "Use schema_hint parameter in hunt_suspicious_process_activity "
-                              "to specify which schema to use"
+                "to specify which schema to use",
             }
 
         @mcp.tool()
@@ -164,7 +164,7 @@ class SchemaTools:
             if not schema:
                 return {
                     "error": f"Schema '{schema_id}' not found",
-                    "available_schemas": [s["schema_id"] for s in list_schemas()]
+                    "available_schemas": [s["schema_id"] for s in list_schemas()],
                 }
 
             return {
@@ -182,18 +182,15 @@ class SchemaTools:
                         "event_code": defn.event_code,
                         "description": defn.description,
                         "category": defn.category,
-                        "fields": defn.fields
+                        "fields": defn.fields,
                     }
                     for event_type, defn in schema.event_types.items()
-                }
+                },
             }
 
         @mcp.tool()
         def get_field_mapping(
-            semantic_field: str,
-            event_type: str,
-            schema_id: str | None = None,
-            index: str | None = None
+            semantic_field: str, event_type: str, schema_id: str | None = None, index: str | None = None
         ) -> dict[str, Any]:
             """
             Get the actual field name for a semantic field concept.
@@ -231,7 +228,7 @@ class SchemaTools:
             if not schema:
                 return {
                     "error": "Could not determine schema. Provide schema_id or index.",
-                    "available_schemas": [s["schema_id"] for s in list_schemas()]
+                    "available_schemas": [s["schema_id"] for s in list_schemas()],
                 }
 
             # Get the field mapping
@@ -248,7 +245,7 @@ class SchemaTools:
                     "error": f"Field '{semantic_field}' not found for event type '{event_type}'",
                     "schema_id": schema.schema_id,
                     "event_type": event_type,
-                    "available_fields": available_fields
+                    "available_fields": available_fields,
                 }
 
             return {
@@ -258,7 +255,7 @@ class SchemaTools:
                 "actual_field": field,
                 "full_field_path": field,  # Already includes prefix from schema
                 "field_prefix": schema.field_prefix,
-                "usage_example": f'| WHERE {field} LIKE "*suspicious*"'
+                "usage_example": f'| WHERE {field} LIKE "*suspicious*"',
             }
 
         @mcp.tool()
@@ -289,7 +286,7 @@ class SchemaTools:
                     "schema_name": schema.name,
                     "source_type": schema.source_type.value,
                     "field_prefix": schema.field_prefix,
-                    "event_types": list(schema.event_types.keys())
+                    "event_types": list(schema.event_types.keys()),
                 }
             return {
                 "detected": False,
@@ -297,19 +294,12 @@ class SchemaTools:
                 "message": "No schema auto-detected. Will fall back to Sysmon schema.",
                 "suggestion": "Use schema_hint parameter to specify explicitly.",
                 "available_schemas": [
-                    {
-                        "schema_id": s["schema_id"],
-                        "index_patterns": s["index_patterns"]
-                    }
-                    for s in list_schemas()
-                ]
+                    {"schema_id": s["schema_id"], "index_patterns": s["index_patterns"]} for s in list_schemas()
+                ],
             }
 
         @mcp.tool()
-        def get_event_type_fields(
-            event_type: str,
-            schema_id: str | None = None
-        ) -> dict[str, Any]:
+        def get_event_type_fields(event_type: str, schema_id: str | None = None) -> dict[str, Any]:
             """
             Get all fields available for a specific event type.
 
@@ -335,13 +325,13 @@ class SchemaTools:
                 if not schema:
                     return {
                         "error": f"Schema '{schema_id}' not found",
-                        "available_schemas": [s["schema_id"] for s in list_schemas()]
+                        "available_schemas": [s["schema_id"] for s in list_schemas()],
                     }
 
                 if not schema.has_event_type(event_type):
                     return {
                         "error": f"Event type '{event_type}' not supported by schema '{schema_id}'",
-                        "available_event_types": list(schema.event_types.keys())
+                        "available_event_types": list(schema.event_types.keys()),
                     }
 
                 event_def = schema.event_types[event_type]
@@ -351,7 +341,7 @@ class SchemaTools:
                     "event_code": event_def.event_code,
                     "description": event_def.description,
                     "category": event_def.category,
-                    "fields": event_def.fields
+                    "fields": event_def.fields,
                 }
 
             # Return for all schemas
@@ -362,20 +352,15 @@ class SchemaTools:
                     results[sid] = {
                         "event_code": event_def.event_code,
                         "description": event_def.description,
-                        "fields": event_def.fields
+                        "fields": event_def.fields,
                     }
 
             if not results:
                 return {
                     "error": f"Event type '{event_type}' not found in any schema",
                     "available_event_types": {
-                        sid: list(schema.event_types.keys())
-                        for sid, schema in SCHEMA_REGISTRY.items()
-                    }
+                        sid: list(schema.event_types.keys()) for sid, schema in SCHEMA_REGISTRY.items()
+                    },
                 }
 
-            return {
-                "event_type": event_type,
-                "schemas_supporting": list(results.keys()),
-                "mappings": results
-            }
+            return {"event_type": event_type, "schemas_supporting": list(results.keys()), "mappings": results}

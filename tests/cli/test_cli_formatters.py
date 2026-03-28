@@ -61,10 +61,22 @@ RULES_DATA = {
     "total_matching": 317,
     "showing": 3,
     "rules": [
-        {"rule_id": "win_test_1", "name": "Test Rule 1", "platform": "windows",
-         "log_source": "builtin", "type": "lucene", "mitre_tactics": ["credential_access"]},
-        {"rule_id": "win_test_2", "name": "Test Rule 2", "platform": "windows",
-         "log_source": "powershell", "type": "eql", "mitre_tactics": ["execution"]},
+        {
+            "rule_id": "win_test_1",
+            "name": "Test Rule 1",
+            "platform": "windows",
+            "log_source": "builtin",
+            "type": "lucene",
+            "mitre_tactics": ["credential_access"],
+        },
+        {
+            "rule_id": "win_test_2",
+            "name": "Test Rule 2",
+            "platform": "windows",
+            "log_source": "powershell",
+            "type": "eql",
+            "mitre_tactics": ["execution"],
+        },
     ],
     "statistics": {"total_rules_loaded": 6061, "by_platform": {"windows": 4305}},
 }
@@ -101,8 +113,15 @@ BEACONING_DATA = {
     "pcap_path": "/path/to/capture.pcap",
     "beacons": [],
     "patterns": [
-        {"src_ip": "10.0.2.16", "dst_ip": "173.194.70.106", "dst_port": 80,
-         "interval_mean": 1047.5, "jitter_percent": 88.0, "occurrence_count": 313, "confidence": "MEDIUM"},
+        {
+            "src_ip": "10.0.2.16",
+            "dst_ip": "173.194.70.106",
+            "dst_port": 80,
+            "interval_mean": 1047.5,
+            "jitter_percent": 88.0,
+            "occurrence_count": 313,
+            "confidence": "MEDIUM",
+        },
     ],
     "summary": {"total_patterns": 1, "high_confidence": 0, "medium_confidence": 1, "low_confidence": 0},
 }
@@ -111,6 +130,7 @@ BEACONING_DATA = {
 # ---------------------------------------------------------------------------
 # JSON format tests
 # ---------------------------------------------------------------------------
+
 
 class TestFormatJson:
     def test_health_json(self):
@@ -133,6 +153,7 @@ class TestFormatJson:
 # ---------------------------------------------------------------------------
 # Table format tests
 # ---------------------------------------------------------------------------
+
 
 class TestFormatTable:
     def test_health_table(self):
@@ -200,6 +221,7 @@ class TestFormatTable:
 # ---------------------------------------------------------------------------
 # Summary format tests
 # ---------------------------------------------------------------------------
+
 
 class TestFormatSummary:
     def test_health_summary(self):

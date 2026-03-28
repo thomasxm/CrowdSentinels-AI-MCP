@@ -9,9 +9,13 @@ class EQLQueryTools:
 
     def register_tools(self, mcp: FastMCP):
         @mcp.tool()
-        def eql_search(index: str, query: str, size: int = 100,
-                      filter_query: dict | None = None,
-                      timestamp_field: str = "@timestamp") -> dict:
+        def eql_search(
+            index: str,
+            query: str,
+            size: int = 100,
+            filter_query: dict | None = None,
+            timestamp_field: str = "@timestamp",
+        ) -> dict:
             """
             Execute an EQL (Event Query Language) query for advanced threat hunting.
             EQL is designed for event-based data and is excellent for detecting
@@ -39,11 +43,7 @@ class EQLQueryTools:
                    query: 'registry where registry.path == "*\\\\Run\\\\*"'
             """
             return self.search_client.eql_search(
-                index=index,
-                query=query,
-                size=size,
-                filter_query=filter_query,
-                timestamp_field=timestamp_field
+                index=index, query=query, size=size, filter_query=filter_query, timestamp_field=timestamp_field
             )
 
         @mcp.tool()

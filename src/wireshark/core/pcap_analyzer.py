@@ -1,5 +1,6 @@
 # src/wireshark/core/pcap_analyzer.py
 """PCAP file analyzer using TShark."""
+
 import hashlib
 import logging
 import re
@@ -78,11 +79,7 @@ class PcapAnalyzer:
                             pass
 
         # Get first packet timestamp
-        first_cmd = self.executor.build_command(
-            pcap_path=pcap_path,
-            fields=["frame.time_epoch"],
-            limit=1
-        )
+        first_cmd = self.executor.build_command(pcap_path=pcap_path, fields=["frame.time_epoch"], limit=1)
         _, first_out, _ = self.executor.execute(first_cmd, timeout=60)
 
         # Parse timestamps
@@ -98,10 +95,7 @@ class PcapAnalyzer:
 
         # Get last packet timestamp - read all timestamps and take the last one
         # More reliable than trying to get specific packet number
-        all_ts_cmd = self.executor.build_command(
-            pcap_path=pcap_path,
-            fields=["frame.time_epoch"]
-        )
+        all_ts_cmd = self.executor.build_command(pcap_path=pcap_path, fields=["frame.time_epoch"])
         _, all_ts_out, _ = self.executor.execute(all_ts_cmd, timeout=180)
 
         try:
@@ -128,7 +122,7 @@ class PcapAnalyzer:
             time_start=time_start,
             time_end=time_end,
             duration_seconds=duration,
-            protocols_detected=protocols
+            protocols_detected=protocols,
         )
 
     def get_protocol_list(self, pcap_path: str) -> list[str]:
@@ -170,12 +164,14 @@ class PcapAnalyzer:
                 protocol = match.group(1)
                 frames = int(match.group(2))
                 bytes_count = int(match.group(3))
-                stats.append(ProtocolStats(
-                    protocol=protocol,
-                    packet_count=frames,
-                    byte_count=bytes_count,
-                    percentage=0.0  # Calculate later
-                ))
+                stats.append(
+                    ProtocolStats(
+                        protocol=protocol,
+                        packet_count=frames,
+                        byte_count=bytes_count,
+                        percentage=0.0,  # Calculate later
+                    )
+                )
 
         # Calculate percentages
         total_packets = sum(s.packet_count for s in stats) if stats else 1
@@ -184,11 +180,7 @@ class PcapAnalyzer:
 
         return stats
 
-    def get_top_talkers(
-        self,
-        pcap_path: str,
-        limit: int = 20
-    ) -> list[TopTalker]:
+    def get_top_talkers(self, pcap_path: str, limit: int = 20) -> list[TopTalker]:
         """Get top communicating hosts by packet count.
 
         Args:
@@ -236,25 +228,27 @@ class PcapAnalyzer:
 
                     # Check if internal
                     is_internal = (
-                        ip.startswith("10.") or
-                        ip.startswith("192.168.") or
-                        ip.startswith("172.16.") or
-                        ip.startswith("172.17.") or
-                        ip.startswith("172.18.") or
-                        ip.startswith("172.19.") or
-                        ip.startswith("172.2") or
-                        ip.startswith("172.30.") or
-                        ip.startswith("172.31.")
+                        ip.startswith("10.")
+                        or ip.startswith("192.168.")
+                        or ip.startswith("172.16.")
+                        or ip.startswith("172.17.")
+                        or ip.startswith("172.18.")
+                        or ip.startswith("172.19.")
+                        or ip.startswith("172.2")
+                        or ip.startswith("172.30.")
+                        or ip.startswith("172.31.")
                     )
 
-                    talkers.append(TopTalker(
-                        ip=ip,
-                        packet_count=packets,
-                        byte_count=bytes_count,
-                        connection_count=0,  # Would need separate query
-                        protocols=[],
-                        is_internal=is_internal
-                    ))
+                    talkers.append(
+                        TopTalker(
+                            ip=ip,
+                            packet_count=packets,
+                            byte_count=bytes_count,
+                            connection_count=0,  # Would need separate query
+                            protocols=[],
+                            is_internal=is_internal,
+                        )
+                    )
                 except (ValueError, IndexError):
                     continue
 
@@ -289,12 +283,7 @@ class PcapAnalyzer:
             return int(value * 1024 * 1024 * 1024)
         return int(value)
 
-    def get_conversations(
-        self,
-        pcap_path: str,
-        protocol: str = "tcp",
-        limit: int = 50
-    ) -> list[dict]:
+    def get_conversations(self, pcap_path: str, protocol: str = "tcp", limit: int = 50) -> list[dict]:
         """Get conversation statistics.
 
         Args:
@@ -331,21 +320,13 @@ class PcapAnalyzer:
                     try:
                         src = parts[0]
                         dst = parts[2]
-                        conversations.append({
-                            "source": src,
-                            "destination": dst,
-                            "raw": line.strip()
-                        })
+                        conversations.append({"source": src, "destination": dst, "raw": line.strip()})
                     except IndexError:
                         continue
 
         return conversations[:limit]
 
-    def get_dns_queries(
-        self,
-        pcap_path: str,
-        limit: int = 500
-    ) -> list[dict]:
+    def get_dns_queries(self, pcap_path: str, limit: int = 500) -> list[dict]:
         """Get DNS queries from pcap.
 
         Args:
@@ -361,28 +342,24 @@ class PcapAnalyzer:
             pcap_path=pcap_path,
             fields=["dns.qry.name", "dns.qry.type", "dns.flags.rcode", "ip.src", "frame.time_epoch"],
             display_filter="dns.flags.response == 0",
-            limit=limit
+            limit=limit,
         )
 
         queries = []
         for row in results:
             if row.get("dns.qry.name"):
-                queries.append({
-                    "query_name": row.get("dns.qry.name", ""),
-                    "query_type": row.get("dns.qry.type", ""),
-                    "source_ip": row.get("ip.src", ""),
-                    "timestamp": row.get("frame.time_epoch", "")
-                })
+                queries.append(
+                    {
+                        "query_name": row.get("dns.qry.name", ""),
+                        "query_type": row.get("dns.qry.type", ""),
+                        "source_ip": row.get("ip.src", ""),
+                        "timestamp": row.get("frame.time_epoch", ""),
+                    }
+                )
 
         return queries
 
-    def follow_stream(
-        self,
-        pcap_path: str,
-        stream_type: str,
-        stream_index: int,
-        output_type: str = "ascii"
-    ) -> str:
+    def follow_stream(self, pcap_path: str, stream_type: str, stream_index: int, output_type: str = "ascii") -> str:
         """Follow and reconstruct a TCP/UDP stream.
 
         Args:
@@ -397,10 +374,7 @@ class PcapAnalyzer:
         self.validate_pcap(pcap_path)
 
         cmd = self.executor.build_follow_stream_command(
-            pcap_path=pcap_path,
-            stream_type=stream_type,
-            stream_index=stream_index,
-            output_type=output_type
+            pcap_path=pcap_path, stream_type=stream_type, stream_index=stream_index, output_type=output_type
         )
 
         returncode, stdout, stderr = self.executor.execute(cmd, timeout=120)

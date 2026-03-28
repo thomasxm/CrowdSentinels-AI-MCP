@@ -1,5 +1,6 @@
 # src/wireshark/extraction/object_extractor.py
 """HTTP/SMB/FTP object extraction from PCAP files."""
+
 import hashlib
 import logging
 import os
@@ -26,11 +27,7 @@ SUPPORTED_PROTOCOLS = {
 class ObjectExtractor:
     """Extract objects from network traffic captures."""
 
-    def __init__(
-        self,
-        store_files: bool = False,
-        storage_path: Path | None = None
-    ):
+    def __init__(self, store_files: bool = False, storage_path: Path | None = None):
         """Initialize object extractor.
 
         Args:
@@ -46,11 +43,7 @@ class ObjectExtractor:
         """Get list of supported protocols."""
         return list(SUPPORTED_PROTOCOLS.keys())
 
-    def list_objects(
-        self,
-        pcap_path: str,
-        protocol: str = "http"
-    ) -> list[dict]:
+    def list_objects(self, pcap_path: str, protocol: str = "http") -> list[dict]:
         """List objects in PCAP without extracting.
 
         Args:
@@ -69,17 +62,14 @@ class ObjectExtractor:
             try:
                 cmd = [
                     self._tshark_path,
-                    "-r", pcap_path,
-                    "--export-objects", f"{SUPPORTED_PROTOCOLS[protocol]},{tmpdir}",
-                    "-q"  # Quiet mode
+                    "-r",
+                    pcap_path,
+                    "--export-objects",
+                    f"{SUPPORTED_PROTOCOLS[protocol]},{tmpdir}",
+                    "-q",  # Quiet mode
                 ]
 
-                result = subprocess.run(
-                    cmd,
-                    capture_output=True,
-                    text=True,
-                    timeout=300
-                )
+                result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
 
                 # List extracted files
                 objects = []
@@ -87,11 +77,7 @@ class ObjectExtractor:
                     filepath = os.path.join(tmpdir, filename)
                     if os.path.isfile(filepath):
                         stat = os.stat(filepath)
-                        objects.append({
-                            "filename": filename,
-                            "size": stat.st_size,
-                            "protocol": protocol
-                        })
+                        objects.append({"filename": filename, "size": stat.st_size, "protocol": protocol})
 
                 return objects
 
@@ -103,11 +89,7 @@ class ObjectExtractor:
                 return []
 
     def extract_objects(
-        self,
-        pcap_path: str,
-        output_dir: str,
-        protocol: str = "http",
-        compute_hash: bool = True
+        self, pcap_path: str, output_dir: str, protocol: str = "http", compute_hash: bool = True
     ) -> dict[str, Any]:
         """Extract objects from PCAP to directory.
 
@@ -125,7 +107,7 @@ class ObjectExtractor:
                 "success": False,
                 "error": f"Unsupported protocol: {protocol}",
                 "extracted_count": 0,
-                "output_dir": output_dir
+                "output_dir": output_dir,
             }
 
         try:
@@ -134,17 +116,14 @@ class ObjectExtractor:
 
             cmd = [
                 self._tshark_path,
-                "-r", pcap_path,
-                "--export-objects", f"{SUPPORTED_PROTOCOLS[protocol]},{output_dir}",
-                "-q"
+                "-r",
+                pcap_path,
+                "--export-objects",
+                f"{SUPPORTED_PROTOCOLS[protocol]},{output_dir}",
+                "-q",
             ]
 
-            result = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                timeout=300
-            )
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
 
             # Get extracted objects
             extracted = []
@@ -155,7 +134,7 @@ class ObjectExtractor:
                         "filename": filename,
                         "size": os.path.getsize(filepath),
                         "path": filepath,
-                        "protocol": protocol
+                        "protocol": protocol,
                     }
 
                     if compute_hash:
@@ -163,35 +142,20 @@ class ObjectExtractor:
 
                     extracted.append(obj_info)
 
-            return {
-                "success": True,
-                "extracted_count": len(extracted),
-                "output_dir": output_dir,
-                "objects": extracted
-            }
+            return {"success": True, "extracted_count": len(extracted), "output_dir": output_dir, "objects": extracted}
 
         except subprocess.TimeoutExpired:
             return {
                 "success": False,
                 "error": "Timeout during extraction",
                 "extracted_count": 0,
-                "output_dir": output_dir
+                "output_dir": output_dir,
             }
         except Exception as e:
-            return {
-                "success": False,
-                "error": str(e),
-                "extracted_count": 0,
-                "output_dir": output_dir
-            }
+            return {"success": False, "error": str(e), "extracted_count": 0, "output_dir": output_dir}
 
     def build_metadata(
-        self,
-        object_data: dict,
-        src_ip: str,
-        dst_ip: str,
-        protocol: str,
-        timestamp: datetime | None = None
+        self, object_data: dict, src_ip: str, dst_ip: str, protocol: str, timestamp: datetime | None = None
     ) -> dict[str, Any]:
         """Build metadata dictionary for an extracted object.
 
@@ -214,15 +178,10 @@ class ObjectExtractor:
             "src_ip": src_ip,
             "dst_ip": dst_ip,
             "packet_number": object_data.get("packet"),
-            "timestamp": timestamp or datetime.now()
+            "timestamp": timestamp or datetime.now(),
         }
 
-    def create_extracted_object(
-        self,
-        metadata: dict,
-        pcap_path: str,
-        local_path: str | None = None
-    ) -> ExtractedObject:
+    def create_extracted_object(self, metadata: dict, pcap_path: str, local_path: str | None = None) -> ExtractedObject:
         """Create ExtractedObject model from metadata.
 
         Args:
@@ -247,14 +206,10 @@ class ObjectExtractor:
             dest_ip=metadata.get("dst_ip", "unknown"),
             timestamp=metadata.get("timestamp", datetime.now()),
             stored_locally=local_path is not None,
-            local_path=local_path
+            local_path=local_path,
         )
 
-    def filter_by_extension(
-        self,
-        objects: list[dict],
-        extensions: list[str]
-    ) -> list[dict]:
+    def filter_by_extension(self, objects: list[dict], extensions: list[str]) -> list[dict]:
         """Filter objects by file extension.
 
         Args:
@@ -277,12 +232,7 @@ class ObjectExtractor:
 
         return filtered
 
-    def filter_by_size(
-        self,
-        objects: list[dict],
-        min_size: int = 0,
-        max_size: int | None = None
-    ) -> list[dict]:
+    def filter_by_size(self, objects: list[dict], min_size: int = 0, max_size: int | None = None) -> list[dict]:
         """Filter objects by size.
 
         Args:
@@ -302,10 +252,7 @@ class ObjectExtractor:
 
         return filtered
 
-    def filter_suspicious(
-        self,
-        objects: list[dict]
-    ) -> list[dict]:
+    def filter_suspicious(self, objects: list[dict]) -> list[dict]:
         """Filter for potentially suspicious objects.
 
         Looks for: executables, scripts, archives, documents with macros
@@ -317,20 +264,39 @@ class ObjectExtractor:
             Suspicious objects
         """
         suspicious_extensions = [
-            ".exe", ".dll", ".scr", ".pif", ".bat", ".cmd", ".ps1",
-            ".vbs", ".js", ".jse", ".wsf", ".wsh",
-            ".zip", ".rar", ".7z", ".tar", ".gz",
-            ".doc", ".docm", ".xls", ".xlsm", ".ppt", ".pptm",
-            ".hta", ".msi", ".jar", ".class"
+            ".exe",
+            ".dll",
+            ".scr",
+            ".pif",
+            ".bat",
+            ".cmd",
+            ".ps1",
+            ".vbs",
+            ".js",
+            ".jse",
+            ".wsf",
+            ".wsh",
+            ".zip",
+            ".rar",
+            ".7z",
+            ".tar",
+            ".gz",
+            ".doc",
+            ".docm",
+            ".xls",
+            ".xlsm",
+            ".ppt",
+            ".pptm",
+            ".hta",
+            ".msi",
+            ".jar",
+            ".class",
         ]
 
         return self.filter_by_extension(objects, suspicious_extensions)
 
     def extract_from_pcap(
-        self,
-        pcap_path: str,
-        protocols: list[str] | None = None,
-        store_files: bool | None = None
+        self, pcap_path: str, protocols: list[str] | None = None, store_files: bool | None = None
     ) -> dict[str, Any]:
         """Extract all objects from PCAP file.
 
@@ -352,7 +318,7 @@ class ObjectExtractor:
             "pcap_path": pcap_path,
             "protocols_checked": protocols,
             "total_objects": 0,
-            "objects_by_protocol": {}
+            "objects_by_protocol": {},
         }
 
         for protocol in protocols:
@@ -363,19 +329,13 @@ class ObjectExtractor:
                 # Extract to storage path
                 output_dir = self.storage_path / f"extraction_{datetime.now().strftime('%Y%m%d_%H%M%S')}" / protocol
                 extraction = self.extract_objects(
-                    pcap_path=pcap_path,
-                    output_dir=str(output_dir),
-                    protocol=protocol,
-                    compute_hash=True
+                    pcap_path=pcap_path, output_dir=str(output_dir), protocol=protocol, compute_hash=True
                 )
             else:
                 # Extract to temp dir (will be cleaned up)
                 with tempfile.TemporaryDirectory() as tmpdir:
                     extraction = self.extract_objects(
-                        pcap_path=pcap_path,
-                        output_dir=tmpdir,
-                        protocol=protocol,
-                        compute_hash=True
+                        pcap_path=pcap_path, output_dir=tmpdir, protocol=protocol, compute_hash=True
                     )
 
             results["objects_by_protocol"][protocol] = extraction.get("objects", [])
@@ -401,10 +361,7 @@ class ObjectExtractor:
                 sha256_hash.update(chunk)
         return sha256_hash.hexdigest()
 
-    def get_extraction_summary(
-        self,
-        results: dict[str, Any]
-    ) -> str:
+    def get_extraction_summary(self, results: dict[str, Any]) -> str:
         """Generate human-readable extraction summary.
 
         Args:

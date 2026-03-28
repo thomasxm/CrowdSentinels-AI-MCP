@@ -29,19 +29,21 @@ def create_stage1_response(
     hosts: list = None,
     users: list = None,
     executables: list = None,
-    parent_processes: list = None
+    parent_processes: list = None,
 ) -> dict[str, Any]:
     """Create a mock Stage 1 (process bounds) response."""
     return {
         "hits_count": 1,
-        "results": [{
-            "start_time": start_time,
-            "end_time": end_time,
-            "hosts": hosts or ["VICTIM-PC"],
-            "users": users or ["admin"],
-            "executables": executables or ["C:\\malware\\maze.exe"],
-            "parent_processes": parent_processes or ["explorer.exe"]
-        }]
+        "results": [
+            {
+                "start_time": start_time,
+                "end_time": end_time,
+                "hosts": hosts or ["VICTIM-PC"],
+                "users": users or ["admin"],
+                "executables": executables or ["C:\\malware\\maze.exe"],
+                "parent_processes": parent_processes or ["explorer.exe"],
+            }
+        ],
     }
 
 
@@ -55,7 +57,7 @@ def create_stage2_response(child_processes: list = None) -> dict[str, Any]:
                 "process.name": "cmd.exe",
                 "process.executable": "C:\\Windows\\System32\\cmd.exe",
                 "process.command_line": "cmd.exe /c whoami",
-                "user.name": "admin"
+                "user.name": "admin",
             },
             {
                 "@timestamp": "2024-01-15T10:10:00.000Z",
@@ -63,7 +65,7 @@ def create_stage2_response(child_processes: list = None) -> dict[str, Any]:
                 "process.name": "powershell.exe",
                 "process.executable": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
                 "process.command_line": "powershell -enc SGVsbG8gV29ybGQ=",
-                "user.name": "admin"
+                "user.name": "admin",
             },
             {
                 "@timestamp": "2024-01-15T10:15:00.000Z",
@@ -71,13 +73,10 @@ def create_stage2_response(child_processes: list = None) -> dict[str, Any]:
                 "process.name": "vssadmin.exe",
                 "process.executable": "C:\\Windows\\System32\\vssadmin.exe",
                 "process.command_line": "vssadmin delete shadows /all /quiet",
-                "user.name": "SYSTEM"
-            }
+                "user.name": "SYSTEM",
+            },
         ]
-    return {
-        "hits_count": len(child_processes),
-        "results": child_processes
-    }
+    return {"hits_count": len(child_processes), "results": child_processes}
 
 
 def create_stage3_response(file_operations: list = None) -> dict[str, Any]:
@@ -90,7 +89,7 @@ def create_stage3_response(file_operations: list = None) -> dict[str, Any]:
                 "file.path": "C:\\Users\\admin\\Desktop\\DECRYPT-FILES.txt",
                 "file.name": "DECRYPT-FILES.txt",
                 "file.extension": "txt",
-                "process.name": "maze.exe"
+                "process.name": "maze.exe",
             },
             {
                 "@timestamp": "2024-01-15T10:07:00.000Z",
@@ -98,7 +97,7 @@ def create_stage3_response(file_operations: list = None) -> dict[str, Any]:
                 "file.path": "C:\\Users\\admin\\Documents\\important.docx.encrypted",
                 "file.name": "important.docx.encrypted",
                 "file.extension": "encrypted",
-                "process.name": "maze.exe"
+                "process.name": "maze.exe",
             },
             {
                 "@timestamp": "2024-01-15T10:08:00.000Z",
@@ -106,13 +105,10 @@ def create_stage3_response(file_operations: list = None) -> dict[str, Any]:
                 "file.path": "C:\\Windows\\Temp\\payload.dll",
                 "file.name": "payload.dll",
                 "file.extension": "dll",
-                "process.name": "maze.exe"
-            }
+                "process.name": "maze.exe",
+            },
         ]
-    return {
-        "hits_count": len(file_operations),
-        "results": file_operations
-    }
+    return {"hits_count": len(file_operations), "results": file_operations}
 
 
 def create_stage4_response(network_connections: list = None) -> dict[str, Any]:
@@ -125,7 +121,7 @@ def create_stage4_response(network_connections: list = None) -> dict[str, Any]:
                 "process.name": "maze.exe",
                 "destination.ip": "185.220.101.42",
                 "destination.port": 443,
-                "network.protocol": "tcp"
+                "network.protocol": "tcp",
             },
             {
                 "@timestamp": "2024-01-15T10:12:00.000Z",
@@ -133,7 +129,7 @@ def create_stage4_response(network_connections: list = None) -> dict[str, Any]:
                 "process.name": "maze.exe",
                 "destination.ip": "91.219.236.222",
                 "destination.port": 8080,
-                "network.protocol": "tcp"
+                "network.protocol": "tcp",
             },
             {
                 "@timestamp": "2024-01-15T10:20:00.000Z",
@@ -141,13 +137,10 @@ def create_stage4_response(network_connections: list = None) -> dict[str, Any]:
                 "process.name": "powershell.exe",
                 "destination.ip": "185.220.101.42",
                 "destination.port": 443,
-                "network.protocol": "tcp"
-            }
+                "network.protocol": "tcp",
+            },
         ]
-    return {
-        "hits_count": len(network_connections),
-        "results": network_connections
-    }
+    return {"hits_count": len(network_connections), "results": network_connections}
 
 
 class TestHuntSuspiciousProcessActivity:
@@ -200,7 +193,7 @@ class TestHuntSuspiciousProcessActivity:
             include_registry=False,
             include_process_access=False,
             include_remote_threads=False,
-            include_dns=False
+            include_dns=False,
         )
 
         # Verify IoCs extracted
@@ -213,7 +206,9 @@ class TestHuntSuspiciousProcessActivity:
         # Check process IoCs from Stage 2 (child processes)
         # Note: IoCs come from child process executables, not the main process
         assert "C:\\Windows\\System32\\cmd.exe" in iocs["processes"], "Should extract child process executable"
-        assert "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" in iocs["processes"], "Should extract powershell executable"
+        assert "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" in iocs["processes"], (
+            "Should extract powershell executable"
+        )
         assert "C:\\Windows\\System32\\vssadmin.exe" in iocs["processes"], "Should extract vssadmin executable"
         print(f"  ✓ Processes extracted: {len(iocs['processes'])} unique")
 
@@ -241,20 +236,36 @@ class TestHuntSuspiciousProcessActivity:
                 return create_stage1_response()
             if call_count[0] == 2:
                 # Return duplicate process names
-                return create_stage2_response([
-                    {"@timestamp": "2024-01-15T10:05:00.000Z", "process.name": "cmd.exe", "process.executable": "C:\\Windows\\System32\\cmd.exe"},
-                    {"@timestamp": "2024-01-15T10:06:00.000Z", "process.name": "cmd.exe", "process.executable": "C:\\Windows\\System32\\cmd.exe"},
-                    {"@timestamp": "2024-01-15T10:07:00.000Z", "process.name": "cmd.exe", "process.executable": "C:\\Windows\\System32\\cmd.exe"},
-                ])
+                return create_stage2_response(
+                    [
+                        {
+                            "@timestamp": "2024-01-15T10:05:00.000Z",
+                            "process.name": "cmd.exe",
+                            "process.executable": "C:\\Windows\\System32\\cmd.exe",
+                        },
+                        {
+                            "@timestamp": "2024-01-15T10:06:00.000Z",
+                            "process.name": "cmd.exe",
+                            "process.executable": "C:\\Windows\\System32\\cmd.exe",
+                        },
+                        {
+                            "@timestamp": "2024-01-15T10:07:00.000Z",
+                            "process.name": "cmd.exe",
+                            "process.executable": "C:\\Windows\\System32\\cmd.exe",
+                        },
+                    ]
+                )
             if call_count[0] == 3:
                 return create_stage3_response([])
             if call_count[0] == 4:
                 # Return duplicate IPs
-                return create_stage4_response([
-                    {"@timestamp": "2024-01-15T10:02:00.000Z", "destination.ip": "185.220.101.42"},
-                    {"@timestamp": "2024-01-15T10:03:00.000Z", "destination.ip": "185.220.101.42"},
-                    {"@timestamp": "2024-01-15T10:04:00.000Z", "destination.ip": "185.220.101.42"},
-                ])
+                return create_stage4_response(
+                    [
+                        {"@timestamp": "2024-01-15T10:02:00.000Z", "destination.ip": "185.220.101.42"},
+                        {"@timestamp": "2024-01-15T10:03:00.000Z", "destination.ip": "185.220.101.42"},
+                        {"@timestamp": "2024-01-15T10:04:00.000Z", "destination.ip": "185.220.101.42"},
+                    ]
+                )
             return {"hits_count": 0, "results": []}
 
         self.mock_esql_client.execute = mock_execute
@@ -266,7 +277,7 @@ class TestHuntSuspiciousProcessActivity:
             include_registry=False,
             include_process_access=False,
             include_remote_threads=False,
-            include_dns=False
+            include_dns=False,
         )
 
         iocs = result["iocs"]
@@ -274,7 +285,9 @@ class TestHuntSuspiciousProcessActivity:
         # Check deduplication
         assert iocs["ips"].count("185.220.101.42") == 1, "IP should appear only once"
         # Note: IoCs use process.executable (full path), not process.name
-        assert iocs["processes"].count("C:\\Windows\\System32\\cmd.exe") == 1, "Process executable should appear only once"
+        assert iocs["processes"].count("C:\\Windows\\System32\\cmd.exe") == 1, (
+            "Process executable should appear only once"
+        )
 
         print(f"  ✓ IPs deduplicated: {iocs['ips']}")
         print(f"  ✓ Processes deduplicated: {iocs['processes']}")
@@ -291,17 +304,15 @@ class TestHuntSuspiciousProcessActivity:
             if call_count[0] == 1:
                 return create_stage1_response()
             if call_count[0] == 2:
-                return create_stage2_response([
-                    {"@timestamp": "2024-01-15T10:15:00.000Z", "process.name": "late_process.exe"}
-                ])
+                return create_stage2_response(
+                    [{"@timestamp": "2024-01-15T10:15:00.000Z", "process.name": "late_process.exe"}]
+                )
             if call_count[0] == 3:
-                return create_stage3_response([
-                    {"@timestamp": "2024-01-15T10:05:00.000Z", "file.path": "C:\\early_file.txt"}
-                ])
+                return create_stage3_response(
+                    [{"@timestamp": "2024-01-15T10:05:00.000Z", "file.path": "C:\\early_file.txt"}]
+                )
             if call_count[0] == 4:
-                return create_stage4_response([
-                    {"@timestamp": "2024-01-15T10:10:00.000Z", "destination.ip": "1.2.3.4"}
-                ])
+                return create_stage4_response([{"@timestamp": "2024-01-15T10:10:00.000Z", "destination.ip": "1.2.3.4"}])
             return {"hits_count": 0, "results": []}
 
         self.mock_esql_client.execute = mock_execute
@@ -313,7 +324,7 @@ class TestHuntSuspiciousProcessActivity:
             include_registry=False,
             include_process_access=False,
             include_remote_threads=False,
-            include_dns=False
+            include_dns=False,
         )
 
         timeline = result["timeline"]
@@ -358,7 +369,7 @@ class TestHuntSuspiciousProcessActivity:
             include_registry=False,
             include_process_access=False,
             include_remote_threads=False,
-            include_dns=False
+            include_dns=False,
         )
 
         summary = result["summary"]
@@ -396,7 +407,7 @@ class TestHuntSuspiciousProcessActivity:
             include_registry=False,
             include_process_access=False,
             include_remote_threads=False,
-            include_dns=False
+            include_dns=False,
         )
 
         assert result["process_bounds"] is None
@@ -440,7 +451,7 @@ class TestHuntSuspiciousProcessActivity:
             include_registry=False,
             include_process_access=False,
             include_remote_threads=False,
-            include_dns=False
+            include_dns=False,
         )
 
         # Should only execute 2 queries (Stage 1 + Stage 2)
@@ -482,7 +493,7 @@ class TestHuntSuspiciousProcessActivity:
             include_registry=False,
             include_process_access=False,
             include_remote_threads=False,
-            include_dns=False
+            include_dns=False,
         )
 
         # Should have errors recorded
@@ -517,31 +528,60 @@ class TestHuntSuspiciousProcessActivity:
                     hosts=["FINANCE-PC-01"],
                     users=["john.smith"],
                     executables=["C:\\Users\\john.smith\\Downloads\\invoice.exe"],
-                    parent_processes=["outlook.exe"]
+                    parent_processes=["outlook.exe"],
                 )
             if call_count[0] == 2:
-                return create_stage2_response([
-                    {"@timestamp": "2024-01-15T10:01:00.000Z", "process.name": "wmic.exe",
-                     "process.executable": "C:\\Windows\\System32\\wbem\\WMIC.exe",
-                     "process.command_line": "wmic shadowcopy delete"},
-                    {"@timestamp": "2024-01-15T10:02:00.000Z", "process.name": "vssadmin.exe",
-                     "process.executable": "C:\\Windows\\System32\\vssadmin.exe",
-                     "process.command_line": "vssadmin delete shadows /all /quiet"},
-                    {"@timestamp": "2024-01-15T10:03:00.000Z", "process.name": "bcdedit.exe",
-                     "process.executable": "C:\\Windows\\System32\\bcdedit.exe",
-                     "process.command_line": "bcdedit /set {default} recoveryenabled No"},
-                ])
+                return create_stage2_response(
+                    [
+                        {
+                            "@timestamp": "2024-01-15T10:01:00.000Z",
+                            "process.name": "wmic.exe",
+                            "process.executable": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+                            "process.command_line": "wmic shadowcopy delete",
+                        },
+                        {
+                            "@timestamp": "2024-01-15T10:02:00.000Z",
+                            "process.name": "vssadmin.exe",
+                            "process.executable": "C:\\Windows\\System32\\vssadmin.exe",
+                            "process.command_line": "vssadmin delete shadows /all /quiet",
+                        },
+                        {
+                            "@timestamp": "2024-01-15T10:03:00.000Z",
+                            "process.name": "bcdedit.exe",
+                            "process.executable": "C:\\Windows\\System32\\bcdedit.exe",
+                            "process.command_line": "bcdedit /set {default} recoveryenabled No",
+                        },
+                    ]
+                )
             if call_count[0] == 3:
-                return create_stage3_response([
-                    {"@timestamp": "2024-01-15T10:05:00.000Z", "file.path": "C:\\README_DECRYPT.txt"},
-                    {"@timestamp": "2024-01-15T10:06:00.000Z", "file.path": "C:\\Users\\john.smith\\Documents\\Q4_Report.xlsx.encrypted"},
-                    {"@timestamp": "2024-01-15T10:07:00.000Z", "file.path": "C:\\Users\\john.smith\\Desktop\\family_photos.zip.encrypted"},
-                ])
+                return create_stage3_response(
+                    [
+                        {"@timestamp": "2024-01-15T10:05:00.000Z", "file.path": "C:\\README_DECRYPT.txt"},
+                        {
+                            "@timestamp": "2024-01-15T10:06:00.000Z",
+                            "file.path": "C:\\Users\\john.smith\\Documents\\Q4_Report.xlsx.encrypted",
+                        },
+                        {
+                            "@timestamp": "2024-01-15T10:07:00.000Z",
+                            "file.path": "C:\\Users\\john.smith\\Desktop\\family_photos.zip.encrypted",
+                        },
+                    ]
+                )
             if call_count[0] == 4:
-                return create_stage4_response([
-                    {"@timestamp": "2024-01-15T10:00:30.000Z", "destination.ip": "45.33.32.156", "destination.port": 443},
-                    {"@timestamp": "2024-01-15T10:04:00.000Z", "destination.ip": "185.141.62.123", "destination.port": 8443},
-                ])
+                return create_stage4_response(
+                    [
+                        {
+                            "@timestamp": "2024-01-15T10:00:30.000Z",
+                            "destination.ip": "45.33.32.156",
+                            "destination.port": 443,
+                        },
+                        {
+                            "@timestamp": "2024-01-15T10:04:00.000Z",
+                            "destination.ip": "185.141.62.123",
+                            "destination.port": 8443,
+                        },
+                    ]
+                )
             return {"hits_count": 0, "results": []}
 
         self.mock_esql_client.execute = mock_execute
@@ -555,7 +595,7 @@ class TestHuntSuspiciousProcessActivity:
             include_registry=False,
             include_process_access=False,
             include_remote_threads=False,
-            include_dns=False
+            include_dns=False,
         )
 
         iocs = result["iocs"]

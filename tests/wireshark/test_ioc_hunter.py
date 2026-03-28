@@ -1,5 +1,6 @@
 # tests/wireshark/test_ioc_hunter.py
 """Tests for IoC hunter."""
+
 from pathlib import Path
 
 import pytest
@@ -88,7 +89,7 @@ class TestIoCHunter:
         # Hunt for common DNS servers (should find in normal traffic)
         results = hunter.hunt_iocs_in_pcap(
             pcap_path=str(pcap_files[0]),
-            ip_iocs=["8.8.8.8", "1.1.1.1"]  # Common DNS servers
+            ip_iocs=["8.8.8.8", "1.1.1.1"],  # Common DNS servers
         )
 
         assert "matches" in results

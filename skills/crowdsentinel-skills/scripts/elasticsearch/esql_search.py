@@ -24,7 +24,7 @@ import json
 import os
 import signal
 import sys
-from typing import Dict, Any, List, Tuple
+from typing import Any
 
 try:
     from elasticsearch import Elasticsearch
@@ -90,9 +90,7 @@ def get_es_client() -> Elasticsearch:
     es_version = int(elasticsearch.__version__[0])
 
     if api_key:
-        return Elasticsearch(
-            hosts=hosts.split(","), api_key=api_key, verify_certs=verify_certs
-        )
+        return Elasticsearch(hosts=hosts.split(","), api_key=api_key, verify_certs=verify_certs)
     elif es_version >= 8:
         # v8.x uses basic_auth
         return Elasticsearch(
@@ -109,7 +107,7 @@ def get_es_client() -> Elasticsearch:
         )
 
 
-def check_esql_support(es: Elasticsearch) -> Tuple[bool, str]:
+def check_esql_support(es: Elasticsearch) -> tuple[bool, str]:
     """Check if ES|QL is supported by the connected cluster.
 
     Validates both the Python library version (requires 8.x+) and
@@ -141,7 +139,7 @@ def check_esql_support(es: Elasticsearch) -> Tuple[bool, str]:
     return True, "OK"
 
 
-def esql_search(query: str) -> Dict[str, Any]:
+def esql_search(query: str) -> dict[str, Any]:
     """Execute an ES|QL query against Elasticsearch.
 
     Validates ES|QL support before executing the query.
@@ -172,7 +170,7 @@ def esql_search(query: str) -> Dict[str, Any]:
     return response
 
 
-def format_table(columns: List[Dict], values: List[List]) -> str:
+def format_table(columns: list[dict], values: list[list]) -> str:
     """Format ES|QL results as a text table.
 
     Args:
@@ -205,10 +203,7 @@ def format_table(columns: List[Dict], values: List[List]) -> str:
 
     # Rows
     for row in values:
-        row_str = " | ".join(
-            str(val if val is not None else "null")[:50].ljust(widths[i])
-            for i, val in enumerate(row)
-        )
+        row_str = " | ".join(str(val if val is not None else "null")[:50].ljust(widths[i]) for i, val in enumerate(row))
         lines.append(row_str)
 
     return "\n".join(lines)
@@ -281,14 +276,12 @@ Exit Codes:
             print(format_table(columns, values))
         else:
             # Summary output
-            print(f"\n=== Results Summary ===")
-            print(
-                f"Columns: {', '.join(col.get('name', '?') for col in columns)}"
-            )
+            print("\n=== Results Summary ===")
+            print(f"Columns: {', '.join(col.get('name', '?') for col in columns)}")
             print(f"Rows: {len(values)}")
 
             if values:
-                print(f"\nFirst 5 rows:")
+                print("\nFirst 5 rows:")
                 print(format_table(columns, values[:5]))
 
                 if len(values) > 5:

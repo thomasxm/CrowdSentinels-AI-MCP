@@ -1,5 +1,6 @@
 # src/wireshark/reporting/report_generator.py
 """NCSC-style incident report generator."""
+
 import json
 import logging
 from datetime import datetime
@@ -26,7 +27,7 @@ class ReportGenerator:
         pcap_path: str,
         findings: dict[str, Any],
         investigation_id: str | None = None,
-        include_raw_json: bool = True
+        include_raw_json: bool = True,
     ) -> str:
         """Generate complete NCSC-style markdown report.
 
@@ -172,24 +173,17 @@ class ReportGenerator:
         if beacons:
             high_conf = [b for b in beacons if b.get("confidence") == "high"]
             summary_parts.append(
-                f"Detected {len(beacons)} potential beaconing patterns "
-                f"({len(high_conf)} high confidence)."
+                f"Detected {len(beacons)} potential beaconing patterns ({len(high_conf)} high confidence)."
             )
 
         if lateral:
-            summary_parts.append(
-                f"Identified {len(lateral)} lateral movement indicators."
-            )
+            summary_parts.append(f"Identified {len(lateral)} lateral movement indicators.")
 
         if anomalies:
-            summary_parts.append(
-                f"Found {len(anomalies)} network anomalies requiring investigation."
-            )
+            summary_parts.append(f"Found {len(anomalies)} network anomalies requiring investigation.")
 
         if iocs:
-            summary_parts.append(
-                f"Extracted {len(iocs)} indicators of compromise."
-            )
+            summary_parts.append(f"Extracted {len(iocs)} indicators of compromise.")
 
         if not summary_parts:
             return "No significant findings detected during analysis."
@@ -328,11 +322,7 @@ class ReportGenerator:
 
         return steps
 
-    def export_to_json(
-        self,
-        investigation_id: str,
-        findings: dict[str, Any]
-    ) -> dict[str, Any]:
+    def export_to_json(self, investigation_id: str, findings: dict[str, Any]) -> dict[str, Any]:
         """Export report data as JSON.
 
         Args:
@@ -353,7 +343,7 @@ class ReportGenerator:
                 "beaconing": findings.get("beaconing", []),
                 "anomalies": findings.get("anomalies", []),
                 "lateral_movement": findings.get("lateral_movement", []),
-            }
+            },
         }
 
     def _extract_affected_assets(self, findings: dict[str, Any]) -> list[dict]:
@@ -371,11 +361,7 @@ class ReportGenerator:
         for beacon in findings.get("beaconing", []):
             src_ip = beacon.get("src_ip")
             if src_ip and src_ip not in assets:
-                assets[src_ip] = {
-                    "ip": src_ip,
-                    "hostname": beacon.get("hostname", "N/A"),
-                    "role": "source"
-                }
+                assets[src_ip] = {"ip": src_ip, "hostname": beacon.get("hostname", "N/A"), "role": "source"}
 
         # Extract from lateral movement
         for mov in findings.get("lateral_movement", []):
@@ -383,17 +369,9 @@ class ReportGenerator:
             dst_ip = mov.get("dst_ip")
 
             if src_ip and src_ip not in assets:
-                assets[src_ip] = {
-                    "ip": src_ip,
-                    "hostname": "N/A",
-                    "role": "source"
-                }
+                assets[src_ip] = {"ip": src_ip, "hostname": "N/A", "role": "source"}
             if dst_ip and dst_ip not in assets:
-                assets[dst_ip] = {
-                    "ip": dst_ip,
-                    "hostname": "N/A",
-                    "role": "target"
-                }
+                assets[dst_ip] = {"ip": dst_ip, "hostname": "N/A", "role": "target"}
 
         return list(assets.values())
 
@@ -410,11 +388,13 @@ class ReportGenerator:
 
         # Add beaconing events
         for beacon in findings.get("beaconing", []):
-            events.append({
-                "timestamp": beacon.get("timestamp", 0),
-                "src_ip": beacon.get("src_ip", "unknown"),
-                "dst_ip": beacon.get("dst_ip", "unknown"),
-            })
+            events.append(
+                {
+                    "timestamp": beacon.get("timestamp", 0),
+                    "src_ip": beacon.get("src_ip", "unknown"),
+                    "dst_ip": beacon.get("dst_ip", "unknown"),
+                }
+            )
 
         if events:
             target_ip = events[0].get("dst_ip", "unknown")
@@ -503,11 +483,7 @@ class ReportGenerator:
 
         return items
 
-    def save_report(
-        self,
-        report: str,
-        output_path: str
-    ) -> bool:
+    def save_report(self, report: str, output_path: str) -> bool:
         """Save report to file.
 
         Args:

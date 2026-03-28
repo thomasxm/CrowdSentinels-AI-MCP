@@ -1,5 +1,6 @@
 # tests/wireshark/test_lateral_movement.py
 """Tests for lateral movement detector."""
+
 from pathlib import Path
 
 import pytest
@@ -17,10 +18,20 @@ class TestLateralMovementDetector:
         detector = LateralMovementDetector()
 
         connections = [
-            {"src_ip": "192.168.1.100", "dst_ip": "192.168.1.50", "dst_port": 445,
-             "protocol": "tcp", "timestamp": 1704067200.0},
-            {"src_ip": "192.168.1.100", "dst_ip": "8.8.8.8", "dst_port": 443,
-             "protocol": "tcp", "timestamp": 1704067201.0},
+            {
+                "src_ip": "192.168.1.100",
+                "dst_ip": "192.168.1.50",
+                "dst_port": 445,
+                "protocol": "tcp",
+                "timestamp": 1704067200.0,
+            },
+            {
+                "src_ip": "192.168.1.100",
+                "dst_ip": "8.8.8.8",
+                "dst_port": 443,
+                "protocol": "tcp",
+                "timestamp": 1704067201.0,
+            },
         ]
 
         findings = detector.detect_smb_movement(connections)
@@ -37,8 +48,13 @@ class TestLateralMovementDetector:
         detector = LateralMovementDetector()
 
         connections = [
-            {"src_ip": "10.0.0.5", "dst_ip": "10.0.0.100", "dst_port": 3389,
-             "protocol": "tcp", "timestamp": 1704067200.0},
+            {
+                "src_ip": "10.0.0.5",
+                "dst_ip": "10.0.0.100",
+                "dst_port": 3389,
+                "protocol": "tcp",
+                "timestamp": 1704067200.0,
+            },
         ]
 
         findings = detector.detect_rdp_movement(connections)
@@ -53,10 +69,20 @@ class TestLateralMovementDetector:
         detector = LateralMovementDetector()
 
         connections = [
-            {"src_ip": "192.168.1.100", "dst_ip": "192.168.1.50", "dst_port": 5985,
-             "protocol": "tcp", "timestamp": 1704067200.0},
-            {"src_ip": "192.168.1.100", "dst_ip": "192.168.1.51", "dst_port": 5986,
-             "protocol": "tcp", "timestamp": 1704067201.0},
+            {
+                "src_ip": "192.168.1.100",
+                "dst_ip": "192.168.1.50",
+                "dst_port": 5985,
+                "protocol": "tcp",
+                "timestamp": 1704067200.0,
+            },
+            {
+                "src_ip": "192.168.1.100",
+                "dst_ip": "192.168.1.51",
+                "dst_port": 5986,
+                "protocol": "tcp",
+                "timestamp": 1704067201.0,
+            },
         ]
 
         findings = detector.detect_winrm_movement(connections)
@@ -71,8 +97,13 @@ class TestLateralMovementDetector:
         detector = LateralMovementDetector()
 
         connections = [
-            {"src_ip": "192.168.1.100", "dst_ip": "8.8.8.8", "dst_port": 445,
-             "protocol": "tcp", "timestamp": 1704067200.0},
+            {
+                "src_ip": "192.168.1.100",
+                "dst_ip": "8.8.8.8",
+                "dst_port": 445,
+                "protocol": "tcp",
+                "timestamp": 1704067200.0,
+            },
         ]
 
         findings = detector.detect_smb_movement(connections)
@@ -88,8 +119,13 @@ class TestLateralMovementDetector:
 
         # Single source hitting many internal hosts on port 445
         connections = [
-            {"src_ip": "192.168.1.100", "dst_ip": f"192.168.1.{i}", "dst_port": 445,
-             "protocol": "tcp", "timestamp": 1704067200.0 + i}
+            {
+                "src_ip": "192.168.1.100",
+                "dst_ip": f"192.168.1.{i}",
+                "dst_port": 445,
+                "protocol": "tcp",
+                "timestamp": 1704067200.0 + i,
+            }
             for i in range(10, 20)
         ]
 
@@ -106,12 +142,27 @@ class TestLateralMovementDetector:
         detector = LateralMovementDetector()
 
         connections = [
-            {"src_ip": "192.168.1.100", "dst_ip": "192.168.1.50", "dst_port": 445,
-             "protocol": "tcp", "timestamp": 1704067200.0},
-            {"src_ip": "192.168.1.100", "dst_ip": "192.168.1.51", "dst_port": 3389,
-             "protocol": "tcp", "timestamp": 1704067201.0},
-            {"src_ip": "192.168.1.100", "dst_ip": "192.168.1.52", "dst_port": 5985,
-             "protocol": "tcp", "timestamp": 1704067202.0},
+            {
+                "src_ip": "192.168.1.100",
+                "dst_ip": "192.168.1.50",
+                "dst_port": 445,
+                "protocol": "tcp",
+                "timestamp": 1704067200.0,
+            },
+            {
+                "src_ip": "192.168.1.100",
+                "dst_ip": "192.168.1.51",
+                "dst_port": 3389,
+                "protocol": "tcp",
+                "timestamp": 1704067201.0,
+            },
+            {
+                "src_ip": "192.168.1.100",
+                "dst_ip": "192.168.1.52",
+                "dst_port": 5985,
+                "protocol": "tcp",
+                "timestamp": 1704067202.0,
+            },
         ]
 
         results = detector.detect_all(connections)
@@ -131,10 +182,22 @@ class TestLateralMovementDetector:
 
         # PsExec typically: SMB connection + admin share access + service pipe
         connections = [
-            {"src_ip": "192.168.1.100", "dst_ip": "192.168.1.50", "dst_port": 445,
-             "protocol": "tcp", "timestamp": 1704067200.0, "smb_path": "\\\\192.168.1.50\\ADMIN$"},
-            {"src_ip": "192.168.1.100", "dst_ip": "192.168.1.50", "dst_port": 445,
-             "protocol": "tcp", "timestamp": 1704067201.0, "smb_pipe": "\\pipe\\svcctl"},
+            {
+                "src_ip": "192.168.1.100",
+                "dst_ip": "192.168.1.50",
+                "dst_port": 445,
+                "protocol": "tcp",
+                "timestamp": 1704067200.0,
+                "smb_path": "\\\\192.168.1.50\\ADMIN$",
+            },
+            {
+                "src_ip": "192.168.1.100",
+                "dst_ip": "192.168.1.50",
+                "dst_port": 445,
+                "protocol": "tcp",
+                "timestamp": 1704067201.0,
+                "smb_pipe": "\\pipe\\svcctl",
+            },
         ]
 
         findings = detector.detect_psexec_pattern(connections)
@@ -153,7 +216,7 @@ class TestLateralMovementDetector:
             "dst_ip": "192.168.1.50",
             "movement_type": "smb",
             "admin_share_access": True,
-            "pipe_access": True
+            "pipe_access": True,
         }
 
         score = detector.calculate_risk_score(finding)

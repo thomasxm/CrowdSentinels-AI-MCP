@@ -1,5 +1,6 @@
 # tests/wireshark/test_object_extractor.py
 """Tests for object extractor."""
+
 import tempfile
 from pathlib import Path
 
@@ -36,11 +37,7 @@ class TestObjectExtractor:
         extractor = ObjectExtractor()
 
         with tempfile.TemporaryDirectory() as tmpdir:
-            result = extractor.extract_objects(
-                pcap_path=str(pcap_files[0]),
-                output_dir=tmpdir,
-                protocol="http"
-            )
+            result = extractor.extract_objects(pcap_path=str(pcap_files[0]), output_dir=tmpdir, protocol="http")
 
             assert "extracted_count" in result
             assert "output_dir" in result
@@ -57,14 +54,11 @@ class TestObjectExtractor:
             "hostname": "example.com",
             "content_type": "text/html",
             "size": 1024,
-            "filename": "index.html"
+            "filename": "index.html",
         }
 
         metadata = extractor.build_metadata(
-            object_data=object_data,
-            src_ip="192.168.1.100",
-            dst_ip="93.184.216.34",
-            protocol="http"
+            object_data=object_data, src_ip="192.168.1.100", dst_ip="93.184.216.34", protocol="http"
         )
 
         assert metadata["filename"] == "index.html"
@@ -138,13 +132,10 @@ class TestObjectExtractor:
             "sha256": "abc123def456",
             "src_ip": "192.168.1.100",
             "dst_ip": "8.8.8.8",
-            "mime_type": "application/octet-stream"
+            "mime_type": "application/octet-stream",
         }
 
-        obj = extractor.create_extracted_object(
-            metadata=metadata,
-            pcap_path="/tmp/test.pcap"
-        )
+        obj = extractor.create_extracted_object(metadata=metadata, pcap_path="/tmp/test.pcap")
 
         assert isinstance(obj, ExtractedObject)
         assert obj.filename == "test.exe"

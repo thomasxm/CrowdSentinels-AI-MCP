@@ -21,6 +21,7 @@ from src.version import __version__
 # Output formatting helpers
 # ---------------------------------------------------------------------------
 
+
 def _format_json(data: Any) -> str:
     """Return pretty-printed JSON."""
     return json.dumps(data, indent=2, default=str)
@@ -51,7 +52,9 @@ def _format_table(data: Any) -> str:
             lines.append("=== MITRE ATT&CK ===")
             for t in mitre:
                 if isinstance(t, dict):
-                    lines.append(f"  {t.get('technique_id','?')} {t.get('technique_name','?')} [{t.get('tactic','?')}] (x{t.get('count','')})")
+                    lines.append(
+                        f"  {t.get('technique_id', '?')} {t.get('technique_name', '?')} [{t.get('tactic', '?')}] (x{t.get('count', '')})"
+                    )
             lines.append("")
 
         # IoCs from analyse (piped from hunt)
@@ -100,7 +103,9 @@ def _format_table(data: Any) -> str:
             lines.append("=== Top Protocols ===")
             for p in protocols[:10]:
                 if isinstance(p, dict):
-                    lines.append(f"  {p.get('protocol','?'):15s} pkts={p.get('packet_count',0):>6}  bytes={p.get('byte_count',0):>10}  ({p.get('percentage',0):.1f}%)")
+                    lines.append(
+                        f"  {p.get('protocol', '?'):15s} pkts={p.get('packet_count', 0):>6}  bytes={p.get('byte_count', 0):>10}  ({p.get('percentage', 0):.1f}%)"
+                    )
             lines.append("")
 
         talkers = data.get("top_talkers", [])
@@ -109,7 +114,9 @@ def _format_table(data: Any) -> str:
             for t in talkers[:10]:
                 if isinstance(t, dict):
                     internal = " [internal]" if t.get("is_internal") else ""
-                    lines.append(f"  {t.get('ip','?'):20s} pkts={t.get('packet_count',0):>6}  bytes={t.get('byte_count',0):>10}{internal}")
+                    lines.append(
+                        f"  {t.get('ip', '?'):20s} pkts={t.get('packet_count', 0):>6}  bytes={t.get('byte_count', 0):>10}{internal}"
+                    )
             lines.append("")
 
         return "\n".join(lines)
@@ -129,8 +136,10 @@ def _format_table(data: Any) -> str:
             lines.append("=== Detected Patterns ===")
             for p in patterns:
                 if isinstance(p, dict):
-                    lines.append(f"  {p.get('src_ip','?')} → {p.get('dst_ip','?')}:{p.get('dst_port','?')}")
-                    lines.append(f"    interval={p.get('interval_mean',0):.0f}s  jitter={p.get('jitter_percent',0):.1f}%  count={p.get('occurrence_count',0)}  confidence={p.get('confidence','?')}")
+                    lines.append(f"  {p.get('src_ip', '?')} → {p.get('dst_ip', '?')}:{p.get('dst_port', '?')}")
+                    lines.append(
+                        f"    interval={p.get('interval_mean', 0):.0f}s  jitter={p.get('jitter_percent', 0):.1f}%  count={p.get('occurrence_count', 0)}  confidence={p.get('confidence', '?')}"
+                    )
             lines.append("")
 
         timeline = data.get("timeline", "")
@@ -297,7 +306,9 @@ def _format_summary(data: Any) -> str:
         nodes = data.get("number_of_nodes", "?")
         shards = data.get("active_shards", "?")
         unassigned = data.get("unassigned_shards", 0)
-        parts.append(f"cluster={data['cluster_name']} status={status} nodes={nodes} shards={shards} unassigned={unassigned}")
+        parts.append(
+            f"cluster={data['cluster_name']} status={status} nodes={nodes} shards={shards} unassigned={unassigned}"
+        )
         return " | ".join(parts)
 
     # PCAP overview
@@ -308,7 +319,7 @@ def _format_summary(data: Any) -> str:
         talkers = data.get("top_talkers", [])
         if talkers:
             top = talkers[0] if isinstance(talkers[0], dict) else {}
-            parts.append(f"top_talker={top.get('ip','?')} ({top.get('packet_count',0)} pkts)")
+            parts.append(f"top_talker={top.get('ip', '?')} ({top.get('packet_count', 0)} pkts)")
         return "\n".join(parts)
 
     # PCAP beaconing
@@ -316,10 +327,14 @@ def _format_summary(data: Any) -> str:
         summary = data.get("summary", {})
         patterns = data.get("patterns", data.get("beacons", []))
         parts.append(f"patterns={summary.get('total_patterns', len(patterns))}")
-        parts.append(f"high={summary.get('high_confidence', 0)} medium={summary.get('medium_confidence', 0)} low={summary.get('low_confidence', 0)}")
+        parts.append(
+            f"high={summary.get('high_confidence', 0)} medium={summary.get('medium_confidence', 0)} low={summary.get('low_confidence', 0)}"
+        )
         for p in patterns[:3]:
             if isinstance(p, dict):
-                parts.append(f"{p.get('src_ip','?')} → {p.get('dst_ip','?')}:{p.get('dst_port','?')} interval={p.get('interval_mean',0):.0f}s jitter={p.get('jitter_percent',0):.1f}% ({p.get('confidence','?')})")
+                parts.append(
+                    f"{p.get('src_ip', '?')} → {p.get('dst_ip', '?')}:{p.get('dst_port', '?')} interval={p.get('interval_mean', 0):.0f}s jitter={p.get('jitter_percent', 0):.1f}% ({p.get('confidence', '?')})"
+                )
         return "\n".join(parts)
 
     # Detect output
@@ -375,13 +390,11 @@ def _format_summary(data: Any) -> str:
 
     if not parts:
         # Fallback for unknown data shapes
-        for key in ("status", "cluster_name", "total_hits", "total_found",
-                     "total", "count", "hits_count", "detected"):
+        for key in ("status", "cluster_name", "total_hits", "total_found", "total", "count", "hits_count", "detected"):
             if key in data:
                 parts.append(f"{key}={data[key]}")
         if not parts:
-            return " | ".join(f"{k}={v}" for k, v in list(data.items())[:8]
-                              if not isinstance(v, (dict, list)))
+            return " | ".join(f"{k}={v}" for k, v in list(data.items())[:8] if not isinstance(v, (dict, list)))
 
     return "\n".join(parts)
 
@@ -402,9 +415,17 @@ def _emit(data: Any, output_mode: str) -> None:
     # so the top-level handler can translate it into an actionable message.
     if isinstance(data, dict) and "error" in data:
         err = str(data["error"])
-        if any(s in err for s in ("ConnectionError", "Connection refused",
-                                   "TLS error", "SSL", "AuthenticationException",
-                                   "AuthorizationException")):
+        if any(
+            s in err
+            for s in (
+                "ConnectionError",
+                "Connection refused",
+                "TLS error",
+                "SSL",
+                "AuthenticationException",
+                "AuthorizationException",
+            )
+        ):
             raise RuntimeError(err)
 
     formatters = {
@@ -420,10 +441,12 @@ def _emit(data: Any, output_mode: str) -> None:
 # Client factory (lazy — only created when a subcommand runs)
 # ---------------------------------------------------------------------------
 
+
 def _create_client():
     """Create a SearchClient using the same infrastructure as the MCP server."""
     load_dotenv()
     from src.clients import create_search_client
+
     return create_search_client("elasticsearch")
 
 
@@ -435,11 +458,13 @@ def _get_data_dir() -> Path:
     resolved separately via ``src.paths.get_rules_dir()`` etc.
     """
     import os
+
     env_dir = os.environ.get("CROWDSENTINEL_DATA_DIR")
     if env_dir:
         return Path(env_dir)
 
     from src.paths import get_user_data_dir
+
     return get_user_data_dir()
 
 
@@ -453,8 +478,7 @@ def _create_rule_loader():
 
     if rules_dir is None and toml_rules_dir is None:
         print(
-            "Error: detection rules not found.\n"
-            "Run 'crowdsentinel setup' to download detection rules and Chainsaw.",
+            "Error: detection rules not found.\nRun 'crowdsentinel setup' to download detection rules and Chainsaw.",
             file=sys.stderr,
         )
         return None
@@ -479,6 +503,7 @@ def _create_esql_client(search_client):
 # Subcommand handlers
 # ---------------------------------------------------------------------------
 
+
 def _cmd_health(args):
     """Show cluster health information."""
     client = _create_client()
@@ -500,6 +525,7 @@ def _cmd_hunt(args):
     client = _create_client()
 
     from src.tools.smart_search import SmartSearchTools
+
     smart = SmartSearchTools(client)
 
     result = smart._execute_threat_hunt_search(
@@ -612,14 +638,16 @@ def _cmd_rules(args):
     stats = loader.get_statistics()
     summaries = []
     for rule in rules:
-        summaries.append({
-            "rule_id": rule.rule_id,
-            "name": rule.display_name,
-            "platform": rule.platform,
-            "log_source": rule.log_source,
-            "type": rule.rule_type,
-            "mitre_tactics": list(rule.mitre_tactics),
-        })
+        summaries.append(
+            {
+                "rule_id": rule.rule_id,
+                "name": rule.display_name,
+                "platform": rule.platform,
+                "log_source": rule.log_source,
+                "type": rule.rule_type,
+                "mitre_tactics": list(rule.mitre_tactics),
+            }
+        )
 
     result = {
         "total_matching": total_matching,
@@ -656,8 +684,7 @@ def _cmd_schema(args):
             "index_pattern": args.index,
             "message": "No schema auto-detected. Will fall back to Sysmon schema.",
             "available_schemas": [
-                {"schema_id": s["schema_id"], "index_patterns": s["index_patterns"]}
-                for s in list_schemas()
+                {"schema_id": s["schema_id"], "index_patterns": s["index_patterns"]} for s in list_schemas()
             ],
         }
 
@@ -683,6 +710,7 @@ def _cmd_ioc(args):
 def _cmd_pcap(args):
     """Analyse a PCAP file for network threats."""
     from src.tools.wireshark_tools import WiresharkTools
+
     ws = WiresharkTools()
 
     if args.action == "overview":
@@ -718,6 +746,7 @@ def _cmd_pcap(args):
 def _cmd_chainsaw(args):
     """Hunt through EVTX logs using Chainsaw with Sigma rules."""
     import os
+
     data_dir = _get_data_dir()
     chainsaw_dir = data_dir / "chainsaw"
 
@@ -728,6 +757,7 @@ def _cmd_chainsaw(args):
         os.environ["CHAINSAW_SIGMA_PATH"] = str(chainsaw_dir / "sigma")
 
     from src.clients.common.chainsaw_client import ChainsawClient
+
     client = ChainsawClient()
 
     if args.action == "hunt":
@@ -736,8 +766,7 @@ def _cmd_chainsaw(args):
             return 1
         if not client.chainsaw_path.exists():
             print(
-                "Error: Chainsaw not installed.\n"
-                "Run 'crowdsentinel setup' to download Chainsaw and Sigma rules.",
+                "Error: Chainsaw not installed.\nRun 'crowdsentinel setup' to download Chainsaw and Sigma rules.",
                 file=sys.stderr,
             )
             return 1
@@ -788,6 +817,7 @@ def _cmd_chainsaw(args):
 def _safe_extract_tar(archive_path, dest_dir):
     """Safely extract a tar archive with path traversal protection (CWE-22)."""
     import tarfile
+
     dest_dir = str(dest_dir)
     # nosemgrep: tarfile-extractall-traversal — members validated via data_filter or manual path check
     with tarfile.open(str(archive_path), "r:gz") as tar:
@@ -807,6 +837,7 @@ def _safe_extract_tar(archive_path, dest_dir):
 def _safe_extract_zip(archive_path, dest_dir):
     """Safely extract a ZIP archive with path traversal protection (CWE-22)."""
     import zipfile
+
     dest_dir = os.path.realpath(str(dest_dir))
     with zipfile.ZipFile(str(archive_path), "r") as zf:
         for member in zf.namelist():
@@ -819,6 +850,7 @@ def _safe_extract_zip(archive_path, dest_dir):
 def _validate_download_url(url):
     """Validate that a download URL uses the HTTPS scheme only."""
     from urllib.parse import urlparse
+
     parsed = urlparse(url)
     if parsed.scheme != "https":
         raise ValueError(f"Only HTTPS URLs are allowed, got: {parsed.scheme}://")
@@ -844,12 +876,13 @@ def _cmd_auth(args):
         return 0 if success else 1
 
     if action == "status":
-        from src.agent.auth import load_profiles, _migrate_legacy_auth
+        from src.agent.auth import _migrate_legacy_auth, load_profiles
+
         _migrate_legacy_auth()
         profiles = load_profiles()
 
         if profiles:
-            print(f"Authenticated: yes")
+            print("Authenticated: yes")
             print(f"Profiles: {len(profiles)}")
             for pid, p in profiles.items():
                 ptype = p.get("type", "unknown")
@@ -859,7 +892,7 @@ def _cmd_auth(args):
                     if expires > 0:
                         remaining = (expires / 1000) - time.time()
                         if remaining > 0:
-                            print(f"  {pid}: type={ptype}, provider={provider}, expires in {remaining/3600:.1f}h")
+                            print(f"  {pid}: type={ptype}, provider={provider}, expires in {remaining / 3600:.1f}h")
                         else:
                             print(f"  {pid}: type={ptype}, provider={provider}, expired (will refresh on next use)")
                     else:
@@ -900,6 +933,7 @@ def _cmd_setup(args):
 
     # --- Detection Rules ---
     from src.paths import get_rules_dir
+
     bundled_rules = get_rules_dir()
     rules_dir = data_dir / "rules"
     if bundled_rules is not None:
@@ -1062,6 +1096,7 @@ def _cmd_analyse_mcp(args, search_results):
             # No auth at all — offer inline login
             print("No LLM authentication found. Starting sign-in...\n", file=sys.stderr)
             from src.agent.auth import login_anthropic
+
             if not login_anthropic():
                 print("Authentication failed.", file=sys.stderr)
                 return 1
@@ -1081,8 +1116,7 @@ def _cmd_analyse_mcp(args, search_results):
         exc_str = str(exc)
         if "401" in exc_str or "Unauthorized" in exc_str:
             print(
-                "LLM API authentication failed. Token may have expired.\n"
-                "Run: crowdsentinel auth login\n",
+                "LLM API authentication failed. Token may have expired.\nRun: crowdsentinel auth login\n",
                 file=sys.stderr,
             )
         else:
@@ -1097,6 +1131,7 @@ def _cmd_analyse_mcp(args, search_results):
 
     # Create CrowdSentinel MCP server instance (in-process)
     from src.server import SearchMCPServer
+
     cs_server = SearchMCPServer(engine_type="elasticsearch")
 
     # Run agent
@@ -1132,13 +1167,15 @@ def _cmd_analyse_mcp(args, search_results):
 # Argument parser
 # ---------------------------------------------------------------------------
 
+
 def _build_parser() -> argparse.ArgumentParser:
     """Build the top-level argument parser with all subcommands."""
 
     # Shared parent parser that adds --output to every subcommand
     output_parent = argparse.ArgumentParser(add_help=False)
     output_parent.add_argument(
-        "--output", "-o",
+        "--output",
+        "-o",
         choices=["json", "table", "summary"],
         default="json",
         help="Output format (default: json)",
@@ -1150,7 +1187,8 @@ def _build_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument(
-        "--version", "-V",
+        "--version",
+        "-V",
         action="version",
         version=f"crowdsentinel {__version__}",
     )
@@ -1204,7 +1242,7 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Execute an EQL query",
         epilog=(
             "Examples:\n"
-            '  crowdsentinel eql \'process where process.name == "cmd.exe"\' -i winlogbeat-*\n'
+            "  crowdsentinel eql 'process where process.name == \"cmd.exe\"' -i winlogbeat-*\n"
             "  crowdsentinel eql 'sequence [process where true] [network where true]' -i winlogbeat-* --size 50"
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -1227,10 +1265,14 @@ def _build_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     sp.add_argument("query", help="ES|QL query string (must start with FROM)")
-    sp.add_argument("--no-auto-discover", dest="auto_discover", action="store_false",
-                    default=True, help="Disable index auto-discovery")
-    sp.add_argument("--lean", action="store_true", default=False,
-                    help="Return token-efficient summarised results")
+    sp.add_argument(
+        "--no-auto-discover",
+        dest="auto_discover",
+        action="store_false",
+        default=True,
+        help="Disable index auto-discovery",
+    )
+    sp.add_argument("--lean", action="store_true", default=False, help="Return token-efficient summarised results")
     sp.set_defaults(func=_cmd_esql)
 
     # --- detect ----------------------------------------------------------
@@ -1267,7 +1309,9 @@ def _build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--platform", "-p", help="Filter by platform (windows, linux, macos, ...)")
     sp.add_argument("--tactic", help="Filter by MITRE ATT&CK tactic (e.g. credential_access)")
     sp.add_argument("--log-source", dest="log_source", help="Filter by log source")
-    sp.add_argument("--rule-type", "--type", "-t", dest="rule_type", choices=["lucene", "eql", "esql"], help="Filter by rule type")
+    sp.add_argument(
+        "--rule-type", "--type", "-t", dest="rule_type", choices=["lucene", "eql", "esql"], help="Filter by rule type"
+    )
     sp.add_argument("--search", "-s", help="Search term (name, tags, description)")
     sp.add_argument("--limit", "-l", type=int, default=50, help="Max results (default: 50, max: 200)")
     sp.set_defaults(func=_cmd_rules)
@@ -1301,12 +1345,11 @@ def _build_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     sp.add_argument("value", help="IoC value (IP, domain, hash, filename, process, user)")
-    sp.add_argument("--type", required=True,
-                    choices=["ip", "domain", "hash", "filename", "process", "user"],
-                    help="Type of IoC")
+    sp.add_argument(
+        "--type", required=True, choices=["ip", "domain", "hash", "filename", "process", "user"], help="Type of IoC"
+    )
     sp.add_argument("-i", "--index", required=True, help="Index pattern")
-    sp.add_argument("--timeframe", type=int, default=None,
-                    help="Time window in minutes (default: all time)")
+    sp.add_argument("--timeframe", type=int, default=None, help="Time window in minutes (default: all time)")
     sp.set_defaults(func=_cmd_ioc)
 
     # --- analyse ---------------------------------------------------------
@@ -1324,23 +1367,29 @@ def _build_parser() -> argparse.ArgumentParser:
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    sp.add_argument("--context", "-c", default="",
-                    help="Context about what was searched for")
+    sp.add_argument("--context", "-c", default="", help="Context about what was searched for")
     # Agent mode flags
-    sp.add_argument("--mcp", action="store_true",
-                    help="Use AI agent with MCP tools instead of deterministic analysis")
-    sp.add_argument("--mcp-server", dest="mcp_server", action="append",
-                    help="Add external MCP server (format: name:command args). Repeatable.")
-    sp.add_argument("--no-mcp-server", dest="no_mcp_server", action="append",
-                    help="Exclude a configured MCP server by name. Repeatable.")
-    sp.add_argument("--model", default=None,
-                    help="LLM model to use (default: auto-detect from API key)")
-    sp.add_argument("--model-url", dest="model_url", default=None,
-                    help="OpenAI-compatible API base URL (for Ollama, vLLM, etc.)")
-    sp.add_argument("--max-steps", dest="max_steps", type=int, default=30,
-                    help="Maximum tool calls before stopping (default: 30)")
-    sp.add_argument("--timeout", type=int, default=300,
-                    help="Maximum seconds for the agent run (default: 300)")
+    sp.add_argument("--mcp", action="store_true", help="Use AI agent with MCP tools instead of deterministic analysis")
+    sp.add_argument(
+        "--mcp-server",
+        dest="mcp_server",
+        action="append",
+        help="Add external MCP server (format: name:command args). Repeatable.",
+    )
+    sp.add_argument(
+        "--no-mcp-server",
+        dest="no_mcp_server",
+        action="append",
+        help="Exclude a configured MCP server by name. Repeatable.",
+    )
+    sp.add_argument("--model", default=None, help="LLM model to use (default: auto-detect from API key)")
+    sp.add_argument(
+        "--model-url", dest="model_url", default=None, help="OpenAI-compatible API base URL (for Ollama, vLLM, etc.)"
+    )
+    sp.add_argument(
+        "--max-steps", dest="max_steps", type=int, default=30, help="Maximum tool calls before stopping (default: 30)"
+    )
+    sp.add_argument("--timeout", type=int, default=300, help="Maximum seconds for the agent run (default: 300)")
     sp.set_defaults(func=_cmd_analyse)
 
     # --- pcap ------------------------------------------------------------
@@ -1358,16 +1407,19 @@ def _build_parser() -> argparse.ArgumentParser:
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    sp.add_argument("action",
-                    choices=["overview", "beaconing", "lateral", "sessions", "iocs"],
-                    help="Analysis type")
+    sp.add_argument("action", choices=["overview", "beaconing", "lateral", "sessions", "iocs"], help="Analysis type")
     sp.add_argument("pcap", help="Path to PCAP/PCAPNG file")
-    sp.add_argument("--min-connections", type=int, default=10, dest="min_connections",
-                    help="Minimum connections for beaconing detection (default: 10)")
-    sp.add_argument("--protocol", default="tcp", choices=["tcp", "udp"],
-                    help="Protocol for session tracking (default: tcp)")
-    sp.add_argument("--indicators", nargs="+",
-                    help="IoC values to hunt for (IPs, domains, hashes)")
+    sp.add_argument(
+        "--min-connections",
+        type=int,
+        default=10,
+        dest="min_connections",
+        help="Minimum connections for beaconing detection (default: 10)",
+    )
+    sp.add_argument(
+        "--protocol", default="tcp", choices=["tcp", "udp"], help="Protocol for session tracking (default: tcp)"
+    )
+    sp.add_argument("--indicators", nargs="+", help="IoC values to hunt for (IPs, domains, hashes)")
     sp.set_defaults(func=_cmd_pcap)
 
     # --- chainsaw --------------------------------------------------------
@@ -1384,29 +1436,19 @@ def _build_parser() -> argparse.ArgumentParser:
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    sp.add_argument("action", choices=["hunt", "search", "status"],
-                    help="Chainsaw action")
-    sp.add_argument("evtx", nargs="?", default=None,
-                    help="Path to EVTX file or directory")
-    sp.add_argument("--sigma-rules", dest="sigma_rules", default=None,
-                    help="Path to Sigma rules directory")
-    sp.add_argument("--mapping", default=None,
-                    help="Path to Chainsaw mapping file")
-    sp.add_argument("--keyword", default=None,
-                    help="Keyword to search for (for 'search' action)")
-    sp.add_argument("--limit", "-l", type=int, default=0,
-                    help="Limit number of detections returned (default: all)")
+    sp.add_argument("action", choices=["hunt", "search", "status"], help="Chainsaw action")
+    sp.add_argument("evtx", nargs="?", default=None, help="Path to EVTX file or directory")
+    sp.add_argument("--sigma-rules", dest="sigma_rules", default=None, help="Path to Sigma rules directory")
+    sp.add_argument("--mapping", default=None, help="Path to Chainsaw mapping file")
+    sp.add_argument("--keyword", default=None, help="Keyword to search for (for 'search' action)")
+    sp.add_argument("--limit", "-l", type=int, default=0, help="Limit number of detections returned (default: all)")
     sp.set_defaults(func=_cmd_chainsaw)
 
     # --- setup -----------------------------------------------------------
     sp = subparsers.add_parser(
         "setup",
         help="Download detection rules, Chainsaw, and Sigma rules",
-        epilog=(
-            "Examples:\n"
-            "  crowdsentinel setup\n"
-            "  CROWDSENTINEL_DATA_DIR=/opt/crowdsentinel crowdsentinel setup"
-        ),
+        epilog=("Examples:\n  crowdsentinel setup\n  CROWDSENTINEL_DATA_DIR=/opt/crowdsentinel crowdsentinel setup"),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     sp.set_defaults(func=_cmd_setup)
@@ -1425,10 +1467,10 @@ def _build_parser() -> argparse.ArgumentParser:
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    sp.add_argument("action", choices=["login", "status", "logout"],
-                    help="Auth action to perform")
-    sp.add_argument("--provider", choices=["openai", "anthropic"], default="anthropic",
-                    help="LLM provider (default: anthropic)")
+    sp.add_argument("action", choices=["login", "status", "logout"], help="Auth action to perform")
+    sp.add_argument(
+        "--provider", choices=["openai", "anthropic"], default="anthropic", help="LLM provider (default: anthropic)"
+    )
     sp.set_defaults(func=_cmd_auth)
 
     return parser
@@ -1437,6 +1479,7 @@ def _build_parser() -> argparse.ArgumentParser:
 # ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
+
 
 def _handle_cli_error(exc: Exception) -> None:
     """Translate raw exceptions into actionable user messages, then exit."""
@@ -1469,8 +1512,7 @@ def _handle_cli_error(exc: Exception) -> None:
     # Authentication failures
     if "AuthenticationException" in type(exc).__name__ or "401" in msg:
         print(
-            "Authentication failed.\n"
-            "Set ELASTICSEARCH_API_KEY or ELASTICSEARCH_USERNAME + ELASTICSEARCH_PASSWORD.",
+            "Authentication failed.\nSet ELASTICSEARCH_API_KEY or ELASTICSEARCH_USERNAME + ELASTICSEARCH_PASSWORD.",
             file=sys.stderr,
         )
         sys.exit(1)

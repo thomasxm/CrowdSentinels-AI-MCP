@@ -24,51 +24,89 @@ import json
 import re
 import signal
 import sys
-from typing import Dict, Optional
 
 # Field mappings between schemas (ECS, Sysmon, Windows Security)
 FIELD_MAPPINGS = {
-    "process.name": {"ecs": "process.name", "sysmon": "winlog.event_data.Image",
-                     "windows_security": "winlog.event_data.NewProcessName"},
-    "process.executable": {"ecs": "process.executable", "sysmon": "winlog.event_data.Image",
-                           "windows_security": "winlog.event_data.NewProcessName"},
-    "process.command_line": {"ecs": "process.command_line", "sysmon": "winlog.event_data.CommandLine",
-                             "windows_security": "winlog.event_data.CommandLine"},
-    "process.pid": {"ecs": "process.pid", "sysmon": "winlog.event_data.ProcessId",
-                    "windows_security": "winlog.event_data.NewProcessId"},
-    "process.parent.name": {"ecs": "process.parent.name", "sysmon": "winlog.event_data.ParentImage",
-                            "windows_security": "winlog.event_data.ParentProcessName"},
-    "process.parent.pid": {"ecs": "process.parent.pid", "sysmon": "winlog.event_data.ParentProcessId",
-                           "windows_security": "winlog.event_data.ProcessId"},
-    "process.parent.command_line": {"ecs": "process.parent.command_line",
-                                    "sysmon": "winlog.event_data.ParentCommandLine",
-                                    "windows_security": None},
-    "user.name": {"ecs": "user.name", "sysmon": "winlog.event_data.User",
-                  "windows_security": "winlog.event_data.TargetUserName"},
-    "user.domain": {"ecs": "user.domain", "sysmon": None,
-                    "windows_security": "winlog.event_data.TargetDomainName"},
-    "source.ip": {"ecs": "source.ip", "sysmon": "winlog.event_data.SourceIp",
-                  "windows_security": "winlog.event_data.IpAddress"},
-    "source.port": {"ecs": "source.port", "sysmon": "winlog.event_data.SourcePort",
-                    "windows_security": "winlog.event_data.IpPort"},
-    "destination.ip": {"ecs": "destination.ip", "sysmon": "winlog.event_data.DestinationIp",
-                       "windows_security": None},
-    "destination.port": {"ecs": "destination.port", "sysmon": "winlog.event_data.DestinationPort",
-                         "windows_security": None},
-    "dns.question.name": {"ecs": "dns.question.name", "sysmon": "winlog.event_data.QueryName",
-                          "windows_security": None},
-    "file.path": {"ecs": "file.path", "sysmon": "winlog.event_data.TargetFilename",
-                  "windows_security": "winlog.event_data.ObjectName"},
-    "file.name": {"ecs": "file.name", "sysmon": "winlog.event_data.TargetFilename",
-                  "windows_security": "winlog.event_data.ObjectName"},
-    "registry.path": {"ecs": "registry.path", "sysmon": "winlog.event_data.TargetObject",
-                      "windows_security": "winlog.event_data.ObjectName"},
-    "registry.value": {"ecs": "registry.value", "sysmon": "winlog.event_data.Details",
-                       "windows_security": None},
-    "host.name": {"ecs": "host.name", "sysmon": "host.name",
-                  "windows_security": "winlog.computer_name"},
-    "event.code": {"ecs": "event.code", "sysmon": "winlog.event_id",
-                   "windows_security": "winlog.event_id"},
+    "process.name": {
+        "ecs": "process.name",
+        "sysmon": "winlog.event_data.Image",
+        "windows_security": "winlog.event_data.NewProcessName",
+    },
+    "process.executable": {
+        "ecs": "process.executable",
+        "sysmon": "winlog.event_data.Image",
+        "windows_security": "winlog.event_data.NewProcessName",
+    },
+    "process.command_line": {
+        "ecs": "process.command_line",
+        "sysmon": "winlog.event_data.CommandLine",
+        "windows_security": "winlog.event_data.CommandLine",
+    },
+    "process.pid": {
+        "ecs": "process.pid",
+        "sysmon": "winlog.event_data.ProcessId",
+        "windows_security": "winlog.event_data.NewProcessId",
+    },
+    "process.parent.name": {
+        "ecs": "process.parent.name",
+        "sysmon": "winlog.event_data.ParentImage",
+        "windows_security": "winlog.event_data.ParentProcessName",
+    },
+    "process.parent.pid": {
+        "ecs": "process.parent.pid",
+        "sysmon": "winlog.event_data.ParentProcessId",
+        "windows_security": "winlog.event_data.ProcessId",
+    },
+    "process.parent.command_line": {
+        "ecs": "process.parent.command_line",
+        "sysmon": "winlog.event_data.ParentCommandLine",
+        "windows_security": None,
+    },
+    "user.name": {
+        "ecs": "user.name",
+        "sysmon": "winlog.event_data.User",
+        "windows_security": "winlog.event_data.TargetUserName",
+    },
+    "user.domain": {"ecs": "user.domain", "sysmon": None, "windows_security": "winlog.event_data.TargetDomainName"},
+    "source.ip": {
+        "ecs": "source.ip",
+        "sysmon": "winlog.event_data.SourceIp",
+        "windows_security": "winlog.event_data.IpAddress",
+    },
+    "source.port": {
+        "ecs": "source.port",
+        "sysmon": "winlog.event_data.SourcePort",
+        "windows_security": "winlog.event_data.IpPort",
+    },
+    "destination.ip": {"ecs": "destination.ip", "sysmon": "winlog.event_data.DestinationIp", "windows_security": None},
+    "destination.port": {
+        "ecs": "destination.port",
+        "sysmon": "winlog.event_data.DestinationPort",
+        "windows_security": None,
+    },
+    "dns.question.name": {
+        "ecs": "dns.question.name",
+        "sysmon": "winlog.event_data.QueryName",
+        "windows_security": None,
+    },
+    "file.path": {
+        "ecs": "file.path",
+        "sysmon": "winlog.event_data.TargetFilename",
+        "windows_security": "winlog.event_data.ObjectName",
+    },
+    "file.name": {
+        "ecs": "file.name",
+        "sysmon": "winlog.event_data.TargetFilename",
+        "windows_security": "winlog.event_data.ObjectName",
+    },
+    "registry.path": {
+        "ecs": "registry.path",
+        "sysmon": "winlog.event_data.TargetObject",
+        "windows_security": "winlog.event_data.ObjectName",
+    },
+    "registry.value": {"ecs": "registry.value", "sysmon": "winlog.event_data.Details", "windows_security": None},
+    "host.name": {"ecs": "host.name", "sysmon": "host.name", "windows_security": "winlog.computer_name"},
+    "event.code": {"ecs": "event.code", "sysmon": "winlog.event_id", "windows_security": "winlog.event_id"},
 }
 
 
@@ -81,7 +119,7 @@ def _handle_sigint(signum, frame):
 signal.signal(signal.SIGINT, _handle_sigint)
 
 
-def build_translation_table(from_schema: str, to_schema: str) -> Dict[str, str]:
+def build_translation_table(from_schema: str, to_schema: str) -> dict[str, str]:
     """Build a translation table from one schema to another."""
     table = {}
     for ecs_field, mappings in FIELD_MAPPINGS.items():
@@ -92,7 +130,7 @@ def build_translation_table(from_schema: str, to_schema: str) -> Dict[str, str]:
     return table
 
 
-def transform_eql_query(query: str, translation_table: Dict[str, str]) -> Dict:
+def transform_eql_query(query: str, translation_table: dict[str, str]) -> dict:
     """Transform an EQL query using the translation table.
 
     Replaces field names using word-boundary matching, processing
@@ -109,11 +147,10 @@ def transform_eql_query(query: str, translation_table: Dict[str, str]) -> Dict:
             transformed = re.sub(pattern, to_field, transformed)
             replacements.append({"from": from_field, "to": to_field})
 
-    return {"original": query, "transformed": transformed,
-            "replacements": replacements, "query_type": "eql"}
+    return {"original": query, "transformed": transformed, "replacements": replacements, "query_type": "eql"}
 
 
-def transform_lucene_query(query: str, translation_table: Dict[str, str]) -> Dict:
+def transform_lucene_query(query: str, translation_table: dict[str, str]) -> dict:
     """Transform a Lucene query using the translation table.
 
     Replaces field:value patterns, processing longer field names first.
@@ -129,13 +166,10 @@ def transform_lucene_query(query: str, translation_table: Dict[str, str]) -> Dic
             transformed = re.sub(pattern, f"{to_field}:", transformed)
             replacements.append({"from": from_field, "to": to_field})
 
-    return {"original": query, "transformed": transformed,
-            "replacements": replacements, "query_type": "lucene"}
+    return {"original": query, "transformed": transformed, "replacements": replacements, "query_type": "lucene"}
 
 
-def transform_query(
-    query: str, from_schema: str, to_schema: str, query_type: str = "auto"
-) -> Dict:
+def transform_query(query: str, from_schema: str, to_schema: str, query_type: str = "auto") -> dict:
     """Transform a query from one schema to another.
 
     Supports EQL and Lucene query syntax with automatic type detection
@@ -158,8 +192,7 @@ def transform_query(
 
     translation_table = build_translation_table(from_schema, to_schema)
     if not translation_table:
-        return {"error": f"No translation available from {from_schema} to {to_schema}",
-                "original": query}
+        return {"error": f"No translation available from {from_schema} to {to_schema}", "original": query}
 
     if query_type == "eql":
         return transform_eql_query(query, translation_table)
@@ -206,15 +239,22 @@ Exit Codes:
     )
 
     parser.add_argument("--query", "-q", required=True, help="Query string to transform")
-    parser.add_argument("--from", dest="from_schema", required=True,
-                        choices=["ecs", "sysmon", "windows_security"], help="Source schema")
-    parser.add_argument("--to", dest="to_schema", required=True,
-                        choices=["ecs", "sysmon", "windows_security"], help="Target schema")
-    parser.add_argument("--type", "-t", choices=["eql", "lucene", "auto"],
-                        default="auto", help="Query type (default: auto-detect)")
-    parser.add_argument("--output", "-o", choices=["json", "table", "summary"],
-                        default="table",
-                        help="Output format: json (raw), table (detailed), summary (brief) (default: table)")
+    parser.add_argument(
+        "--from", dest="from_schema", required=True, choices=["ecs", "sysmon", "windows_security"], help="Source schema"
+    )
+    parser.add_argument(
+        "--to", dest="to_schema", required=True, choices=["ecs", "sysmon", "windows_security"], help="Target schema"
+    )
+    parser.add_argument(
+        "--type", "-t", choices=["eql", "lucene", "auto"], default="auto", help="Query type (default: auto-detect)"
+    )
+    parser.add_argument(
+        "--output",
+        "-o",
+        choices=["json", "table", "summary"],
+        default="table",
+        help="Output format: json (raw), table (detailed), summary (brief) (default: table)",
+    )
 
     args = parser.parse_args()
 
@@ -230,8 +270,7 @@ Exit Codes:
         elif args.output == "summary":
             print(result["transformed"])
         else:
-            print("No field replacements needed (fields already match target schema)",
-                  file=sys.stderr)
+            print("No field replacements needed (fields already match target schema)", file=sys.stderr)
             print(result["transformed"])
         sys.exit(2)
 

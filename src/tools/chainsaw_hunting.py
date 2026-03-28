@@ -18,6 +18,7 @@ class ChainsawHuntingTools:
     def __init__(self):
         """Initialise Chainsaw hunting tools."""
         from src.clients.common.chainsaw_client import ChainsawClient
+
         self.chainsaw = ChainsawClient()
 
     def register_tools(self, mcp: FastMCP):
@@ -31,7 +32,7 @@ class ChainsawHuntingTools:
             mapping_path: str | None = None,
             from_time: str | None = None,
             to_time: str | None = None,
-            prioritize_by_pyramid: bool = True
+            prioritize_by_pyramid: bool = True,
         ) -> dict:
             """
             Hunt for threats in EVTX logs using Sigma rules.
@@ -93,7 +94,7 @@ class ChainsawHuntingTools:
                 from_time=from_time,
                 to_time=to_time,
                 output_format="json",
-                skip_errors=True
+                skip_errors=True,
             )
 
             if "error" in hunt_result:
@@ -102,11 +103,7 @@ class ChainsawHuntingTools:
             detections = hunt_result.get("detections", [])
 
             if not detections:
-                return {
-                    "message": "No threats detected",
-                    "total_detections": 0,
-                    "command": hunt_result.get("command")
-                }
+                return {"message": "No threats detected", "total_detections": 0, "command": hunt_result.get("command")}
 
             # Categorize by Pyramid of Pain and Diamond Model
             categorized = tools_instance._categorize_and_analyze_detections(detections, prioritize_by_pyramid)
@@ -121,7 +118,7 @@ class ChainsawHuntingTools:
                 "diamond_model_analysis": categorized["diamond_summary"],
                 "follow_up_hunts": categorized["follow_ups"],
                 "command_executed": hunt_result.get("command"),
-                "raw_detections": detections[:10]  # Include first 10 for reference
+                "raw_detections": detections[:10],  # Include first 10 for reference
             }
 
             # Auto-capture IoCs to active investigation
@@ -138,7 +135,7 @@ class ChainsawHuntingTools:
             ioc_type: str,
             case_insensitive: bool = True,
             event_id: int | None = None,
-            use_regex: bool = False
+            use_regex: bool = False,
         ) -> dict:
             """
             Search for a specific IoC in EVTX logs.
@@ -220,7 +217,7 @@ class ChainsawHuntingTools:
                 case_insensitive=case_insensitive,
                 event_id=event_id,
                 regex=use_regex,
-                output_format="json"
+                output_format="json",
             )
 
             if "error" in search_result:
@@ -238,7 +235,7 @@ class ChainsawHuntingTools:
                 "summary": tools_instance._generate_search_summary(ioc, ioc_type, matches),
                 "follow_up_searches": tools_instance._suggest_follow_up_searches(ioc, ioc_type, matches),
                 "diamond_model": tools_instance._extract_diamond_model_from_matches(matches),
-                "command_executed": search_result.get("command")
+                "command_executed": search_result.get("command"),
             }
 
             # Auto-capture IoCs to active investigation
@@ -254,7 +251,7 @@ class ChainsawHuntingTools:
             initial_ioc: str,
             initial_ioc_type: str,
             max_iterations: int = 3,
-            follow_pyramid: bool = True
+            follow_pyramid: bool = True,
         ) -> dict:
             """
             Perform iterative threat hunting starting from an initial IoC.
@@ -342,6 +339,7 @@ class ChainsawHuntingTools:
                     from src.clients.common.chainsaw_client import (
                         ChainsawClient as _ChainsawClient,
                     )
+
                     pyramid_info = _ChainsawClient.categorize_ioc_by_pyramid(current_ioc_type, current_ioc)
                     result = {
                         "ioc_searched": current_ioc,
@@ -352,12 +350,14 @@ class ChainsawHuntingTools:
                     }
 
                 if "error" in result:
-                    iterations.append({
-                        "iteration": iteration + 1,
-                        "ioc": current_ioc,
-                        "ioc_type": current_ioc_type,
-                        "error": result["error"]
-                    })
+                    iterations.append(
+                        {
+                            "iteration": iteration + 1,
+                            "ioc": current_ioc,
+                            "ioc_type": current_ioc_type,
+                            "error": result["error"],
+                        }
+                    )
                     break
 
                 # Extract new IoCs from results
@@ -376,7 +376,7 @@ class ChainsawHuntingTools:
                     "new_iocs_discovered": len(new_iocs),
                     "summary": result.get("summary"),
                     "follow_up_suggestions": result.get("follow_up_searches", []),
-                    "sample_matches": result.get("matches", [])[:5]
+                    "sample_matches": result.get("matches", [])[:5],
                 }
 
                 iterations.append(iteration_result)
@@ -407,7 +407,7 @@ class ChainsawHuntingTools:
                 "discovered_iocs_list": sorted(list(discovered_iocs)),
                 "diamond_model_complete": tools_instance._build_complete_diamond_model(iterations),
                 "attack_reconstruction": tools_instance._reconstruct_attack_timeline(iterations),
-                "final_recommendations": tools_instance._generate_final_recommendations(iterations)
+                "final_recommendations": tools_instance._generate_final_recommendations(iterations),
             }
 
             # Auto-capture IoCs to active investigation
@@ -448,7 +448,7 @@ class ChainsawHuntingTools:
                     "name": info.name,
                     "description": info.description,
                     "difficulty_to_change": info.difficulty_to_change,
-                    "examples": info.examples
+                    "examples": info.examples,
                 }
 
             return {
@@ -457,37 +457,22 @@ class ChainsawHuntingTools:
                 "hunting_strategy": "Start at Level 2-3 (IPs, Domains) for quick wins, then move up to Level 5-6 (Tools, TTPs) for lasting impact",
                 "levels": levels_dict,
                 "recommended_hunting_order": [
-                    {
-                        "step": 1,
-                        "level": 2,
-                        "focus": "IP Addresses",
-                        "reason": "Easy to find, provides quick context"
-                    },
-                    {
-                        "step": 2,
-                        "level": 3,
-                        "focus": "Domain Names",
-                        "reason": "Shows attacker infrastructure"
-                    },
-                    {
-                        "step": 3,
-                        "level": 5,
-                        "focus": "Tools",
-                        "reason": "Identifies specific malware/tools used"
-                    },
+                    {"step": 1, "level": 2, "focus": "IP Addresses", "reason": "Easy to find, provides quick context"},
+                    {"step": 2, "level": 3, "focus": "Domain Names", "reason": "Shows attacker infrastructure"},
+                    {"step": 3, "level": 5, "focus": "Tools", "reason": "Identifies specific malware/tools used"},
                     {
                         "step": 4,
                         "level": 6,
                         "focus": "TTPs",
-                        "reason": "Most valuable - attackers can't easily change behavior"
-                    }
+                        "reason": "Most valuable - attackers can't easily change behavior",
+                    },
                 ],
                 "integration_with_diamond_model": {
                     "Infrastructure": "Levels 2-3 (IPs, Domains)",
                     "Capability": "Levels 5-6 (Tools, TTPs)",
                     "Victim": "Identified from all levels",
-                    "Adversary": "Inferred from Level 6 (TTPs)"
-                }
+                    "Adversary": "Inferred from Level 6 (TTPs)",
+                },
             }
 
         @mcp.tool()
@@ -518,7 +503,7 @@ class ChainsawHuntingTools:
                 vertices_dict[name] = {
                     "vertex": info.vertex,
                     "description": info.description,
-                    "elements": info.elements
+                    "elements": info.elements,
                 }
 
             return {
@@ -530,18 +515,18 @@ class ChainsawHuntingTools:
                     "adversary_to_capability": "Adversary deploys Capability",
                     "capability_to_infrastructure": "Capability targets Infrastructure",
                     "infrastructure_to_victim": "Infrastructure affects Victim",
-                    "capability_to_victim": "Capability impacts Victim"
+                    "capability_to_victim": "Capability impacts Victim",
                 },
                 "hunting_application": {
                     "step_1": "Identify Victim (affected hosts/users) - easiest to find",
                     "step_2": "Discover Infrastructure (IPs, domains) from victim logs",
                     "step_3": "Extract Capability (tools, techniques) from events",
-                    "step_4": "Infer Adversary from TTPs and infrastructure patterns"
+                    "step_4": "Infer Adversary from TTPs and infrastructure patterns",
                 },
                 "integration_with_pyramid": {
                     "note": "Use Pyramid of Pain to prioritize which vertex to investigate first",
-                    "strategy": "Start with Infrastructure (Levels 2-3) to quickly populate the model, then focus on Capability (Levels 5-6) for attribution"
-                }
+                    "strategy": "Start with Infrastructure (Levels 2-3) to quickly populate the model, then focus on Capability (Levels 5-6) for attribution",
+                },
             }
 
     # Helper methods - now proper class methods
@@ -552,7 +537,7 @@ class ChainsawHuntingTools:
             "adversary_elements": set(),
             "capability_elements": set(),
             "infrastructure_elements": set(),
-            "victim_elements": set()
+            "victim_elements": set(),
         }
         follow_ups = []
 
@@ -584,9 +569,7 @@ class ChainsawHuntingTools:
             for vertex, data in diamond.items():
                 if data["identified"]:
                     for element in data["elements"]:
-                        diamond_summary[f"{vertex}_elements"].add(
-                            f"{element['type']}:{element['value']}"
-                        )
+                        diamond_summary[f"{vertex}_elements"].add(f"{element['type']}:{element['value']}")
 
         # Convert sets to lists for JSON serialization
         for key in diamond_summary:
@@ -596,23 +579,23 @@ class ChainsawHuntingTools:
         if prioritize:
             # Suggest hunting for higher pyramid levels
             if by_pyramid[2] or by_pyramid[3]:  # Found IPs/domains
-                follow_ups.append({
-                    "priority": "HIGH",
-                    "action": "Search for tools/malware associated with discovered IPs/domains",
-                    "pyramid_level": 5
-                })
+                follow_ups.append(
+                    {
+                        "priority": "HIGH",
+                        "action": "Search for tools/malware associated with discovered IPs/domains",
+                        "pyramid_level": 5,
+                    }
+                )
             if by_pyramid[5]:  # Found tools
-                follow_ups.append({
-                    "priority": "CRITICAL",
-                    "action": "Analyze TTPs and behavior patterns to understand adversary methodology",
-                    "pyramid_level": 6
-                })
+                follow_ups.append(
+                    {
+                        "priority": "CRITICAL",
+                        "action": "Analyze TTPs and behavior patterns to understand adversary methodology",
+                        "pyramid_level": 6,
+                    }
+                )
 
-        return {
-            "by_pyramid": by_pyramid,
-            "diamond_summary": diamond_summary,
-            "follow_ups": follow_ups
-        }
+        return {"by_pyramid": by_pyramid, "diamond_summary": diamond_summary, "follow_ups": follow_ups}
 
     def _generate_hunt_summary(self, categorized: dict, evtx_path: str) -> str:
         """Generate human-readable summary of hunt results."""
@@ -626,6 +609,7 @@ class ChainsawHuntingTools:
             count = len(categorized["by_pyramid"][level])
             if count > 0:
                 from src.clients.common.chainsaw_client import ChainsawClient
+
                 level_info = ChainsawClient.PYRAMID_OF_PAIN[level]
                 pyramid_summary.append(f"  Level {level} ({level_info.name}): {count} detections")
 
@@ -677,28 +661,28 @@ class ChainsawHuntingTools:
         # Extract potential follow-up IoCs
         if matches:
             # Suggest searching for related processes
-            suggestions.append({
-                "suggestion": f"Search for processes that interacted with {ioc}",
-                "ioc_type": "process_name",
-                "priority": "HIGH"
-            })
+            suggestions.append(
+                {
+                    "suggestion": f"Search for processes that interacted with {ioc}",
+                    "ioc_type": "process_name",
+                    "priority": "HIGH",
+                }
+            )
 
             # Suggest timeline analysis
-            suggestions.append({
-                "suggestion": f"Analyze events before and after {ioc} activity",
-                "action": "time_correlation",
-                "priority": "MEDIUM"
-            })
+            suggestions.append(
+                {
+                    "suggestion": f"Analyze events before and after {ioc} activity",
+                    "action": "time_correlation",
+                    "priority": "MEDIUM",
+                }
+            )
 
         return suggestions
 
     def _extract_diamond_model_from_matches(self, matches: list[dict]) -> dict:
         """Extract Diamond Model elements from search matches."""
-        diamond = {
-            "infrastructure": [],
-            "capability": [],
-            "victim": []
-        }
+        diamond = {"infrastructure": [], "capability": [], "victim": []}
 
         for match in matches[:10]:
             if not isinstance(match, dict):
@@ -770,10 +754,7 @@ class ChainsawHuntingTools:
             ioc_key = f"{ioc['type']}:{ioc['value']}"
             if ioc_key not in discovered:
                 pyramid_info = self.chainsaw.categorize_ioc_by_pyramid(ioc["type"], ioc["value"])
-                prioritized.append({
-                    "ioc": ioc,
-                    "priority": pyramid_info["priority"]
-                })
+                prioritized.append({"ioc": ioc, "priority": pyramid_info["priority"]})
 
         if not prioritized:
             return None
@@ -788,7 +769,7 @@ class ChainsawHuntingTools:
             "adversary": {"elements": [], "confidence": "LOW"},
             "capability": {"elements": [], "confidence": "MEDIUM"},
             "infrastructure": {"elements": [], "confidence": "HIGH"},
-            "victim": {"elements": [], "confidence": "HIGH"}
+            "victim": {"elements": [], "confidence": "HIGH"},
         }
 
         # This would analyze all iterations to build complete picture
@@ -801,12 +782,14 @@ class ChainsawHuntingTools:
         timeline = []
 
         for iteration in iterations:
-            timeline.append({
-                "step": iteration["iteration"],
-                "action": f"Searched for {iteration['searched_ioc']} ({iteration['searched_ioc_type']})",
-                "findings": iteration["matches_found"],
-                "new_iocs": iteration["new_iocs_discovered"]
-            })
+            timeline.append(
+                {
+                    "step": iteration["iteration"],
+                    "action": f"Searched for {iteration['searched_ioc']} ({iteration['searched_ioc_type']})",
+                    "findings": iteration["matches_found"],
+                    "new_iocs": iteration["new_iocs_discovered"],
+                }
+            )
 
         return timeline
 

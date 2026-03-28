@@ -1,5 +1,6 @@
 # src/wireshark/hunting/session_tracker.py
 """TCP/UDP session reconstruction and tracking."""
+
 import logging
 from collections import defaultdict
 from datetime import datetime
@@ -28,11 +29,7 @@ class SessionTracker:
     def __init__(self):
         """Initialize session tracker."""
 
-    def build_sessions_from_packets(
-        self,
-        packets: list[dict],
-        protocol: str = "tcp"
-    ) -> list[Session]:
+    def build_sessions_from_packets(self, packets: list[dict], protocol: str = "tcp") -> list[Session]:
         """Build session objects from packet list.
 
         Args:
@@ -56,22 +53,13 @@ class SessionTracker:
 
         sessions = []
         for stream_id, stream_packets in streams.items():
-            session = self._build_single_session(
-                stream_id=int(stream_id),
-                packets=stream_packets,
-                protocol=protocol
-            )
+            session = self._build_single_session(stream_id=int(stream_id), packets=stream_packets, protocol=protocol)
             if session:
                 sessions.append(session)
 
         return sessions
 
-    def _build_single_session(
-        self,
-        stream_id: int,
-        packets: list[dict],
-        protocol: str
-    ) -> Session | None:
+    def _build_single_session(self, stream_id: int, packets: list[dict], protocol: str) -> Session | None:
         """Build a single session from its packets.
 
         Args:
@@ -86,10 +74,7 @@ class SessionTracker:
             return None
 
         # Sort packets by timestamp
-        sorted_packets = sorted(
-            packets,
-            key=lambda p: float(p.get("frame.time_epoch", 0))
-        )
+        sorted_packets = sorted(packets, key=lambda p: float(p.get("frame.time_epoch", 0)))
 
         # Determine client (initiator) - first packet's source
         first_pkt = sorted_packets[0]
@@ -164,15 +149,11 @@ class SessionTracker:
             end_time=end_time,
             packet_count=packet_count,
             byte_count=total_bytes,
-            flags=sorted(list(flags_seen))
+            flags=sorted(list(flags_seen)),
         )
 
     def track_from_pcap(
-        self,
-        pcap_path: str,
-        protocol: str = "tcp",
-        display_filter: str | None = None,
-        executor=None
+        self, pcap_path: str, protocol: str = "tcp", display_filter: str | None = None, executor=None
     ) -> list[Session]:
         """Track sessions from a PCAP file.
 
@@ -195,15 +176,7 @@ class SessionTracker:
         srcport_field = f"{protocol}.srcport"
         dstport_field = f"{protocol}.dstport"
 
-        fields = [
-            stream_field,
-            "ip.src",
-            "ip.dst",
-            srcport_field,
-            dstport_field,
-            "frame.time_epoch",
-            "frame.len"
-        ]
+        fields = [stream_field, "ip.src", "ip.dst", srcport_field, dstport_field, "frame.time_epoch", "frame.len"]
 
         if protocol == "tcp":
             fields.append("tcp.flags")
@@ -215,19 +188,12 @@ class SessionTracker:
             filter_str = protocol
 
         results = executor.execute_and_parse_fields(
-            pcap_path=pcap_path,
-            fields=fields,
-            display_filter=filter_str,
-            timeout=300
+            pcap_path=pcap_path, fields=fields, display_filter=filter_str, timeout=300
         )
 
         return self.build_sessions_from_packets(results, protocol)
 
-    def track_all_sessions(
-        self,
-        pcap_path: str,
-        executor=None
-    ) -> list[Session]:
+    def track_all_sessions(self, pcap_path: str, executor=None) -> list[Session]:
         """Track both TCP and UDP sessions from a PCAP.
 
         Args:
@@ -249,12 +215,7 @@ class SessionTracker:
 
         return sessions
 
-    def filter_by_port(
-        self,
-        sessions: list[Session],
-        ports: list[int],
-        check_both: bool = True
-    ) -> list[Session]:
+    def filter_by_port(self, sessions: list[Session], ports: list[int], check_both: bool = True) -> list[Session]:
         """Filter sessions by port number.
 
         Args:
@@ -274,12 +235,7 @@ class SessionTracker:
 
         return filtered
 
-    def filter_by_ip(
-        self,
-        sessions: list[Session],
-        ips: list[str],
-        check_both: bool = True
-    ) -> list[Session]:
+    def filter_by_ip(self, sessions: list[Session], ips: list[str], check_both: bool = True) -> list[Session]:
         """Filter sessions by IP address.
 
         Args:
@@ -317,7 +273,7 @@ class SessionTracker:
                 "total_bytes": 0,
                 "unique_src_ips": 0,
                 "unique_dst_ips": 0,
-                "unique_dst_ports": 0
+                "unique_dst_ports": 0,
             }
 
         tcp_sessions = [s for s in sessions if s.protocol == "tcp"]
@@ -331,14 +287,10 @@ class SessionTracker:
             "total_bytes": sum(s.byte_count for s in sessions),
             "unique_src_ips": len(set(s.src_ip for s in sessions)),
             "unique_dst_ips": len(set(s.dst_ip for s in sessions)),
-            "unique_dst_ports": len(set(s.dst_port for s in sessions))
+            "unique_dst_ports": len(set(s.dst_port for s in sessions)),
         }
 
-    def find_long_sessions(
-        self,
-        sessions: list[Session],
-        min_duration_seconds: float = 300
-    ) -> list[Session]:
+    def find_long_sessions(self, sessions: list[Session], min_duration_seconds: float = 300) -> list[Session]:
         """Find sessions that lasted longer than threshold.
 
         Args:
@@ -361,7 +313,7 @@ class SessionTracker:
     def find_high_volume_sessions(
         self,
         sessions: list[Session],
-        min_bytes: int = 1048576  # 1MB default
+        min_bytes: int = 1048576,  # 1MB default
     ) -> list[Session]:
         """Find sessions with high data transfer.
 

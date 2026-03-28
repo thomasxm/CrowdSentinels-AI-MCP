@@ -19,19 +19,19 @@ logger = logging.getLogger(__name__)
 
 # Pyramid of Pain priority mapping
 PYRAMID_PRIORITY = {
-    IoCType.HASH: 1,           # Trivial - easily changed
-    IoCType.IP: 2,             # Easy - can be changed quickly
-    IoCType.DOMAIN: 3,         # Simple - takes some effort
+    IoCType.HASH: 1,  # Trivial - easily changed
+    IoCType.IP: 2,  # Easy - can be changed quickly
+    IoCType.DOMAIN: 3,  # Simple - takes some effort
     IoCType.URL: 3,
     IoCType.EMAIL: 3,
-    IoCType.USER: 4,           # Annoying - network artifacts
+    IoCType.USER: 4,  # Annoying - network artifacts
     IoCType.HOSTNAME: 4,
     IoCType.FILE_PATH: 4,
     IoCType.REGISTRY_KEY: 4,
     IoCType.SERVICE: 4,
     IoCType.SCHEDULED_TASK: 4,
-    IoCType.PROCESS: 5,        # Challenging - tools
-    IoCType.COMMANDLINE: 6,    # Tough - TTPs
+    IoCType.PROCESS: 5,  # Challenging - tools
+    IoCType.COMMANDLINE: 6,  # Tough - TTPs
     IoCType.OTHER: 3,
 }
 
@@ -102,6 +102,7 @@ class SmartExtractor:
                 # Try to parse as Python dict literal
                 try:
                     import ast
+
                     response = ast.literal_eval(response)
                 except (ValueError, SyntaxError):
                     logger.warning("Could not parse truncated response string")
@@ -163,12 +164,7 @@ class SmartExtractor:
         for detection in detections:
             # Extract from detection data
             event_data = detection.get("event", {}) or detection.get("data", {})
-            extracted = self._extract_from_event(
-                event_data,
-                SourceType.CHAINSAW,
-                source_tool,
-                investigation_id
-            )
+            extracted = self._extract_from_event(event_data, SourceType.CHAINSAW, source_tool, investigation_id)
 
             # Add rule-specific context
             rule_name = detection.get("rule", {}).get("name", "")
@@ -205,26 +201,39 @@ class SmartExtractor:
             if "ip.src" in packet or "source_ip" in packet:
                 ip = packet.get("ip.src") or packet.get("source_ip")
                 if ip and self._is_valid_ioc(ip, IoCType.IP):
-                    iocs.append(self._create_ioc(
-                        ip, IoCType.IP, SourceType.WIRESHARK, source_tool,
-                        investigation_id, {"direction": "source"}
-                    ))
+                    iocs.append(
+                        self._create_ioc(
+                            ip, IoCType.IP, SourceType.WIRESHARK, source_tool, investigation_id, {"direction": "source"}
+                        )
+                    )
 
             if "ip.dst" in packet or "dest_ip" in packet:
                 ip = packet.get("ip.dst") or packet.get("dest_ip")
                 if ip and self._is_valid_ioc(ip, IoCType.IP):
-                    iocs.append(self._create_ioc(
-                        ip, IoCType.IP, SourceType.WIRESHARK, source_tool,
-                        investigation_id, {"direction": "destination"}
-                    ))
+                    iocs.append(
+                        self._create_ioc(
+                            ip,
+                            IoCType.IP,
+                            SourceType.WIRESHARK,
+                            source_tool,
+                            investigation_id,
+                            {"direction": "destination"},
+                        )
+                    )
 
             if "dns.qry.name" in packet:
                 domain = packet.get("dns.qry.name")
                 if domain and self._is_valid_ioc(domain, IoCType.DOMAIN):
-                    iocs.append(self._create_ioc(
-                        domain, IoCType.DOMAIN, SourceType.WIRESHARK, source_tool,
-                        investigation_id, {"query_type": "dns"}
-                    ))
+                    iocs.append(
+                        self._create_ioc(
+                            domain,
+                            IoCType.DOMAIN,
+                            SourceType.WIRESHARK,
+                            source_tool,
+                            investigation_id,
+                            {"query_type": "dns"},
+                        )
+                    )
 
         return self._deduplicate_and_prioritize(iocs)
 
@@ -239,89 +248,117 @@ class SmartExtractor:
         iocs = []
 
         # IP addresses
-        for ip_field in ["source.ip", "destination.ip", "client.ip", "server.ip",
-                        "host.ip", "src_ip", "dst_ip", "remote_ip", "IpAddress",
-                        "winlog.event_data.IpAddress", "related.ip"]:
+        for ip_field in [
+            "source.ip",
+            "destination.ip",
+            "client.ip",
+            "server.ip",
+            "host.ip",
+            "src_ip",
+            "dst_ip",
+            "remote_ip",
+            "IpAddress",
+            "winlog.event_data.IpAddress",
+            "related.ip",
+        ]:
             ip_value = self._get_nested_list(event, ip_field)
             if ip_value:
                 # Handle both single values and lists
                 ip_list = ip_value if isinstance(ip_value, list) else [ip_value]
                 for ip in ip_list:
                     if ip and self._is_valid_ioc(str(ip), IoCType.IP):
-                        iocs.append(self._create_ioc(
-                            str(ip), IoCType.IP, source_type, source_tool,
-                            investigation_id, {"field": ip_field}
-                        ))
+                        iocs.append(
+                            self._create_ioc(
+                                str(ip), IoCType.IP, source_type, source_tool, investigation_id, {"field": ip_field}
+                            )
+                        )
 
         # Usernames
-        for user_field in ["user.name", "winlog.event_data.TargetUserName",
-                          "winlog.event_data.SubjectUserName", "winlog.event_data.User",
-                          "related.user", "User", "user"]:
+        for user_field in [
+            "user.name",
+            "winlog.event_data.TargetUserName",
+            "winlog.event_data.SubjectUserName",
+            "winlog.event_data.User",
+            "related.user",
+            "User",
+            "user",
+        ]:
             user = self._get_nested(event, user_field)
             if user and self._is_valid_ioc(user, IoCType.USER):
-                iocs.append(self._create_ioc(
-                    user, IoCType.USER, source_type, source_tool,
-                    investigation_id, {"field": user_field}
-                ))
+                iocs.append(
+                    self._create_ioc(
+                        user, IoCType.USER, source_type, source_tool, investigation_id, {"field": user_field}
+                    )
+                )
 
         # Hostnames
-        for host_field in ["host.name", "host.hostname", "ComputerName",
-                          "winlog.computer_name", "hostname"]:
+        for host_field in ["host.name", "host.hostname", "ComputerName", "winlog.computer_name", "hostname"]:
             host = self._get_nested(event, host_field)
             if host and self._is_valid_ioc(host, IoCType.HOSTNAME):
-                iocs.append(self._create_ioc(
-                    host, IoCType.HOSTNAME, source_type, source_tool,
-                    investigation_id, {"field": host_field}
-                ))
+                iocs.append(
+                    self._create_ioc(
+                        host, IoCType.HOSTNAME, source_type, source_tool, investigation_id, {"field": host_field}
+                    )
+                )
 
         # Processes
-        for proc_field in ["process.name", "winlog.event_data.NewProcessName",
-                          "winlog.event_data.Image", "process.executable"]:
+        for proc_field in [
+            "process.name",
+            "winlog.event_data.NewProcessName",
+            "winlog.event_data.Image",
+            "process.executable",
+        ]:
             proc = self._get_nested(event, proc_field)
             if proc and self._is_valid_ioc(proc, IoCType.PROCESS):
-                iocs.append(self._create_ioc(
-                    proc, IoCType.PROCESS, source_type, source_tool,
-                    investigation_id, {"field": proc_field}
-                ))
+                iocs.append(
+                    self._create_ioc(
+                        proc, IoCType.PROCESS, source_type, source_tool, investigation_id, {"field": proc_field}
+                    )
+                )
 
         # Command lines (TTPs - highest priority)
-        for cmd_field in ["process.command_line", "winlog.event_data.CommandLine",
-                         "winlog.event_data.ParentCommandLine"]:
+        for cmd_field in [
+            "process.command_line",
+            "winlog.event_data.CommandLine",
+            "winlog.event_data.ParentCommandLine",
+        ]:
             cmd = self._get_nested(event, cmd_field)
             if cmd and self._is_valid_ioc(cmd, IoCType.COMMANDLINE):
-                iocs.append(self._create_ioc(
-                    cmd, IoCType.COMMANDLINE, source_type, source_tool,
-                    investigation_id, {"field": cmd_field}
-                ))
+                iocs.append(
+                    self._create_ioc(
+                        cmd, IoCType.COMMANDLINE, source_type, source_tool, investigation_id, {"field": cmd_field}
+                    )
+                )
 
         # Hashes
-        for hash_field in ["file.hash.sha256", "file.hash.md5", "file.hash.sha1",
-                          "winlog.event_data.Hashes"]:
+        for hash_field in ["file.hash.sha256", "file.hash.md5", "file.hash.sha1", "winlog.event_data.Hashes"]:
             hash_val = self._get_nested(event, hash_field)
             if hash_val and self._is_valid_ioc(hash_val, IoCType.HASH):
-                iocs.append(self._create_ioc(
-                    hash_val, IoCType.HASH, source_type, source_tool,
-                    investigation_id, {"field": hash_field}
-                ))
+                iocs.append(
+                    self._create_ioc(
+                        hash_val, IoCType.HASH, source_type, source_tool, investigation_id, {"field": hash_field}
+                    )
+                )
 
         # File paths
-        for path_field in ["file.path", "winlog.event_data.TargetFilename",
-                          "process.executable"]:
+        for path_field in ["file.path", "winlog.event_data.TargetFilename", "process.executable"]:
             path = self._get_nested(event, path_field)
             if path and self._is_valid_ioc(path, IoCType.FILE_PATH):
-                iocs.append(self._create_ioc(
-                    path, IoCType.FILE_PATH, source_type, source_tool,
-                    investigation_id, {"field": path_field}
-                ))
+                iocs.append(
+                    self._create_ioc(
+                        path, IoCType.FILE_PATH, source_type, source_tool, investigation_id, {"field": path_field}
+                    )
+                )
 
         # Registry keys
         for reg_field in ["registry.path", "winlog.event_data.TargetObject"]:
             reg = self._get_nested(event, reg_field)
             if reg and self._is_valid_ioc(reg, IoCType.REGISTRY_KEY):
-                iocs.append(self._create_ioc(
-                    reg, IoCType.REGISTRY_KEY, source_type, source_tool,
-                    investigation_id, {"field": reg_field}
-                ))
+                iocs.append(
+                    self._create_ioc(
+                        reg, IoCType.REGISTRY_KEY, source_type, source_tool, investigation_id, {"field": reg_field}
+                    )
+                )
 
         return iocs
 
@@ -367,8 +404,17 @@ class SmartExtractor:
             return False
 
         # Skip system/default values
-        skip_values = {"SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE", "-", "N/A",
-                      "localhost", "127.0.0.1", "::1", "0.0.0.0"}
+        skip_values = {
+            "SYSTEM",
+            "LOCAL SERVICE",
+            "NETWORK SERVICE",
+            "-",
+            "N/A",
+            "localhost",
+            "127.0.0.1",
+            "::1",
+            "0.0.0.0",
+        }
         if value.upper() in skip_values:
             return False
 
@@ -458,13 +504,9 @@ class SmartExtractor:
                 unique[key] = ioc
 
         # Sort by priority (highest first) and limit
-        sorted_iocs = sorted(
-            unique.values(),
-            key=lambda x: (x.pyramid_priority, x.total_occurrences),
-            reverse=True
-        )
+        sorted_iocs = sorted(unique.values(), key=lambda x: (x.pyramid_priority, x.total_occurrences), reverse=True)
 
-        return sorted_iocs[:self.max_iocs]
+        return sorted_iocs[: self.max_iocs]
 
     def summarize_events(
         self,
@@ -492,8 +534,7 @@ class SmartExtractor:
 
         for event in events:
             # Count event types
-            event_code = self._get_nested(event, "event.code") or \
-                        self._get_nested(event, "winlog.event_id")
+            event_code = self._get_nested(event, "event.code") or self._get_nested(event, "winlog.event_id")
             if event_code:
                 event_types[str(event_code)] = event_types.get(str(event_code), 0) + 1
 
@@ -502,14 +543,12 @@ class SmartExtractor:
                     mitre_techniques.add(MITRE_EVENT_MAPPING[str(event_code)]["technique"])
 
             # Collect hosts
-            host = self._get_nested(event, "host.name") or \
-                   self._get_nested(event, "winlog.computer_name")
+            host = self._get_nested(event, "host.name") or self._get_nested(event, "winlog.computer_name")
             if host:
                 hosts.add(host)
 
             # Collect users
-            user = self._get_nested(event, "user.name") or \
-                   self._get_nested(event, "winlog.event_data.TargetUserName")
+            user = self._get_nested(event, "user.name") or self._get_nested(event, "winlog.event_data.TargetUserName")
             if user and user.upper() not in {"SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE"}:
                 users.add(user)
 
@@ -568,8 +607,7 @@ class SmartExtractor:
 
         for event in events:
             # Get timestamp
-            timestamp_str = self._get_nested(event, "@timestamp") or \
-                           self._get_nested(event, "timestamp")
+            timestamp_str = self._get_nested(event, "@timestamp") or self._get_nested(event, "timestamp")
             if not timestamp_str:
                 continue
 
@@ -583,8 +621,9 @@ class SmartExtractor:
                 continue
 
             # Get event details
-            event_code = self._get_nested(event, "event.code") or \
-                        self._get_nested(event, "winlog.event_id") or "unknown"
+            event_code = (
+                self._get_nested(event, "event.code") or self._get_nested(event, "winlog.event_id") or "unknown"
+            )
 
             # Determine severity
             severity = Severity.INFO
@@ -595,8 +634,7 @@ class SmartExtractor:
 
             # Build summary
             host = self._get_nested(event, "host.name") or "unknown"
-            user = self._get_nested(event, "user.name") or \
-                   self._get_nested(event, "winlog.event_data.TargetUserName")
+            user = self._get_nested(event, "user.name") or self._get_nested(event, "winlog.event_data.TargetUserName")
             summary = f"Event {event_code}"
             if user:
                 summary += f" by {user}"
@@ -635,6 +673,7 @@ class SmartExtractor:
         Rough estimate: 1 token ≈ 4 characters
         """
         import json
+
         if isinstance(data, str):
             text = data
         else:

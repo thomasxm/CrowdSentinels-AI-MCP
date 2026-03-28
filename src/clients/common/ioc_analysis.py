@@ -1,4 +1,5 @@
 """IoC Analysis and Decision-Making Client for incident response."""
+
 from datetime import datetime
 
 from src.clients.base import SearchClientBase
@@ -14,7 +15,7 @@ class IoCAnalysisClient(SearchClientBase):
         "domain": {"priority": 3, "difficulty": "Simple", "description": "Takes some effort to change"},
         "network_artifact": {"priority": 4, "difficulty": "Annoying", "description": "Requires infrastructure changes"},
         "tool": {"priority": 5, "difficulty": "Challenging", "description": "Requires tool development"},
-        "ttps": {"priority": 6, "difficulty": "Tough", "description": "Fundamental behavior patterns"}
+        "ttps": {"priority": 6, "difficulty": "Tough", "description": "Fundamental behavior patterns"},
     }
 
     # MITRE ATT&CK mapping for common Windows events
@@ -52,7 +53,11 @@ class IoCAnalysisClient(SearchClientBase):
         "4657": {"technique": "T1112", "tactic": "Defense Evasion", "name": "Registry Modification"},
         # Network
         "3": {"technique": "T1071", "tactic": "Command and Control", "name": "Network Connection (Sysmon)"},
-        "5156": {"technique": "T1071", "tactic": "Command and Control", "name": "Windows Filtering Platform Connection"},
+        "5156": {
+            "technique": "T1071",
+            "tactic": "Command and Control",
+            "name": "Windows Filtering Platform Connection",
+        },
     }
 
     # Content-based patterns for MITRE mapping when event codes alone are insufficient.
@@ -104,7 +109,7 @@ class IoCAnalysisClient(SearchClientBase):
             "mitre_attack_techniques": [],
             "severity_assessment": "unknown",
             "recommended_followup": [],
-            "raw_insights": []
+            "raw_insights": [],
         }
 
         # Extract total hits and events - handle multiple input formats:
@@ -187,56 +192,59 @@ class IoCAnalysisClient(SearchClientBase):
             for ip_field in ["source.ip", "destination.ip", "client.ip"]:
                 ip = self._get_nested_value(source, ip_field)
                 if ip and ip not in seen:
-                    iocs.append({
-                        "type": "ip",
-                        "value": ip,
-                        "pyramid_priority": self.PYRAMID_OF_PAIN["ip"]["priority"],
-                        "field": ip_field
-                    })
+                    iocs.append(
+                        {
+                            "type": "ip",
+                            "value": ip,
+                            "pyramid_priority": self.PYRAMID_OF_PAIN["ip"]["priority"],
+                            "field": ip_field,
+                        }
+                    )
                     seen.add(ip)
 
             # Extract usernames
             user = self._get_nested_value(source, "user.name")
             if user and user not in seen and user != "SYSTEM":
-                iocs.append({
-                    "type": "user",
-                    "value": user,
-                    "pyramid_priority": 4,  # Network artifact level
-                    "field": "user.name"
-                })
+                iocs.append(
+                    {
+                        "type": "user",
+                        "value": user,
+                        "pyramid_priority": 4,  # Network artifact level
+                        "field": "user.name",
+                    }
+                )
                 seen.add(user)
 
             # Extract process names
             process = self._get_nested_value(source, "winlog.event_data.NewProcessName")
             if process and process not in seen:
-                iocs.append({
-                    "type": "process",
-                    "value": process,
-                    "pyramid_priority": self.PYRAMID_OF_PAIN["tool"]["priority"],
-                    "field": "winlog.event_data.NewProcessName"
-                })
+                iocs.append(
+                    {
+                        "type": "process",
+                        "value": process,
+                        "pyramid_priority": self.PYRAMID_OF_PAIN["tool"]["priority"],
+                        "field": "winlog.event_data.NewProcessName",
+                    }
+                )
                 seen.add(process)
 
             # Extract command lines (TTPs)
             cmdline = self._get_nested_value(source, "winlog.event_data.CommandLine")
             if cmdline and cmdline not in seen:
-                iocs.append({
-                    "type": "commandline",
-                    "value": cmdline,
-                    "pyramid_priority": self.PYRAMID_OF_PAIN["ttps"]["priority"],
-                    "field": "winlog.event_data.CommandLine"
-                })
+                iocs.append(
+                    {
+                        "type": "commandline",
+                        "value": cmdline,
+                        "pyramid_priority": self.PYRAMID_OF_PAIN["ttps"]["priority"],
+                        "field": "winlog.event_data.CommandLine",
+                    }
+                )
                 seen.add(cmdline)
 
             # Extract hostnames
             hostname = self._get_nested_value(source, "host.name")
             if hostname and hostname not in seen:
-                iocs.append({
-                    "type": "hostname",
-                    "value": hostname,
-                    "pyramid_priority": 3,
-                    "field": "host.name"
-                })
+                iocs.append({"type": "hostname", "value": hostname, "pyramid_priority": 3, "field": "host.name"})
                 seen.add(hostname)
 
         # Sort by pyramid priority (higher priority first)
@@ -259,13 +267,15 @@ class IoCAnalysisClient(SearchClientBase):
 
         def _add_technique(technique_id, mapping, event_code=None):
             if technique_id not in seen_techniques:
-                techniques.append({
-                    "technique_id": technique_id,
-                    "technique_name": mapping["name"],
-                    "tactic": mapping["tactic"],
-                    "event_code": event_code or "content",
-                    "count": 1
-                })
+                techniques.append(
+                    {
+                        "technique_id": technique_id,
+                        "technique_name": mapping["name"],
+                        "tactic": mapping["tactic"],
+                        "event_code": event_code or "content",
+                        "count": 1,
+                    }
+                )
                 seen_techniques.add(technique_id)
             else:
                 for t in techniques:
@@ -278,9 +288,9 @@ class IoCAnalysisClient(SearchClientBase):
 
             # Try multiple field names for event code
             event_code = (
-                self._get_nested_value(source, "event.code") or
-                source.get("code") or
-                self._get_nested_value(source, "winlog.event_id")
+                self._get_nested_value(source, "event.code")
+                or source.get("code")
+                or self._get_nested_value(source, "winlog.event_id")
             )
 
             # 1. Event code mapping
@@ -289,12 +299,17 @@ class IoCAnalysisClient(SearchClientBase):
                 _add_technique(mapping["technique"], mapping, event_code)
 
             # 2. Content pattern matching — scan message and command_line
-            content = " ".join(filter(None, [
-                source.get("message", ""),
-                self._get_nested_value(source, "process.command_line") or "",
-                self._get_nested_value(source, "winlog.event_data.CommandLine") or "",
-                self._get_nested_value(source, "process.executable") or "",
-            ]))
+            content = " ".join(
+                filter(
+                    None,
+                    [
+                        source.get("message", ""),
+                        self._get_nested_value(source, "process.command_line") or "",
+                        self._get_nested_value(source, "winlog.event_data.CommandLine") or "",
+                        self._get_nested_value(source, "process.executable") or "",
+                    ],
+                )
+            )
             if content.strip():
                 for pattern, mapping in self.MITRE_CONTENT_PATTERNS.items():
                     if pattern.lower() in content.lower():
@@ -302,8 +317,7 @@ class IoCAnalysisClient(SearchClientBase):
 
         return techniques
 
-    def _assess_severity(self, total_hits: int, iocs: list[dict],
-                        techniques: list[dict]) -> str:
+    def _assess_severity(self, total_hits: int, iocs: list[dict], techniques: list[dict]) -> str:
         """Assess severity based on findings.
 
         Severity is driven primarily by *what* was detected (technique
@@ -350,8 +364,7 @@ class IoCAnalysisClient(SearchClientBase):
             return "medium"
         return "low"
 
-    def _generate_insights(self, events: list[dict], iocs: list[dict],
-                          techniques: list[dict]) -> list[str]:
+    def _generate_insights(self, events: list[dict], iocs: list[dict], techniques: list[dict]) -> list[str]:
         """Generate human-readable insights from the analysis."""
         insights = []
 
@@ -380,17 +393,20 @@ class IoCAnalysisClient(SearchClientBase):
         # MITRE ATT&CK insights
         if techniques:
             tactics = set(t["tactic"] for t in techniques)
-            insights.append(f"MITRE ATT&CK: Detected techniques from {len(tactics)} different tactics: {', '.join(tactics)}")
+            insights.append(
+                f"MITRE ATT&CK: Detected techniques from {len(tactics)} different tactics: {', '.join(tactics)}"
+            )
 
         # Specific technique insights
         for technique in techniques:
             if technique["count"] > 5:
-                insights.append(f"REPEATED TECHNIQUE: {technique['technique_name']} ({technique['technique_id']}) occurred {technique['count']} times")
+                insights.append(
+                    f"REPEATED TECHNIQUE: {technique['technique_name']} ({technique['technique_id']}) occurred {technique['count']} times"
+                )
 
         return insights
 
-    def _recommend_followup_queries(self, iocs: list[dict], events: list[dict],
-                                   context: str) -> list[dict]:
+    def _recommend_followup_queries(self, iocs: list[dict], events: list[dict], context: str) -> list[dict]:
         """Recommend follow-up queries based on findings."""
         recommendations = []
 
@@ -399,53 +415,49 @@ class IoCAnalysisClient(SearchClientBase):
 
         for ioc in high_priority_iocs[:5]:  # Top 5 high-priority IoCs
             if ioc["type"] == "user":
-                recommendations.append({
-                    "priority": "high",
-                    "reason": f"Investigate all activity for user '{ioc['value']}'",
-                    "tool": "get_host_activity_timeline",
-                    "parameters": {
-                        "search_scope": "all_indices",
-                        "ioc": ioc["value"],
-                        "ioc_type": "user"
-                    },
-                    "query_description": f"Search for all events involving user {ioc['value']} to understand scope"
-                })
+                recommendations.append(
+                    {
+                        "priority": "high",
+                        "reason": f"Investigate all activity for user '{ioc['value']}'",
+                        "tool": "get_host_activity_timeline",
+                        "parameters": {"search_scope": "all_indices", "ioc": ioc["value"], "ioc_type": "user"},
+                        "query_description": f"Search for all events involving user {ioc['value']} to understand scope",
+                    }
+                )
 
             elif ioc["type"] == "hostname":
-                recommendations.append({
-                    "priority": "high",
-                    "reason": f"Perform forensic timeline analysis on host '{ioc['value']}'",
-                    "tool": "get_host_activity_timeline",
-                    "parameters": {
-                        "hostname": ioc["value"],
-                        "timeframe": "extended"
-                    },
-                    "query_description": f"Get complete activity timeline for {ioc['value']}"
-                })
+                recommendations.append(
+                    {
+                        "priority": "high",
+                        "reason": f"Perform forensic timeline analysis on host '{ioc['value']}'",
+                        "tool": "get_host_activity_timeline",
+                        "parameters": {"hostname": ioc["value"], "timeframe": "extended"},
+                        "query_description": f"Get complete activity timeline for {ioc['value']}",
+                    }
+                )
 
             elif ioc["type"] == "process":
-                recommendations.append({
-                    "priority": "medium",
-                    "reason": f"Search for other instances of process '{ioc['value']}'",
-                    "tool": "hunt_for_ioc",
-                    "parameters": {
-                        "ioc": ioc["value"],
-                        "ioc_type": "process"
-                    },
-                    "query_description": f"Find all executions of {ioc['value']} across the environment"
-                })
+                recommendations.append(
+                    {
+                        "priority": "medium",
+                        "reason": f"Search for other instances of process '{ioc['value']}'",
+                        "tool": "hunt_for_ioc",
+                        "parameters": {"ioc": ioc["value"], "ioc_type": "process"},
+                        "query_description": f"Find all executions of {ioc['value']} across the environment",
+                    }
+                )
 
         # Recommend correlation queries
         if len(high_priority_iocs) > 1:
-            recommendations.append({
-                "priority": "high",
-                "reason": "Correlate multiple IoCs to identify attack chain",
-                "tool": "custom_correlation",
-                "parameters": {
-                    "iocs": [ioc["value"] for ioc in high_priority_iocs[:3]]
-                },
-                "query_description": "Build timeline showing relationship between identified IoCs"
-            })
+            recommendations.append(
+                {
+                    "priority": "high",
+                    "reason": "Correlate multiple IoCs to identify attack chain",
+                    "tool": "custom_correlation",
+                    "parameters": {"iocs": [ioc["value"] for ioc in high_priority_iocs[:3]]},
+                    "query_description": "Build timeline showing relationship between identified IoCs",
+                }
+            )
 
         return recommendations
 
@@ -460,8 +472,7 @@ class IoCAnalysisClient(SearchClientBase):
                 return None
         return value
 
-    def generate_investigation_report(self, analysis_results: list[dict],
-                                     investigation_context: str) -> dict:
+    def generate_investigation_report(self, analysis_results: list[dict], investigation_context: str) -> dict:
         """
         Generate a comprehensive investigation report from multiple analyses.
 
@@ -484,7 +495,7 @@ class IoCAnalysisClient(SearchClientBase):
             "affected_users": set(),
             "timeline": [],
             "severity": "unknown",
-            "recommendations": []
+            "recommendations": [],
         }
 
         # Aggregate all IoCs
@@ -513,19 +524,23 @@ class IoCAnalysisClient(SearchClientBase):
                 # Handle both dict techniques and string technique IDs
                 if isinstance(technique, str):
                     # Convert string to dict format
-                    technique = {"technique_id": technique, "technique_name": technique, "tactic": "Unknown", "count": 1}
+                    technique = {
+                        "technique_id": technique,
+                        "technique_name": technique,
+                        "tactic": "Unknown",
+                        "count": 1,
+                    }
 
                 if not isinstance(technique, dict):
                     continue
 
                 technique_id = technique.get("technique_id", "")
-                existing = next((t for t in report["all_techniques"]
-                               if t.get("technique_id") == technique_id), None)
+                existing = next((t for t in report["all_techniques"] if t.get("technique_id") == technique_id), None)
                 if existing:
                     existing["count"] = existing.get("count", 0) + technique.get("count", 1)
                 else:
                     # Safe copy - handle both dict and other types
-                    if hasattr(technique, 'copy'):
+                    if hasattr(technique, "copy"):
                         report["all_techniques"].append(technique.copy())
                     else:
                         report["all_techniques"].append(dict(technique))

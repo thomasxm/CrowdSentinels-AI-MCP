@@ -25,13 +25,13 @@ import json
 import os
 import signal
 import sys
-from typing import Dict, Any, List
+from typing import Any
 
 try:
     from elasticsearch import (
-        Elasticsearch,
         AuthenticationException,
         AuthorizationException,
+        Elasticsearch,
     )
 except ImportError:
     print("Error: elasticsearch package not installed.", file=sys.stderr)
@@ -95,9 +95,7 @@ def get_es_client() -> Elasticsearch:
     es_version = int(elasticsearch.__version__[0])
 
     if api_key:
-        return Elasticsearch(
-            hosts=hosts.split(","), api_key=api_key, verify_certs=verify_certs
-        )
+        return Elasticsearch(hosts=hosts.split(","), api_key=api_key, verify_certs=verify_certs)
     elif es_version >= 8:
         return Elasticsearch(
             hosts=hosts.split(","),
@@ -112,7 +110,7 @@ def get_es_client() -> Elasticsearch:
         )
 
 
-def check_authentication(es: Elasticsearch) -> Dict[str, Any]:
+def check_authentication(es: Elasticsearch) -> dict[str, Any]:
     """Check if authentication credentials are valid.
 
     Args:
@@ -134,7 +132,7 @@ def check_authentication(es: Elasticsearch) -> Dict[str, Any]:
         return {"success": False, "error": "Connection error", "details": str(e)}
 
 
-def check_user_info(es: Elasticsearch) -> Dict[str, Any]:
+def check_user_info(es: Elasticsearch) -> dict[str, Any]:
     """Get current authenticated user information.
 
     Args:
@@ -154,9 +152,7 @@ def check_user_info(es: Elasticsearch) -> Dict[str, Any]:
             return {"success": False, "error": str(e)}
 
 
-def check_permissions(
-    es: Elasticsearch, verbose: bool = False
-) -> List[Dict[str, Any]]:
+def check_permissions(es: Elasticsearch, verbose: bool = False) -> list[dict[str, Any]]:
     """Check various Elasticsearch permissions for the authenticated user.
 
     Tests cluster health, index listing, search on common patterns,
@@ -175,31 +171,27 @@ def check_permissions(
     try:
         es.cluster.health()
         permission_checks.append(
-            {"permission": "cluster:monitor/health", "status": "granted",
-             "description": "Can check cluster health"})
+            {"permission": "cluster:monitor/health", "status": "granted", "description": "Can check cluster health"}
+        )
     except AuthorizationException:
         permission_checks.append(
-            {"permission": "cluster:monitor/health", "status": "denied",
-             "description": "Cannot check cluster health"})
+            {"permission": "cluster:monitor/health", "status": "denied", "description": "Cannot check cluster health"}
+        )
     except Exception as e:
-        permission_checks.append(
-            {"permission": "cluster:monitor/health", "status": "error",
-             "description": str(e)})
+        permission_checks.append({"permission": "cluster:monitor/health", "status": "error", "description": str(e)})
 
     # Check index listing
     try:
         es.cat.indices(format="json")
         permission_checks.append(
-            {"permission": "indices:monitor/stats", "status": "granted",
-             "description": "Can list indices"})
+            {"permission": "indices:monitor/stats", "status": "granted", "description": "Can list indices"}
+        )
     except AuthorizationException:
         permission_checks.append(
-            {"permission": "indices:monitor/stats", "status": "denied",
-             "description": "Cannot list indices"})
+            {"permission": "indices:monitor/stats", "status": "denied", "description": "Cannot list indices"}
+        )
     except Exception as e:
-        permission_checks.append(
-            {"permission": "indices:monitor/stats", "status": "error",
-             "description": str(e)})
+        permission_checks.append({"permission": "indices:monitor/stats", "status": "error", "description": str(e)})
 
     # Check search on common patterns
     test_indices = ["winlogbeat-*", "logs-*", "auditbeat-*", "*"]
@@ -207,57 +199,81 @@ def check_permissions(
         try:
             es.search(index=idx_pattern, size=0, ignore_unavailable=True)
             permission_checks.append(
-                {"permission": f"indices:data/read/search [{idx_pattern}]",
-                 "status": "granted",
-                 "description": f"Can search {idx_pattern}"})
+                {
+                    "permission": f"indices:data/read/search [{idx_pattern}]",
+                    "status": "granted",
+                    "description": f"Can search {idx_pattern}",
+                }
+            )
             if not verbose:
                 break
         except AuthorizationException:
             permission_checks.append(
-                {"permission": f"indices:data/read/search [{idx_pattern}]",
-                 "status": "denied",
-                 "description": f"Cannot search {idx_pattern}"})
+                {
+                    "permission": f"indices:data/read/search [{idx_pattern}]",
+                    "status": "denied",
+                    "description": f"Cannot search {idx_pattern}",
+                }
+            )
         except Exception as e:
             if "index_not_found" in str(e).lower():
                 permission_checks.append(
-                    {"permission": f"indices:data/read/search [{idx_pattern}]",
-                     "status": "no_index",
-                     "description": f"Index pattern {idx_pattern} does not exist"})
+                    {
+                        "permission": f"indices:data/read/search [{idx_pattern}]",
+                        "status": "no_index",
+                        "description": f"Index pattern {idx_pattern} does not exist",
+                    }
+                )
             else:
                 permission_checks.append(
-                    {"permission": f"indices:data/read/search [{idx_pattern}]",
-                     "status": "error", "description": str(e)})
+                    {
+                        "permission": f"indices:data/read/search [{idx_pattern}]",
+                        "status": "error",
+                        "description": str(e),
+                    }
+                )
 
     # Check EQL search
     try:
-        es.eql.search(
-            index="winlogbeat-*", body={"query": "any where true", "size": 0})
+        es.eql.search(index="winlogbeat-*", body={"query": "any where true", "size": 0})
         permission_checks.append(
-            {"permission": "indices:data/read/eql", "status": "granted",
-             "description": "Can execute EQL queries"})
+            {"permission": "indices:data/read/eql", "status": "granted", "description": "Can execute EQL queries"}
+        )
     except AuthorizationException:
         permission_checks.append(
-            {"permission": "indices:data/read/eql", "status": "denied",
-             "description": "Cannot execute EQL queries"})
+            {"permission": "indices:data/read/eql", "status": "denied", "description": "Cannot execute EQL queries"}
+        )
     except Exception as e:
         err_str = str(e).lower()
         if "eql" in err_str and "not supported" in err_str:
             permission_checks.append(
-                {"permission": "indices:data/read/eql", "status": "not_supported",
-                 "description": "EQL not supported on this version"})
+                {
+                    "permission": "indices:data/read/eql",
+                    "status": "not_supported",
+                    "description": "EQL not supported on this version",
+                }
+            )
         elif "index_not_found" in err_str or "no such index" in err_str:
             permission_checks.append(
-                {"permission": "indices:data/read/eql", "status": "no_index",
-                 "description": "No winlogbeat-* index for EQL test"})
+                {
+                    "permission": "indices:data/read/eql",
+                    "status": "no_index",
+                    "description": "No winlogbeat-* index for EQL test",
+                }
+            )
         else:
             permission_checks.append(
-                {"permission": "indices:data/read/eql", "status": "granted",
-                 "description": "Can execute EQL queries (with warnings)"})
+                {
+                    "permission": "indices:data/read/eql",
+                    "status": "granted",
+                    "description": "Can execute EQL queries (with warnings)",
+                }
+            )
 
     return permission_checks
 
 
-def _format_table(results: Dict[str, Any]) -> str:
+def _format_table(results: dict[str, Any]) -> str:
     """Format authentication check results as a table.
 
     Args:
@@ -300,8 +316,13 @@ def _format_table(results: Dict[str, Any]) -> str:
         lines.append("Permission Checks:")
         for perm in results["permissions"]:
             status = perm["status"]
-            icon = {"granted": "[OK]", "denied": "[DENIED]", "error": "[ERROR]",
-                    "no_index": "[N/A]", "not_supported": "[N/A]"}.get(status, "[?]")
+            icon = {
+                "granted": "[OK]",
+                "denied": "[DENIED]",
+                "error": "[ERROR]",
+                "no_index": "[N/A]",
+                "not_supported": "[N/A]",
+            }.get(status, "[?]")
             lines.append(f"  {icon} {perm['description']}")
         lines.append("")
 
@@ -349,11 +370,15 @@ Exit Codes:
     )
 
     parser.add_argument(
-        "--verbose", "-v", action="store_true",
-        help="Show detailed permission checks for all index patterns")
+        "--verbose", "-v", action="store_true", help="Show detailed permission checks for all index patterns"
+    )
     parser.add_argument(
-        "--output", "-o", choices=["json", "table", "summary"], default="table",
-        help="Output format: json (raw), table (detailed), summary (brief) (default: table)")
+        "--output",
+        "-o",
+        choices=["json", "table", "summary"],
+        default="table",
+        help="Output format: json (raw), table (detailed), summary (brief) (default: table)",
+    )
 
     args = parser.parse_args()
 
@@ -389,14 +414,14 @@ Exit Codes:
         # Summary output
         auth = results.get("authentication", {})
         if auth.get("success"):
-            granted = sum(1 for p in results.get("permissions", [])
-                          if p["status"] == "granted")
+            granted = sum(1 for p in results.get("permissions", []) if p["status"] == "granted")
             total = len(results.get("permissions", []))
-            print(f"[OK] Authenticated to {results['config']['hosts']} "
-                  f"(v{auth.get('version', '?')}) - {granted}/{total} permissions granted")
+            print(
+                f"[OK] Authenticated to {results['config']['hosts']} "
+                f"(v{auth.get('version', '?')}) - {granted}/{total} permissions granted"
+            )
         else:
-            print(f"[FAIL] {auth.get('error', 'Unknown error')}: "
-                  f"{auth.get('details', 'No details')}")
+            print(f"[FAIL] {auth.get('error', 'Unknown error')}: {auth.get('details', 'No details')}")
 
     # Determine exit code
     auth = results.get("authentication", {})

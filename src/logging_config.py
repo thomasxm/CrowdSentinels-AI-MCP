@@ -32,6 +32,7 @@ LOG_TO_TTY_ENV = "CROWDSENTINEL_LOG_TO_TTY"  # Set to "false" to disable TTY log
 # ANSI Colour codes for terminal output
 class Colours:
     """ANSI colour codes for terminal output."""
+
     RESET = "\033[0m"
     BOLD = "\033[1m"
     DIM = "\033[2m"
@@ -94,7 +95,7 @@ def _get_tty_stream() -> TextIO | None:
     try:
         # /dev/tty is the controlling terminal - writes here go directly
         # to the terminal, bypassing any stdout/stderr redirection
-        tty = open('/dev/tty', 'w')
+        tty = open("/dev/tty", "w")
         return tty
     except OSError:
         # No controlling terminal (e.g., running in background, Docker, etc.)
@@ -118,7 +119,7 @@ class ColouredFormatter(logging.Formatter):
 
     def format(self, record: logging.LogRecord) -> str:
         # Get the timestamp
-        timestamp = datetime.fromtimestamp(record.created).strftime('%H:%M:%S')
+        timestamp = datetime.fromtimestamp(record.created).strftime("%H:%M:%S")
 
         # Get the message
         message = record.getMessage()
@@ -268,6 +269,7 @@ class DirectStdoutHandler(logging.Handler):
         super().__init__()
         # Import os here to ensure it's available
         import os
+
         self._os = os
 
     def emit(self, record: logging.LogRecord):
@@ -276,7 +278,7 @@ class DirectStdoutHandler(logging.Handler):
             msg = self.format(record)
             # Write directly to file descriptor 1 (stdout)
             # This cannot be intercepted by any Python framework
-            self._os.write(1, (msg + '\n').encode('utf-8'))
+            self._os.write(1, (msg + "\n").encode("utf-8"))
         except Exception:
             # Don't crash on logging errors
             pass
@@ -310,8 +312,7 @@ def configure_logging(name: str = "crowdsentinel") -> logging.Logger:
     # Create formatters
     # File formatter - detailed without colours
     file_formatter = logging.Formatter(
-        fmt='%(asctime)s | %(levelname)-8s | %(name)s | %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
+        fmt="%(asctime)s | %(levelname)-8s | %(name)s | %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
     )
 
     # Coloured formatter for terminal
@@ -338,7 +339,7 @@ def configure_logging(name: str = "crowdsentinel") -> logging.Logger:
     # Don't add handlers to child - let it propagate to parent
 
     # File handler - always write to file for debugging
-    file_handler = logging.FileHandler(log_file, mode='a', encoding='utf-8')
+    file_handler = logging.FileHandler(log_file, mode="a", encoding="utf-8")
     file_handler.setLevel(logging.DEBUG)  # Capture everything in file
     file_handler.setFormatter(file_formatter)
     root_logger.addHandler(file_handler)
@@ -411,6 +412,7 @@ def log_tool_call(logger: logging.Logger):
         def my_tool(param1: str, param2: int) -> Dict:
             ...
     """
+
     def decorator(func: Callable) -> Callable:
         @functools.wraps(func)
         def wrapper(*args, **kwargs) -> Any:
@@ -437,6 +439,7 @@ def log_tool_call(logger: logging.Logger):
                 raise
 
         return wrapper
+
     return decorator
 
 
@@ -472,8 +475,7 @@ def _extract_result_summary(result: Any) -> str:
     return " | ".join(parts) if parts else "ok"
 
 
-def log_query(logger: logging.Logger, query_type: str, index: str,
-              query: str, timeframe: int | None = None):
+def log_query(logger: logging.Logger, query_type: str, index: str, query: str, timeframe: int | None = None):
     """
     Log an Elasticsearch query execution.
 
@@ -489,8 +491,7 @@ def log_query(logger: logging.Logger, query_type: str, index: str,
     logger.debug(f"QUERY: {query_type} | index={index}{time_str} | {query_preview}")
 
 
-def log_es_response(logger: logging.Logger, took_ms: int, hits: int,
-                    timed_out: bool = False):
+def log_es_response(logger: logging.Logger, took_ms: int, hits: int, timed_out: bool = False):
     """
     Log Elasticsearch response summary.
 
@@ -527,8 +528,7 @@ class ToolLogger:
         params_str = format_params_for_log(params)
         self.logger.info(f">>> {tool_name} | {params_str}")
 
-    def query(self, query_type: str, query: str, index: str,
-              timeframe: int | None = None):
+    def query(self, query_type: str, query: str, index: str, timeframe: int | None = None):
         """Log a query being executed."""
         log_query(self.logger, query_type, index, query, timeframe)
 

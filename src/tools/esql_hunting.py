@@ -1,4 +1,5 @@
 """MCP Tools for ES|QL Hunting Queries."""
+
 import logging
 
 from fastmcp import FastMCP
@@ -38,10 +39,7 @@ class ESQLHuntingTools:
     def register_tools(self, mcp: FastMCP):
         @mcp.tool()
         def list_esql_hunts(
-            platform: str | None = None,
-            mitre_technique: str | None = None,
-            keyword: str | None = None,
-            limit: int = 50
+            platform: str | None = None, mitre_technique: str | None = None, keyword: str | None = None, limit: int = 50
         ) -> dict:
             """
             List available ES|QL hunting queries from the curated rule library.
@@ -75,10 +73,7 @@ class ESQLHuntingTools:
             """
             # Search for matching rules
             rules = self.hunting_loader.search_rules(
-                platform=platform,
-                mitre=mitre_technique,
-                keyword=keyword,
-                limit=limit
+                platform=platform, mitre=mitre_technique, keyword=keyword, limit=limit
             )
 
             # Get statistics
@@ -87,22 +82,24 @@ class ESQLHuntingTools:
             # Format rules for display
             rule_summaries = []
             for rule in rules:
-                rule_summaries.append({
-                    "uuid": rule.uuid,
-                    "name": rule.name,
-                    "description": rule.short_description,
-                    "platform": rule.platform,
-                    "mitre": rule.mitre,
-                    "integration": rule.integration,
-                    "query_count": len(rule.esql_queries)
-                })
+                rule_summaries.append(
+                    {
+                        "uuid": rule.uuid,
+                        "name": rule.name,
+                        "description": rule.short_description,
+                        "platform": rule.platform,
+                        "mitre": rule.mitre,
+                        "integration": rule.integration,
+                        "query_count": len(rule.esql_queries),
+                    }
+                )
 
             return {
                 "total_found": len(rules),
                 "showing": len(rule_summaries),
                 "rules": rule_summaries,
                 "platforms": self.hunting_loader.get_platforms(),
-                "statistics": stats
+                "statistics": stats,
             }
 
         @mcp.tool()
@@ -124,7 +121,7 @@ class ESQLHuntingTools:
             if not rule:
                 return {
                     "error": f"Hunting rule not found: {rule_id}",
-                    "suggestion": "Use list_esql_hunts() to find available rules"
+                    "suggestion": "Use list_esql_hunts() to find available rules",
                 }
 
             return {
@@ -137,7 +134,7 @@ class ESQLHuntingTools:
                 "notes": rule.notes,
                 "esql_queries": rule.esql_queries,
                 "query_count": len(rule.esql_queries),
-                "file_path": rule.file_path
+                "file_path": rule.file_path,
             }
 
         @mcp.tool()
@@ -146,7 +143,7 @@ class ESQLHuntingTools:
             index: str | None = None,
             timeframe_days: int | None = None,
             query_index: int = 0,
-            lean: bool = False
+            lean: bool = False,
         ) -> dict:
             """
             Execute a curated ES|QL hunting query from the rule library.
@@ -199,7 +196,7 @@ class ESQLHuntingTools:
             if not rule:
                 return {
                     "error": f"Hunting rule not found: {rule_id}",
-                    "suggestion": "Use list_esql_hunts() to find available rules"
+                    "suggestion": "Use list_esql_hunts() to find available rules",
                 }
 
             # Validate query index
@@ -207,7 +204,7 @@ class ESQLHuntingTools:
                 return {
                     "error": f"Query index {query_index} out of range",
                     "available_queries": len(rule.esql_queries),
-                    "suggestion": f"Use query_index 0-{len(rule.esql_queries) - 1}"
+                    "suggestion": f"Use query_index 0-{len(rule.esql_queries) - 1}",
                 }
 
             # Get the query
@@ -218,12 +215,7 @@ class ESQLHuntingTools:
                 query = self.esql_client.substitute_timeframe(query, timeframe_days)
 
             # Execute with adaptive index resolution
-            result = self.esql_client.execute_with_auto_discovery(
-                query=query,
-                index=index,
-                lean=lean,
-                rule_id=rule_id
-            )
+            result = self.esql_client.execute_with_auto_discovery(query=query, index=index, lean=lean, rule_id=rule_id)
 
             # Add rule metadata - base info always included
             result["rule_info"] = {
@@ -251,8 +243,8 @@ class ESQLHuntingTools:
                         "Review the results for true positives vs false positives",
                         "Correlate findings with other log sources",
                         "Check affected hosts for additional indicators",
-                        f"Research MITRE techniques: {', '.join(rule.mitre)}" if rule.mitre else None
-                    ]
+                        f"Research MITRE techniques: {', '.join(rule.mitre)}" if rule.mitre else None,
+                    ],
                 }
                 # Filter out None values from next_steps
                 result["investigation_context"]["next_steps"] = [
@@ -262,17 +254,13 @@ class ESQLHuntingTools:
                 # No hits - minimal output
                 result["investigation_context"] = {
                     "findings_detected": False,
-                    "message": "No matches found for this hunting query in the specified timeframe"
+                    "message": "No matches found for this hunting query in the specified timeframe",
                 }
 
             return result
 
         @mcp.tool()
-        def esql_query(
-            query: str,
-            auto_discover: bool = True,
-            lean: bool = False
-        ) -> dict:
+        def esql_query(query: str, auto_discover: bool = True, lean: bool = False) -> dict:
             """
             Execute a raw ES|QL query for ad-hoc threat hunting.
 
@@ -313,23 +301,14 @@ class ESQLHuntingTools:
                 esql_query("FROM logs-* | LIMIT 100", lean=True)
             """
             if auto_discover:
-                result = self.esql_client.execute_with_auto_discovery(
-                    query=query,
-                    lean=lean
-                )
+                result = self.esql_client.execute_with_auto_discovery(query=query, lean=lean)
             else:
-                result = self.esql_client.execute(
-                    query=query,
-                    lean=lean
-                )
+                result = self.esql_client.execute(query=query, lean=lean)
 
             return result
 
         @mcp.tool()
-        def discover_esql_indices(
-            fields: list[str] | None = None,
-            data_type: str | None = None
-        ) -> dict:
+        def discover_esql_indices(fields: list[str] | None = None, data_type: str | None = None) -> dict:
             """
             Discover available indices for ES|QL hunting.
 
@@ -360,10 +339,7 @@ class ESQLHuntingTools:
             """
             try:
                 # Get all indices
-                indices_info = self.esql_client.client.cat.indices(
-                    format="json",
-                    h="index,docs.count,store.size"
-                )
+                indices_info = self.esql_client.client.cat.indices(format="json", h="index,docs.count,store.size")
 
                 all_indices = []
                 for idx_info in indices_info:
@@ -374,11 +350,9 @@ class ESQLHuntingTools:
                     if index_name.startswith(".") or doc_count == 0:
                         continue
 
-                    all_indices.append({
-                        "index": index_name,
-                        "doc_count": doc_count,
-                        "size": idx_info.get("store.size", "unknown")
-                    })
+                    all_indices.append(
+                        {"index": index_name, "doc_count": doc_count, "size": idx_info.get("store.size", "unknown")}
+                    )
 
                 # Sort by doc count
                 all_indices.sort(key=lambda x: -x["doc_count"])
@@ -394,7 +368,7 @@ class ESQLHuntingTools:
                         "suggestion": (
                             f"Found {len(compatible)} indices with matching fields. "
                             f"Use the top match in your FROM clause or override with index parameter."
-                        )
+                        ),
                     }
                 return {
                     "indices": all_indices[:20],  # Top 20 by doc count
@@ -403,14 +377,11 @@ class ESQLHuntingTools:
                     "suggestion": (
                         "Use discover_esql_indices(fields=['process.name', ...]) to find "
                         "indices compatible with specific queries."
-                    )
+                    ),
                 }
 
             except Exception as e:
-                return {
-                    "error": f"Failed to discover indices: {str(e)}",
-                    "indices": []
-                }
+                return {"error": f"Failed to discover indices: {str(e)}", "indices": []}
 
         @mcp.tool()
         def get_esql_execution_history() -> dict:
@@ -433,11 +404,7 @@ class ESQLHuntingTools:
             if not history:
                 return {
                     "executions": [],
-                    "summary": {
-                        "total_executions": 0,
-                        "total_tokens_used": 0,
-                        "avg_tokens_per_query": 0
-                    }
+                    "summary": {"total_executions": 0, "total_tokens_used": 0, "avg_tokens_per_query": 0},
                 }
 
             total_tokens = sum(e["result_tokens"] for e in history)
@@ -449,8 +416,10 @@ class ESQLHuntingTools:
                     "total_executions": len(history),
                     "total_tokens_used": total_tokens,
                     "avg_tokens_per_query": avg_tokens,
-                    "avg_execution_time_ms": sum(e["execution_time_ms"] for e in history) // len(history) if history else 0
-                }
+                    "avg_execution_time_ms": sum(e["execution_time_ms"] for e in history) // len(history)
+                    if history
+                    else 0,
+                },
             }
 
         @mcp.tool()
@@ -476,7 +445,7 @@ class ESQLHuntingTools:
                     "supported": True,
                     "es_version": self.esql_client.es_version,
                     "min_required": "8.11",
-                    "status": "ES|QL is available and ready to use"
+                    "status": "ES|QL is available and ready to use",
                 }
             except Exception as e:
                 return {
@@ -484,7 +453,7 @@ class ESQLHuntingTools:
                     "es_version": self.esql_client.es_version,
                     "min_required": "8.11",
                     "error": str(e),
-                    "status": "ES|QL is not available on this cluster"
+                    "status": "ES|QL is not available on this cluster",
                 }
 
         @mcp.tool()
@@ -500,7 +469,7 @@ class ESQLHuntingTools:
             include_remote_threads: bool = True,
             include_dns: bool = True,
             schema_hint: str | None = None,
-            max_results: int = 100
+            max_results: int = 100,
         ) -> dict:
             """
             Hunt for all activity associated with a suspicious process.
@@ -591,7 +560,7 @@ class ESQLHuntingTools:
                     "include_process_access": include_process_access,
                     "include_remote_threads": include_remote_threads,
                     "include_dns": include_dns,
-                    "schema_hint": schema_hint
+                    "schema_hint": schema_hint,
                 },
                 "stages": [],
                 "schema_used": None,
@@ -604,15 +573,8 @@ class ESQLHuntingTools:
                 "dns_queries": [],
                 "registry_operations": [],
                 "timeline": [],
-                "iocs": {
-                    "processes": [],
-                    "files": [],
-                    "ips": [],
-                    "hostnames": [],
-                    "registry_keys": [],
-                    "domains": []
-                },
-                "errors": []
+                "iocs": {"processes": [], "files": [], "ips": [], "hostnames": [], "registry_keys": [], "domains": []},
+                "errors": [],
             }
 
             # Determine index patterns to search
@@ -639,15 +601,11 @@ class ESQLHuntingTools:
                 "schema_id": schema.schema_id,
                 "name": schema.name,
                 "field_prefix": schema.field_prefix,
-                "index": process_index
+                "index": process_index,
             }
 
             # Create query builder for schema-aware queries
-            query_builder = SchemaAwareQueryBuilder(
-                schema=schema,
-                index=process_index,
-                max_results=max_results
-            )
+            query_builder = SchemaAwareQueryBuilder(schema=schema, index=process_index, max_results=max_results)
 
             # =====================================================================
             # Stage 1: Find process execution bounds (start/stop times and hosts)
@@ -657,15 +615,17 @@ class ESQLHuntingTools:
                 stage1_query = stage1_query_result.query
 
                 stage1_result = self.esql_client.execute(stage1_query, lean=False)
-                results["stages"].append({
-                    "stage": 1,
-                    "name": "Process Bounds Discovery",
-                    "query": stage1_query.strip(),
-                    "schema_fields": stage1_query_result.fields_used,
-                    "event_code": stage1_query_result.event_code,
-                    "status": "success",
-                    "hits": stage1_result.get("hits_count", 0)
-                })
+                results["stages"].append(
+                    {
+                        "stage": 1,
+                        "name": "Process Bounds Discovery",
+                        "query": stage1_query.strip(),
+                        "schema_fields": stage1_query_result.fields_used,
+                        "event_code": stage1_query_result.event_code,
+                        "status": "success",
+                        "hits": stage1_result.get("hits_count", 0),
+                    }
+                )
 
                 # Extract bounds from results
                 if stage1_result.get("hits_count", 0) > 0:
@@ -686,7 +646,7 @@ class ESQLHuntingTools:
                             "end_time": end_time,
                             "hosts": hosts,
                             "event_count": count,
-                            "duration_info": "Time window for subsequent queries"
+                            "duration_info": "Time window for subsequent queries",
                         }
 
                         # Add to IoCs
@@ -706,20 +666,22 @@ class ESQLHuntingTools:
                                     parent_process_name=process_name,
                                     host=target_host,
                                     start_time=start_time,
-                                    end_time=end_time
+                                    end_time=end_time,
                                 )
                                 stage2_query = stage2_query_result.query
 
                                 stage2_result = self.esql_client.execute(stage2_query, lean=False)
-                                results["stages"].append({
-                                    "stage": stage_num,
-                                    "name": "Child Process Discovery",
-                                    "query": stage2_query.strip(),
-                                    "schema_fields": stage2_query_result.fields_used,
-                                    "event_code": stage2_query_result.event_code,
-                                    "status": "success",
-                                    "hits": stage2_result.get("hits_count", 0)
-                                })
+                                results["stages"].append(
+                                    {
+                                        "stage": stage_num,
+                                        "name": "Child Process Discovery",
+                                        "query": stage2_query.strip(),
+                                        "schema_fields": stage2_query_result.fields_used,
+                                        "event_code": stage2_query_result.event_code,
+                                        "status": "success",
+                                        "hits": stage2_result.get("hits_count", 0),
+                                    }
+                                )
 
                                 child_procs = stage2_result.get("results", [])
                                 results["child_processes"] = child_procs
@@ -729,29 +691,35 @@ class ESQLHuntingTools:
                                     timestamp_field = schema.timestamp_field
                                     process_field = schema.get_field("source_process", "process_create")
 
-                                    results["timeline"].append({
-                                        "timestamp": proc.get(timestamp_field),
-                                        "type": "child_process",
-                                        "details": proc
-                                    })
+                                    results["timeline"].append(
+                                        {
+                                            "timestamp": proc.get(timestamp_field),
+                                            "type": "child_process",
+                                            "details": proc,
+                                        }
+                                    )
                                     if process_field and proc.get(process_field):
                                         results["iocs"]["processes"].append(proc.get(process_field))
 
                             except ValueError as e:
                                 # Schema doesn't support this event type
-                                results["stages"].append({
-                                    "stage": stage_num,
-                                    "name": "Child Process Discovery",
-                                    "status": "skipped",
-                                    "reason": str(e)
-                                })
+                                results["stages"].append(
+                                    {
+                                        "stage": stage_num,
+                                        "name": "Child Process Discovery",
+                                        "status": "skipped",
+                                        "reason": str(e),
+                                    }
+                                )
                             except Exception as e:
-                                results["stages"].append({
-                                    "stage": stage_num,
-                                    "name": "Child Process Discovery",
-                                    "status": "error",
-                                    "error": str(e)
-                                })
+                                results["stages"].append(
+                                    {
+                                        "stage": stage_num,
+                                        "name": "Child Process Discovery",
+                                        "status": "error",
+                                        "error": str(e),
+                                    }
+                                )
                                 results["errors"].append(f"Stage {stage_num} (child processes): {str(e)}")
 
                             stage_num += 1
@@ -765,20 +733,22 @@ class ESQLHuntingTools:
                                     process_name=process_name,
                                     host=target_host,
                                     start_time=start_time,
-                                    end_time=end_time
+                                    end_time=end_time,
                                 )
                                 stage3_query = stage3_query_result.query
 
                                 stage3_result = self.esql_client.execute(stage3_query, lean=False)
-                                results["stages"].append({
-                                    "stage": stage_num,
-                                    "name": "File Operations Discovery",
-                                    "query": stage3_query.strip(),
-                                    "schema_fields": stage3_query_result.fields_used,
-                                    "event_code": stage3_query_result.event_code,
-                                    "status": "success",
-                                    "hits": stage3_result.get("hits_count", 0)
-                                })
+                                results["stages"].append(
+                                    {
+                                        "stage": stage_num,
+                                        "name": "File Operations Discovery",
+                                        "query": stage3_query.strip(),
+                                        "schema_fields": stage3_query_result.fields_used,
+                                        "event_code": stage3_query_result.event_code,
+                                        "status": "success",
+                                        "hits": stage3_result.get("hits_count", 0),
+                                    }
+                                )
 
                                 file_ops = stage3_result.get("results", [])
                                 results["file_operations"] = file_ops
@@ -788,28 +758,34 @@ class ESQLHuntingTools:
                                 target_file_field = schema.get_field("target_filename", "file_create")
 
                                 for file_op in file_ops if isinstance(file_ops, list) else []:
-                                    results["timeline"].append({
-                                        "timestamp": file_op.get(timestamp_field),
-                                        "type": "file_operation",
-                                        "details": file_op
-                                    })
+                                    results["timeline"].append(
+                                        {
+                                            "timestamp": file_op.get(timestamp_field),
+                                            "type": "file_operation",
+                                            "details": file_op,
+                                        }
+                                    )
                                     if target_file_field and file_op.get(target_file_field):
                                         results["iocs"]["files"].append(file_op.get(target_file_field))
 
                             except ValueError as e:
-                                results["stages"].append({
-                                    "stage": stage_num,
-                                    "name": "File Operations Discovery",
-                                    "status": "skipped",
-                                    "reason": str(e)
-                                })
+                                results["stages"].append(
+                                    {
+                                        "stage": stage_num,
+                                        "name": "File Operations Discovery",
+                                        "status": "skipped",
+                                        "reason": str(e),
+                                    }
+                                )
                             except Exception as e:
-                                results["stages"].append({
-                                    "stage": stage_num,
-                                    "name": "File Operations Discovery",
-                                    "status": "error",
-                                    "error": str(e)
-                                })
+                                results["stages"].append(
+                                    {
+                                        "stage": stage_num,
+                                        "name": "File Operations Discovery",
+                                        "status": "error",
+                                        "error": str(e),
+                                    }
+                                )
                                 results["errors"].append(f"Stage {stage_num} (file operations): {str(e)}")
 
                             stage_num += 1
@@ -823,20 +799,22 @@ class ESQLHuntingTools:
                                     process_name=process_name,
                                     host=target_host,
                                     start_time=start_time,
-                                    end_time=end_time
+                                    end_time=end_time,
                                 )
                                 stage4_query = stage4_query_result.query
 
                                 stage4_result = self.esql_client.execute(stage4_query, lean=False)
-                                results["stages"].append({
-                                    "stage": stage_num,
-                                    "name": "Network Connections Discovery",
-                                    "query": stage4_query.strip(),
-                                    "schema_fields": stage4_query_result.fields_used,
-                                    "event_code": stage4_query_result.event_code,
-                                    "status": "success",
-                                    "hits": stage4_result.get("hits_count", 0)
-                                })
+                                results["stages"].append(
+                                    {
+                                        "stage": stage_num,
+                                        "name": "Network Connections Discovery",
+                                        "query": stage4_query.strip(),
+                                        "schema_fields": stage4_query_result.fields_used,
+                                        "event_code": stage4_query_result.event_code,
+                                        "status": "success",
+                                        "hits": stage4_result.get("hits_count", 0),
+                                    }
+                                )
 
                                 net_conns = stage4_result.get("results", [])
                                 results["network_connections"] = net_conns
@@ -846,28 +824,34 @@ class ESQLHuntingTools:
                                 dest_ip_field = schema.get_field("destination_ip", "network_connection")
 
                                 for conn in net_conns if isinstance(net_conns, list) else []:
-                                    results["timeline"].append({
-                                        "timestamp": conn.get(timestamp_field),
-                                        "type": "network_connection",
-                                        "details": conn
-                                    })
+                                    results["timeline"].append(
+                                        {
+                                            "timestamp": conn.get(timestamp_field),
+                                            "type": "network_connection",
+                                            "details": conn,
+                                        }
+                                    )
                                     if dest_ip_field and conn.get(dest_ip_field):
                                         results["iocs"]["ips"].append(conn.get(dest_ip_field))
 
                             except ValueError as e:
-                                results["stages"].append({
-                                    "stage": stage_num,
-                                    "name": "Network Connections Discovery",
-                                    "status": "skipped",
-                                    "reason": str(e)
-                                })
+                                results["stages"].append(
+                                    {
+                                        "stage": stage_num,
+                                        "name": "Network Connections Discovery",
+                                        "status": "skipped",
+                                        "reason": str(e),
+                                    }
+                                )
                             except Exception as e:
-                                results["stages"].append({
-                                    "stage": stage_num,
-                                    "name": "Network Connections Discovery",
-                                    "status": "error",
-                                    "error": str(e)
-                                })
+                                results["stages"].append(
+                                    {
+                                        "stage": stage_num,
+                                        "name": "Network Connections Discovery",
+                                        "status": "error",
+                                        "error": str(e),
+                                    }
+                                )
                                 results["errors"].append(f"Stage {stage_num} (network connections): {str(e)}")
 
                             stage_num += 1
@@ -881,20 +865,22 @@ class ESQLHuntingTools:
                                     process_name=process_name,
                                     host=target_host,
                                     start_time=start_time,
-                                    end_time=end_time
+                                    end_time=end_time,
                                 )
                                 stage5_query = stage5_query_result.query
 
                                 stage5_result = self.esql_client.execute(stage5_query, lean=False)
-                                results["stages"].append({
-                                    "stage": stage_num,
-                                    "name": "Registry Operations Discovery",
-                                    "query": stage5_query.strip(),
-                                    "schema_fields": stage5_query_result.fields_used,
-                                    "event_code": stage5_query_result.event_code,
-                                    "status": "success",
-                                    "hits": stage5_result.get("hits_count", 0)
-                                })
+                                results["stages"].append(
+                                    {
+                                        "stage": stage_num,
+                                        "name": "Registry Operations Discovery",
+                                        "query": stage5_query.strip(),
+                                        "schema_fields": stage5_query_result.fields_used,
+                                        "event_code": stage5_query_result.event_code,
+                                        "status": "success",
+                                        "hits": stage5_result.get("hits_count", 0),
+                                    }
+                                )
 
                                 reg_ops = stage5_result.get("results", [])
                                 results["registry_operations"] = reg_ops
@@ -904,28 +890,34 @@ class ESQLHuntingTools:
                                 target_object_field = schema.get_field("target_object", "registry_value_set")
 
                                 for reg_op in reg_ops if isinstance(reg_ops, list) else []:
-                                    results["timeline"].append({
-                                        "timestamp": reg_op.get(timestamp_field),
-                                        "type": "registry_operation",
-                                        "details": reg_op
-                                    })
+                                    results["timeline"].append(
+                                        {
+                                            "timestamp": reg_op.get(timestamp_field),
+                                            "type": "registry_operation",
+                                            "details": reg_op,
+                                        }
+                                    )
                                     if target_object_field and reg_op.get(target_object_field):
                                         results["iocs"]["registry_keys"].append(reg_op.get(target_object_field))
 
                             except ValueError as e:
-                                results["stages"].append({
-                                    "stage": stage_num,
-                                    "name": "Registry Operations Discovery",
-                                    "status": "skipped",
-                                    "reason": str(e)
-                                })
+                                results["stages"].append(
+                                    {
+                                        "stage": stage_num,
+                                        "name": "Registry Operations Discovery",
+                                        "status": "skipped",
+                                        "reason": str(e),
+                                    }
+                                )
                             except Exception as e:
-                                results["stages"].append({
-                                    "stage": stage_num,
-                                    "name": "Registry Operations Discovery",
-                                    "status": "error",
-                                    "error": str(e)
-                                })
+                                results["stages"].append(
+                                    {
+                                        "stage": stage_num,
+                                        "name": "Registry Operations Discovery",
+                                        "status": "error",
+                                        "error": str(e),
+                                    }
+                                )
                                 results["errors"].append(f"Stage {stage_num} (registry operations): {str(e)}")
 
                             stage_num += 1
@@ -941,20 +933,22 @@ class ESQLHuntingTools:
                                     start_time=start_time,
                                     end_time=end_time,
                                     as_source=True,
-                                    as_target=True
+                                    as_target=True,
                                 )
                                 stage6_query = stage6_query_result.query
 
                                 stage6_result = self.esql_client.execute(stage6_query, lean=False)
-                                results["stages"].append({
-                                    "stage": stage_num,
-                                    "name": "Process Access Discovery (Credential Dumping)",
-                                    "query": stage6_query.strip(),
-                                    "schema_fields": stage6_query_result.fields_used,
-                                    "event_code": stage6_query_result.event_code,
-                                    "status": "success",
-                                    "hits": stage6_result.get("hits_count", 0)
-                                })
+                                results["stages"].append(
+                                    {
+                                        "stage": stage_num,
+                                        "name": "Process Access Discovery (Credential Dumping)",
+                                        "query": stage6_query.strip(),
+                                        "schema_fields": stage6_query_result.fields_used,
+                                        "event_code": stage6_query_result.event_code,
+                                        "status": "success",
+                                        "hits": stage6_result.get("hits_count", 0),
+                                    }
+                                )
 
                                 proc_access = stage6_result.get("results", [])
                                 results["process_access"] = proc_access
@@ -962,26 +956,32 @@ class ESQLHuntingTools:
                                 # Add to timeline
                                 timestamp_field = schema.timestamp_field
                                 for access in proc_access if isinstance(proc_access, list) else []:
-                                    results["timeline"].append({
-                                        "timestamp": access.get(timestamp_field),
-                                        "type": "process_access",
-                                        "details": access
-                                    })
+                                    results["timeline"].append(
+                                        {
+                                            "timestamp": access.get(timestamp_field),
+                                            "type": "process_access",
+                                            "details": access,
+                                        }
+                                    )
 
                             except ValueError as e:
-                                results["stages"].append({
-                                    "stage": stage_num,
-                                    "name": "Process Access Discovery",
-                                    "status": "skipped",
-                                    "reason": str(e)
-                                })
+                                results["stages"].append(
+                                    {
+                                        "stage": stage_num,
+                                        "name": "Process Access Discovery",
+                                        "status": "skipped",
+                                        "reason": str(e),
+                                    }
+                                )
                             except Exception as e:
-                                results["stages"].append({
-                                    "stage": stage_num,
-                                    "name": "Process Access Discovery",
-                                    "status": "error",
-                                    "error": str(e)
-                                })
+                                results["stages"].append(
+                                    {
+                                        "stage": stage_num,
+                                        "name": "Process Access Discovery",
+                                        "status": "error",
+                                        "error": str(e),
+                                    }
+                                )
                                 results["errors"].append(f"Stage {stage_num} (process access): {str(e)}")
 
                             stage_num += 1
@@ -997,20 +997,22 @@ class ESQLHuntingTools:
                                     start_time=start_time,
                                     end_time=end_time,
                                     as_source=True,
-                                    as_target=True
+                                    as_target=True,
                                 )
                                 stage7_query = stage7_query_result.query
 
                                 stage7_result = self.esql_client.execute(stage7_query, lean=False)
-                                results["stages"].append({
-                                    "stage": stage_num,
-                                    "name": "Remote Thread Discovery (Process Injection)",
-                                    "query": stage7_query.strip(),
-                                    "schema_fields": stage7_query_result.fields_used,
-                                    "event_code": stage7_query_result.event_code,
-                                    "status": "success",
-                                    "hits": stage7_result.get("hits_count", 0)
-                                })
+                                results["stages"].append(
+                                    {
+                                        "stage": stage_num,
+                                        "name": "Remote Thread Discovery (Process Injection)",
+                                        "query": stage7_query.strip(),
+                                        "schema_fields": stage7_query_result.fields_used,
+                                        "event_code": stage7_query_result.event_code,
+                                        "status": "success",
+                                        "hits": stage7_result.get("hits_count", 0),
+                                    }
+                                )
 
                                 remote_threads = stage7_result.get("results", [])
                                 results["remote_threads"] = remote_threads
@@ -1018,26 +1020,32 @@ class ESQLHuntingTools:
                                 # Add to timeline
                                 timestamp_field = schema.timestamp_field
                                 for thread in remote_threads if isinstance(remote_threads, list) else []:
-                                    results["timeline"].append({
-                                        "timestamp": thread.get(timestamp_field),
-                                        "type": "remote_thread",
-                                        "details": thread
-                                    })
+                                    results["timeline"].append(
+                                        {
+                                            "timestamp": thread.get(timestamp_field),
+                                            "type": "remote_thread",
+                                            "details": thread,
+                                        }
+                                    )
 
                             except ValueError as e:
-                                results["stages"].append({
-                                    "stage": stage_num,
-                                    "name": "Remote Thread Discovery",
-                                    "status": "skipped",
-                                    "reason": str(e)
-                                })
+                                results["stages"].append(
+                                    {
+                                        "stage": stage_num,
+                                        "name": "Remote Thread Discovery",
+                                        "status": "skipped",
+                                        "reason": str(e),
+                                    }
+                                )
                             except Exception as e:
-                                results["stages"].append({
-                                    "stage": stage_num,
-                                    "name": "Remote Thread Discovery",
-                                    "status": "error",
-                                    "error": str(e)
-                                })
+                                results["stages"].append(
+                                    {
+                                        "stage": stage_num,
+                                        "name": "Remote Thread Discovery",
+                                        "status": "error",
+                                        "error": str(e),
+                                    }
+                                )
                                 results["errors"].append(f"Stage {stage_num} (remote threads): {str(e)}")
 
                             stage_num += 1
@@ -1051,20 +1059,22 @@ class ESQLHuntingTools:
                                     process_name=process_name,
                                     host=target_host,
                                     start_time=start_time,
-                                    end_time=end_time
+                                    end_time=end_time,
                                 )
                                 stage8_query = stage8_query_result.query
 
                                 stage8_result = self.esql_client.execute(stage8_query, lean=False)
-                                results["stages"].append({
-                                    "stage": stage_num,
-                                    "name": "DNS Query Discovery (C2 Detection)",
-                                    "query": stage8_query.strip(),
-                                    "schema_fields": stage8_query_result.fields_used,
-                                    "event_code": stage8_query_result.event_code,
-                                    "status": "success",
-                                    "hits": stage8_result.get("hits_count", 0)
-                                })
+                                results["stages"].append(
+                                    {
+                                        "stage": stage_num,
+                                        "name": "DNS Query Discovery (C2 Detection)",
+                                        "query": stage8_query.strip(),
+                                        "schema_fields": stage8_query_result.fields_used,
+                                        "event_code": stage8_query_result.event_code,
+                                        "status": "success",
+                                        "hits": stage8_result.get("hits_count", 0),
+                                    }
+                                )
 
                                 dns_queries = stage8_result.get("results", [])
                                 results["dns_queries"] = dns_queries
@@ -1074,52 +1084,50 @@ class ESQLHuntingTools:
                                 query_name_field = schema.get_field("query_name", "dns_query")
 
                                 for dns_q in dns_queries if isinstance(dns_queries, list) else []:
-                                    results["timeline"].append({
-                                        "timestamp": dns_q.get(timestamp_field),
-                                        "type": "dns_query",
-                                        "details": dns_q
-                                    })
+                                    results["timeline"].append(
+                                        {"timestamp": dns_q.get(timestamp_field), "type": "dns_query", "details": dns_q}
+                                    )
                                     if query_name_field and dns_q.get(query_name_field):
                                         results["iocs"]["domains"].append(dns_q.get(query_name_field))
 
                             except ValueError as e:
-                                results["stages"].append({
-                                    "stage": stage_num,
-                                    "name": "DNS Query Discovery",
-                                    "status": "skipped",
-                                    "reason": str(e)
-                                })
+                                results["stages"].append(
+                                    {
+                                        "stage": stage_num,
+                                        "name": "DNS Query Discovery",
+                                        "status": "skipped",
+                                        "reason": str(e),
+                                    }
+                                )
                             except Exception as e:
-                                results["stages"].append({
-                                    "stage": stage_num,
-                                    "name": "DNS Query Discovery",
-                                    "status": "error",
-                                    "error": str(e)
-                                })
+                                results["stages"].append(
+                                    {
+                                        "stage": stage_num,
+                                        "name": "DNS Query Discovery",
+                                        "status": "error",
+                                        "error": str(e),
+                                    }
+                                )
                                 results["errors"].append(f"Stage {stage_num} (DNS queries): {str(e)}")
 
                         # Sort timeline chronologically
                         results["timeline"].sort(key=lambda x: x.get("timestamp", ""))
 
                 else:
-                    results["stages"][0]["message"] = f"No execution of '{process_name}' found in the last {timeframe_days} days"
+                    results["stages"][0]["message"] = (
+                        f"No execution of '{process_name}' found in the last {timeframe_days} days"
+                    )
 
             except ValueError as e:
                 # Schema doesn't support required event types
-                results["stages"].append({
-                    "stage": 1,
-                    "name": "Process Bounds Discovery",
-                    "status": "skipped",
-                    "reason": str(e)
-                })
+                results["stages"].append(
+                    {"stage": 1, "name": "Process Bounds Discovery", "status": "skipped", "reason": str(e)}
+                )
                 results["errors"].append(f"Schema limitation: {str(e)}")
             except Exception as e:
-                results["stages"].append({
-                    "stage": 1,
-                    "name": "Process Bounds Discovery",
-                    "status": "error",
-                    "error": str(e)
-                })
+                results["stages"].append(
+                    {"stage": 1, "name": "Process Bounds Discovery", "status": "error", "error": str(e)}
+                )
                 results["errors"].append(f"Stage 1 (process bounds): {str(e)}")
 
             # Deduplicate IoCs
@@ -1144,22 +1152,22 @@ class ESQLHuntingTools:
                 "dns_queries_count": len(results["dns_queries"]),
                 "total_timeline_events": len(results["timeline"]),
                 "total_iocs_extracted": (
-                    len(results["iocs"]["processes"]) +
-                    len(results["iocs"]["files"]) +
-                    len(results["iocs"]["ips"]) +
-                    len(results["iocs"]["hostnames"]) +
-                    len(results["iocs"]["registry_keys"]) +
-                    len(results["iocs"]["domains"])
+                    len(results["iocs"]["processes"])
+                    + len(results["iocs"]["files"])
+                    + len(results["iocs"]["ips"])
+                    + len(results["iocs"]["hostnames"])
+                    + len(results["iocs"]["registry_keys"])
+                    + len(results["iocs"]["domains"])
                 ),
                 "mitre_techniques": [
-                    "T1059",   # Command and Scripting Interpreter
-                    "T1055",   # Process Injection
-                    "T1083",   # File and Directory Discovery
-                    "T1071",   # Application Layer Protocol
-                    "T1003",   # OS Credential Dumping
-                    "T1547",   # Boot or Logon Autostart Execution
-                    "T1112",   # Modify Registry
-                ]
+                    "T1059",  # Command and Scripting Interpreter
+                    "T1055",  # Process Injection
+                    "T1083",  # File and Directory Discovery
+                    "T1071",  # Application Layer Protocol
+                    "T1003",  # OS Credential Dumping
+                    "T1547",  # Boot or Logon Autostart Execution
+                    "T1112",  # Modify Registry
+                ],
             }
 
             return results

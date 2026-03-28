@@ -1,4 +1,5 @@
 """ES|QL Query Client for Elasticsearch 8.11+."""
+
 import json
 import logging
 import re
@@ -19,6 +20,7 @@ class ESQLNotSupportedError(Exception):
 @dataclass
 class QueryExecution:
     """Tracks token usage and execution metrics for a query."""
+
     rule_id: str
     query: str
     result_tokens: int
@@ -99,11 +101,11 @@ class ESQLClient(SearchClientBase):
 
         try:
             info = self.client.info()
-            version_str = info['version']['number']
+            version_str = info["version"]["number"]
             self._es_version = version_str
 
             # Parse version (e.g., "8.15.0" -> (8, 15))
-            parts = version_str.split('.')
+            parts = version_str.split(".")
             major = int(parts[0])
             minor = int(parts[1]) if len(parts) > 1 else 0
 
@@ -143,10 +145,10 @@ class ESQLClient(SearchClientBase):
         """
         # Match FROM clause - capture everything until pipe, METADATA keyword, or newline
         # This handles multi-index patterns like "idx1, idx2, idx3"
-        pattern = r'(?i)^\s*FROM\s+([^|\n]+?)(?:\s*(?:\||METADATA\s|$))'
+        pattern = r"(?i)^\s*FROM\s+([^|\n]+?)(?:\s*(?:\||METADATA\s|$))"
         match = re.search(pattern, query.strip())
         if match:
-            return match.group(1).strip().rstrip(',')
+            return match.group(1).strip().rstrip(",")
         return None
 
     def extract_fields_from_query(self, query: str) -> list[str]:
@@ -168,26 +170,30 @@ class ESQLClient(SearchClientBase):
         # STATS ... BY field.name
 
         # Pattern for dotted field names (e.g., process.name, winlog.event_data.Image)
-        field_pattern = r'\b([a-zA-Z_][a-zA-Z0-9_]*(?:\.[a-zA-Z_][a-zA-Z0-9_]*)+)\b'
+        field_pattern = r"\b([a-zA-Z_][a-zA-Z0-9_]*(?:\.[a-zA-Z_][a-zA-Z0-9_]*)+)\b"
 
         # Exclude common ES|QL functions and keywords
         exclude_patterns = {
-            'now.day', 'now.hour', 'count.by', 'stats.by',
-            'to.lower', 'to.upper', 'to.string', 'to.int',
+            "now.day",
+            "now.hour",
+            "count.by",
+            "stats.by",
+            "to.lower",
+            "to.upper",
+            "to.string",
+            "to.int",
         }
 
         for match in re.finditer(field_pattern, query):
             field = match.group(1)
             # Skip if it looks like a function call or keyword
-            if field.lower() not in exclude_patterns and not field.startswith('logs.'):
+            if field.lower() not in exclude_patterns and not field.startswith("logs."):
                 fields.add(field)
 
         return list(fields)
 
     def discover_compatible_indices(
-        self,
-        required_fields: list[str],
-        data_type: str | None = None
+        self, required_fields: list[str], data_type: str | None = None
     ) -> list[dict[str, Any]]:
         """
         Find indices and data streams that contain the required fields.
@@ -218,19 +224,19 @@ class ESQLClient(SearchClientBase):
                     mapping = self.client.indices.get_mapping(index=index_name)
                     if index_name in mapping:
                         properties = self._extract_properties(mapping[index_name])
-                        match_score = self._calculate_field_match_score(
-                            required_fields, properties
-                        )
+                        match_score = self._calculate_field_match_score(required_fields, properties)
 
                         if match_score > 0:
-                            compatible.append({
-                                "index": index_name,
-                                "doc_count": doc_count,
-                                "match_score": match_score,
-                                "matched_fields": match_score,
-                                "total_fields": len(required_fields),
-                                "type": "index"
-                            })
+                            compatible.append(
+                                {
+                                    "index": index_name,
+                                    "doc_count": doc_count,
+                                    "match_score": match_score,
+                                    "matched_fields": match_score,
+                                    "total_fields": len(required_fields),
+                                    "type": "index",
+                                }
+                            )
                 except Exception:
                     continue
 
@@ -273,19 +279,19 @@ class ESQLClient(SearchClientBase):
                     mapping = self.client.indices.get_mapping(index=write_index)
                     if write_index in mapping:
                         properties = self._extract_properties(mapping[write_index])
-                        match_score = self._calculate_field_match_score(
-                            required_fields, properties
-                        )
+                        match_score = self._calculate_field_match_score(required_fields, properties)
 
                         if match_score > 0:
-                            compatible.append({
-                                "index": ds_name,  # Use data stream name for queries
-                                "doc_count": total_docs,
-                                "match_score": match_score,
-                                "matched_fields": match_score,
-                                "total_fields": len(required_fields),
-                                "type": "data_stream"
-                            })
+                            compatible.append(
+                                {
+                                    "index": ds_name,  # Use data stream name for queries
+                                    "doc_count": total_docs,
+                                    "match_score": match_score,
+                                    "matched_fields": match_score,
+                                    "total_fields": len(required_fields),
+                                    "type": "data_stream",
+                                }
+                            )
                 except Exception:
                     continue
 
@@ -334,20 +340,20 @@ class ESQLClient(SearchClientBase):
                     mapping = self.client.indices.get_mapping(index=sample_index)
                     if sample_index in mapping:
                         properties = self._extract_properties(mapping[sample_index])
-                        match_score = self._calculate_field_match_score(
-                            required_fields, properties
-                        )
+                        match_score = self._calculate_field_match_score(required_fields, properties)
 
                         if match_score > 0:
-                            compatible.append({
-                                "index": alias_name,  # Use alias name for queries
-                                "doc_count": total_docs,
-                                "match_score": match_score,
-                                "matched_fields": match_score,
-                                "total_fields": len(required_fields),
-                                "type": "alias",
-                                "backing_indices": len(indices_list)
-                            })
+                            compatible.append(
+                                {
+                                    "index": alias_name,  # Use alias name for queries
+                                    "doc_count": total_docs,
+                                    "match_score": match_score,
+                                    "matched_fields": match_score,
+                                    "total_fields": len(required_fields),
+                                    "type": "alias",
+                                    "backing_indices": len(indices_list),
+                                }
+                            )
                 except Exception:
                     continue
 
@@ -378,11 +384,7 @@ class ESQLClient(SearchClientBase):
 
         return properties
 
-    def _calculate_field_match_score(
-        self,
-        required_fields: list[str],
-        available_fields: set
-    ) -> int:
+    def _calculate_field_match_score(self, required_fields: list[str], available_fields: set) -> int:
         """
         Calculate how many required fields are available in the index.
 
@@ -422,7 +424,7 @@ class ESQLClient(SearchClientBase):
         """
         # Match FROM clause - capture everything until pipe, METADATA, or newline
         # This handles multi-index patterns like "FROM idx1, idx2, idx3"
-        pattern = r'(?i)(^\s*FROM\s+)([^|\n]+?)(\s*(?:\||METADATA\s|$))'
+        pattern = r"(?i)(^\s*FROM\s+)([^|\n]+?)(\s*(?:\||METADATA\s|$))"
 
         def replace_index(match):
             return f"{match.group(1)}{new_index}{match.group(3)}"
@@ -435,7 +437,7 @@ class ESQLClient(SearchClientBase):
         index: str | None = None,
         lean: bool = False,
         rule_id: str | None = None,
-        field_substitution: bool = True
+        field_substitution: bool = True,
     ) -> dict[str, Any]:
         """
         Execute ES|QL query with automatic index discovery and field substitution.
@@ -518,14 +520,14 @@ class ESQLClient(SearchClientBase):
                             "used_index": alt_index,
                             "auto_discovered": True,
                             "discovery_reason": f"Original index '{original_index}' not found",
-                            "alternatives_checked": [i["index"] for i in discovered_indices[:3]]
+                            "alternatives_checked": [i["index"] for i in discovered_indices[:3]],
                         }
                         # Add field substitution metadata
                         if field_substitutions:
                             alt_result["field_substitutions"] = {
                                 "enabled": True,
                                 "substitutions": field_substitutions,
-                                "count": len(field_substitutions)
+                                "count": len(field_substitutions),
                             }
                         return alt_result
 
@@ -536,7 +538,7 @@ class ESQLClient(SearchClientBase):
                 "used_index": used_index,
                 "auto_discovered": discovery_attempted,
                 "discovery_reason": None if not discovery_attempted else "No compatible index found",
-                "alternatives_checked": [i["index"] for i in discovered_indices] if discovered_indices else []
+                "alternatives_checked": [i["index"] for i in discovered_indices] if discovered_indices else [],
             }
 
         # Add field substitution metadata
@@ -544,24 +546,19 @@ class ESQLClient(SearchClientBase):
             result["field_substitutions"] = {
                 "enabled": True,
                 "substitutions": field_substitutions,
-                "count": len(field_substitutions)
+                "count": len(field_substitutions),
             }
         elif field_substitution:
             result["field_substitutions"] = {
                 "enabled": True,
                 "substitutions": {},
                 "count": 0,
-                "note": "No field substitutions needed - fields already match"
+                "note": "No field substitutions needed - fields already match",
             }
 
         return result
 
-    def execute(
-        self,
-        query: str,
-        lean: bool = False,
-        rule_id: str | None = None
-    ) -> dict[str, Any]:
+    def execute(self, query: str, lean: bool = False, rule_id: str | None = None) -> dict[str, Any]:
         """
         Execute an ES|QL query.
 
@@ -578,6 +575,7 @@ class ESQLClient(SearchClientBase):
             self.check_version()
 
         import time
+
         start_time = time.time()
 
         try:
@@ -613,21 +611,11 @@ class ESQLClient(SearchClientBase):
                     "error": "Index not found. Check if the required data source is available.",
                     "hits_count": 0,
                     "tokens_used": 0,
-                    "results": []
+                    "results": [],
                 }
             if "parsing_exception" in error_msg.lower() or "verification_exception" in error_msg.lower():
-                return {
-                    "error": f"ES|QL syntax error: {error_msg}",
-                    "hits_count": 0,
-                    "tokens_used": 0,
-                    "results": []
-                }
-            return {
-                "error": f"ES|QL execution failed: {error_msg}",
-                "hits_count": 0,
-                "tokens_used": 0,
-                "results": []
-            }
+                return {"error": f"ES|QL syntax error: {error_msg}", "hits_count": 0, "tokens_used": 0, "results": []}
+            return {"error": f"ES|QL execution failed: {error_msg}", "hits_count": 0, "tokens_used": 0, "results": []}
 
     def substitute_timeframe(self, query: str, days: int) -> str:
         """
@@ -644,38 +632,38 @@ class ESQLClient(SearchClientBase):
             "@timestamp > now() - 30 day" -> "@timestamp > now() - 7 day"
         """
         # Pattern matches: @timestamp > now() - N day (with variations)
-        pattern = r'@timestamp\s*>\s*now\(\)\s*-\s*\d+\s*day'
-        replacement = f'@timestamp > now() - {days} day'
+        pattern = r"@timestamp\s*>\s*now\(\)\s*-\s*\d+\s*day"
+        replacement = f"@timestamp > now() - {days} day"
 
         return re.sub(pattern, replacement, query, flags=re.IGNORECASE)
 
     def _clean_query(self, query: str) -> str:
         """Clean ES|QL query by removing comments and normalizing whitespace."""
         # Remove single-line comments (// ...)
-        query = re.sub(r'//.*', '', query)
+        query = re.sub(r"//.*", "", query)
 
         # Remove multi-line comments (/* ... */)
-        query = re.sub(r'/\*.*?\*/', '', query, flags=re.DOTALL)
+        query = re.sub(r"/\*.*?\*/", "", query, flags=re.DOTALL)
 
         # Normalize whitespace (but preserve newlines for readability in logs)
-        query = re.sub(r'[ \t]+', ' ', query)
-        query = re.sub(r'\n\s*\n', '\n', query)
+        query = re.sub(r"[ \t]+", " ", query)
+        query = re.sub(r"\n\s*\n", "\n", query)
 
         return query.strip()
 
     def _parse_response(self, response) -> dict[str, Any]:
         """Parse ES|QL response into structured result."""
         # Handle both dict and response object
-        if hasattr(response, 'body'):
+        if hasattr(response, "body"):
             data = response.body
         else:
             data = response
 
-        columns = data.get('columns', [])
-        values = data.get('values', [])
+        columns = data.get("columns", [])
+        values = data.get("values", [])
 
         # Convert to list of dicts for easier consumption
-        column_names = [col.get('name', f'col_{i}') for i, col in enumerate(columns)]
+        column_names = [col.get("name", f"col_{i}") for i, col in enumerate(columns)]
 
         results = []
         for row in values:
@@ -685,11 +673,7 @@ class ESQLClient(SearchClientBase):
                     result_row[column_names[i]] = value
             results.append(result_row)
 
-        return {
-            "hits_count": len(results),
-            "columns": column_names,
-            "results": results
-        }
+        return {"hits_count": len(results), "columns": column_names, "results": results}
 
     def _count_tokens(self, result: dict[str, Any]) -> int:
         """
@@ -739,7 +723,7 @@ class ESQLClient(SearchClientBase):
             "tokens_used": result.get("tokens_used", 0) // 3,  # Lean mode uses ~1/3 tokens
             "execution_time_ms": result.get("execution_time_ms", 0),
             "summary": summary,
-            "sample_results": sample_results
+            "sample_results": sample_results,
         }
 
     def _track_execution(self, rule_id: str, query: str, result: dict[str, Any]) -> None:
@@ -750,7 +734,7 @@ class ESQLClient(SearchClientBase):
             result_tokens=result.get("tokens_used", 0),
             hits_count=result.get("hits_count", 0),
             execution_time_ms=result.get("execution_time_ms", 0),
-            timestamp=datetime.utcnow()
+            timestamp=datetime.utcnow(),
         )
 
         # Keep last 100 executions
@@ -766,7 +750,7 @@ class ESQLClient(SearchClientBase):
                 "result_tokens": e.result_tokens,
                 "hits_count": e.hits_count,
                 "execution_time_ms": e.execution_time_ms,
-                "timestamp": e.timestamp.isoformat()
+                "timestamp": e.timestamp.isoformat(),
             }
             for e in self._execution_history
         ]

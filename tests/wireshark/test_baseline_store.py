@@ -1,5 +1,6 @@
 # tests/wireshark/test_baseline_store.py
 """Tests for baseline storage."""
+
 import tempfile
 from pathlib import Path
 
@@ -14,11 +15,7 @@ class TestBaselineStore:
         with tempfile.TemporaryDirectory() as tmpdir:
             store = BaselineStore(Path(tmpdir))
 
-            baseline = {
-                "name": "test_baseline",
-                "observed_ports": {"tcp": [80, 443]},
-                "observed_ips": ["192.168.1.1"]
-            }
+            baseline = {"name": "test_baseline", "observed_ports": {"tcp": [80, 443]}, "observed_ips": ["192.168.1.1"]}
 
             store.save("test_baseline", baseline)
             loaded = store.load("test_baseline")

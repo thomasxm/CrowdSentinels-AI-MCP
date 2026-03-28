@@ -1,4 +1,3 @@
-
 from src.clients.common.alias import AliasClient
 from src.clients.common.asset_discovery import AssetDiscoveryClient
 from src.clients.common.cluster import ClusterClient
@@ -11,10 +10,21 @@ from src.clients.common.ioc_analysis import IoCAnalysisClient
 from src.clients.common.threat_hunting import ThreatHuntingClient
 
 
-class SearchClient(IndexClient, DocumentClient, ClusterClient, AliasClient, DataStreamClient, GeneralClient, AssetDiscoveryClient, EQLQueryClient, ThreatHuntingClient, IoCAnalysisClient):
+class SearchClient(
+    IndexClient,
+    DocumentClient,
+    ClusterClient,
+    AliasClient,
+    DataStreamClient,
+    GeneralClient,
+    AssetDiscoveryClient,
+    EQLQueryClient,
+    ThreatHuntingClient,
+    IoCAnalysisClient,
+):
     """
     Unified search client that combines all search functionality.
-    
+
     This class uses multiple inheritance to combine all specialized client implementations
     (index, document, cluster, alias) into a single unified client.
     """
@@ -22,7 +32,7 @@ class SearchClient(IndexClient, DocumentClient, ClusterClient, AliasClient, Data
     def __init__(self, config: dict, engine_type: str):
         """
         Initialize the search client.
-        
+
         Args:
             config: Configuration dictionary with connection parameters
             engine_type: Type of search engine to use ("elasticsearch" or "opensearch")

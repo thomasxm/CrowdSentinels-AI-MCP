@@ -1,4 +1,5 @@
 """Tests for FieldMapper - field name substitution for different log schemas."""
+
 from unittest.mock import MagicMock
 
 
@@ -18,12 +19,12 @@ class TestFieldMapper:
             "winlog.event_data.User",
             "host.hostname",
             "event.code",
-            "@timestamp"
+            "@timestamp",
         }
 
-        query = '''FROM logs-*
+        query = """FROM logs-*
 | WHERE process.name == "powershell.exe"
-| KEEP process.name, process.command_line, user.name'''
+| KEEP process.name, process.command_line, user.name"""
 
         result = mapper.substitute_fields_esql(query, available_fields)
 
@@ -40,12 +41,7 @@ class TestFieldMapper:
         mapper = FieldMapper()
 
         # Fields already exist in index
-        available_fields = {
-            "process.name",
-            "process.command_line",
-            "user.name",
-            "@timestamp"
-        }
+        available_fields = {"process.name", "process.command_line", "user.name", "@timestamp"}
 
         query = '''FROM logs-* | WHERE process.name == "cmd.exe"'''
 
@@ -60,13 +56,9 @@ class TestFieldMapper:
 
         mapper = FieldMapper()
 
-        available_fields = {
-            "winlog.event_data.Image",
-            "winlog.event_data.CommandLine",
-            "event.code"
-        }
+        available_fields = {"winlog.event_data.Image", "winlog.event_data.CommandLine", "event.code"}
 
-        query = 'process.name:powershell.exe AND process.command_line:*enc*'
+        query = "process.name:powershell.exe AND process.command_line:*enc*"
 
         result = mapper.substitute_fields_lucene(query, available_fields)
 
@@ -79,11 +71,7 @@ class TestFieldMapper:
 
         mapper = FieldMapper()
 
-        available_fields = {
-            "winlog.event_data.Image",
-            "winlog.event_data.CommandLine",
-            "winlog.event_data.ParentImage"
-        }
+        available_fields = {"winlog.event_data.Image", "winlog.event_data.CommandLine", "winlog.event_data.ParentImage"}
 
         query = '''process where process.name == "powershell.exe" and
                    process.parent.name == "cmd.exe"'''
@@ -109,21 +97,13 @@ class TestFieldMapper:
                                     "properties": {
                                         "Image": {"type": "keyword"},
                                         "CommandLine": {"type": "text"},
-                                        "User": {"type": "keyword"}
+                                        "User": {"type": "keyword"},
                                     }
                                 }
                             }
                         },
-                        "event": {
-                            "properties": {
-                                "code": {"type": "keyword"}
-                            }
-                        },
-                        "host": {
-                            "properties": {
-                                "hostname": {"type": "keyword"}
-                            }
-                        }
+                        "event": {"properties": {"code": {"type": "keyword"}}},
+                        "host": {"properties": {"hostname": {"type": "keyword"}}},
                     }
                 }
             }
@@ -161,9 +141,9 @@ class TestFieldMapper:
         available_fields = {"winlog.event_data.Image", "event.code"}
 
         # ES|QL with complex operators
-        query = '''FROM logs-*
+        query = """FROM logs-*
 | WHERE process.name LIKE "power*" AND NOT process.name == "notepad.exe"
-| STATS count = COUNT(*) BY process.name'''
+| STATS count = COUNT(*) BY process.name"""
 
         result = mapper.substitute_fields_esql(query, available_fields)
 
@@ -178,10 +158,7 @@ class TestFieldMapper:
 
         mapper = FieldMapper()
 
-        available_fields = {
-            "winlog.event_data.TargetFilename",
-            "file.hash.sha256"
-        }
+        available_fields = {"winlog.event_data.TargetFilename", "file.hash.sha256"}
 
         query = '''FROM logs-* | WHERE file.path == "/tmp/malware.exe"'''
 
@@ -196,13 +173,7 @@ class TestFieldMapper:
 
         mock_client = MagicMock()
         mock_client.indices.get_mapping.return_value = {
-            "test-index": {
-                "mappings": {
-                    "properties": {
-                        "field1": {"type": "keyword"}
-                    }
-                }
-            }
+            "test-index": {"mappings": {"properties": {"field1": {"type": "keyword"}}}}
         }
 
         mapper = FieldMapper(client=mock_client)
@@ -225,9 +196,7 @@ class TestFieldMapper:
         query = '''FROM logs-* | WHERE process.name == "cmd.exe"'''
 
         # With substitution disabled
-        result = mapper.substitute_fields_esql(
-            query, available_fields, enabled=False
-        )
+        result = mapper.substitute_fields_esql(query, available_fields, enabled=False)
 
         # Should remain unchanged
         assert result == query

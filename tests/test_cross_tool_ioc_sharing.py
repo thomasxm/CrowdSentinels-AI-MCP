@@ -41,6 +41,7 @@ def test_cross_tool_ioc_sharing():
         has_active_investigation,
     )
     from src.storage.models import Severity
+
     auto_module._client = None
 
     # Test 1: Verify no active investigation initially
@@ -84,7 +85,7 @@ def test_cross_tool_ioc_sharing():
                         "host.name": "VICTIM-PC-02",
                     }
                 },
-            ]
+            ],
         }
     }
 
@@ -113,10 +114,10 @@ def test_cross_tool_ioc_sharing():
                         "Image": "C:\\Windows\\System32\\mimikatz.exe",
                         "User": "DOMAIN\\hacker",
                         "IpAddress": "192.168.1.200",
-                    }
-                }
+                    },
+                },
             }
-        ]
+        ],
     }
 
     captured_chainsaw = auto_capture_chainsaw_results(

@@ -1,5 +1,6 @@
 # src/wireshark/baseline/baseline_builder.py
 """Baseline builder for auto-learning from normal traffic."""
+
 import logging
 from collections import Counter
 from datetime import datetime
@@ -16,21 +17,12 @@ logger = logging.getLogger(__name__)
 class BaselineBuilder:
     """Build baselines from normal traffic captures."""
 
-    def __init__(
-        self,
-        executor: TSharkExecutor | None = None,
-        analyzer: PcapAnalyzer | None = None
-    ):
+    def __init__(self, executor: TSharkExecutor | None = None, analyzer: PcapAnalyzer | None = None):
         """Initialize baseline builder."""
         self.executor = executor or TSharkExecutor()
         self.analyzer = analyzer or PcapAnalyzer(self.executor)
 
-    def build_from_pcap(
-        self,
-        pcap_path: str,
-        name: str | None = None,
-        include_defaults: bool = True
-    ) -> dict[str, Any]:
+    def build_from_pcap(self, pcap_path: str, name: str | None = None, include_defaults: bool = True) -> dict[str, Any]:
         """Build baseline from a normal traffic PCAP.
 
         Args:
@@ -54,7 +46,7 @@ class BaselineBuilder:
             "observed_protocols": [],
             "observed_dns_servers": [],
             "observed_domains": [],
-            "traffic_stats": {}
+            "traffic_stats": {},
         }
 
         # Get TCP ports
@@ -98,11 +90,7 @@ class BaselineBuilder:
     def _extract_ports(self, pcap_path: str, protocol: str) -> list[int]:
         """Extract unique destination ports."""
         field = f"{protocol}.dstport"
-        cmd = self.executor.build_command(
-            pcap_path=pcap_path,
-            fields=[field],
-            display_filter=protocol
-        )
+        cmd = self.executor.build_command(pcap_path=pcap_path, fields=[field], display_filter=protocol)
 
         returncode, stdout, _ = self.executor.execute(cmd, timeout=300)
 
@@ -120,10 +108,7 @@ class BaselineBuilder:
     def _extract_ips(self, pcap_path: str) -> list[str]:
         """Extract unique IP addresses."""
         results = self.executor.execute_and_parse_fields(
-            pcap_path=pcap_path,
-            fields=["ip.src", "ip.dst"],
-            display_filter="ip",
-            timeout=300
+            pcap_path=pcap_path, fields=["ip.src", "ip.dst"], display_filter="ip", timeout=300
         )
 
         ips = set()
@@ -143,10 +128,7 @@ class BaselineBuilder:
     def _extract_dns_servers(self, pcap_path: str) -> list[str]:
         """Extract DNS server IPs (sources of DNS responses)."""
         results = self.executor.execute_and_parse_fields(
-            pcap_path=pcap_path,
-            fields=["ip.src"],
-            display_filter="dns.flags.response == 1",
-            timeout=120
+            pcap_path=pcap_path, fields=["ip.src"], display_filter="dns.flags.response == 1", timeout=120
         )
 
         servers = set()
@@ -159,10 +141,7 @@ class BaselineBuilder:
     def _extract_domains(self, pcap_path: str) -> list[str]:
         """Extract queried domain names."""
         results = self.executor.execute_and_parse_fields(
-            pcap_path=pcap_path,
-            fields=["dns.qry.name"],
-            display_filter="dns.flags.response == 0",
-            timeout=120
+            pcap_path=pcap_path, fields=["dns.qry.name"], display_filter="dns.flags.response == 0", timeout=120
         )
 
         domains = Counter()
@@ -190,7 +169,7 @@ class BaselineBuilder:
             "observed_ips": set(),
             "observed_protocols": set(),
             "observed_dns_servers": set(),
-            "observed_domains": set()
+            "observed_domains": set(),
         }
 
         for baseline in baselines:

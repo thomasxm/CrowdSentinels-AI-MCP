@@ -169,10 +169,13 @@ class MCPBridge:
                 return
 
             # Send initialized notification
-            self._send_jsonrpc(proc, {
-                "jsonrpc": "2.0",
-                "method": "notifications/initialized",
-            })
+            self._send_jsonrpc(
+                proc,
+                {
+                    "jsonrpc": "2.0",
+                    "method": "notifications/initialized",
+                },
+            )
 
             # List tools
             tools_request = {
@@ -221,7 +224,7 @@ class MCPBridge:
         # Strip server prefix if present
         original_name = tool_name
         if tool_name.startswith(f"{server_name}__"):
-            original_name = tool_name[len(f"{server_name}__"):]
+            original_name = tool_name[len(f"{server_name}__") :]
 
         request = {
             "jsonrpc": "2.0",

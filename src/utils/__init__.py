@@ -15,5 +15,5 @@ __all__ = [
     "summarize_search_response",
     "summarize_hits",
     "MAX_HITS_DEFAULT",
-    "MAX_RESPONSE_CHARS"
+    "MAX_RESPONSE_CHARS",
 ]

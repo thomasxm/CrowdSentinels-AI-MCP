@@ -44,18 +44,14 @@ def summarize_hits(hits: list[dict], max_hits: int = MAX_HITS_DEFAULT) -> dict:
     total_hits = len(hits)
 
     if total_hits <= max_hits:
-        return {
-            "total_returned": total_hits,
-            "hits": hits,
-            "truncated": False
-        }
+        return {"total_returned": total_hits, "hits": hits, "truncated": False}
 
     return {
         "total_returned": max_hits,
         "total_available": total_hits,
         "hits": hits[:max_hits],
         "truncated": True,
-        "message": f"Response truncated: showing {max_hits} of {total_hits} hits. Use pagination or more specific queries to see more results."
+        "message": f"Response truncated: showing {max_hits} of {total_hits} hits. Use pagination or more specific queries to see more results.",
     }
 
 
@@ -77,7 +73,7 @@ def summarize_search_response(response: dict, max_hits: int = MAX_HITS_DEFAULT) 
         "took": response.get("took"),
         "timed_out": response.get("timed_out"),
         "_shards": response.get("_shards"),
-        "hits": {}
+        "hits": {},
     }
 
     # Handle hits
@@ -144,8 +140,16 @@ def slim_event(event: dict) -> dict:
     # Add winlog.event_data fields (these contain valuable IoCs)
     event_data = source.get("winlog", {}).get("event_data", {})
     if event_data:
-        for key in ["TargetUserName", "SubjectUserName", "IpAddress", "CommandLine",
-                    "Image", "ParentImage", "TargetFilename", "User"]:
+        for key in [
+            "TargetUserName",
+            "SubjectUserName",
+            "IpAddress",
+            "CommandLine",
+            "Image",
+            "ParentImage",
+            "TargetFilename",
+            "User",
+        ]:
             if key in event_data:
                 essential_fields[f"winlog.event_data.{key}"] = event_data[key]
 
@@ -225,11 +229,7 @@ def limit_response_size(response: Any, max_chars: int = MAX_RESPONSE_CHARS) -> d
         if len(response_str) <= max_chars:
             return {
                 "response": response,
-                "metadata": {
-                    "size_bytes": len(response_str),
-                    "estimated_tokens": estimated_tokens,
-                    "truncated": False
-                }
+                "metadata": {"size_bytes": len(response_str), "estimated_tokens": estimated_tokens, "truncated": False},
             }
 
         # Response too large - try to summarize
@@ -249,8 +249,8 @@ def limit_response_size(response: Any, max_chars: int = MAX_RESPONSE_CHARS) -> d
                         "estimated_tokens": estimate_tokens(summarized_str),
                         "truncated": True,
                         "original_size_bytes": len(response_str),
-                        "message": "Response automatically summarized due to size"
-                    }
+                        "message": "Response automatically summarized due to size",
+                    },
                 }
 
             # Still too large - truncate further
@@ -270,8 +270,8 @@ def limit_response_size(response: Any, max_chars: int = MAX_RESPONSE_CHARS) -> d
                         "estimated_tokens": estimate_tokens(summarized_str),
                         "truncated": True,
                         "original_size_bytes": len(response_str),
-                        "message": "Response automatically summarized due to size"
-                    }
+                        "message": "Response automatically summarized due to size",
+                    },
                 }
 
             # Still too large - truncate further
@@ -287,8 +287,8 @@ def limit_response_size(response: Any, max_chars: int = MAX_RESPONSE_CHARS) -> d
                 "estimated_tokens": estimate_tokens(truncated),
                 "truncated": True,
                 "original_size_bytes": len(response_str),
-                "message": "Response truncated due to size limit. Use more specific queries or pagination."
-            }
+                "message": "Response truncated due to size limit. Use more specific queries or pagination.",
+            },
         }
 
     except Exception as e:
@@ -300,8 +300,8 @@ def limit_response_size(response: Any, max_chars: int = MAX_RESPONSE_CHARS) -> d
             "metadata": {
                 "truncated": True,
                 "error": str(e),
-                "message": "Error processing response, returned truncated string representation"
-            }
+                "message": "Error processing response, returned truncated string representation",
+            },
         }
 
 
@@ -322,7 +322,7 @@ def limit_response_size_if_needed(response: Any, max_chars: int = MAX_RESPONSE_C
 
 def chunk_large_list(items: list, chunk_size: int = 100) -> list[list]:
     """Split large list into chunks."""
-    return [items[i:i + chunk_size] for i in range(0, len(items), chunk_size)]
+    return [items[i : i + chunk_size] for i in range(0, len(items), chunk_size)]
 
 
 def summarize_aggregation(agg_result: dict) -> dict:
@@ -346,7 +346,7 @@ def summarize_aggregation(agg_result: dict) -> dict:
                         "buckets": buckets[:50],
                         "truncated": True,
                         "total_buckets": len(buckets),
-                        "showing": 50
+                        "showing": 50,
                     }
                 else:
                     summarized[key] = value

@@ -6,6 +6,7 @@ so that ANY AI agent connecting to the MCP server knows how to use the tools pro
 Unlike CLAUDE.md or skills which are local to specific environments, these MCP
 primitives are exposed by the server itself and accessible to all connected clients.
 """
+
 from fastmcp import FastMCP
 
 INVESTIGATION_WORKFLOW = """
@@ -92,59 +93,57 @@ RECOMMENDED_NEXT_STEPS = {
     # Data collection tools → Analysis
     "search_documents": {
         "next_step": "analyze_search_results",
-        "hint": "Use analyze_search_results() to extract IoCs and map to MITRE ATT&CK"
+        "hint": "Use analyze_search_results() to extract IoCs and map to MITRE ATT&CK",
     },
     "smart_search": {
         "next_step": "analyze_search_results",
-        "hint": "Use analyze_search_results() to extract IoCs and assess severity"
+        "hint": "Use analyze_search_results() to extract IoCs and assess severity",
     },
     "threat_hunt_search": {
         "next_step": "analyze_kill_chain_stage",
-        "hint": "IoCs already extracted. Use analyze_kill_chain_stage() to position in kill chain"
+        "hint": "IoCs already extracted. Use analyze_kill_chain_stage() to position in kill chain",
     },
     "execute_detection_rule": {
         "next_step": "analyze_search_results",
-        "hint": "Use analyze_search_results() to analyze detection hits"
+        "hint": "Use analyze_search_results() to analyze detection hits",
     },
     "execute_esql_hunt": {
         "next_step": "analyze_search_results",
-        "hint": "Use analyze_search_results() to analyze hunting results"
+        "hint": "Use analyze_search_results() to analyze hunting results",
     },
     "esql_query": {
         "next_step": "analyze_search_results",
-        "hint": "Use analyze_search_results() to extract insights from query results"
+        "hint": "Use analyze_search_results() to extract insights from query results",
     },
     "eql_search": {
         "next_step": "analyze_search_results",
-        "hint": "Use analyze_search_results() to analyze EQL matches"
+        "hint": "Use analyze_search_results() to analyze EQL matches",
     },
     "hunt_by_timeframe": {
         "next_step": "analyze_search_results",
-        "hint": "Use analyze_search_results() for comprehensive analysis"
+        "hint": "Use analyze_search_results() for comprehensive analysis",
     },
     "hunt_for_ioc": {
         "next_step": "analyze_search_results",
-        "hint": "Use analyze_search_results() to assess IoC matches"
+        "hint": "Use analyze_search_results() to assess IoC matches",
     },
-
     # Analysis tools → More analysis or reporting
     "analyze_search_results": {
         "next_step": "analyze_kill_chain_stage",
-        "hint": "Use analyze_kill_chain_stage() with extracted IoCs to position in kill chain"
+        "hint": "Use analyze_kill_chain_stage() with extracted IoCs to position in kill chain",
     },
     "analyze_kill_chain_stage": {
         "next_step": "generate_investigation_report",
-        "hint": "Use generate_investigation_report() to create final report, or follow hunting suggestions"
+        "hint": "Use generate_investigation_report() to create final report, or follow hunting suggestions",
     },
-
     # Kill chain hunting → Analysis
     "hunt_by_kill_chain_stage": {
         "next_step": "analyze_search_results",
-        "hint": "Use analyze_search_results() to analyze stage-specific findings"
+        "hint": "Use analyze_search_results() to analyze stage-specific findings",
     },
     "hunt_adjacent_stages": {
         "next_step": "analyze_search_results",
-        "hint": "Use analyze_search_results() on each stage's results"
+        "hint": "Use analyze_search_results() on each stage's results",
     },
 }
 
@@ -182,9 +181,7 @@ class WorkflowGuidanceTools:
 
         # Register MCP Prompt: Investigation Starter
         @mcp.prompt("start-investigation")
-        def start_investigation_prompt(
-            description: str = "Describe the incident or threat to investigate"
-        ):
+        def start_investigation_prompt(description: str = "Describe the incident or threat to investigate"):
             """
             Use this prompt to start a new investigation with proper workflow.
 
@@ -256,7 +253,7 @@ Begin your investigation now, following this workflow strictly.
                     "NEVER skip the analysis phase. After every search/hunt query, "
                     "you MUST use analyze_search_results() and analyze_kill_chain_stage(). "
                     "Before concluding, use generate_investigation_report()."
-                )
+                ),
             }
 
         @mcp.tool()
@@ -282,27 +279,31 @@ Begin your investigation now, following this workflow strictly.
                 return {
                     "previous_tool": tool_name,
                     **RECOMMENDED_NEXT_STEPS[tool_name],
-                    "workflow_phase": self._get_phase(tool_name)
+                    "workflow_phase": self._get_phase(tool_name),
                 }
             return {
                 "previous_tool": tool_name,
                 "next_step": "analyze_search_results",
                 "hint": "If this tool returned search results, analyze them with analyze_search_results()",
-                "workflow_phase": "unknown"
+                "workflow_phase": "unknown",
             }
 
     def _get_phase(self, tool_name: str) -> str:
         """Determine which workflow phase a tool belongs to."""
         collection_tools = {
-            "search_documents", "smart_search", "threat_hunt_search",
-            "execute_detection_rule", "execute_esql_hunt", "esql_query",
-            "eql_search", "hunt_by_timeframe", "hunt_for_ioc",
-            "hunt_by_kill_chain_stage", "hunt_adjacent_stages"
+            "search_documents",
+            "smart_search",
+            "threat_hunt_search",
+            "execute_detection_rule",
+            "execute_esql_hunt",
+            "esql_query",
+            "eql_search",
+            "hunt_by_timeframe",
+            "hunt_for_ioc",
+            "hunt_by_kill_chain_stage",
+            "hunt_adjacent_stages",
         }
-        analysis_tools = {
-            "analyze_search_results", "analyze_kill_chain_stage",
-            "map_events_to_kill_chain"
-        }
+        analysis_tools = {"analyze_search_results", "analyze_kill_chain_stage", "map_events_to_kill_chain"}
         reporting_tools = {"generate_investigation_report"}
 
         if tool_name in collection_tools:

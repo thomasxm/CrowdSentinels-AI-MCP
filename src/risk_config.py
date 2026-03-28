@@ -1,6 +1,7 @@
 """
 CrowdSentinel configuration for high-risk operations management.
 """
+
 import logging
 import os
 
@@ -27,6 +28,7 @@ HIGH_RISK_OPERATIONS = {
         "general_api_request",
     },
 }
+
 
 class RiskManager:
     """Manages high-risk operation filtering and control."""
@@ -70,6 +72,7 @@ class RiskManager:
             return False
 
         return True
+
 
 # Global risk manager instance
 risk_manager = RiskManager()

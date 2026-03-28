@@ -1,4 +1,5 @@
 """Dynamic tool registration for the CrowdSentinel MCP server."""
+
 import logging
 
 from fastmcp import FastMCP
@@ -14,7 +15,7 @@ class ToolsRegister:
     def __init__(self, logger: logging.Logger, search_client: SearchClient, mcp: FastMCP):
         """
         Initialize the tools register.
-        
+
         Args:
             logger: Logger instance
             search_client: Search client instance
@@ -27,7 +28,7 @@ class ToolsRegister:
     def register_all_tools(self, tool_classes: list[type]):
         """
         Register all tools with the MCP server.
-        
+
         Args:
             tool_classes: List of tool classes to register
         """
@@ -54,7 +55,7 @@ class ToolsRegister:
         """
         Register tools with risk filtering applied.
         Only called when risk management is enabled.
-        
+
         Args:
             tool_instance: The tool instance to register
         """
@@ -74,6 +75,7 @@ class ToolsRegister:
                     # Don't register disabled tools - return a no-op function
                     def no_op(*args, **kwargs):
                         pass
+
                     return no_op
 
                 # If allowed, use the original decorator

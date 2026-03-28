@@ -1,4 +1,5 @@
 """Threat Hunting Client for incident response and threat detection."""
+
 import logging
 
 from src.clients.base import SearchClientBase
@@ -66,22 +67,19 @@ class ThreatHuntingClient(SearchClientBase):
             "description": "Brute force authentication attempts",
             "event_codes": ["4625", "4776"],
             "threshold": 5,
-            "timeframe_minutes": 5
+            "timeframe_minutes": 5,
         },
         "privilege_escalation": {
             "description": "Privilege escalation attempts",
             "event_codes": ["4672", "4673", "4674"],
-            "indicators": ["SeDebugPrivilege", "SeImpersonatePrivilege"]
+            "indicators": ["SeDebugPrivilege", "SeImpersonatePrivilege"],
         },
         "lateral_movement": {
             "description": "Lateral movement indicators",
             "event_codes": ["4624", "4648", "4672"],
-            "logon_types": ["3", "10"]  # Network, Remote Interactive
+            "logon_types": ["3", "10"],  # Network, Remote Interactive
         },
-        "persistence": {
-            "description": "Persistence mechanisms",
-            "event_codes": ["4697", "4698", "4720", "4732"]
-        },
+        "persistence": {"description": "Persistence mechanisms", "event_codes": ["4697", "4698", "4720", "4732"]},
         "suspicious_process": {
             "description": "Suspicious process execution",
             "event_codes": ["4688"],
@@ -94,29 +92,25 @@ class ThreatHuntingClient(SearchClientBase):
                 "rundll32.exe",
                 "regsvr32.exe",
                 "certutil.exe",
-                "bitsadmin.exe"
-            ]
+                "bitsadmin.exe",
+            ],
         },
         "encoded_commands": {
             "description": "Encoded PowerShell commands",
             "event_codes": ["4688"],
-            "indicators": ["-EncodedCommand", "-enc", "-e ", "frombase64"]
+            "indicators": ["-EncodedCommand", "-enc", "-e ", "frombase64"],
         },
         "credential_access": {
             "description": "Credential dumping attempts",
             "event_codes": ["4688", "4656"],
-            "processes": ["lsass.exe", "mimikatz", "procdump"]
+            "processes": ["lsass.exe", "mimikatz", "procdump"],
         },
-        "port_scan": {
-            "description": "Port scanning activity",
-            "threshold": 1000,
-            "timeframe_minutes": 15
-        }
+        "port_scan": {"description": "Port scanning activity", "threshold": 1000, "timeframe_minutes": 15},
     }
 
-    def hunt_by_timeframe(self, index: str, attack_types: list[str],
-                         start_time: str, end_time: str | None = None,
-                         host: str | None = None) -> dict:
+    def hunt_by_timeframe(
+        self, index: str, attack_types: list[str], start_time: str, end_time: str | None = None, host: str | None = None
+    ) -> dict:
         """
         Hunt for specific attack patterns within a timeframe.
 
@@ -136,7 +130,7 @@ class ThreatHuntingClient(SearchClientBase):
         findings = {
             "search_timeframe": {"start": start_time, "end": end_time},
             "host_filter": host,
-            "attack_patterns": {}
+            "attack_patterns": {},
         }
 
         for attack_type in attack_types:
@@ -152,82 +146,58 @@ class ThreatHuntingClient(SearchClientBase):
                 findings["attack_patterns"][attack_type] = {
                     "description": pattern["description"],
                     "total_hits": result["hits"]["total"]["value"],
-                    "events": result["hits"]["hits"][:50]  # Limit to 50 events per attack type
+                    "events": result["hits"]["hits"][:50],  # Limit to 50 events per attack type
                 }
             except Exception as e:
                 self.logger.error(f"Failed to hunt for {attack_type}: {e}")
-                findings["attack_patterns"][attack_type] = {
-                    "error": str(e)
-                }
+                findings["attack_patterns"][attack_type] = {"error": str(e)}
 
         # Apply response size limiting to entire result
         return limit_response_size(findings)
 
-    def _build_attack_query(self, pattern: dict, start_time: str,
-                           end_time: str, host: str | None = None) -> dict:
+    def _build_attack_query(self, pattern: dict, start_time: str, end_time: str, host: str | None = None) -> dict:
         """Build Elasticsearch query for attack pattern."""
         must_clauses = []
         should_clauses = []
 
         # Time range filter
-        must_clauses.append({
-            "range": {
-                "@timestamp": {
-                    "gte": start_time,
-                    "lte": end_time
-                }
-            }
-        })
+        must_clauses.append({"range": {"@timestamp": {"gte": start_time, "lte": end_time}}})
 
         # Event code filter
         if "event_codes" in pattern:
-            should_clauses.extend([
-                {"term": {"event.code": code}}
-                for code in pattern["event_codes"]
-            ])
+            should_clauses.extend([{"term": {"event.code": code}} for code in pattern["event_codes"]])
 
         # Host filter
         if host:
-            must_clauses.append({
-                "term": {"host.name.keyword": host}
-            })
+            must_clauses.append({"term": {"host.name.keyword": host}})
 
         # Process name filter
         if "processes" in pattern:
             process_clauses = []
             for proc in pattern["processes"]:
-                process_clauses.append({
-                    "wildcard": {
-                        "winlog.event_data.NewProcessName": f"*{proc}*"
-                    }
-                })
+                process_clauses.append({"wildcard": {"winlog.event_data.NewProcessName": f"*{proc}*"}})
             should_clauses.extend(process_clauses)
 
         # Command line indicators
         if "indicators" in pattern:
             for indicator in pattern["indicators"]:
-                should_clauses.append({
-                    "wildcard": {
-                        "winlog.event_data.CommandLine": f"*{indicator}*"
-                    }
-                })
+                should_clauses.append({"wildcard": {"winlog.event_data.CommandLine": f"*{indicator}*"}})
 
         query = {
             "query": {
                 "bool": {
                     "must": must_clauses,
                     "should": should_clauses,
-                    "minimum_should_match": 1 if should_clauses else 0
+                    "minimum_should_match": 1 if should_clauses else 0,
                 }
             },
             "size": 100,
-            "sort": [{"@timestamp": "desc"}]
+            "sort": [{"@timestamp": "desc"}],
         }
 
         return query
 
-    def analyze_failed_logins(self, index: str, timeframe_minutes: int = 15,
-                             threshold: int = 5) -> dict:
+    def analyze_failed_logins(self, index: str, timeframe_minutes: int = 15, threshold: int = 5) -> dict:
         """
         Analyze failed login attempts (potential brute force).
 
@@ -244,64 +214,41 @@ class ThreatHuntingClient(SearchClientBase):
                 "bool": {
                     "must": [
                         {"term": {"event.code": "4625"}},
-                        {
-                            "range": {
-                                "@timestamp": {
-                                    "gte": f"now-{timeframe_minutes}m"
-                                }
-                            }
-                        }
+                        {"range": {"@timestamp": {"gte": f"now-{timeframe_minutes}m"}}},
                     ]
                 }
             },
             "size": 0,
             "aggs": {
                 "by_user": {
-                    "terms": {
-                        "field": "user.name.keyword",
-                        "size": 50,
-                        "min_doc_count": threshold
-                    },
+                    "terms": {"field": "user.name.keyword", "size": 50, "min_doc_count": threshold},
                     "aggs": {
-                        "by_host": {
-                            "terms": {
-                                "field": "host.name.keyword",
-                                "size": 10
-                            }
-                        },
-                        "by_source_ip": {
-                            "terms": {
-                                "field": "source.ip",
-                                "size": 10
-                            }
-                        }
-                    }
+                        "by_host": {"terms": {"field": "host.name.keyword", "size": 10}},
+                        "by_source_ip": {"terms": {"field": "source.ip", "size": 10}},
+                    },
                 },
-                "by_host": {
-                    "terms": {
-                        "field": "host.name.keyword",
-                        "size": 50,
-                        "min_doc_count": threshold
-                    }
-                }
-            }
+                "by_host": {"terms": {"field": "host.name.keyword", "size": 50, "min_doc_count": threshold}},
+            },
         }
 
         try:
             result = self.client.search(index=index, body=query)
-            return limit_response_size({
-                "total_failed_logins": result["hits"]["total"]["value"],
-                "suspicious_users": result["aggregations"]["by_user"]["buckets"][:20],  # Limit buckets
-                "suspicious_hosts": result["aggregations"]["by_host"]["buckets"][:20],
-                "timeframe_minutes": timeframe_minutes,
-                "threshold": threshold
-            })
+            return limit_response_size(
+                {
+                    "total_failed_logins": result["hits"]["total"]["value"],
+                    "suspicious_users": result["aggregations"]["by_user"]["buckets"][:20],  # Limit buckets
+                    "suspicious_hosts": result["aggregations"]["by_host"]["buckets"][:20],
+                    "timeframe_minutes": timeframe_minutes,
+                    "threshold": threshold,
+                }
+            )
         except Exception as e:
             self.logger.error(f"Failed to analyze failed logins: {e}")
             raise
 
-    def analyze_process_creation(self, index: str, timeframe_minutes: int = 60,
-                                process_filter: list[str] | None = None) -> dict:
+    def analyze_process_creation(
+        self, index: str, timeframe_minutes: int = 60, process_filter: list[str] | None = None
+    ) -> dict:
         """
         Analyze process creation events for suspicious activity.
 
@@ -315,34 +262,18 @@ class ThreatHuntingClient(SearchClientBase):
         """
         must_clauses = [
             {"term": {"event.code": "4688"}},
-            {
-                "range": {
-                    "@timestamp": {
-                        "gte": f"now-{timeframe_minutes}m"
-                    }
-                }
-            }
+            {"range": {"@timestamp": {"gte": f"now-{timeframe_minutes}m"}}},
         ]
 
         # Add process filter if provided
         if process_filter:
             should_clauses = [
-                {"wildcard": {"winlog.event_data.NewProcessName": f"*{proc}*"}}
-                for proc in process_filter
+                {"wildcard": {"winlog.event_data.NewProcessName": f"*{proc}*"}} for proc in process_filter
             ]
-            must_clauses.append({
-                "bool": {
-                    "should": should_clauses,
-                    "minimum_should_match": 1
-                }
-            })
+            must_clauses.append({"bool": {"should": should_clauses, "minimum_should_match": 1}})
 
         query = {
-            "query": {
-                "bool": {
-                    "must": must_clauses
-                }
-            },
+            "query": {"bool": {"must": must_clauses}},
             "size": 100,
             "sort": [{"@timestamp": "desc"}],
             "_source": [
@@ -351,8 +282,8 @@ class ThreatHuntingClient(SearchClientBase):
                 "user.name",
                 "winlog.event_data.NewProcessName",
                 "winlog.event_data.CommandLine",
-                "winlog.event_data.ParentProcessName"
-            ]
+                "winlog.event_data.ParentProcessName",
+            ],
         }
 
         try:
@@ -360,14 +291,13 @@ class ThreatHuntingClient(SearchClientBase):
             return {
                 "total_processes": result["hits"]["total"]["value"],
                 "processes": result["hits"]["hits"],
-                "timeframe_minutes": timeframe_minutes
+                "timeframe_minutes": timeframe_minutes,
             }
         except Exception as e:
             self.logger.error(f"Failed to analyze process creation: {e}")
             raise
 
-    def hunt_for_ioc(self, index: str, ioc: str, ioc_type: str,
-                    timeframe_minutes: int | None = None) -> dict:
+    def hunt_for_ioc(self, index: str, ioc: str, ioc_type: str, timeframe_minutes: int | None = None) -> dict:
         """
         Hunt for a specific Indicator of Compromise (IoC).
 
@@ -387,7 +317,7 @@ class ThreatHuntingClient(SearchClientBase):
             "hash": ["file.hash.md5", "file.hash.sha1", "file.hash.sha256"],
             "filename": ["file.name", "file.path", "winlog.event_data.TargetFilename"],
             "process": ["process.name", "winlog.event_data.NewProcessName"],
-            "user": ["user.name", "winlog.event_data.TargetUserName"]
+            "user": ["user.name", "winlog.event_data.TargetUserName"],
         }
 
         fields = field_mapping.get(ioc_type, [])
@@ -401,34 +331,13 @@ class ThreatHuntingClient(SearchClientBase):
             should_clauses.append({"term": {f"{field}.keyword": ioc}})
             should_clauses.append({"wildcard": {field: f"*{ioc}*"}})
 
-        must_clauses = [
-            {
-                "bool": {
-                    "should": should_clauses,
-                    "minimum_should_match": 1
-                }
-            }
-        ]
+        must_clauses = [{"bool": {"should": should_clauses, "minimum_should_match": 1}}]
 
         # Add time filter if specified
         if timeframe_minutes:
-            must_clauses.append({
-                "range": {
-                    "@timestamp": {
-                        "gte": f"now-{timeframe_minutes}m"
-                    }
-                }
-            })
+            must_clauses.append({"range": {"@timestamp": {"gte": f"now-{timeframe_minutes}m"}}})
 
-        query = {
-            "query": {
-                "bool": {
-                    "must": must_clauses
-                }
-            },
-            "size": 100,
-            "sort": [{"@timestamp": "desc"}]
-        }
+        query = {"query": {"bool": {"must": must_clauses}}, "size": 100, "sort": [{"@timestamp": "desc"}]}
 
         try:
             result = self.client.search(index=index, body=query)
@@ -436,14 +345,15 @@ class ThreatHuntingClient(SearchClientBase):
                 "ioc": ioc,
                 "ioc_type": ioc_type,
                 "total_hits": result["hits"]["total"]["value"],
-                "events": result["hits"]["hits"]
+                "events": result["hits"]["hits"],
             }
         except Exception as e:
             self.logger.error(f"Failed to hunt for IoC: {e}")
             raise
 
-    def get_host_activity_timeline(self, index: str, hostname: str,
-                                   start_time: str, end_time: str | None = None) -> dict:
+    def get_host_activity_timeline(
+        self, index: str, hostname: str, start_time: str, end_time: str | None = None
+    ) -> dict:
         """
         Get a timeline of all activity for a specific host.
 
@@ -464,14 +374,7 @@ class ThreatHuntingClient(SearchClientBase):
                 "bool": {
                     "must": [
                         {"term": {"host.name.keyword": hostname}},
-                        {
-                            "range": {
-                                "@timestamp": {
-                                    "gte": start_time,
-                                    "lte": end_time
-                                }
-                            }
-                        }
+                        {"range": {"@timestamp": {"gte": start_time, "lte": end_time}}},
                     ]
                 }
             },
@@ -484,8 +387,8 @@ class ThreatHuntingClient(SearchClientBase):
                 "user.name",
                 "process.name",
                 "winlog.event_data.NewProcessName",
-                "winlog.event_data.CommandLine"
-            ]
+                "winlog.event_data.CommandLine",
+            ],
         }
 
         try:
@@ -494,16 +397,20 @@ class ThreatHuntingClient(SearchClientBase):
                 "hostname": hostname,
                 "timeframe": {"start": start_time, "end": end_time},
                 "total_events": result["hits"]["total"]["value"],
-                "timeline": result["hits"]["hits"]
+                "timeline": result["hits"]["hits"],
             }
         except Exception as e:
             self.logger.error(f"Failed to get host timeline: {e}")
             raise
 
-    def search_with_lucene(self, index: str, lucene_query: str,
-                          timeframe_minutes: int | None = None,
-                          size: int = 100,
-                          field_substitution: bool = True) -> dict:
+    def search_with_lucene(
+        self,
+        index: str,
+        lucene_query: str,
+        timeframe_minutes: int | None = None,
+        size: int = 100,
+        field_substitution: bool = True,
+    ) -> dict:
         """
         Execute a Lucene query string search with automatic field substitution.
 
@@ -533,56 +440,38 @@ class ThreatHuntingClient(SearchClientBase):
                 # Apply substitutions to the query
                 lucene_query = self.field_mapper.substitute_fields_lucene(lucene_query, available_fields)
 
-        must_clauses = [
-            {
-                "query_string": {
-                    "query": lucene_query
-                }
-            }
-        ]
+        must_clauses = [{"query_string": {"query": lucene_query}}]
 
         if timeframe_minutes:
-            must_clauses.append({
-                "range": {
-                    "@timestamp": {
-                        "gte": f"now-{timeframe_minutes}m"
-                    }
-                }
-            })
+            must_clauses.append({"range": {"@timestamp": {"gte": f"now-{timeframe_minutes}m"}}})
 
-        query = {
-            "query": {
-                "bool": {
-                    "must": must_clauses
-                }
-            },
-            "size": size,
-            "sort": [{"@timestamp": "desc"}]
-        }
+        query = {"query": {"bool": {"must": must_clauses}}, "size": size, "sort": [{"@timestamp": "desc"}]}
 
         try:
             result = self.client.search(index=index, body=query)
 
             # Limit size to prevent context overflow
-            limited_result = limit_response_size({
-                "lucene_query": lucene_query,
-                "total_hits": result["hits"]["total"]["value"],
-                "events": result["hits"]["hits"]
-            })
+            limited_result = limit_response_size(
+                {
+                    "lucene_query": lucene_query,
+                    "total_hits": result["hits"]["total"]["value"],
+                    "events": result["hits"]["hits"],
+                }
+            )
 
             # Add field substitution metadata
             if field_substitutions:
                 limited_result["field_substitutions"] = {
                     "enabled": True,
                     "substitutions": field_substitutions,
-                    "count": len(field_substitutions)
+                    "count": len(field_substitutions),
                 }
             elif field_substitution:
                 limited_result["field_substitutions"] = {
                     "enabled": True,
                     "substitutions": {},
                     "count": 0,
-                    "note": "No field substitutions needed - fields already match"
+                    "note": "No field substitutions needed - fields already match",
                 }
 
             return limited_result
@@ -590,10 +479,14 @@ class ThreatHuntingClient(SearchClientBase):
             self.logger.error(f"Lucene search failed: {e}")
             raise
 
-    def execute_investigation_prompt(self, prompt_id: str, index: str,
-                                    timeframe_minutes: int = 60,
-                                    size: int = 100,
-                                    additional_filters: dict | None = None) -> dict:
+    def execute_investigation_prompt(
+        self,
+        prompt_id: str,
+        index: str,
+        timeframe_minutes: int = 60,
+        size: int = 100,
+        additional_filters: dict | None = None,
+    ) -> dict:
         """
         Execute an investigation prompt query.
 
@@ -614,7 +507,7 @@ class ThreatHuntingClient(SearchClientBase):
         if not prompt:
             return {
                 "error": f"Prompt not found: {prompt_id}",
-                "tip": "Use show_investigation_prompts() to see available prompts"
+                "tip": "Use show_investigation_prompts() to see available prompts",
             }
 
         # Build the query with filters
@@ -623,49 +516,23 @@ class ThreatHuntingClient(SearchClientBase):
         # Add the base query template
         if prompt.query_template.startswith("event.code"):
             # Parse Lucene-style query
-            must_clauses.append({
-                "query_string": {
-                    "query": prompt.query_template
-                }
-            })
+            must_clauses.append({"query_string": {"query": prompt.query_template}})
         else:
             # Treat as a generic query string
-            must_clauses.append({
-                "query_string": {
-                    "query": prompt.query_template
-                }
-            })
+            must_clauses.append({"query_string": {"query": prompt.query_template}})
 
         # Add time range filter
-        must_clauses.append({
-            "range": {
-                "@timestamp": {
-                    "gte": f"now-{timeframe_minutes}m"
-                }
-            }
-        })
+        must_clauses.append({"range": {"@timestamp": {"gte": f"now-{timeframe_minutes}m"}}})
 
         # Add additional filters
         if additional_filters:
             for field, value in additional_filters.items():
                 if isinstance(value, list):
-                    must_clauses.append({
-                        "terms": {f"{field}.keyword": value}
-                    })
+                    must_clauses.append({"terms": {f"{field}.keyword": value}})
                 else:
-                    must_clauses.append({
-                        "term": {f"{field}.keyword": value}
-                    })
+                    must_clauses.append({"term": {f"{field}.keyword": value}})
 
-        query = {
-            "query": {
-                "bool": {
-                    "must": must_clauses
-                }
-            },
-            "size": size,
-            "sort": [{"@timestamp": "desc"}]
-        }
+        query = {"query": {"bool": {"must": must_clauses}}, "size": size, "sort": [{"@timestamp": "desc"}]}
 
         try:
             result = self.client.search(index=index, body=query)
@@ -680,11 +547,8 @@ class ThreatHuntingClient(SearchClientBase):
                 "events": result["hits"]["hits"],
                 "focus_areas": prompt.focus_areas,
                 "mitre_tactics": prompt.mitre_tactics,
-                "timeframe_minutes": timeframe_minutes
+                "timeframe_minutes": timeframe_minutes,
             }
         except Exception as e:
             self.logger.error(f"Investigation prompt execution failed: {e}")
-            return {
-                "error": f"Execution failed: {str(e)}",
-                "prompt_id": prompt_id
-            }
+            return {"error": f"Execution failed: {str(e)}", "prompt_id": prompt_id}

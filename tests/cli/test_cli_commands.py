@@ -18,11 +18,7 @@ def run_cli(*args, stdin_data=None, timeout=30):
     """
     # Build a small script that imports and calls main with sys.argv set
     arg_list = list(args)
-    script = (
-        "import sys; "
-        f"sys.argv = ['crowdsentinel'] + {arg_list!r}; "
-        "from src.cli.main import main; main()"
-    )
+    script = f"import sys; sys.argv = ['crowdsentinel'] + {arg_list!r}; from src.cli.main import main; main()"
     cmd = [sys.executable, "-c", script]
 
     result = subprocess.run(
@@ -92,6 +88,7 @@ def _es_available():
     """Check if Elasticsearch is reachable."""
     try:
         import httpx
+
         hosts = __import__("os").environ.get("ELASTICSEARCH_HOSTS", "http://localhost:9200")
         resp = httpx.get(hosts, timeout=3, verify=False)
         return resp.status_code in (200, 401)
@@ -108,32 +105,38 @@ class TestCLIAnalyseDeterministic:
         assert parsed["severity_assessment"] == "low"
 
     def test_analyse_hunt_format(self):
-        hunt_data = json.dumps({
-            "summary": {"total_hits": 1},
-            "sample_events": [{"code": "4625", "message": "Failed login"}],
-        })
+        hunt_data = json.dumps(
+            {
+                "summary": {"total_hits": 1},
+                "sample_events": [{"code": "4625", "message": "Failed login"}],
+            }
+        )
         code, out, _ = run_cli("analyse", "-c", "test failed auth", "-o", "summary", stdin_data=hunt_data)
         assert code == 0
         assert "severity=" in out
         assert "mitre=" in out
 
     def test_analyse_summary_format(self):
-        hunt_data = json.dumps({
-            "summary": {"total_hits": 4},
-            "sample_events": [
-                {"code": "4104", "message": "MiniDumpWriteDump lsass Get-Process lsass"},
-            ],
-        })
+        hunt_data = json.dumps(
+            {
+                "summary": {"total_hits": 4},
+                "sample_events": [
+                    {"code": "4104", "message": "MiniDumpWriteDump lsass Get-Process lsass"},
+                ],
+            }
+        )
         code, out, _ = run_cli("analyse", "-c", "PS investigation", "-o", "summary", stdin_data=hunt_data)
         assert code == 0
         assert "severity=critical" in out
         assert "T1003.001" in out
 
     def test_analyse_table_format(self):
-        hunt_data = json.dumps({
-            "summary": {"total_hits": 1},
-            "sample_events": [{"code": "4625", "message": "Failed login"}],
-        })
+        hunt_data = json.dumps(
+            {
+                "summary": {"total_hits": 1},
+                "sample_events": [{"code": "4625", "message": "Failed login"}],
+            }
+        )
         code, out, _ = run_cli("analyse", "-c", "test", "-o", "table", stdin_data=hunt_data)
         assert code == 0
         assert "Analysis" in out
@@ -149,6 +152,7 @@ class TestCLIAgentModeErrors:
     def test_mcp_no_api_key(self):
         """Agent mode without API key should error clearly."""
         import os
+
         env = {k: v for k, v in os.environ.items() if k not in ("ANTHROPIC_API_KEY", "OPENAI_API_KEY")}
         script = (
             "import sys; "

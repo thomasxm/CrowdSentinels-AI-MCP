@@ -17,7 +17,7 @@ class IndexTools:
         def get_index(index: str) -> dict:
             """
             Returns information (mappings, settings, aliases) about one or more indices.
-            
+
             Args:
                 index: Name of the index
             """
@@ -27,7 +27,7 @@ class IndexTools:
         def create_index(index: str, body: dict | None = None) -> dict:
             """
             Create a new index.
-            
+
             Args:
                 index: Name of the index
                 body: Optional index configuration including mappings and settings
@@ -38,7 +38,7 @@ class IndexTools:
         def delete_index(index: str) -> dict:
             """
             Delete an index.
-            
+
             Args:
                 index: Name of the index
             """

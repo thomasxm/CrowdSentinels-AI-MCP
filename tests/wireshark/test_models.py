@@ -1,5 +1,6 @@
 # tests/wireshark/test_models.py
 """Tests for Wireshark data models."""
+
 from datetime import datetime
 
 
@@ -19,7 +20,7 @@ class TestNetworkIoC:
             first_seen=datetime.now(),
             last_seen=datetime.now(),
             occurrence_count=5,
-            source_tool="hunt_anomalies"
+            source_tool="hunt_anomalies",
         )
 
         assert ioc.type == "ip"
@@ -52,7 +53,7 @@ class TestPcapMetadata:
             time_start=datetime.now(),
             time_end=datetime.now(),
             duration_seconds=60.5,
-            protocols_detected=["tcp", "http", "dns"]
+            protocols_detected=["tcp", "http", "dns"],
         )
 
         assert metadata.packet_count == 1000
@@ -75,7 +76,7 @@ class TestBeaconPattern:
             jitter_percent=4.2,
             occurrence_count=50,
             confidence="HIGH",
-            timestamps=[]
+            timestamps=[],
         )
 
         assert beacon.interval_mean_seconds == 60.0

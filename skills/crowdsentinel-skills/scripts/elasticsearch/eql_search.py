@@ -23,7 +23,7 @@ import json
 import os
 import signal
 import sys
-from typing import Optional, Dict, Any
+from typing import Any
 
 try:
     from elasticsearch import Elasticsearch
@@ -89,9 +89,7 @@ def get_es_client() -> Elasticsearch:
     es_version = int(elasticsearch.__version__[0])
 
     if api_key:
-        return Elasticsearch(
-            hosts=hosts.split(","), api_key=api_key, verify_certs=verify_certs
-        )
+        return Elasticsearch(hosts=hosts.split(","), api_key=api_key, verify_certs=verify_certs)
     elif es_version >= 8:
         # v8.x uses basic_auth
         return Elasticsearch(
@@ -113,8 +111,8 @@ def eql_search(
     index: str = "winlogbeat-*",
     size: int = 100,
     timestamp_field: str = "@timestamp",
-    filter_query: Optional[Dict[str, Any]] = None,
-) -> Dict[str, Any]:
+    filter_query: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     """Execute an EQL query against Elasticsearch.
 
     Args:
@@ -168,14 +166,12 @@ def _format_table(events, sequences) -> str:
         for i, event in enumerate(events, 1):
             source = event.get("_source", {})
             timestamp = str(source.get("@timestamp", "N/A"))[:26]
-            process_name = (
-                source.get("process", {}).get("name")
-                or source.get("winlog", {}).get("event_data", {}).get("Image", "N/A")
+            process_name = source.get("process", {}).get("name") or source.get("winlog", {}).get("event_data", {}).get(
+                "Image", "N/A"
             )
             host = source.get("host", {}).get("name", "N/A")
-            user = (
-                source.get("user", {}).get("name")
-                or source.get("winlog", {}).get("event_data", {}).get("User", "N/A")
+            user = source.get("user", {}).get("name") or source.get("winlog", {}).get("event_data", {}).get(
+                "User", "N/A"
             )
 
             row = " | ".join(
@@ -197,12 +193,9 @@ def _format_table(events, sequences) -> str:
             lines.append(f"  Sequence {i}: {len(seq_events)} events")
             for j, event in enumerate(seq_events, 1):
                 source = event.get("_source", {})
-                process_name = (
-                    source.get("process", {}).get("name")
-                    or source.get("winlog", {})
-                    .get("event_data", {})
-                    .get("Image", "N/A")
-                )
+                process_name = source.get("process", {}).get("name") or source.get("winlog", {}).get(
+                    "event_data", {}
+                ).get("Image", "N/A")
                 lines.append(f"    {j}. {process_name}")
 
     return "\n".join(lines) if lines else "No results"
@@ -269,9 +262,7 @@ Exit Codes:
         default="@timestamp",
         help="Timestamp field name (default: @timestamp)",
     )
-    parser.add_argument(
-        "--filter", "-f", help="JSON filter query to apply before EQL evaluation"
-    )
+    parser.add_argument("--filter", "-f", help="JSON filter query to apply before EQL evaluation")
     parser.add_argument(
         "--output",
         "-o",
@@ -318,7 +309,7 @@ Exit Codes:
 
         else:
             # Summary output
-            print(f"\n=== Results Summary ===")
+            print("\n=== Results Summary ===")
             print(f"Total hits: {total}")
 
             if events:
@@ -326,12 +317,9 @@ Exit Codes:
                 for i, event in enumerate(events[:10], 1):
                     source = event.get("_source", {})
                     timestamp = source.get("@timestamp", "N/A")
-                    process_name = (
-                        source.get("process", {}).get("name")
-                        or source.get("winlog", {})
-                        .get("event_data", {})
-                        .get("Image", "N/A")
-                    )
+                    process_name = source.get("process", {}).get("name") or source.get("winlog", {}).get(
+                        "event_data", {}
+                    ).get("Image", "N/A")
                     print(f"  {i}. [{timestamp}] {process_name}")
 
                 if len(events) > 10:
@@ -344,12 +332,9 @@ Exit Codes:
                     print(f"  Sequence {i}: {len(seq_events)} events")
                     for j, event in enumerate(seq_events, 1):
                         source = event.get("_source", {})
-                        process_name = (
-                            source.get("process", {}).get("name")
-                            or source.get("winlog", {})
-                            .get("event_data", {})
-                            .get("Image", "N/A")
-                        )
+                        process_name = source.get("process", {}).get("name") or source.get("winlog", {}).get(
+                            "event_data", {}
+                        ).get("Image", "N/A")
                         print(f"    {j}. {process_name}")
 
     except Exception as e:

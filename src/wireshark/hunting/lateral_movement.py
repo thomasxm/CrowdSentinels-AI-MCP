@@ -1,5 +1,6 @@
 # src/wireshark/hunting/lateral_movement.py
 """Lateral movement detection (SMB/RDP/WinRM/NTLM)."""
+
 import logging
 from collections import defaultdict
 from typing import Any
@@ -29,11 +30,7 @@ class LateralMovementDetector:
         """Initialize detector with optional baseline."""
         self.baseline = baseline or {}
 
-    def detect_smb_movement(
-        self,
-        connections: list[dict],
-        internal_only: bool = True
-    ) -> list[dict]:
+    def detect_smb_movement(self, connections: list[dict], internal_only: bool = True) -> list[dict]:
         """Detect SMB-based lateral movement.
 
         Args:
@@ -68,17 +65,13 @@ class LateralMovementDetector:
                 "smb_path": conn.get("smb_path"),
                 "smb_pipe": conn.get("smb_pipe"),
                 "admin_share_access": self._is_admin_share(conn.get("smb_path", "")),
-                "pipe_access": self._is_suspicious_pipe(conn.get("smb_pipe", ""))
+                "pipe_access": self._is_suspicious_pipe(conn.get("smb_pipe", "")),
             }
             findings.append(finding)
 
         return findings
 
-    def detect_rdp_movement(
-        self,
-        connections: list[dict],
-        internal_only: bool = True
-    ) -> list[dict]:
+    def detect_rdp_movement(self, connections: list[dict], internal_only: bool = True) -> list[dict]:
         """Detect RDP-based lateral movement.
 
         Args:
@@ -109,17 +102,13 @@ class LateralMovementDetector:
                 "dst_port": dst_port,
                 "movement_type": "rdp",
                 "timestamp": conn.get("timestamp"),
-                "protocol": conn.get("protocol", "tcp")
+                "protocol": conn.get("protocol", "tcp"),
             }
             findings.append(finding)
 
         return findings
 
-    def detect_winrm_movement(
-        self,
-        connections: list[dict],
-        internal_only: bool = True
-    ) -> list[dict]:
+    def detect_winrm_movement(self, connections: list[dict], internal_only: bool = True) -> list[dict]:
         """Detect WinRM-based lateral movement.
 
         Args:
@@ -150,17 +139,14 @@ class LateralMovementDetector:
                 "dst_port": dst_port,
                 "movement_type": "winrm",
                 "timestamp": conn.get("timestamp"),
-                "protocol": conn.get("protocol", "tcp")
+                "protocol": conn.get("protocol", "tcp"),
             }
             findings.append(finding)
 
         return findings
 
     def detect_enumeration(
-        self,
-        connections: list[dict],
-        min_targets: int = 5,
-        ports: list[int] | None = None
+        self, connections: list[dict], min_targets: int = 5, ports: list[int] | None = None
     ) -> list[dict]:
         """Detect host enumeration (single source targeting many hosts).
 
@@ -196,20 +182,19 @@ class LateralMovementDetector:
         for src_ip, port_targets in src_targets.items():
             for port, targets in port_targets.items():
                 if len(targets) >= min_targets:
-                    findings.append({
-                        "source_ip": src_ip,
-                        "port": port,
-                        "target_count": len(targets),
-                        "targets": sorted(list(targets)),
-                        "finding_type": "enumeration"
-                    })
+                    findings.append(
+                        {
+                            "source_ip": src_ip,
+                            "port": port,
+                            "target_count": len(targets),
+                            "targets": sorted(list(targets)),
+                            "finding_type": "enumeration",
+                        }
+                    )
 
         return findings
 
-    def detect_psexec_pattern(
-        self,
-        connections: list[dict]
-    ) -> list[dict]:
+    def detect_psexec_pattern(self, connections: list[dict]) -> list[dict]:
         """Detect PsExec-like patterns.
 
         PsExec pattern:
@@ -251,34 +236,34 @@ class LateralMovementDetector:
 
             # PsExec pattern requires admin share + service pipe
             if has_admin_share and has_service_pipe:
-                findings.append({
-                    "src_ip": src_ip,
-                    "dst_ip": dst_ip,
-                    "movement_type": "psexec_pattern",
-                    "admin_share_access": True,
-                    "pipe_access": True,
-                    "confidence": "high",
-                    "connection_count": len(conns)
-                })
+                findings.append(
+                    {
+                        "src_ip": src_ip,
+                        "dst_ip": dst_ip,
+                        "movement_type": "psexec_pattern",
+                        "admin_share_access": True,
+                        "pipe_access": True,
+                        "confidence": "high",
+                        "connection_count": len(conns),
+                    }
+                )
             elif has_admin_share or has_service_pipe:
                 # Partial pattern - still suspicious
-                findings.append({
-                    "src_ip": src_ip,
-                    "dst_ip": dst_ip,
-                    "movement_type": "suspicious_smb",
-                    "admin_share_access": has_admin_share,
-                    "pipe_access": has_service_pipe,
-                    "confidence": "medium",
-                    "connection_count": len(conns)
-                })
+                findings.append(
+                    {
+                        "src_ip": src_ip,
+                        "dst_ip": dst_ip,
+                        "movement_type": "suspicious_smb",
+                        "admin_share_access": has_admin_share,
+                        "pipe_access": has_service_pipe,
+                        "confidence": "medium",
+                        "connection_count": len(conns),
+                    }
+                )
 
         return findings
 
-    def detect_all(
-        self,
-        connections: list[dict],
-        internal_only: bool = True
-    ) -> dict[str, Any]:
+    def detect_all(self, connections: list[dict], internal_only: bool = True) -> dict[str, Any]:
         """Detect all types of lateral movement.
 
         Args:
@@ -305,8 +290,8 @@ class LateralMovementDetector:
                 "total_rdp": len(rdp_findings),
                 "total_winrm": len(winrm_findings),
                 "enumeration_detected": len(enumeration) > 0,
-                "psexec_detected": len(psexec) > 0
-            }
+                "psexec_detected": len(psexec) > 0,
+            },
         }
 
     def calculate_risk_score(self, finding: dict) -> int:
@@ -340,11 +325,7 @@ class LateralMovementDetector:
 
         return min(10, score)
 
-    def detect_from_pcap(
-        self,
-        pcap_path: str,
-        executor=None
-    ) -> dict[str, Any]:
+    def detect_from_pcap(self, pcap_path: str, executor=None) -> dict[str, Any]:
         """Detect lateral movement from a PCAP file.
 
         Args:
@@ -368,12 +349,9 @@ class LateralMovementDetector:
 
         results = executor.execute_and_parse_fields(
             pcap_path=pcap_path,
-            fields=[
-                "ip.src", "ip.dst", "tcp.dstport",
-                "frame.time_epoch", "smb.path", "smb.file"
-            ],
+            fields=["ip.src", "ip.dst", "tcp.dstport", "frame.time_epoch", "smb.path", "smb.file"],
             display_filter=f"tcp and ({port_filter})",
-            timeout=300
+            timeout=300,
         )
 
         # Build connection list
@@ -387,7 +365,7 @@ class LateralMovementDetector:
                     "protocol": "tcp",
                     "timestamp": float(row.get("frame.time_epoch", 0)),
                     "smb_path": row.get("smb.path", ""),
-                    "smb_pipe": row.get("smb.file", "")
+                    "smb_pipe": row.get("smb.file", ""),
                 }
                 connections.append(conn)
             except (ValueError, TypeError):
@@ -414,10 +392,7 @@ class LateralMovementDetector:
         pipe_lower = pipe.lower()
         return any(p in pipe_lower for p in SUSPICIOUS_PIPES)
 
-    def get_lateral_movement_summary(
-        self,
-        results: dict[str, Any]
-    ) -> str:
+    def get_lateral_movement_summary(self, results: dict[str, Any]) -> str:
         """Generate human-readable summary of lateral movement findings.
 
         Args:

@@ -8,15 +8,19 @@ class SmartSearchTools:
 
     # Default fields to extract for different index types
     DEFAULT_FIELDS = {
-        "winlogbeat": ["@timestamp", "event.code", "host.name", "user.name",
-                       "source.ip", "winlog.event_data.CommandLine", "message"],
-        "auditbeat": ["@timestamp", "event.action", "host.name", "user.name",
-                      "source.ip", "process.name", "message"],
-        "filebeat": ["@timestamp", "event.module", "host.name", "source.ip",
-                     "message"],
-        "cef": ["@timestamp", "name", "severity", "sourceAddress",
-                "destinationAddress", "deviceAddress", "message"],
-        "default": ["@timestamp", "host.name", "message", "event.action"]
+        "winlogbeat": [
+            "@timestamp",
+            "event.code",
+            "host.name",
+            "user.name",
+            "source.ip",
+            "winlog.event_data.CommandLine",
+            "message",
+        ],
+        "auditbeat": ["@timestamp", "event.action", "host.name", "user.name", "source.ip", "process.name", "message"],
+        "filebeat": ["@timestamp", "event.module", "host.name", "source.ip", "message"],
+        "cef": ["@timestamp", "name", "severity", "sourceAddress", "destinationAddress", "deviceAddress", "message"],
+        "default": ["@timestamp", "host.name", "message", "event.action"],
     }
 
     def __init__(self, search_client):
@@ -33,10 +37,7 @@ class SmartSearchTools:
             # Use aggregations to efficiently get min/max timestamps
             agg_query = {
                 "size": 0,
-                "aggs": {
-                    "min_time": {"min": {"field": "@timestamp"}},
-                    "max_time": {"max": {"field": "@timestamp"}}
-                }
+                "aggs": {"min_time": {"min": {"field": "@timestamp"}}, "max_time": {"max": {"field": "@timestamp"}}},
             }
             result = self.search_client.search_documents(index=index, body=agg_query, raw=True)
             aggs = result.get("aggregations", {})
@@ -51,10 +52,7 @@ class SmartSearchTools:
         return None
 
     def _build_adaptive_time_filter(
-        self,
-        index: str,
-        timeframe_minutes: int | None,
-        query: str = "*"
+        self, index: str, timeframe_minutes: int | None, query: str = "*"
     ) -> tuple[dict | None, str | None]:
         """
         Build time filter that adapts to actual data range if needed.
@@ -73,37 +71,18 @@ class SmartSearchTools:
             if time_range:
                 min_time, max_time = time_range
                 return (
-                    {
-                        "range": {
-                            "@timestamp": {
-                                "gte": min_time,
-                                "lte": max_time
-                            }
-                        }
-                    },
-                    f"Auto-detected time range: {min_time} to {max_time}"
+                    {"range": {"@timestamp": {"gte": min_time, "lte": max_time}}},
+                    f"Auto-detected time range: {min_time} to {max_time}",
                 )
             return (None, "No time filter applied - unable to detect data range")
 
         # User specified a timeframe - first try it
-        time_filter = {
-            "range": {
-                "@timestamp": {
-                    "gte": f"now-{timeframe_minutes}m",
-                    "lte": "now"
-                }
-            }
-        }
+        time_filter = {"range": {"@timestamp": {"gte": f"now-{timeframe_minutes}m", "lte": "now"}}}
 
         # Quick check if this timeframe has data
         check_query = {
             "size": 0,
-            "query": {
-                "bool": {
-                    "must": [{"query_string": {"query": query}}],
-                    "filter": [time_filter]
-                }
-            }
+            "query": {"bool": {"must": [{"query_string": {"query": query}}], "filter": [time_filter]}},
         }
 
         try:
@@ -120,15 +99,8 @@ class SmartSearchTools:
             if time_range:
                 min_time, max_time = time_range
                 return (
-                    {
-                        "range": {
-                            "@timestamp": {
-                                "gte": min_time,
-                                "lte": max_time
-                            }
-                        }
-                    },
-                    f"No data in last {timeframe_minutes}m. Auto-detected range: {min_time} to {max_time}"
+                    {"range": {"@timestamp": {"gte": min_time, "lte": max_time}}},
+                    f"No data in last {timeframe_minutes}m. Auto-detected range: {min_time} to {max_time}",
                 )
 
         except Exception:
@@ -146,7 +118,7 @@ class SmartSearchTools:
             max_results: int = 20,
             offset: int = 0,
             timeframe_minutes: int | None = None,
-            search_after: list | None = None
+            search_after: list | None = None,
         ) -> dict:
             """
             Token-efficient search with automatic summarization and PAGINATION.
@@ -195,7 +167,7 @@ class SmartSearchTools:
                 max_results=max_results,
                 offset=offset,
                 timeframe_minutes=timeframe_minutes,
-                search_after=search_after
+                search_after=search_after,
             )
 
         @mcp.tool()
@@ -209,7 +181,7 @@ class SmartSearchTools:
             analysis_size: int = 50,
             offset: int = 0,
             search_after: list | None = None,
-            agg_bucket_size: int = 20
+            agg_bucket_size: int = 20,
         ) -> dict:
             """
             IR-focused search with automatic IoC extraction, MITRE mapping, and PAGINATION.
@@ -270,16 +242,12 @@ class SmartSearchTools:
                 analysis_size=analysis_size,
                 offset=offset,
                 search_after=search_after,
-                agg_bucket_size=agg_bucket_size
+                agg_bucket_size=agg_bucket_size,
             )
 
         @mcp.tool()
         def quick_count(
-            index: str,
-            group_by: str,
-            query: str = "*",
-            timeframe_minutes: int = 60,
-            top_n: int = 10
+            index: str, group_by: str, query: str = "*", timeframe_minutes: int = 60, top_n: int = 10
         ) -> dict:
             """
             Fast triage aggregation - counts without returning documents.
@@ -310,11 +278,7 @@ class SmartSearchTools:
                 )
             """
             return self._execute_quick_count(
-                index=index,
-                group_by=group_by,
-                query=query,
-                timeframe_minutes=timeframe_minutes,
-                top_n=top_n
+                index=index, group_by=group_by, query=query, timeframe_minutes=timeframe_minutes, top_n=top_n
             )
 
     def _detect_index_type(self, index: str) -> str:
@@ -339,14 +303,7 @@ class SmartSearchTools:
         """Build time range filter."""
         if not timeframe_minutes:
             return None
-        return {
-            "range": {
-                "@timestamp": {
-                    "gte": f"now-{timeframe_minutes}m",
-                    "lte": "now"
-                }
-            }
-        }
+        return {"range": {"@timestamp": {"gte": f"now-{timeframe_minutes}m", "lte": "now"}}}
 
     def _extract_field_value(self, source: dict, field: str):
         """Extract nested field value using dot notation."""
@@ -405,10 +362,7 @@ class SmartSearchTools:
 
         if timestamps:
             timestamps.sort()
-            return {
-                "earliest": timestamps[0],
-                "latest": timestamps[-1]
-            }
+            return {"earliest": timestamps[0], "latest": timestamps[-1]}
         return {}
 
     def _execute_smart_search(
@@ -419,7 +373,7 @@ class SmartSearchTools:
         max_results: int,
         offset: int,
         timeframe_minutes: int | None,
-        search_after: list | None
+        search_after: list | None,
     ) -> dict:
         """Execute smart search with summarization and PAGINATION support."""
         # Determine fields to extract
@@ -429,15 +383,9 @@ class SmartSearchTools:
         # Build query
         es_query = {
             "size": min(max_results, 100),  # Cap at 100 for performance
-            "query": {
-                "bool": {
-                    "must": [
-                        {"query_string": {"query": query}}
-                    ]
-                }
-            },
+            "query": {"bool": {"must": [{"query_string": {"query": query}}]}},
             "_source": fields,
-            "sort": [{"@timestamp": {"order": "desc", "unmapped_type": "date"}}]  # Simple sort for pagination
+            "sort": [{"@timestamp": {"order": "desc", "unmapped_type": "date"}}],  # Simple sort for pagination
         }
 
         # Add pagination - search_after takes precedence over offset
@@ -466,7 +414,11 @@ class SmartSearchTools:
 
         # Calculate pagination info
         current_offset = offset if not search_after else None
-        has_more = (offset + len(hits) < total_hits) if not search_after else (len(hits) == max_results and total_hits > len(hits))
+        has_more = (
+            (offset + len(hits) < total_hits)
+            if not search_after
+            else (len(hits) == max_results and total_hits > len(hits))
+        )
 
         # Extract sort values from last hit for search_after pagination
         next_search_after = None
@@ -479,15 +431,11 @@ class SmartSearchTools:
                 "total_hits": total_hits,
                 "returned": len(hits),
                 "time_range": self._get_time_range(hits),
-                "top_values": self._calculate_top_values(hits, fields)
+                "top_values": self._calculate_top_values(hits, fields),
             },
-            "pagination": {
-                "offset": current_offset,
-                "has_more": has_more,
-                "next_search_after": next_search_after
-            },
+            "pagination": {"offset": current_offset, "has_more": has_more, "next_search_after": next_search_after},
             "hits": [self._simplify_hit(hit, fields) for hit in hits],
-            "query_used": es_query
+            "query_used": es_query,
         }
 
         # Add guidance for large result sets
@@ -505,23 +453,44 @@ class SmartSearchTools:
                 "map MITRE ATT&CK techniques, and get follow-up recommendations. "
                 "Do NOT manually summarize - use the analysis tools."
             ),
-            "after_analysis": "Use analyze_kill_chain_stage() to position attack in kill chain"
+            "after_analysis": "Use analyze_kill_chain_stage() to position attack in kill chain",
         }
 
         return response
 
     # IR-relevant fields for threat hunting analysis
     THREAT_HUNT_FIELDS = [
-        "@timestamp", "event.code", "event.action", "event.category",
-        "host.name", "host.hostname", "user.name", "user.domain",
-        "source.ip", "source.port", "destination.ip", "destination.port",
-        "process.name", "process.executable", "process.command_line",
-        "process.parent.name", "process.parent.command_line",
-        "file.name", "file.path", "file.hash.sha256",
-        "registry.key", "registry.value",
-        "winlog.event_id", "winlog.event_data.CommandLine",
-        "winlog.event_data.TargetUserName", "winlog.event_data.IpAddress",
-        "message", "name", "severity", "sourceAddress", "destinationAddress"
+        "@timestamp",
+        "event.code",
+        "event.action",
+        "event.category",
+        "host.name",
+        "host.hostname",
+        "user.name",
+        "user.domain",
+        "source.ip",
+        "source.port",
+        "destination.ip",
+        "destination.port",
+        "process.name",
+        "process.executable",
+        "process.command_line",
+        "process.parent.name",
+        "process.parent.command_line",
+        "file.name",
+        "file.path",
+        "file.hash.sha256",
+        "registry.key",
+        "registry.value",
+        "winlog.event_id",
+        "winlog.event_data.CommandLine",
+        "winlog.event_data.TargetUserName",
+        "winlog.event_data.IpAddress",
+        "message",
+        "name",
+        "severity",
+        "sourceAddress",
+        "destinationAddress",
     ]
 
     def _execute_threat_hunt_search(
@@ -535,7 +504,7 @@ class SmartSearchTools:
         analysis_size: int = 50,
         offset: int = 0,
         search_after: list | None = None,
-        agg_bucket_size: int = 20
+        agg_bucket_size: int = 20,
     ) -> dict:
         """Execute threat hunting search with automatic analysis and PAGINATION."""
         # Clamp analysis_size to reasonable range
@@ -543,22 +512,14 @@ class SmartSearchTools:
 
         # Build adaptive time filter (auto-detects if no recent data)
         time_filter, time_info = self._build_adaptive_time_filter(
-            index=index,
-            timeframe_minutes=timeframe_minutes,
-            query=query
+            index=index, timeframe_minutes=timeframe_minutes, query=query
         )
 
         # Build comprehensive query with _source filtering to avoid truncation
         es_query = {
             "size": analysis_size,  # Configurable analysis size
             "_source": self.THREAT_HUNT_FIELDS,  # Only fetch IR-relevant fields
-            "query": {
-                "bool": {
-                    "must": [
-                        {"query_string": {"query": query}}
-                    ]
-                }
-            },
+            "query": {"bool": {"must": [{"query_string": {"query": query}}]}},
             "sort": [{"@timestamp": {"order": "desc", "unmapped_type": "date"}}],  # Simple sort for pagination
             # Add aggregations for complete IoC coverage - configurable bucket size
             "aggs": {
@@ -567,9 +528,13 @@ class SmartSearchTools:
                 "top_users": {"terms": {"field": "user.name.keyword", "size": agg_bucket_size, "missing": "N/A"}},
                 "top_hosts": {"terms": {"field": "host.name.keyword", "size": agg_bucket_size}},
                 "top_events": {"terms": {"field": "event.code", "size": agg_bucket_size}},
-                "top_processes": {"terms": {"field": "process.name.keyword", "size": agg_bucket_size, "missing": "N/A"}},
-                "top_commands": {"terms": {"field": "process.command_line.keyword", "size": agg_bucket_size, "missing": "N/A"}}
-            }
+                "top_processes": {
+                    "terms": {"field": "process.name.keyword", "size": agg_bucket_size, "missing": "N/A"}
+                },
+                "top_commands": {
+                    "terms": {"field": "process.command_line.keyword", "size": agg_bucket_size, "missing": "N/A"}
+                },
+            },
         }
 
         # Add adaptive time filter if available
@@ -589,10 +554,7 @@ class SmartSearchTools:
             return {"error": str(e), "query_used": es_query}
 
         # Get analysis using existing analyze_search_results
-        analysis = self.search_client.analyze_search_results(
-            search_results=result,
-            context=f"Threat hunt: {query}"
-        )
+        analysis = self.search_client.analyze_search_results(search_results=result, context=f"Threat hunt: {query}")
 
         # Extract total hits
         total_hits = result.get("hits", {}).get("total", {})
@@ -603,7 +565,11 @@ class SmartSearchTools:
 
         # Calculate pagination info
         current_offset = offset if not search_after else None
-        has_more = (offset + len(hits) < total_hits) if not search_after else (len(hits) == analysis_size and total_hits > len(hits))
+        has_more = (
+            (offset + len(hits) < total_hits)
+            if not search_after
+            else (len(hits) == analysis_size and total_hits > len(hits))
+        )
 
         # Extract sort values from last hit for search_after pagination
         next_search_after = None
@@ -627,13 +593,9 @@ class SmartSearchTools:
                 "analyzed": len(hits),
                 "coverage_percent": round(coverage_pct, 1),
                 "severity": analysis.get("severity_assessment", "unknown"),
-                "timeframe": time_info or f"last {timeframe_minutes} minutes"
+                "timeframe": time_info or f"last {timeframe_minutes} minutes",
             },
-            "pagination": {
-                "offset": current_offset,
-                "has_more": has_more,
-                "next_search_after": next_search_after
-            }
+            "pagination": {"offset": current_offset, "has_more": has_more, "next_search_after": next_search_after},
         }
 
         if coverage_warning:
@@ -656,10 +618,7 @@ class SmartSearchTools:
                 ioc_type = ioc.get("type", "unknown")
                 if ioc_type not in grouped_iocs:
                     grouped_iocs[ioc_type] = []
-                grouped_iocs[ioc_type].append({
-                    "value": ioc.get("value"),
-                    "priority": ioc.get("pyramid_priority", 0)
-                })
+                grouped_iocs[ioc_type].append({"value": ioc.get("value"), "priority": ioc.get("pyramid_priority", 0)})
 
             # Enrich with aggregation data (covers ALL events, not just samples)
             aggs = result.get("aggregations", {})
@@ -667,23 +626,38 @@ class SmartSearchTools:
                 # Add source IPs from aggregations
                 for bucket in aggs.get("top_ips", {}).get("buckets", []):
                     ip = bucket.get("key")
-                    if ip and ("ip" not in grouped_iocs or not any(i["value"] == ip for i in grouped_iocs.get("ip", []))):
+                    if ip and (
+                        "ip" not in grouped_iocs or not any(i["value"] == ip for i in grouped_iocs.get("ip", []))
+                    ):
                         if "ip" not in grouped_iocs:
                             grouped_iocs["ip"] = []
-                        grouped_iocs["ip"].append({"value": ip, "count": bucket.get("doc_count"), "priority": 2, "type": "source"})
+                        grouped_iocs["ip"].append(
+                            {"value": ip, "count": bucket.get("doc_count"), "priority": 2, "type": "source"}
+                        )
 
                 # Add destination IPs from aggregations
                 for bucket in aggs.get("top_dest_ips", {}).get("buckets", []):
                     ip = bucket.get("key")
-                    if ip and ("ip" not in grouped_iocs or not any(i["value"] == ip for i in grouped_iocs.get("ip", []))):
+                    if ip and (
+                        "ip" not in grouped_iocs or not any(i["value"] == ip for i in grouped_iocs.get("ip", []))
+                    ):
                         if "ip" not in grouped_iocs:
                             grouped_iocs["ip"] = []
-                        grouped_iocs["ip"].append({"value": ip, "count": bucket.get("doc_count"), "priority": 2, "type": "destination"})
+                        grouped_iocs["ip"].append(
+                            {"value": ip, "count": bucket.get("doc_count"), "priority": 2, "type": "destination"}
+                        )
 
                 # Add users from aggregations
                 for bucket in aggs.get("top_users", {}).get("buckets", []):
                     user = bucket.get("key")
-                    if user and user != "N/A" and ("user" not in grouped_iocs or not any(i["value"] == user for i in grouped_iocs.get("user", []))):
+                    if (
+                        user
+                        and user != "N/A"
+                        and (
+                            "user" not in grouped_iocs
+                            or not any(i["value"] == user for i in grouped_iocs.get("user", []))
+                        )
+                    ):
                         if "user" not in grouped_iocs:
                             grouped_iocs["user"] = []
                         grouped_iocs["user"].append({"value": user, "count": bucket.get("doc_count"), "priority": 4})
@@ -691,15 +665,27 @@ class SmartSearchTools:
                 # Add hosts from aggregations
                 for bucket in aggs.get("top_hosts", {}).get("buckets", []):
                     host = bucket.get("key")
-                    if host and ("hostname" not in grouped_iocs or not any(i["value"] == host for i in grouped_iocs.get("hostname", []))):
+                    if host and (
+                        "hostname" not in grouped_iocs
+                        or not any(i["value"] == host for i in grouped_iocs.get("hostname", []))
+                    ):
                         if "hostname" not in grouped_iocs:
                             grouped_iocs["hostname"] = []
-                        grouped_iocs["hostname"].append({"value": host, "count": bucket.get("doc_count"), "priority": 4})
+                        grouped_iocs["hostname"].append(
+                            {"value": host, "count": bucket.get("doc_count"), "priority": 4}
+                        )
 
                 # Add processes from aggregations
                 for bucket in aggs.get("top_processes", {}).get("buckets", []):
                     proc = bucket.get("key")
-                    if proc and proc != "N/A" and ("process" not in grouped_iocs or not any(i["value"] == proc for i in grouped_iocs.get("process", []))):
+                    if (
+                        proc
+                        and proc != "N/A"
+                        and (
+                            "process" not in grouped_iocs
+                            or not any(i["value"] == proc for i in grouped_iocs.get("process", []))
+                        )
+                    ):
                         if "process" not in grouped_iocs:
                             grouped_iocs["process"] = []
                         grouped_iocs["process"].append({"value": proc, "count": bucket.get("doc_count"), "priority": 5})
@@ -711,7 +697,9 @@ class SmartSearchTools:
                         if "command_line" not in grouped_iocs:
                             grouped_iocs["command_line"] = []
                         if not any(i["value"] == cmd for i in grouped_iocs.get("command_line", [])):
-                            grouped_iocs["command_line"].append({"value": cmd, "count": bucket.get("doc_count"), "priority": 6})
+                            grouped_iocs["command_line"].append(
+                                {"value": cmd, "count": bucket.get("doc_count"), "priority": 6}
+                            )
 
             response["iocs"] = grouped_iocs
             response["ioc_source"] = "aggregations + sample analysis" if aggs else "sample analysis only"
@@ -726,19 +714,14 @@ class SmartSearchTools:
 
         # Add recommendations
         response["recommended_followups"] = [
-            {
-                "action": r.get("reason"),
-                "tool": r.get("tool"),
-                "priority": r.get("priority")
-            }
+            {"action": r.get("reason"), "tool": r.get("tool"), "priority": r.get("priority")}
             for r in analysis.get("recommended_followup", [])[:5]
         ]
 
         # Add limited sample events
         if max_sample_events > 0:
             response["sample_events"] = [
-                self._simplify_hit(hit, self._get_default_fields(index))
-                for hit in hits[:max_sample_events]
+                self._simplify_hit(hit, self._get_default_fields(index)) for hit in hits[:max_sample_events]
             ]
 
         # WORKFLOW HINT: Guide the AI to use kill chain analysis
@@ -750,44 +733,29 @@ class SmartSearchTools:
                 "Use analyze_kill_chain_stage() with the IoCs above to position this activity "
                 "in the Cyber Kill Chain and get hunting suggestions for previous/next stages."
             ),
-            "final_step": "Use generate_investigation_report() before presenting findings"
+            "final_step": "Use generate_investigation_report() before presenting findings",
         }
 
         return response
 
-    def _execute_quick_count(
-        self,
-        index: str,
-        group_by: str,
-        query: str,
-        timeframe_minutes: int,
-        top_n: int
-    ) -> dict:
+    def _execute_quick_count(self, index: str, group_by: str, query: str, timeframe_minutes: int, top_n: int) -> dict:
         """Execute quick count aggregation."""
         # Build adaptive time filter (auto-detects if no recent data)
         time_filter, time_info = self._build_adaptive_time_filter(
-            index=index,
-            timeframe_minutes=timeframe_minutes,
-            query=query
+            index=index, timeframe_minutes=timeframe_minutes, query=query
         )
 
         es_query = {
             "size": 0,  # No documents, just aggregations
-            "query": {
-                "bool": {
-                    "must": [
-                        {"query_string": {"query": query}}
-                    ]
-                }
-            },
+            "query": {"bool": {"must": [{"query_string": {"query": query}}]}},
             "aggs": {
                 "top_values": {
                     "terms": {
                         "field": group_by,  # Try without .keyword first
-                        "size": top_n
+                        "size": top_n,
                     }
                 }
-            }
+            },
         }
 
         # Add adaptive time filter if available
@@ -832,8 +800,5 @@ class SmartSearchTools:
             "total": total_hits,
             "grouped_by": group_by,
             "timeframe": time_info or f"last {timeframe_minutes} minutes",
-            "groups": [
-                {"key": b.get("key"), "count": b.get("doc_count")}
-                for b in buckets
-            ]
+            "groups": [{"key": b.get("key"), "count": b.get("doc_count")} for b in buckets],
         }

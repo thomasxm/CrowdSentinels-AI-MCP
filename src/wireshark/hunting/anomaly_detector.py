@@ -1,5 +1,6 @@
 # src/wireshark/hunting/anomaly_detector.py
 """Protocol anomaly detection."""
+
 import logging
 import re
 from datetime import datetime
@@ -24,12 +25,7 @@ class AnomalyDetector:
         self.baseline = baseline or DEFAULT_BASELINE
 
     def check_port_anomaly(
-        self,
-        port: int,
-        protocol: str,
-        occurrence_count: int,
-        src_ip: str | None = None,
-        dst_ip: str | None = None
+        self, port: int, protocol: str, occurrence_count: int, src_ip: str | None = None, dst_ip: str | None = None
     ) -> list[AnomalyFinding]:
         """Check for port-based anomalies.
 
@@ -48,37 +44,41 @@ class AnomalyDetector:
 
         # Check for known suspicious ports
         if is_suspicious_port(port, self.baseline):
-            anomalies.append(AnomalyFinding(
-                id=f"port-suspicious-{port}-{timestamp.timestamp()}",
-                type="suspicious_port",
-                severity="high",
-                description=f"Connection to known suspicious port {port}/{protocol}",
-                source_ip=src_ip or "unknown",
-                dest_ip=dst_ip,
-                port=port,
-                protocol=protocol,
-                evidence={"occurrences": occurrence_count},
-                timestamp=timestamp,
-                confidence=9
-            ))
+            anomalies.append(
+                AnomalyFinding(
+                    id=f"port-suspicious-{port}-{timestamp.timestamp()}",
+                    type="suspicious_port",
+                    severity="high",
+                    description=f"Connection to known suspicious port {port}/{protocol}",
+                    source_ip=src_ip or "unknown",
+                    dest_ip=dst_ip,
+                    port=port,
+                    protocol=protocol,
+                    evidence={"occurrences": occurrence_count},
+                    timestamp=timestamp,
+                    confidence=9,
+                )
+            )
 
         # Check for non-standard ports with significant traffic
         elif not is_legitimate_port(port, protocol, self.baseline):
             threshold = get_threshold("unusual_port_threshold", self.baseline)
             if occurrence_count >= threshold:
-                anomalies.append(AnomalyFinding(
-                    id=f"port-unusual-{port}-{timestamp.timestamp()}",
-                    type="unusual_port",
-                    severity="medium",
-                    description=f"Significant traffic on unusual port {port}/{protocol}",
-                    source_ip=src_ip or "unknown",
-                    dest_ip=dst_ip,
-                    port=port,
-                    protocol=protocol,
-                    evidence={"occurrences": occurrence_count, "threshold": threshold},
-                    timestamp=timestamp,
-                    confidence=6
-                ))
+                anomalies.append(
+                    AnomalyFinding(
+                        id=f"port-unusual-{port}-{timestamp.timestamp()}",
+                        type="unusual_port",
+                        severity="medium",
+                        description=f"Significant traffic on unusual port {port}/{protocol}",
+                        source_ip=src_ip or "unknown",
+                        dest_ip=dst_ip,
+                        port=port,
+                        protocol=protocol,
+                        evidence={"occurrences": occurrence_count, "threshold": threshold},
+                        timestamp=timestamp,
+                        confidence=6,
+                    )
+                )
 
         return anomalies
 
@@ -88,7 +88,7 @@ class AnomalyDetector:
         query_type: str,
         response_code: str | None,
         src_ip: str = "unknown",
-        response_size: int = 0
+        response_size: int = 0,
     ) -> list[AnomalyFinding]:
         """Check for DNS-based anomalies.
 
@@ -110,53 +110,51 @@ class AnomalyDetector:
 
         # Check for long query names (potential tunneling)
         if len(query_name) > max_length:
-            anomalies.append(AnomalyFinding(
-                id=f"dns-long-query-{timestamp.timestamp()}",
-                type="dns_tunnel_suspect",
-                severity="high",
-                description=f"Unusually long DNS query ({len(query_name)} chars): {query_name[:50]}...",
-                source_ip=src_ip,
-                protocol="dns",
-                evidence={
-                    "query_name": query_name,
-                    "length": len(query_name),
-                    "threshold": max_length
-                },
-                timestamp=timestamp,
-                confidence=7
-            ))
+            anomalies.append(
+                AnomalyFinding(
+                    id=f"dns-long-query-{timestamp.timestamp()}",
+                    type="dns_tunnel_suspect",
+                    severity="high",
+                    description=f"Unusually long DNS query ({len(query_name)} chars): {query_name[:50]}...",
+                    source_ip=src_ip,
+                    protocol="dns",
+                    evidence={"query_name": query_name, "length": len(query_name), "threshold": max_length},
+                    timestamp=timestamp,
+                    confidence=7,
+                )
+            )
 
         # Check for high-entropy subdomains (potential DGA or tunneling)
         if self._is_high_entropy(query_name):
-            anomalies.append(AnomalyFinding(
-                id=f"dns-entropy-{timestamp.timestamp()}",
-                type="dns_high_entropy",
-                severity="medium",
-                description=f"High-entropy DNS query (potential DGA): {query_name}",
-                source_ip=src_ip,
-                protocol="dns",
-                evidence={"query_name": query_name},
-                timestamp=timestamp,
-                confidence=6
-            ))
+            anomalies.append(
+                AnomalyFinding(
+                    id=f"dns-entropy-{timestamp.timestamp()}",
+                    type="dns_high_entropy",
+                    severity="medium",
+                    description=f"High-entropy DNS query (potential DGA): {query_name}",
+                    source_ip=src_ip,
+                    protocol="dns",
+                    evidence={"query_name": query_name},
+                    timestamp=timestamp,
+                    confidence=6,
+                )
+            )
 
         # Check for large TXT responses (potential exfil)
         if query_type == "TXT" and response_size > max_txt_size:
-            anomalies.append(AnomalyFinding(
-                id=f"dns-large-txt-{timestamp.timestamp()}",
-                type="dns_exfil_suspect",
-                severity="high",
-                description=f"Large DNS TXT response ({response_size} bytes)",
-                source_ip=src_ip,
-                protocol="dns",
-                evidence={
-                    "query_name": query_name,
-                    "response_size": response_size,
-                    "threshold": max_txt_size
-                },
-                timestamp=timestamp,
-                confidence=7
-            ))
+            anomalies.append(
+                AnomalyFinding(
+                    id=f"dns-large-txt-{timestamp.timestamp()}",
+                    type="dns_exfil_suspect",
+                    severity="high",
+                    description=f"Large DNS TXT response ({response_size} bytes)",
+                    source_ip=src_ip,
+                    protocol="dns",
+                    evidence={"query_name": query_name, "response_size": response_size, "threshold": max_txt_size},
+                    timestamp=timestamp,
+                    confidence=7,
+                )
+            )
 
         return anomalies
 
@@ -166,7 +164,7 @@ class AnomalyDetector:
         server_ip: str,
         ja3_hash: str | None = None,
         cert_cn: str | None = None,
-        src_ip: str = "unknown"
+        src_ip: str = "unknown",
     ) -> list[AnomalyFinding]:
         """Check for TLS-based anomalies.
 
@@ -185,47 +183,42 @@ class AnomalyDetector:
 
         # TLS without SNI is suspicious (common in malware)
         if not has_sni:
-            anomalies.append(AnomalyFinding(
-                id=f"tls-no-sni-{timestamp.timestamp()}",
-                type="tls_no_sni",
-                severity="medium",
-                description=f"TLS connection without SNI to {server_ip}",
-                source_ip=src_ip,
-                dest_ip=server_ip,
-                protocol="tls",
-                evidence={
-                    "has_sni": False,
-                    "ja3": ja3_hash,
-                    "cert_cn": cert_cn
-                },
-                timestamp=timestamp,
-                confidence=6
-            ))
+            anomalies.append(
+                AnomalyFinding(
+                    id=f"tls-no-sni-{timestamp.timestamp()}",
+                    type="tls_no_sni",
+                    severity="medium",
+                    description=f"TLS connection without SNI to {server_ip}",
+                    source_ip=src_ip,
+                    dest_ip=server_ip,
+                    protocol="tls",
+                    evidence={"has_sni": False, "ja3": ja3_hash, "cert_cn": cert_cn},
+                    timestamp=timestamp,
+                    confidence=6,
+                )
+            )
 
         # Self-signed or suspicious cert (if CN doesn't match IP pattern)
         if cert_cn and self._is_suspicious_cert(cert_cn, server_ip):
-            anomalies.append(AnomalyFinding(
-                id=f"tls-suspicious-cert-{timestamp.timestamp()}",
-                type="tls_suspicious_cert",
-                severity="medium",
-                description=f"Suspicious TLS certificate: {cert_cn}",
-                source_ip=src_ip,
-                dest_ip=server_ip,
-                protocol="tls",
-                evidence={"cert_cn": cert_cn},
-                timestamp=timestamp,
-                confidence=5
-            ))
+            anomalies.append(
+                AnomalyFinding(
+                    id=f"tls-suspicious-cert-{timestamp.timestamp()}",
+                    type="tls_suspicious_cert",
+                    severity="medium",
+                    description=f"Suspicious TLS certificate: {cert_cn}",
+                    source_ip=src_ip,
+                    dest_ip=server_ip,
+                    protocol="tls",
+                    evidence={"cert_cn": cert_cn},
+                    timestamp=timestamp,
+                    confidence=5,
+                )
+            )
 
         return anomalies
 
     def check_traffic_volume_anomaly(
-        self,
-        src_ip: str,
-        dst_ip: str,
-        bytes_sent: int,
-        bytes_received: int,
-        duration_seconds: float
+        self, src_ip: str, dst_ip: str, bytes_sent: int, bytes_received: int, duration_seconds: float
     ) -> list[AnomalyFinding]:
         """Check for traffic volume anomalies.
 
@@ -246,42 +239,42 @@ class AnomalyDetector:
 
         # Large upload to external IP
         if bytes_sent > large_upload and not is_internal_ip(dst_ip):
-            anomalies.append(AnomalyFinding(
-                id=f"traffic-large-upload-{timestamp.timestamp()}",
-                type="large_upload",
-                severity="high",
-                description=f"Large data upload ({bytes_sent / 1048576:.1f} MB) to external IP {dst_ip}",
-                source_ip=src_ip,
-                dest_ip=dst_ip,
-                evidence={
-                    "bytes_sent": bytes_sent,
-                    "bytes_received": bytes_received,
-                    "duration": duration_seconds,
-                    "threshold": large_upload
-                },
-                timestamp=timestamp,
-                confidence=7
-            ))
-
-        # Highly asymmetric traffic (potential exfil)
-        if bytes_sent > 0 and bytes_received > 0:
-            ratio = bytes_sent / bytes_received
-            if ratio > 10 and bytes_sent > 1048576:  # >10:1 ratio and >1MB
-                anomalies.append(AnomalyFinding(
-                    id=f"traffic-asymmetric-{timestamp.timestamp()}",
-                    type="asymmetric_traffic",
-                    severity="medium",
-                    description=f"Highly asymmetric traffic (ratio {ratio:.1f}:1) to {dst_ip}",
+            anomalies.append(
+                AnomalyFinding(
+                    id=f"traffic-large-upload-{timestamp.timestamp()}",
+                    type="large_upload",
+                    severity="high",
+                    description=f"Large data upload ({bytes_sent / 1048576:.1f} MB) to external IP {dst_ip}",
                     source_ip=src_ip,
                     dest_ip=dst_ip,
                     evidence={
                         "bytes_sent": bytes_sent,
                         "bytes_received": bytes_received,
-                        "ratio": ratio
+                        "duration": duration_seconds,
+                        "threshold": large_upload,
                     },
                     timestamp=timestamp,
-                    confidence=6
-                ))
+                    confidence=7,
+                )
+            )
+
+        # Highly asymmetric traffic (potential exfil)
+        if bytes_sent > 0 and bytes_received > 0:
+            ratio = bytes_sent / bytes_received
+            if ratio > 10 and bytes_sent > 1048576:  # >10:1 ratio and >1MB
+                anomalies.append(
+                    AnomalyFinding(
+                        id=f"traffic-asymmetric-{timestamp.timestamp()}",
+                        type="asymmetric_traffic",
+                        severity="medium",
+                        description=f"Highly asymmetric traffic (ratio {ratio:.1f}:1) to {dst_ip}",
+                        source_ip=src_ip,
+                        dest_ip=dst_ip,
+                        evidence={"bytes_sent": bytes_sent, "bytes_received": bytes_received, "ratio": ratio},
+                        timestamp=timestamp,
+                        confidence=6,
+                    )
+                )
 
         return anomalies
 
@@ -320,10 +313,7 @@ class AnomalyDetector:
             return True
 
         # localhost or test certs
-        suspicious_patterns = [
-            "localhost", "test", "self-signed", "example",
-            "changeme", "default", "*.local"
-        ]
+        suspicious_patterns = ["localhost", "test", "self-signed", "example", "changeme", "default", "*.local"]
 
         cn_lower = cert_cn.lower()
         return any(p in cn_lower for p in suspicious_patterns)

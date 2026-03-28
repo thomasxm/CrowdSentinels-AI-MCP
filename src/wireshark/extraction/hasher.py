@@ -1,5 +1,6 @@
 # src/wireshark/extraction/hasher.py
 """File hashing utilities with metadata for forensic analysis."""
+
 import hashlib
 import logging
 import os
@@ -24,16 +25,33 @@ FILE_CATEGORIES = {
 
 # Suspicious extensions that could be malware
 SUSPICIOUS_EXTENSIONS = [
-    ".exe", ".dll", ".scr", ".pif", ".com", ".msi",
-    ".ps1", ".bat", ".cmd", ".vbs", ".js", ".jse", ".wsf", ".wsh", ".hta",
-    ".docm", ".xlsm", ".pptm",  # Macro-enabled Office
-    ".jar", ".class",
+    ".exe",
+    ".dll",
+    ".scr",
+    ".pif",
+    ".com",
+    ".msi",
+    ".ps1",
+    ".bat",
+    ".cmd",
+    ".vbs",
+    ".js",
+    ".jse",
+    ".wsf",
+    ".wsh",
+    ".hta",
+    ".docm",
+    ".xlsm",
+    ".pptm",  # Macro-enabled Office
+    ".jar",
+    ".class",
 ]
 
 
 @dataclass
 class HashRecord:
     """Structured hash record for investigation."""
+
     sha256: str
     sha1: str
     md5: str
@@ -78,11 +96,7 @@ class FileHasher:
                 sha256_hash.update(chunk)
         return sha256_hash.hexdigest()
 
-    def compute_hashes(
-        self,
-        file_path: str,
-        algorithms: list[str] | None = None
-    ) -> dict[str, str]:
+    def compute_hashes(self, file_path: str, algorithms: list[str] | None = None) -> dict[str, str]:
         """Compute multiple hash algorithms for file.
 
         Args:
@@ -171,11 +185,7 @@ class FileHasher:
         ext = Path(filename).suffix.lower()
         return ext in SUSPICIOUS_EXTENSIONS
 
-    def hash_buffer(
-        self,
-        data: bytes,
-        algorithms: list[str] | None = None
-    ) -> dict[str, str]:
+    def hash_buffer(self, data: bytes, algorithms: list[str] | None = None) -> dict[str, str]:
         """Hash raw bytes buffer.
 
         Args:
@@ -196,11 +206,7 @@ class FileHasher:
 
         return result
 
-    def batch_hash(
-        self,
-        file_paths: list[str],
-        algorithms: list[str] | None = None
-    ) -> list[dict[str, Any]]:
+    def batch_hash(self, file_paths: list[str], algorithms: list[str] | None = None) -> list[dict[str, Any]]:
         """Hash multiple files in batch.
 
         Args:
@@ -218,20 +224,24 @@ class FileHasher:
             try:
                 path = Path(file_path)
                 hashes = self.compute_hashes(file_path, algorithms)
-                results.append({
-                    **hashes,
-                    "file_path": str(path.absolute()),
-                    "filename": path.name,
-                    "file_size": os.path.getsize(file_path),
-                    "success": True,
-                })
+                results.append(
+                    {
+                        **hashes,
+                        "file_path": str(path.absolute()),
+                        "filename": path.name,
+                        "file_size": os.path.getsize(file_path),
+                        "success": True,
+                    }
+                )
             except Exception as e:
                 logger.warning(f"Failed to hash {file_path}: {e}")
-                results.append({
-                    "file_path": file_path,
-                    "success": False,
-                    "error": str(e),
-                })
+                results.append(
+                    {
+                        "file_path": file_path,
+                        "success": False,
+                        "error": str(e),
+                    }
+                )
 
         return results
 
@@ -242,7 +252,7 @@ class FileHasher:
         dest_ip: str | None = None,
         protocol: str | None = None,
         tags: list[str] | None = None,
-        metadata: dict[str, Any] | None = None
+        metadata: dict[str, Any] | None = None,
     ) -> HashRecord:
         """Create structured hash record for investigation.
 
@@ -311,6 +321,7 @@ class FileHasher:
             True if hashes match
         """
         import hmac
+
         return hmac.compare_digest(hash1.lower(), hash2.lower())
 
     def get_hash_summary(self, results: list[dict]) -> str:

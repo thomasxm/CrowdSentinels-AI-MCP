@@ -1,5 +1,6 @@
 # tests/wireshark/test_session_tracker.py
 """Tests for session tracker."""
+
 from pathlib import Path
 
 import pytest
@@ -26,7 +27,7 @@ class TestSessionTracker:
                 "tcp.dstport": "443",
                 "frame.time_epoch": "1704067200.0",
                 "frame.len": "60",
-                "tcp.flags": "0x002"  # SYN
+                "tcp.flags": "0x002",  # SYN
             },
             {
                 "tcp.stream": "1",
@@ -36,7 +37,7 @@ class TestSessionTracker:
                 "tcp.dstport": "52345",
                 "frame.time_epoch": "1704067200.1",
                 "frame.len": "60",
-                "tcp.flags": "0x012"  # SYN-ACK
+                "tcp.flags": "0x012",  # SYN-ACK
             },
             {
                 "tcp.stream": "1",
@@ -46,7 +47,7 @@ class TestSessionTracker:
                 "tcp.dstport": "443",
                 "frame.time_epoch": "1704067200.2",
                 "frame.len": "52",
-                "tcp.flags": "0x010"  # ACK
+                "tcp.flags": "0x010",  # ACK
             },
         ]
 
@@ -77,7 +78,7 @@ class TestSessionTracker:
                 "tcp.dstport": "53",
                 "frame.time_epoch": "1704067200.0",
                 "frame.len": "60",
-                "tcp.flags": "0x002"  # SYN
+                "tcp.flags": "0x002",  # SYN
             },
         ]
 
@@ -94,12 +95,26 @@ class TestSessionTracker:
         tracker = SessionTracker()
 
         packets = [
-            {"tcp.stream": "1", "ip.src": "192.168.1.100", "ip.dst": "8.8.8.8",
-             "tcp.srcport": "12345", "tcp.dstport": "80",
-             "frame.time_epoch": "1704067200.0", "frame.len": "100", "tcp.flags": "0x010"},
-            {"tcp.stream": "1", "ip.src": "8.8.8.8", "ip.dst": "192.168.1.100",
-             "tcp.srcport": "80", "tcp.dstport": "12345",
-             "frame.time_epoch": "1704067200.1", "frame.len": "1500", "tcp.flags": "0x010"},
+            {
+                "tcp.stream": "1",
+                "ip.src": "192.168.1.100",
+                "ip.dst": "8.8.8.8",
+                "tcp.srcport": "12345",
+                "tcp.dstport": "80",
+                "frame.time_epoch": "1704067200.0",
+                "frame.len": "100",
+                "tcp.flags": "0x010",
+            },
+            {
+                "tcp.stream": "1",
+                "ip.src": "8.8.8.8",
+                "ip.dst": "192.168.1.100",
+                "tcp.srcport": "80",
+                "tcp.dstport": "12345",
+                "frame.time_epoch": "1704067200.1",
+                "frame.len": "1500",
+                "tcp.flags": "0x010",
+            },
         ]
 
         sessions = tracker.build_sessions_from_packets(packets)
@@ -113,15 +128,36 @@ class TestSessionTracker:
         tracker = SessionTracker()
 
         packets = [
-            {"tcp.stream": "1", "ip.src": "192.168.1.100", "ip.dst": "8.8.8.8",
-             "tcp.srcport": "12345", "tcp.dstport": "80",
-             "frame.time_epoch": "1704067200.0", "frame.len": "60", "tcp.flags": "0x002"},  # SYN
-            {"tcp.stream": "1", "ip.src": "8.8.8.8", "ip.dst": "192.168.1.100",
-             "tcp.srcport": "80", "tcp.dstport": "12345",
-             "frame.time_epoch": "1704067200.1", "frame.len": "60", "tcp.flags": "0x012"},  # SYN-ACK
-            {"tcp.stream": "1", "ip.src": "192.168.1.100", "ip.dst": "8.8.8.8",
-             "tcp.srcport": "12345", "tcp.dstport": "80",
-             "frame.time_epoch": "1704067200.2", "frame.len": "52", "tcp.flags": "0x010"},  # ACK
+            {
+                "tcp.stream": "1",
+                "ip.src": "192.168.1.100",
+                "ip.dst": "8.8.8.8",
+                "tcp.srcport": "12345",
+                "tcp.dstport": "80",
+                "frame.time_epoch": "1704067200.0",
+                "frame.len": "60",
+                "tcp.flags": "0x002",
+            },  # SYN
+            {
+                "tcp.stream": "1",
+                "ip.src": "8.8.8.8",
+                "ip.dst": "192.168.1.100",
+                "tcp.srcport": "80",
+                "tcp.dstport": "12345",
+                "frame.time_epoch": "1704067200.1",
+                "frame.len": "60",
+                "tcp.flags": "0x012",
+            },  # SYN-ACK
+            {
+                "tcp.stream": "1",
+                "ip.src": "192.168.1.100",
+                "ip.dst": "8.8.8.8",
+                "tcp.srcport": "12345",
+                "tcp.dstport": "80",
+                "frame.time_epoch": "1704067200.2",
+                "frame.len": "52",
+                "tcp.flags": "0x010",
+            },  # ACK
         ]
 
         sessions = tracker.build_sessions_from_packets(packets)
@@ -137,17 +173,38 @@ class TestSessionTracker:
 
         packets = [
             # Session 1
-            {"tcp.stream": "1", "ip.src": "192.168.1.100", "ip.dst": "8.8.8.8",
-             "tcp.srcport": "12345", "tcp.dstport": "443",
-             "frame.time_epoch": "1704067200.0", "frame.len": "60", "tcp.flags": "0x002"},
+            {
+                "tcp.stream": "1",
+                "ip.src": "192.168.1.100",
+                "ip.dst": "8.8.8.8",
+                "tcp.srcport": "12345",
+                "tcp.dstport": "443",
+                "frame.time_epoch": "1704067200.0",
+                "frame.len": "60",
+                "tcp.flags": "0x002",
+            },
             # Session 2
-            {"tcp.stream": "2", "ip.src": "192.168.1.101", "ip.dst": "1.1.1.1",
-             "tcp.srcport": "54321", "tcp.dstport": "80",
-             "frame.time_epoch": "1704067200.1", "frame.len": "60", "tcp.flags": "0x002"},
+            {
+                "tcp.stream": "2",
+                "ip.src": "192.168.1.101",
+                "ip.dst": "1.1.1.1",
+                "tcp.srcport": "54321",
+                "tcp.dstport": "80",
+                "frame.time_epoch": "1704067200.1",
+                "frame.len": "60",
+                "tcp.flags": "0x002",
+            },
             # Session 1 continued
-            {"tcp.stream": "1", "ip.src": "8.8.8.8", "ip.dst": "192.168.1.100",
-             "tcp.srcport": "443", "tcp.dstport": "12345",
-             "frame.time_epoch": "1704067200.2", "frame.len": "60", "tcp.flags": "0x012"},
+            {
+                "tcp.stream": "1",
+                "ip.src": "8.8.8.8",
+                "ip.dst": "192.168.1.100",
+                "tcp.srcport": "443",
+                "tcp.dstport": "12345",
+                "frame.time_epoch": "1704067200.2",
+                "frame.len": "60",
+                "tcp.flags": "0x012",
+            },
         ]
 
         sessions = tracker.build_sessions_from_packets(packets)
@@ -181,12 +238,26 @@ class TestSessionTracker:
         tracker = SessionTracker()
 
         packets = [
-            {"tcp.stream": "1", "ip.src": "192.168.1.100", "ip.dst": "8.8.8.8",
-             "tcp.srcport": "12345", "tcp.dstport": "443",
-             "frame.time_epoch": "1704067200.0", "frame.len": "60", "tcp.flags": "0x002"},
-            {"tcp.stream": "2", "ip.src": "192.168.1.100", "ip.dst": "8.8.8.8",
-             "tcp.srcport": "12346", "tcp.dstport": "80",
-             "frame.time_epoch": "1704067200.1", "frame.len": "60", "tcp.flags": "0x002"},
+            {
+                "tcp.stream": "1",
+                "ip.src": "192.168.1.100",
+                "ip.dst": "8.8.8.8",
+                "tcp.srcport": "12345",
+                "tcp.dstport": "443",
+                "frame.time_epoch": "1704067200.0",
+                "frame.len": "60",
+                "tcp.flags": "0x002",
+            },
+            {
+                "tcp.stream": "2",
+                "ip.src": "192.168.1.100",
+                "ip.dst": "8.8.8.8",
+                "tcp.srcport": "12346",
+                "tcp.dstport": "80",
+                "frame.time_epoch": "1704067200.1",
+                "frame.len": "60",
+                "tcp.flags": "0x002",
+            },
         ]
 
         sessions = tracker.build_sessions_from_packets(packets)
@@ -202,12 +273,26 @@ class TestSessionTracker:
         tracker = SessionTracker()
 
         packets = [
-            {"tcp.stream": "1", "ip.src": "192.168.1.100", "ip.dst": "8.8.8.8",
-             "tcp.srcport": "12345", "tcp.dstport": "443",
-             "frame.time_epoch": "1704067200.0", "frame.len": "60", "tcp.flags": "0x002"},
-            {"tcp.stream": "2", "ip.src": "192.168.1.100", "ip.dst": "1.1.1.1",
-             "tcp.srcport": "12346", "tcp.dstport": "443",
-             "frame.time_epoch": "1704067200.1", "frame.len": "60", "tcp.flags": "0x002"},
+            {
+                "tcp.stream": "1",
+                "ip.src": "192.168.1.100",
+                "ip.dst": "8.8.8.8",
+                "tcp.srcport": "12345",
+                "tcp.dstport": "443",
+                "frame.time_epoch": "1704067200.0",
+                "frame.len": "60",
+                "tcp.flags": "0x002",
+            },
+            {
+                "tcp.stream": "2",
+                "ip.src": "192.168.1.100",
+                "ip.dst": "1.1.1.1",
+                "tcp.srcport": "12346",
+                "tcp.dstport": "443",
+                "frame.time_epoch": "1704067200.1",
+                "frame.len": "60",
+                "tcp.flags": "0x002",
+            },
         ]
 
         sessions = tracker.build_sessions_from_packets(packets)

@@ -12,7 +12,7 @@ class DocumentTools:
         def search_documents(index: str, body: dict) -> dict:
             """
             Search for documents.
-            
+
             Args:
                 index: Name of the index
                 body: Search query
@@ -23,7 +23,7 @@ class DocumentTools:
         def index_document(index: str, document: dict, id: str | None = None) -> dict:
             """
             Creates or updates a document in the index.
-            
+
             Args:
                 index: Name of the index
                 document: Document data
@@ -35,7 +35,7 @@ class DocumentTools:
         def get_document(index: str, id: str) -> dict:
             """
             Get a document by ID.
-            
+
             Args:
                 index: Name of the index
                 id: Document ID
@@ -46,7 +46,7 @@ class DocumentTools:
         def delete_document(index: str, id: str) -> dict:
             """
             Delete a document by ID.
-            
+
             Args:
                 index: Name of the index
                 id: Document ID
@@ -57,7 +57,7 @@ class DocumentTools:
         def delete_by_query(index: str, body: dict) -> dict:
             """
             Deletes documents matching the provided query.
-            
+
             Args:
                 index: Name of the index
                 body: Query to match documents for deletion

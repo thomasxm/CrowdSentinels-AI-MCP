@@ -1,5 +1,6 @@
 # src/wireshark/hunting/beaconing_detector.py
 """C2 beaconing pattern detection with ASCII timeline visualization."""
+
 import logging
 import statistics
 from collections import defaultdict
@@ -29,12 +30,7 @@ class BeaconingDetector:
             Dictionary with interval statistics
         """
         if len(timestamps) < 2:
-            return {
-                "mean_interval": 0,
-                "stddev": 0,
-                "jitter_percent": 100,
-                "interval_count": 0
-            }
+            return {"mean_interval": 0, "stddev": 0, "jitter_percent": 100, "interval_count": 0}
 
         # Sort timestamps
         sorted_ts = sorted(timestamps)
@@ -46,12 +42,7 @@ class BeaconingDetector:
             intervals.append(interval)
 
         if not intervals:
-            return {
-                "mean_interval": 0,
-                "stddev": 0,
-                "jitter_percent": 100,
-                "interval_count": 0
-            }
+            return {"mean_interval": 0, "stddev": 0, "jitter_percent": 100, "interval_count": 0}
 
         mean_interval = statistics.mean(intervals)
         stddev = statistics.stdev(intervals) if len(intervals) > 1 else 0
@@ -66,14 +57,11 @@ class BeaconingDetector:
             "interval_count": len(intervals),
             "min_interval": min(intervals),
             "max_interval": max(intervals),
-            "intervals": intervals
+            "intervals": intervals,
         }
 
     def detect_patterns(
-        self,
-        connections: list[dict],
-        min_count: int | None = None,
-        max_jitter: float | None = None
+        self, connections: list[dict], min_count: int | None = None, max_jitter: float | None = None
     ) -> list[BeaconPattern]:
         """Detect beaconing patterns from connection data.
 
@@ -110,17 +98,12 @@ class BeaconingDetector:
             if stats["jitter_percent"] <= max_jitter:
                 # Determine confidence based on sample size and jitter
                 confidence = self._calculate_confidence(
-                    len(timestamps),
-                    stats["jitter_percent"],
-                    stats["mean_interval"]
+                    len(timestamps), stats["jitter_percent"], stats["mean_interval"]
                 )
 
                 # Create datetime objects for timestamps
                 sorted_ts = sorted(timestamps)
-                dt_timestamps = [
-                    datetime.fromtimestamp(ts) if isinstance(ts, (int, float)) else ts
-                    for ts in sorted_ts
-                ]
+                dt_timestamps = [datetime.fromtimestamp(ts) if isinstance(ts, (int, float)) else ts for ts in sorted_ts]
 
                 pattern = BeaconPattern(
                     source_ip=src_ip,
@@ -131,7 +114,7 @@ class BeaconingDetector:
                     jitter_percent=stats["jitter_percent"],
                     occurrence_count=len(timestamps),
                     confidence=confidence,
-                    timestamps=dt_timestamps
+                    timestamps=dt_timestamps,
                 )
                 patterns.append(pattern)
 
@@ -141,12 +124,7 @@ class BeaconingDetector:
 
         return patterns
 
-    def _calculate_confidence(
-        self,
-        sample_count: int,
-        jitter_percent: float,
-        mean_interval: float
-    ) -> str:
+    def _calculate_confidence(self, sample_count: int, jitter_percent: float, mean_interval: float) -> str:
         """Calculate confidence level for beaconing detection.
 
         Args:
@@ -189,11 +167,7 @@ class BeaconingDetector:
             return "MEDIUM"
         return "LOW"
 
-    def generate_ascii_timeline(
-        self,
-        pattern: BeaconPattern,
-        width: int = 80
-    ) -> str:
+    def generate_ascii_timeline(self, pattern: BeaconPattern, width: int = 80) -> str:
         """Generate ASCII timeline visualization for a beaconing pattern.
 
         Args:
@@ -307,7 +281,7 @@ class BeaconingDetector:
             pcap_path=pcap_path,
             fields=["frame.time_epoch", "ip.src", "ip.dst", "tcp.dstport"],
             display_filter="tcp.flags.syn==1 and tcp.flags.ack==0",
-            timeout=300
+            timeout=300,
         )
 
         # Also include UDP packets (no SYN concept)
@@ -315,7 +289,7 @@ class BeaconingDetector:
             pcap_path=pcap_path,
             fields=["frame.time_epoch", "ip.src", "ip.dst", "udp.dstport"],
             display_filter="udp",
-            timeout=300
+            timeout=300,
         )
 
         # Build connection list
@@ -328,12 +302,9 @@ class BeaconingDetector:
 
             if timestamp and src_ip and dst_ip and dst_port:
                 try:
-                    connections.append({
-                        "timestamp": float(timestamp),
-                        "src_ip": src_ip,
-                        "dst_ip": dst_ip,
-                        "dst_port": int(dst_port)
-                    })
+                    connections.append(
+                        {"timestamp": float(timestamp), "src_ip": src_ip, "dst_ip": dst_ip, "dst_port": int(dst_port)}
+                    )
                 except (ValueError, TypeError):
                     continue
 
@@ -345,12 +316,9 @@ class BeaconingDetector:
 
             if timestamp and src_ip and dst_ip and dst_port:
                 try:
-                    connections.append({
-                        "timestamp": float(timestamp),
-                        "src_ip": src_ip,
-                        "dst_ip": dst_ip,
-                        "dst_port": int(dst_port)
-                    })
+                    connections.append(
+                        {"timestamp": float(timestamp), "src_ip": src_ip, "dst_ip": dst_ip, "dst_port": int(dst_port)}
+                    )
                 except (ValueError, TypeError):
                     continue
 

@@ -25,8 +25,8 @@ import json
 import os
 import signal
 import sys
-from typing import Dict, Any, List, Optional
 from collections import defaultdict
+from typing import Any
 
 try:
     from elasticsearch import Elasticsearch
@@ -130,19 +130,14 @@ def get_es_client() -> Elasticsearch:
     es_version = int(elasticsearch.__version__[0])
 
     if api_key:
-        return Elasticsearch(
-            hosts=hosts.split(","), api_key=api_key, verify_certs=verify_certs)
+        return Elasticsearch(hosts=hosts.split(","), api_key=api_key, verify_certs=verify_certs)
     elif es_version >= 8:
-        return Elasticsearch(
-            hosts=hosts.split(","), basic_auth=(username, password),
-            verify_certs=verify_certs)
+        return Elasticsearch(hosts=hosts.split(","), basic_auth=(username, password), verify_certs=verify_certs)
     else:
-        return Elasticsearch(
-            hosts=hosts.split(","), http_auth=(username, password),
-            verify_certs=verify_certs)
+        return Elasticsearch(hosts=hosts.split(","), http_auth=(username, password), verify_certs=verify_certs)
 
 
-def flatten_dict(d: Dict, parent_key: str = "", sep: str = ".") -> Dict[str, Any]:
+def flatten_dict(d: dict, parent_key: str = "", sep: str = ".") -> dict[str, Any]:
     """Flatten nested dictionary into dot-notation keys."""
     items = []
     for k, v in d.items():
@@ -154,7 +149,7 @@ def flatten_dict(d: Dict, parent_key: str = "", sep: str = ".") -> Dict[str, Any
     return dict(items)
 
 
-def get_field_value(doc: Dict, field_path: str) -> Optional[Any]:
+def get_field_value(doc: dict, field_path: str) -> Any | None:
     """Get value from nested document using dot notation."""
     keys = field_path.split(".")
     value = doc
@@ -168,7 +163,7 @@ def get_field_value(doc: Dict, field_path: str) -> Optional[Any]:
     return value
 
 
-def detect_schema(index: str, sample_size: int = 20) -> Dict[str, Any]:
+def detect_schema(index: str, sample_size: int = 20) -> dict[str, Any]:
     """Detect the schema used in an Elasticsearch index.
 
     Samples documents and scores them against known schema signatures
@@ -185,9 +180,7 @@ def detect_schema(index: str, sample_size: int = 20) -> Dict[str, Any]:
     es = get_es_client()
 
     try:
-        response = es.search(
-            index=index, query={"match_all": {}}, size=sample_size,
-            ignore_unavailable=True)
+        response = es.search(index=index, query={"match_all": {}}, size=sample_size, ignore_unavailable=True)
     except Exception as e:
         return {"error": f"Failed to search index: {e}"}
 
@@ -209,8 +202,7 @@ def detect_schema(index: str, sample_size: int = 20) -> Dict[str, Any]:
         if provider:
             provider_names.add(provider)
 
-        event_code = get_field_value(source, "winlog.event_id") or get_field_value(
-            source, "event.code")
+        event_code = get_field_value(source, "winlog.event_id") or get_field_value(source, "event.code")
         if event_code:
             try:
                 event_codes.add(int(event_code))
@@ -291,11 +283,16 @@ Exit Codes:
     )
 
     parser.add_argument("--index", "-i", required=True, help="Index pattern to analyse")
-    parser.add_argument("--samples", "-s", type=int, default=20,
-                        help="Number of sample documents to analyse (default: 20)")
-    parser.add_argument("--output", "-o", choices=["json", "table", "summary"],
-                        default="table",
-                        help="Output format: json (raw), table (detailed), summary (brief) (default: table)")
+    parser.add_argument(
+        "--samples", "-s", type=int, default=20, help="Number of sample documents to analyse (default: 20)"
+    )
+    parser.add_argument(
+        "--output",
+        "-o",
+        choices=["json", "table", "summary"],
+        default="table",
+        help="Output format: json (raw), table (detailed), summary (brief) (default: table)",
+    )
 
     args = parser.parse_args()
     _validate_environment()
@@ -324,8 +321,10 @@ Exit Codes:
             print(f"Providers found: {', '.join(result['providers_found'])}")
         if result.get("event_codes_found"):
             codes = result["event_codes_found"]
-            print(f"Event codes found: {', '.join(map(str, codes[:10]))}"
-                  + (f" (+{len(codes) - 10} more)" if len(codes) > 10 else ""))
+            print(
+                f"Event codes found: {', '.join(map(str, codes[:10]))}"
+                + (f" (+{len(codes) - 10} more)" if len(codes) > 10 else "")
+            )
         print()
         print("Schema scores:")
         for schema, data in result.get("scores", {}).items():
@@ -344,8 +343,7 @@ Exit Codes:
         schema = result["detected_schema"]
         confidence = result["confidence"] * 100
         doc_count = result["documents_analysed"]
-        print(f"[{schema}] Detected with {confidence:.0f}% confidence "
-              f"({doc_count} documents analysed)")
+        print(f"[{schema}] Detected with {confidence:.0f}% confidence ({doc_count} documents analysed)")
         if result.get("providers_found"):
             print(f"  Providers: {', '.join(result['providers_found'])}")
 

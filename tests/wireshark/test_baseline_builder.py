@@ -1,5 +1,6 @@
 # tests/wireshark/test_baseline_builder.py
 """Tests for baseline builder (auto-learn)."""
+
 from pathlib import Path
 
 import pytest
@@ -35,14 +36,8 @@ class TestBaselineBuilder:
 
         builder = BaselineBuilder()
 
-        baseline1 = {
-            "observed_ports": {"tcp": [80, 443]},
-            "observed_ips": ["192.168.1.1"]
-        }
-        baseline2 = {
-            "observed_ports": {"tcp": [443, 8080]},
-            "observed_ips": ["192.168.1.2"]
-        }
+        baseline1 = {"observed_ports": {"tcp": [80, 443]}, "observed_ips": ["192.168.1.1"]}
+        baseline2 = {"observed_ports": {"tcp": [443, 8080]}, "observed_ips": ["192.168.1.2"]}
 
         merged = builder.merge_baselines([baseline1, baseline2])
 

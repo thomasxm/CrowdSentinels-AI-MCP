@@ -1,5 +1,6 @@
 # src/wireshark/config.py
 """Wireshark module configuration."""
+
 import json
 import shutil
 from pathlib import Path
@@ -9,28 +10,27 @@ from pydantic import BaseModel, Field
 
 class AutoCaptureConfig(BaseModel):
     """Configuration for automatic IoC capture."""
+
     enabled: bool = True
     min_confidence: int = Field(default=7, ge=1, le=10)
     min_occurrences: int = Field(default=3, ge=1)
-    auto_capture_types: list[str] = Field(
-        default=["ip", "domain", "hash", "user", "process"]
-    )
+    auto_capture_types: list[str] = Field(default=["ip", "domain", "hash", "user", "process"])
     skip_internal_ips: bool = True
     min_pyramid_priority: int = Field(default=2, ge=1, le=6)
-    ignore_domains: list[str] = Field(
-        default=["microsoft.com", "windows.com", "google.com", "googleapis.com"]
-    )
+    ignore_domains: list[str] = Field(default=["microsoft.com", "windows.com", "google.com", "googleapis.com"])
     ignore_ports: list[int] = Field(default=[80, 443, 53])
 
 
 class ArtifactStorageConfig(BaseModel):
     """Configuration for extracted artifact storage."""
+
     store_locally: bool = False
     prompted: bool = False
 
 
 class WiresharkConfig(BaseModel):
     """Main Wireshark module configuration."""
+
     tshark_path: str = Field(default_factory=lambda: shutil.which("tshark") or "/usr/bin/tshark")
     auto_capture: AutoCaptureConfig = Field(default_factory=AutoCaptureConfig)
     artifact_storage: ArtifactStorageConfig = Field(default_factory=ArtifactStorageConfig)

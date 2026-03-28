@@ -55,6 +55,7 @@ def test_live_elasticsearch_hunting():
         has_active_investigation,
     )
     from src.storage.models import Severity
+
     auto_module._client = None
 
     # Initialize Elasticsearch client
@@ -80,7 +81,7 @@ def test_live_elasticsearch_hunting():
         index=".ds-winlogbeat-*",
         lucene_query="event.code:(4624 OR 4625 OR 4648)",  # Logon events
         timeframe_minutes=None,  # Search all time
-        size=20
+        size=20,
     )
 
     total_hits = lucene_results.get("total_hits", 0)
@@ -105,7 +106,7 @@ def test_live_elasticsearch_hunting():
         index=".ds-winlogbeat-*",
         attack_types=["suspicious_process", "encoded_commands"],
         start_time="now-30d",
-        host=None
+        host=None,
     )
 
     print("  Hunt results:")
@@ -131,7 +132,7 @@ def test_live_elasticsearch_hunting():
         index=".ds-winlogbeat-*",
         ioc="powershell",
         ioc_type="process",
-        timeframe_minutes=None  # All time
+        timeframe_minutes=None,  # All time
     )
 
     ioc_hits = ioc_results.get("total_hits", 0)

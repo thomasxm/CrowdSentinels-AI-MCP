@@ -69,4 +69,3 @@ volumes:
 
 networks:
   opensearch-net:
-  

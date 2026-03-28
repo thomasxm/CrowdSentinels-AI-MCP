@@ -3,6 +3,7 @@
 This module provides field name substitution to make hunting queries work with
 different log formats (e.g., ECS vs winlogbeat vs CEF).
 """
+
 import logging
 import re
 from typing import Any
@@ -76,7 +77,6 @@ class FieldMapper:
             "winlog.event_data.Hashes",
             "file.hash.md5",
         ],
-
         # User fields
         "user.name": [
             "winlog.event_data.User",
@@ -95,7 +95,6 @@ class FieldMapper:
             "winlog.event_data.SubjectDomainName",
             "Domain",
         ],
-
         # Host fields
         "host.name": [
             "host.hostname",
@@ -116,7 +115,6 @@ class FieldMapper:
             "host.os.platform",
             "host.os.family",
         ],
-
         # Network fields
         "source.ip": [
             "winlog.event_data.SourceIp",
@@ -141,7 +139,6 @@ class FieldMapper:
             "destinationPort",
             "dst_port",
         ],
-
         # File fields
         "file.path": [
             "winlog.event_data.TargetFilename",
@@ -157,7 +154,6 @@ class FieldMapper:
             "winlog.event_data.Hashes",
             "process.hash.sha256",
         ],
-
         # Registry fields
         "registry.path": [
             "winlog.event_data.TargetObject",
@@ -170,7 +166,6 @@ class FieldMapper:
         "registry.value": [
             "winlog.event_data.Details",
         ],
-
         # Event fields
         "event.code": [
             "winlog.event_id",
@@ -188,7 +183,6 @@ class FieldMapper:
         "event.type": [
             "winlog.event_data.Type",
         ],
-
         # DNS fields
         "dns.question.name": [
             "winlog.event_data.QueryName",
@@ -198,13 +192,11 @@ class FieldMapper:
         "dns.answers.data": [
             "winlog.event_data.QueryResults",
         ],
-
         # Service fields
         "service.name": [
             "winlog.event_data.ServiceName",
             "ServiceName",
         ],
-
         # Agent fields
         "agent.id": [
             "agent.name",
@@ -259,11 +251,7 @@ class FieldMapper:
             # Extract all fields recursively
             fields = set()
             for idx_name, idx_mapping in mapping.items():
-                self._extract_fields_recursive(
-                    idx_mapping.get("mappings", {}),
-                    "",
-                    fields
-                )
+                self._extract_fields_recursive(idx_mapping.get("mappings", {}), "", fields)
 
             # Cache the result
             self._field_cache[index] = fields
@@ -273,30 +261,16 @@ class FieldMapper:
             self.logger.warning(f"Failed to get index fields for {index}: {e}")
             return set()
 
-    def _extract_fields_recursive(
-        self,
-        obj: dict,
-        prefix: str,
-        fields: set[str]
-    ) -> None:
+    def _extract_fields_recursive(self, obj: dict, prefix: str, fields: set[str]) -> None:
         """Recursively extract field names from mapping."""
         if "properties" in obj:
             for field_name, field_def in obj["properties"].items():
                 full_name = f"{prefix}{field_name}" if prefix else field_name
                 fields.add(full_name)
                 if isinstance(field_def, dict):
-                    self._extract_fields_recursive(
-                        field_def,
-                        f"{full_name}.",
-                        fields
-                    )
+                    self._extract_fields_recursive(field_def, f"{full_name}.", fields)
 
-    def find_substitute(
-        self,
-        ecs_field: str,
-        available_fields: set[str],
-        prefer_winlog: bool = True
-    ) -> str | None:
+    def find_substitute(self, ecs_field: str, available_fields: set[str], prefer_winlog: bool = True) -> str | None:
         """
         Find a substitute field name for an ECS field.
 
@@ -315,10 +289,7 @@ class FieldMapper:
         """
         # Check if we have winlog-specific aliases for this field
         if ecs_field in self.FIELD_ALIASES:
-            winlog_aliases = [
-                a for a in self.FIELD_ALIASES[ecs_field]
-                if a.startswith("winlog.")
-            ]
+            winlog_aliases = [a for a in self.FIELD_ALIASES[ecs_field] if a.startswith("winlog.")]
 
             # If prefer_winlog and we have winlog aliases, check them first
             if prefer_winlog and winlog_aliases:
@@ -338,12 +309,7 @@ class FieldMapper:
 
         return None
 
-    def substitute_fields_esql(
-        self,
-        query: str,
-        available_fields: set[str],
-        enabled: bool = True
-    ) -> str:
+    def substitute_fields_esql(self, query: str, available_fields: set[str], enabled: bool = True) -> str:
         """
         Substitute ECS field names in an ES|QL query.
 
@@ -376,18 +342,13 @@ class FieldMapper:
             substitute = substitutions[ecs_field]
             # Use word boundaries to avoid partial replacements
             # Match field name followed by space, operator, comma, or end
-            pattern = rf'\b{re.escape(ecs_field)}\b'
+            pattern = rf"\b{re.escape(ecs_field)}\b"
             result = re.sub(pattern, substitute, result)
 
         self.logger.debug(f"ES|QL field substitutions: {substitutions}")
         return result
 
-    def substitute_fields_lucene(
-        self,
-        query: str,
-        available_fields: set[str],
-        enabled: bool = True
-    ) -> str:
+    def substitute_fields_lucene(self, query: str, available_fields: set[str], enabled: bool = True) -> str:
         """
         Substitute ECS field names in a Lucene query.
 
@@ -412,7 +373,7 @@ class FieldMapper:
         # Find all ECS fields that need substitution
         for ecs_field in self.FIELD_ALIASES.keys():
             # Look for field:value pattern
-            pattern = rf'\b{re.escape(ecs_field)}:'
+            pattern = rf"\b{re.escape(ecs_field)}:"
             if re.search(pattern, query):
                 substitute = self.find_substitute(ecs_field, available_fields)
                 if substitute:
@@ -426,19 +387,14 @@ class FieldMapper:
         for ecs_field in sorted(substitutions.keys(), key=len, reverse=True):
             substitute = substitutions[ecs_field]
             # Replace field:value patterns
-            pattern = rf'\b{re.escape(ecs_field)}:'
-            replacement = f'{substitute}:'
+            pattern = rf"\b{re.escape(ecs_field)}:"
+            replacement = f"{substitute}:"
             result = re.sub(pattern, replacement, result)
 
         self.logger.debug(f"Lucene field substitutions: {substitutions}")
         return result
 
-    def substitute_fields_eql(
-        self,
-        query: str,
-        available_fields: set[str],
-        enabled: bool = True
-    ) -> str:
+    def substitute_fields_eql(self, query: str, available_fields: set[str], enabled: bool = True) -> str:
         """
         Substitute ECS field names in an EQL query.
 
@@ -474,17 +430,13 @@ class FieldMapper:
         for ecs_field in sorted(substitutions.keys(), key=len, reverse=True):
             substitute = substitutions[ecs_field]
             # Use word boundaries
-            pattern = rf'\b{re.escape(ecs_field)}\b'
+            pattern = rf"\b{re.escape(ecs_field)}\b"
             result = re.sub(pattern, substitute, result)
 
         self.logger.debug(f"EQL field substitutions: {substitutions}")
         return result
 
-    def get_substitution_report(
-        self,
-        query: str,
-        available_fields: set[str]
-    ) -> dict[str, Any]:
+    def get_substitution_report(self, query: str, available_fields: set[str]) -> dict[str, Any]:
         """
         Generate a report of field substitutions that would be applied.
 
@@ -512,7 +464,7 @@ class FieldMapper:
             "substitutions": substitutions,
             "unresolved_fields": unresolved,
             "substitution_count": len(substitutions),
-            "unresolved_count": len(unresolved)
+            "unresolved_count": len(unresolved),
         }
 
     def clear_cache(self) -> None:

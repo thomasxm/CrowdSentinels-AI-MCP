@@ -13,9 +13,9 @@ import secrets
 import threading
 import time
 import webbrowser
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import BaseHTTPRequestHandler, HTTPServer
 from typing import Any
-from urllib.parse import urlencode, urlparse, parse_qs
+from urllib.parse import parse_qs, urlencode, urlparse
 
 import httpx
 
@@ -35,6 +35,7 @@ REFRESH_BUFFER_SECONDS = 300
 # ---------------------------------------------------------------------------
 # PKCE helpers
 # ---------------------------------------------------------------------------
+
 
 def generate_code_verifier() -> str:
     """Generate a random PKCE code verifier (96 chars, base64url-safe)."""
@@ -97,6 +98,7 @@ def parse_callback(url: str) -> tuple[str, str]:
 # Token exchange
 # ---------------------------------------------------------------------------
 
+
 def exchange_code(code: str, code_verifier: str) -> dict[str, Any]:
     """Exchange an authorization code for tokens via the OpenAI token endpoint.
 
@@ -134,6 +136,7 @@ def refresh_access_token(refresh_token: str) -> dict[str, Any]:
 # Expiry check
 # ---------------------------------------------------------------------------
 
+
 def is_token_expired(expires_ms: int) -> bool:
     """Check whether a token is expired or within the refresh buffer.
 
@@ -151,6 +154,7 @@ def is_token_expired(expires_ms: int) -> bool:
 # ---------------------------------------------------------------------------
 # Local callback server
 # ---------------------------------------------------------------------------
+
 
 class _CallbackHandler(BaseHTTPRequestHandler):
     """HTTP request handler that captures the OAuth callback parameters."""
@@ -188,6 +192,7 @@ class _CallbackHandler(BaseHTTPRequestHandler):
 # ---------------------------------------------------------------------------
 # Full PKCE flow
 # ---------------------------------------------------------------------------
+
 
 def run_pkce_flow() -> dict[str, Any]:
     """Execute the full PKCE authorization code flow.
@@ -235,8 +240,7 @@ def run_pkce_flow() -> dict[str, Any]:
 
     if _CallbackHandler.auth_state != state:
         raise RuntimeError(
-            "PKCE flow failed: state mismatch "
-            f"(expected {state!r}, got {_CallbackHandler.auth_state!r})"
+            f"PKCE flow failed: state mismatch (expected {state!r}, got {_CallbackHandler.auth_state!r})"
         )
 
     return exchange_code(_CallbackHandler.auth_code, verifier)

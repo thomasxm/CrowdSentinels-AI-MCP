@@ -9,6 +9,7 @@ from pathlib import Path
 @dataclass
 class StorageSettings:
     """Storage limit and management settings."""
+
     max_size_gb: float = 8.0
     compact_after_days: int = 7
     max_investigations: int = 100
@@ -18,6 +19,7 @@ class StorageSettings:
 @dataclass
 class ExtractionSettings:
     """Smart extraction settings for token efficiency."""
+
     max_events_to_keep: int = 100
     max_timeline_entries: int = 50
     max_iocs_in_summary: int = 20
@@ -27,6 +29,7 @@ class ExtractionSettings:
 @dataclass
 class ProgressiveDisclosureSettings:
     """Progressive disclosure settings for session start."""
+
     enabled: bool = True
     max_investigations_shown: int = 10
     show_on_session_start: bool = True
@@ -42,9 +45,7 @@ class StorageConfig:
     # Sub-settings
     storage: StorageSettings = field(default_factory=StorageSettings)
     extraction: ExtractionSettings = field(default_factory=ExtractionSettings)
-    progressive_disclosure: ProgressiveDisclosureSettings = field(
-        default_factory=ProgressiveDisclosureSettings
-    )
+    progressive_disclosure: ProgressiveDisclosureSettings = field(default_factory=ProgressiveDisclosureSettings)
 
     # Computed paths
     @property
@@ -101,24 +102,16 @@ class StorageConfig:
 
         # Load from environment variables
         if os.environ.get("CROWDSENTINEL_MAX_STORAGE_GB"):
-            config.storage.max_size_gb = float(
-                os.environ["CROWDSENTINEL_MAX_STORAGE_GB"]
-            )
+            config.storage.max_size_gb = float(os.environ["CROWDSENTINEL_MAX_STORAGE_GB"])
 
         if os.environ.get("CROWDSENTINEL_COMPACT_AFTER_DAYS"):
-            config.storage.compact_after_days = int(
-                os.environ["CROWDSENTINEL_COMPACT_AFTER_DAYS"]
-            )
+            config.storage.compact_after_days = int(os.environ["CROWDSENTINEL_COMPACT_AFTER_DAYS"])
 
         if os.environ.get("CROWDSENTINEL_MAX_IOCS"):
-            config.storage.max_iocs_per_investigation = int(
-                os.environ["CROWDSENTINEL_MAX_IOCS"]
-            )
+            config.storage.max_iocs_per_investigation = int(os.environ["CROWDSENTINEL_MAX_IOCS"])
 
         if os.environ.get("CROWDSENTINEL_PROGRESSIVE_DISCLOSURE"):
-            config.progressive_disclosure.enabled = (
-                os.environ["CROWDSENTINEL_PROGRESSIVE_DISCLOSURE"].lower() == "true"
-            )
+            config.progressive_disclosure.enabled = os.environ["CROWDSENTINEL_PROGRESSIVE_DISCLOSURE"].lower() == "true"
 
         # Load from config file if exists
         if config.config_file_path.exists():

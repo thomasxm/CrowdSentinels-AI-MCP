@@ -13,8 +13,7 @@ SYSMON_SCHEMA = LogSourceSchema(
     name="Sysmon (Winlogbeat)",
     schema_id="sysmon",
     source_type=LogSourceType.SYSMON,
-    description="Windows Sysmon events collected via Winlogbeat. "
-                "Fields are stored under winlog.event_data.* prefix.",
+    description="Windows Sysmon events collected via Winlogbeat. Fields are stored under winlog.event_data.* prefix.",
     index_patterns=[
         "winlogbeat-*",
         "logs-windows.sysmon*",
@@ -31,9 +30,9 @@ SYSMON_SCHEMA = LogSourceSchema(
     host_field="host.name",
     event_code_field="event.code",
     event_code_alternatives=[
-        "winlog.event_id",           # Winlogbeat native field
+        "winlog.event_id",  # Winlogbeat native field
         "winlog.event_data.EventCode",  # Some Sysmon configurations
-        "EventCode",                  # Raw/legacy field name
+        "EventCode",  # Raw/legacy field name
     ],
     event_types={
         # Event ID 1: Process Create
@@ -65,9 +64,8 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "description": "Description",
                 "product": "Product",
                 "company": "Company",
-            }
+            },
         ),
-
         # Event ID 2: File creation time changed
         "file_time_change": EventTypeDefinition(
             event_code="2",
@@ -82,9 +80,8 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "previous_creation_utc_time": "PreviousCreationUtcTime",
                 "user": "User",
                 "utc_time": "UtcTime",
-            }
+            },
         ),
-
         # Event ID 3: Network connection
         "network_connection": EventTypeDefinition(
             event_code="3",
@@ -108,9 +105,8 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "destination_port": "DestinationPort",
                 "destination_port_name": "DestinationPortName",
                 "utc_time": "UtcTime",
-            }
+            },
         ),
-
         # Event ID 4: Sysmon service state changed
         "service_state_change": EventTypeDefinition(
             event_code="4",
@@ -121,9 +117,8 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "version": "Version",
                 "schema_version": "SchemaVersion",
                 "utc_time": "UtcTime",
-            }
+            },
         ),
-
         # Event ID 5: Process terminated
         "process_terminate": EventTypeDefinition(
             event_code="5",
@@ -135,9 +130,8 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "process_id": "ProcessId",
                 "user": "User",
                 "utc_time": "UtcTime",
-            }
+            },
         ),
-
         # Event ID 6: Driver loaded
         "driver_load": EventTypeDefinition(
             event_code="6",
@@ -150,9 +144,8 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "signature": "Signature",
                 "signature_status": "SignatureStatus",
                 "utc_time": "UtcTime",
-            }
+            },
         ),
-
         # Event ID 7: Image loaded
         "image_load": EventTypeDefinition(
             event_code="7",
@@ -174,9 +167,8 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "signature_status": "SignatureStatus",
                 "user": "User",
                 "utc_time": "UtcTime",
-            }
+            },
         ),
-
         # Event ID 8: CreateRemoteThread
         "remote_thread": EventTypeDefinition(
             event_code="8",
@@ -196,9 +188,8 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "start_module": "StartModule",
                 "start_function": "StartFunction",
                 "utc_time": "UtcTime",
-            }
+            },
         ),
-
         # Event ID 9: RawAccessRead
         "raw_access_read": EventTypeDefinition(
             event_code="9",
@@ -211,9 +202,8 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "device": "Device",
                 "user": "User",
                 "utc_time": "UtcTime",
-            }
+            },
         ),
-
         # Event ID 10: ProcessAccess
         "process_access": EventTypeDefinition(
             event_code="10",
@@ -232,9 +222,8 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "granted_access": "GrantedAccess",
                 "call_trace": "CallTrace",
                 "utc_time": "UtcTime",
-            }
+            },
         ),
-
         # Event ID 11: FileCreate
         "file_create": EventTypeDefinition(
             event_code="11",
@@ -248,9 +237,8 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "creation_utc_time": "CreationUtcTime",
                 "user": "User",
                 "utc_time": "UtcTime",
-            }
+            },
         ),
-
         # Event ID 12: RegistryEvent (Object create and delete)
         "registry_create_delete": EventTypeDefinition(
             event_code="12",
@@ -264,9 +252,8 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "target_object": "TargetObject",
                 "user": "User",
                 "utc_time": "UtcTime",
-            }
+            },
         ),
-
         # Event ID 13: RegistryEvent (Value Set)
         "registry_value_set": EventTypeDefinition(
             event_code="13",
@@ -281,9 +268,8 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "details": "Details",
                 "user": "User",
                 "utc_time": "UtcTime",
-            }
+            },
         ),
-
         # Event ID 14: RegistryEvent (Key and Value Rename)
         "registry_rename": EventTypeDefinition(
             event_code="14",
@@ -298,9 +284,8 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "new_name": "NewName",
                 "user": "User",
                 "utc_time": "UtcTime",
-            }
+            },
         ),
-
         # Event ID 15: FileCreateStreamHash
         "file_stream_create": EventTypeDefinition(
             event_code="15",
@@ -316,9 +301,8 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "contents": "Contents",
                 "user": "User",
                 "utc_time": "UtcTime",
-            }
+            },
         ),
-
         # Event ID 16: Sysmon config state changed
         "config_change": EventTypeDefinition(
             event_code="16",
@@ -328,9 +312,8 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "configuration": "Configuration",
                 "configuration_file_hash": "ConfigurationFileHash",
                 "utc_time": "UtcTime",
-            }
+            },
         ),
-
         # Event ID 17: PipeEvent (Pipe Created)
         "pipe_create": EventTypeDefinition(
             event_code="17",
@@ -343,9 +326,8 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "pipe_name": "PipeName",
                 "user": "User",
                 "utc_time": "UtcTime",
-            }
+            },
         ),
-
         # Event ID 18: PipeEvent (Pipe Connected)
         "pipe_connect": EventTypeDefinition(
             event_code="18",
@@ -358,9 +340,8 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "pipe_name": "PipeName",
                 "user": "User",
                 "utc_time": "UtcTime",
-            }
+            },
         ),
-
         # Event ID 19: WmiEvent (WmiEventFilter activity)
         "wmi_filter": EventTypeDefinition(
             event_code="19",
@@ -374,9 +355,8 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "name": "Name",
                 "query": "Query",
                 "utc_time": "UtcTime",
-            }
+            },
         ),
-
         # Event ID 20: WmiEvent (WmiEventConsumer activity)
         "wmi_consumer": EventTypeDefinition(
             event_code="20",
@@ -390,9 +370,8 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "type": "Type",
                 "destination": "Destination",
                 "utc_time": "UtcTime",
-            }
+            },
         ),
-
         # Event ID 21: WmiEvent (WmiEventConsumerToFilter activity)
         "wmi_binding": EventTypeDefinition(
             event_code="21",
@@ -405,9 +384,8 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "consumer": "Consumer",
                 "filter": "Filter",
                 "utc_time": "UtcTime",
-            }
+            },
         ),
-
         # Event ID 22: DNSEvent
         "dns_query": EventTypeDefinition(
             event_code="22",
@@ -422,9 +400,8 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "query_results": "QueryResults",
                 "user": "User",
                 "utc_time": "UtcTime",
-            }
+            },
         ),
-
         # Event ID 23: FileDelete (archived)
         "file_delete_archived": EventTypeDefinition(
             event_code="23",
@@ -440,9 +417,8 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "is_executable": "IsExecutable",
                 "archived": "Archived",
                 "utc_time": "UtcTime",
-            }
+            },
         ),
-
         # Event ID 24: ClipboardChange
         "clipboard_change": EventTypeDefinition(
             event_code="24",
@@ -458,9 +434,8 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "archived": "Archived",
                 "user": "User",
                 "utc_time": "UtcTime",
-            }
+            },
         ),
-
         # Event ID 25: ProcessTampering
         "process_tampering": EventTypeDefinition(
             event_code="25",
@@ -473,9 +448,8 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "type": "Type",
                 "user": "User",
                 "utc_time": "UtcTime",
-            }
+            },
         ),
-
         # Event ID 26: FileDeleteDetected
         "file_delete_logged": EventTypeDefinition(
             event_code="26",
@@ -490,9 +464,8 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "hashes": "Hashes",
                 "is_executable": "IsExecutable",
                 "utc_time": "UtcTime",
-            }
+            },
         ),
-
         # Event ID 27: FileBlockExecutable
         "file_block_executable": EventTypeDefinition(
             event_code="27",
@@ -506,9 +479,8 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "target_filename": "TargetFilename",
                 "hashes": "Hashes",
                 "utc_time": "UtcTime",
-            }
+            },
         ),
-
         # Event ID 28: FileBlockShredding
         "file_block_shredding": EventTypeDefinition(
             event_code="28",
@@ -523,9 +495,8 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "hashes": "Hashes",
                 "is_executable": "IsExecutable",
                 "utc_time": "UtcTime",
-            }
+            },
         ),
-
         # Event ID 29: FileExecutableDetected
         "file_executable_detected": EventTypeDefinition(
             event_code="29",
@@ -539,7 +510,7 @@ SYSMON_SCHEMA = LogSourceSchema(
                 "target_filename": "TargetFilename",
                 "hashes": "Hashes",
                 "utc_time": "UtcTime",
-            }
+            },
         ),
-    }
+    },
 )

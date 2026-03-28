@@ -142,7 +142,7 @@ def test_smart_extractor():
                         "@timestamp": "2024-12-28T10:05:00Z",
                     }
                 },
-            ]
+            ],
         }
     }
 
@@ -234,10 +234,7 @@ def test_investigation_state_client(config: StorageConfig):
     assert added2 == 0, "Duplicate should merge, not add"
 
     # Check the merged IoC
-    merged_ioc = next(
-        (i for i in investigation.iocs.iocs if i.value == "203.0.113.42"),
-        None
-    )
+    merged_ioc = next((i for i in investigation.iocs.iocs if i.value == "203.0.113.42"), None)
     assert merged_ioc is not None
     assert len(merged_ioc.sources) == 2, "Should have 2 sources after merge"
     print(f"  Merged IoC sources: {[s.tool for s in merged_ioc.sources]}")
@@ -249,7 +246,7 @@ def test_investigation_state_client(config: StorageConfig):
             "hits": [
                 {"_source": {"source.ip": "192.168.1.50", "user.name": "testuser", "event.code": "4688"}},
                 {"_source": {"source.ip": "192.168.1.51", "host.name": "SERVER-01", "event.code": "4624"}},
-            ]
+            ],
         }
     }
 
@@ -335,7 +332,7 @@ def test_cross_tool_sharing(config: StorageConfig):
                 {"_source": {"source.ip": "10.20.30.40", "user.name": "attacker", "event.code": "4625"}},
                 {"_source": {"source.ip": "10.20.30.40", "user.name": "attacker", "event.code": "4625"}},
                 {"_source": {"source.ip": "10.20.30.40", "host.name": "DC-MAIN", "event.code": "4625"}},
-            ]
+            ],
         }
     }
 
@@ -372,10 +369,7 @@ def test_cross_tool_sharing(config: StorageConfig):
     print(f"  After Chainsaw: {investigation.iocs.total_count} IoCs")
 
     # Check the shared IP
-    ip_ioc = next(
-        (i for i in investigation.iocs.iocs if i.type == IoCType.IP and i.value == "10.20.30.40"),
-        None
-    )
+    ip_ioc = next((i for i in investigation.iocs.iocs if i.type == IoCType.IP and i.value == "10.20.30.40"), None)
 
     assert ip_ioc is not None, "Should have the IP"
     print(f"  IP 10.20.30.40 sources: {[s.tool for s in ip_ioc.sources]}")
@@ -401,10 +395,7 @@ def test_cross_tool_sharing(config: StorageConfig):
     print(f"  Shared IoCs (priority >= 2): {len(shared)}")
 
     # Filter to IPs that both tools saw
-    multi_source_iocs = [
-        i for i in shared
-        if len(set(s.source_type for s in i.sources)) > 1
-    ]
+    multi_source_iocs = [i for i in shared if len(set(s.source_type for s in i.sources)) > 1]
     print(f"  Multi-source IoCs: {len(multi_source_iocs)}")
 
     # Export for use in another tool

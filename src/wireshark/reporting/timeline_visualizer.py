@@ -1,5 +1,6 @@
 # src/wireshark/reporting/timeline_visualizer.py
 """ASCII timeline visualization for network analysis."""
+
 import logging
 from datetime import datetime
 from typing import Any
@@ -49,12 +50,7 @@ class TimelineVisualizer:
             bytes_value /= 1024.0
         return f"{bytes_value:.1f} PB"
 
-    def generate_beaconing_timeline(
-        self,
-        beacon_events: list[dict],
-        target_ip: str,
-        time_range_hours: int = 24
-    ) -> str:
+    def generate_beaconing_timeline(self, beacon_events: list[dict], target_ip: str, time_range_hours: int = 24) -> str:
         """Generate ASCII beaconing timeline.
 
         Args:
@@ -77,10 +73,10 @@ class TimelineVisualizer:
         # Calculate interval statistics
         timestamps = sorted([e.get("timestamp", 0) for e in beacon_events])
         if len(timestamps) > 1:
-            intervals = [timestamps[i+1] - timestamps[i] for i in range(len(timestamps)-1)]
+            intervals = [timestamps[i + 1] - timestamps[i] for i in range(len(timestamps) - 1)]
             mean_interval = sum(intervals) / len(intervals)
             variance = sum((x - mean_interval) ** 2 for x in intervals) / len(intervals)
-            std_dev = variance ** 0.5
+            std_dev = variance**0.5
             jitter = (std_dev / mean_interval * 100) if mean_interval > 0 else 0
 
             lines.append(f" Interval Analysis: Mean={mean_interval:.1f}s, StdDev={std_dev:.1f}s, Jitter={jitter:.1f}%")
@@ -114,11 +110,7 @@ class TimelineVisualizer:
 
         return "\n".join(lines)
 
-    def generate_volume_chart(
-        self,
-        volume_data: list[dict],
-        bar_width: int = 30
-    ) -> str:
+    def generate_volume_chart(self, volume_data: list[dict], bar_width: int = 30) -> str:
         """Generate volume over time chart.
 
         Args:
@@ -154,10 +146,7 @@ class TimelineVisualizer:
 
         return "\n".join(lines)
 
-    def generate_connection_timeline(
-        self,
-        connections: list[dict]
-    ) -> str:
+    def generate_connection_timeline(self, connections: list[dict]) -> str:
         """Generate connection timeline.
 
         Args:
@@ -193,7 +182,7 @@ class TimelineVisualizer:
                 else:
                     time_str = str(ts)
 
-                lines.append(f"   [{time_str}] {self._line_char*3}> {dst} ({event})")
+                lines.append(f"   [{time_str}] {self._line_char * 3}> {dst} ({event})")
 
             if len(conns) > 5:
                 lines.append(f"   ... and {len(conns) - 5} more connections")
@@ -204,10 +193,7 @@ class TimelineVisualizer:
 
         return "\n".join(lines)
 
-    def generate_attack_stage_timeline(
-        self,
-        events: list[dict]
-    ) -> str:
+    def generate_attack_stage_timeline(self, events: list[dict]) -> str:
         """Generate kill chain stage timeline.
 
         Args:
@@ -245,10 +231,7 @@ class TimelineVisualizer:
 
         return "\n".join(lines)
 
-    def generate_lateral_movement_graph(
-        self,
-        movements: list[dict]
-    ) -> str:
+    def generate_lateral_movement_graph(self, movements: list[dict]) -> str:
         """Generate lateral movement graph.
 
         Args:
@@ -286,10 +269,7 @@ class TimelineVisualizer:
 
         return "\n".join(lines)
 
-    def generate_summary_dashboard(
-        self,
-        stats: dict[str, Any]
-    ) -> str:
+    def generate_summary_dashboard(self, stats: dict[str, Any]) -> str:
         """Generate summary dashboard.
 
         Args:

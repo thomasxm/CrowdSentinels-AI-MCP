@@ -27,6 +27,7 @@ def _build_config(engine_type: str):
     # so the tool works regardless of where the user runs it from.
     load_dotenv()  # current dir / parent dirs
     from src.paths import get_user_data_dir
+
     user_env = get_user_data_dir() / ".env"
     if user_env.is_file():
         load_dotenv(user_env, override=False)  # don't override already-set vars
@@ -47,9 +48,10 @@ def _build_config(engine_type: str):
 
     if not hosts_env and not cloud_id:
         _logger.info(
-            "%s_HOSTS not set, using default: %s. "
-            "Configure via: export %s_HOSTS=\"http(s)://your-host:9200\"",
-            prefix, default_host, prefix,
+            '%s_HOSTS not set, using default: %s. Configure via: export %s_HOSTS="http(s)://your-host:9200"',
+            prefix,
+            default_host,
+            prefix,
         )
     username = os.environ.get(f"{prefix}_USERNAME")
     password = os.environ.get(f"{prefix}_PASSWORD")
@@ -139,10 +141,7 @@ def create_search_client(engine_type: str) -> SearchClient:
         return client
     except Exception as exc:
         exc_msg = str(exc)
-        is_ssl_error = any(
-            s in exc_msg
-            for s in ("SSL", "TLS", "CERTIFICATE_VERIFY", "RECORD_LAYER")
-        )
+        is_ssl_error = any(s in exc_msg for s in ("SSL", "TLS", "CERTIFICATE_VERIFY", "RECORD_LAYER"))
 
         if not is_ssl_error or user_set_hosts:
             # User explicitly configured hosts — respect their choice,
@@ -150,9 +149,7 @@ def create_search_client(engine_type: str) -> SearchClient:
             raise
 
         # Default host failed with TLS error — try HTTP fallback for local dev
-        http_hosts = [
-            h.replace("https://", "http://", 1) for h in config["hosts"]
-        ]
+        http_hosts = [h.replace("https://", "http://", 1) for h in config["hosts"]]
         _logger.info(
             "Default HTTPS failed (TLS error), retrying with HTTP: %s",
             http_hosts,
@@ -163,14 +160,15 @@ def create_search_client(engine_type: str) -> SearchClient:
         client = SearchClient(config, engine_type)
         client.client.info()
         _logger.info(
-            "Connected via HTTP. To make this permanent: "
-            "export %s_HOSTS=\"%s\"",
-            prefix, ",".join(http_hosts),
+            'Connected via HTTP. To make this permanent: export %s_HOSTS="%s"',
+            prefix,
+            ",".join(http_hosts),
         )
         return client
 
+
 __all__ = [
-    'create_search_client',
-    'handle_search_exceptions',
-    'SearchClient',
+    "create_search_client",
+    "handle_search_exceptions",
+    "SearchClient",
 ]

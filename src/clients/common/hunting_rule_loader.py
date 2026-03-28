@@ -1,4 +1,5 @@
 """Hunting Rule Loader for ES|QL queries from detection-rules/hunting/."""
+
 import logging
 import sys
 from dataclasses import dataclass, field
@@ -137,7 +138,7 @@ class HuntingRuleLoader:
                 mitre=hunt.get("mitre", []),
                 notes=hunt.get("notes", []),
                 file_path=str(toml_file),
-                esql_queries=esql_queries
+                esql_queries=esql_queries,
             )
 
         except Exception as e:
@@ -169,11 +170,7 @@ class HuntingRuleLoader:
         return self.rules.get(rule_id)
 
     def search_rules(
-        self,
-        platform: str | None = None,
-        mitre: str | None = None,
-        keyword: str | None = None,
-        limit: int = 50
+        self, platform: str | None = None, mitre: str | None = None, keyword: str | None = None, limit: int = 50
     ) -> list[HuntingRule]:
         """
         Search hunting rules with optional filters.
@@ -225,7 +222,7 @@ class HuntingRuleLoader:
             "total_rules": len(self.rules),
             "total_esql_queries": total_esql_queries,
             "platforms": {p: len(uuids) for p, uuids in self.rules_by_platform.items()},
-            "mitre_techniques_covered": len(self.rules_by_mitre)
+            "mitre_techniques_covered": len(self.rules_by_mitre),
         }
 
     def get_platforms(self) -> list[str]:

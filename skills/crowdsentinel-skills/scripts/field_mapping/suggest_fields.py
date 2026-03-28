@@ -24,7 +24,6 @@ import argparse
 import json
 import signal
 import sys
-from typing import Dict, List, Optional
 
 
 def _handle_sigint(signum, frame):
@@ -39,114 +38,171 @@ signal.signal(signal.SIGINT, _handle_sigint)
 # Comprehensive field mapping table
 FIELD_MAPPINGS = {
     "process.name": {
-        "ecs": "process.name", "sysmon": "winlog.event_data.Image",
+        "ecs": "process.name",
+        "sysmon": "winlog.event_data.Image",
         "windows_security": "winlog.event_data.NewProcessName",
         "description": "Process executable name/path",
-        "event_types": ["process_create", "process_terminate"]},
+        "event_types": ["process_create", "process_terminate"],
+    },
     "process.executable": {
-        "ecs": "process.executable", "sysmon": "winlog.event_data.Image",
+        "ecs": "process.executable",
+        "sysmon": "winlog.event_data.Image",
         "windows_security": "winlog.event_data.NewProcessName",
-        "description": "Full path to process executable"},
+        "description": "Full path to process executable",
+    },
     "process.command_line": {
-        "ecs": "process.command_line", "sysmon": "winlog.event_data.CommandLine",
+        "ecs": "process.command_line",
+        "sysmon": "winlog.event_data.CommandLine",
         "windows_security": "winlog.event_data.CommandLine",
-        "description": "Process command line arguments"},
+        "description": "Process command line arguments",
+    },
     "process.pid": {
-        "ecs": "process.pid", "sysmon": "winlog.event_data.ProcessId",
+        "ecs": "process.pid",
+        "sysmon": "winlog.event_data.ProcessId",
         "windows_security": "winlog.event_data.NewProcessId",
-        "description": "Process ID"},
+        "description": "Process ID",
+    },
     "process.parent.name": {
-        "ecs": "process.parent.name", "sysmon": "winlog.event_data.ParentImage",
+        "ecs": "process.parent.name",
+        "sysmon": "winlog.event_data.ParentImage",
         "windows_security": "winlog.event_data.ParentProcessName",
-        "description": "Parent process name/path"},
+        "description": "Parent process name/path",
+    },
     "process.parent.pid": {
-        "ecs": "process.parent.pid", "sysmon": "winlog.event_data.ParentProcessId",
+        "ecs": "process.parent.pid",
+        "sysmon": "winlog.event_data.ParentProcessId",
         "windows_security": "winlog.event_data.ProcessId",
-        "description": "Parent process ID"},
+        "description": "Parent process ID",
+    },
     "process.parent.command_line": {
         "ecs": "process.parent.command_line",
         "sysmon": "winlog.event_data.ParentCommandLine",
-        "windows_security": None, "description": "Parent process command line"},
+        "windows_security": None,
+        "description": "Parent process command line",
+    },
     "process.hash.sha256": {
-        "ecs": "process.hash.sha256", "sysmon": "winlog.event_data.Hashes",
-        "windows_security": None, "description": "Process file SHA256 hash"},
+        "ecs": "process.hash.sha256",
+        "sysmon": "winlog.event_data.Hashes",
+        "windows_security": None,
+        "description": "Process file SHA256 hash",
+    },
     "user.name": {
-        "ecs": "user.name", "sysmon": "winlog.event_data.User",
+        "ecs": "user.name",
+        "sysmon": "winlog.event_data.User",
         "windows_security": "winlog.event_data.TargetUserName",
-        "description": "Username"},
+        "description": "Username",
+    },
     "user.domain": {
-        "ecs": "user.domain", "sysmon": None,
+        "ecs": "user.domain",
+        "sysmon": None,
         "windows_security": "winlog.event_data.TargetDomainName",
-        "description": "User domain"},
+        "description": "User domain",
+    },
     "user.id": {
-        "ecs": "user.id", "sysmon": None,
+        "ecs": "user.id",
+        "sysmon": None,
         "windows_security": "winlog.event_data.TargetUserSid",
-        "description": "User SID"},
+        "description": "User SID",
+    },
     "source.ip": {
-        "ecs": "source.ip", "sysmon": "winlog.event_data.SourceIp",
+        "ecs": "source.ip",
+        "sysmon": "winlog.event_data.SourceIp",
         "windows_security": "winlog.event_data.IpAddress",
         "description": "Source IP address",
-        "event_types": ["network_connection", "logon"]},
+        "event_types": ["network_connection", "logon"],
+    },
     "source.port": {
-        "ecs": "source.port", "sysmon": "winlog.event_data.SourcePort",
+        "ecs": "source.port",
+        "sysmon": "winlog.event_data.SourcePort",
         "windows_security": "winlog.event_data.IpPort",
-        "description": "Source port"},
+        "description": "Source port",
+    },
     "destination.ip": {
-        "ecs": "destination.ip", "sysmon": "winlog.event_data.DestinationIp",
-        "windows_security": None, "description": "Destination IP address"},
+        "ecs": "destination.ip",
+        "sysmon": "winlog.event_data.DestinationIp",
+        "windows_security": None,
+        "description": "Destination IP address",
+    },
     "destination.port": {
-        "ecs": "destination.port", "sysmon": "winlog.event_data.DestinationPort",
-        "windows_security": None, "description": "Destination port"},
+        "ecs": "destination.port",
+        "sysmon": "winlog.event_data.DestinationPort",
+        "windows_security": None,
+        "description": "Destination port",
+    },
     "dns.question.name": {
-        "ecs": "dns.question.name", "sysmon": "winlog.event_data.QueryName",
-        "windows_security": None, "description": "DNS query domain name",
-        "event_types": ["dns_query"]},
+        "ecs": "dns.question.name",
+        "sysmon": "winlog.event_data.QueryName",
+        "windows_security": None,
+        "description": "DNS query domain name",
+        "event_types": ["dns_query"],
+    },
     "file.path": {
-        "ecs": "file.path", "sysmon": "winlog.event_data.TargetFilename",
+        "ecs": "file.path",
+        "sysmon": "winlog.event_data.TargetFilename",
         "windows_security": "winlog.event_data.ObjectName",
         "description": "File path",
-        "event_types": ["file_create", "file_modify"]},
+        "event_types": ["file_create", "file_modify"],
+    },
     "file.name": {
-        "ecs": "file.name", "sysmon": "winlog.event_data.TargetFilename",
+        "ecs": "file.name",
+        "sysmon": "winlog.event_data.TargetFilename",
         "windows_security": "winlog.event_data.ObjectName",
-        "description": "File name"},
+        "description": "File name",
+    },
     "file.hash.sha256": {
-        "ecs": "file.hash.sha256", "sysmon": "winlog.event_data.Hash",
-        "windows_security": None, "description": "File SHA256 hash"},
+        "ecs": "file.hash.sha256",
+        "sysmon": "winlog.event_data.Hash",
+        "windows_security": None,
+        "description": "File SHA256 hash",
+    },
     "registry.path": {
-        "ecs": "registry.path", "sysmon": "winlog.event_data.TargetObject",
+        "ecs": "registry.path",
+        "sysmon": "winlog.event_data.TargetObject",
         "windows_security": "winlog.event_data.ObjectName",
         "description": "Registry key path",
-        "event_types": ["registry_modify"]},
+        "event_types": ["registry_modify"],
+    },
     "registry.value": {
-        "ecs": "registry.value", "sysmon": "winlog.event_data.Details",
-        "windows_security": None, "description": "Registry value"},
+        "ecs": "registry.value",
+        "sysmon": "winlog.event_data.Details",
+        "windows_security": None,
+        "description": "Registry value",
+    },
     "host.name": {
-        "ecs": "host.name", "sysmon": "host.name",
+        "ecs": "host.name",
+        "sysmon": "host.name",
         "windows_security": "winlog.computer_name",
-        "description": "Hostname"},
+        "description": "Hostname",
+    },
     "host.hostname": {
-        "ecs": "host.hostname", "sysmon": "host.hostname",
+        "ecs": "host.hostname",
+        "sysmon": "host.hostname",
         "windows_security": "winlog.computer_name",
-        "description": "Hostname (alternative)"},
+        "description": "Hostname (alternative)",
+    },
     "event.code": {
-        "ecs": "event.code", "sysmon": "winlog.event_id",
+        "ecs": "event.code",
+        "sysmon": "winlog.event_id",
         "windows_security": "winlog.event_id",
-        "description": "Event ID"},
+        "description": "Event ID",
+    },
     "event.action": {
-        "ecs": "event.action", "sysmon": "winlog.event_data.RuleName",
-        "windows_security": None, "description": "Event action/rule name"},
+        "ecs": "event.action",
+        "sysmon": "winlog.event_data.RuleName",
+        "windows_security": None,
+        "description": "Event action/rule name",
+    },
 }
 
 # Reverse mapping for finding ECS equivalent from native field names
-REVERSE_MAPPINGS: Dict[str, str] = {}
+REVERSE_MAPPINGS: dict[str, str] = {}
 for ecs_field, mappings in FIELD_MAPPINGS.items():
     for schema, field in mappings.items():
         if schema in ["ecs", "sysmon", "windows_security"] and field:
             REVERSE_MAPPINGS[field.lower()] = ecs_field
 
 
-def suggest_field(field: str, target_schema: Optional[str] = None) -> Dict:
+def suggest_field(field: str, target_schema: str | None = None) -> dict:
     """Suggest equivalent fields across schemas.
 
     Looks up a field name (ECS or native) and returns its equivalents
@@ -167,12 +223,15 @@ def suggest_field(field: str, target_schema: Optional[str] = None) -> Dict:
             if key.lower() == field_lower:
                 mapping = FIELD_MAPPINGS[key]
                 result = {
-                    "input_field": field, "is_ecs": True,
+                    "input_field": field,
+                    "is_ecs": True,
                     "description": mapping.get("description"),
                     "mappings": {
                         "ecs": mapping.get("ecs"),
                         "sysmon": mapping.get("sysmon"),
-                        "windows_security": mapping.get("windows_security")}}
+                        "windows_security": mapping.get("windows_security"),
+                    },
+                }
                 if target_schema:
                     result["suggested_field"] = mapping.get(target_schema)
                 return result
@@ -182,13 +241,16 @@ def suggest_field(field: str, target_schema: Optional[str] = None) -> Dict:
         ecs_field = REVERSE_MAPPINGS[field_lower]
         mapping = FIELD_MAPPINGS[ecs_field]
         return {
-            "input_field": field, "is_ecs": False,
+            "input_field": field,
+            "is_ecs": False,
             "ecs_equivalent": ecs_field,
             "description": mapping.get("description"),
             "mappings": {
                 "ecs": mapping.get("ecs"),
                 "sysmon": mapping.get("sysmon"),
-                "windows_security": mapping.get("windows_security")}}
+                "windows_security": mapping.get("windows_security"),
+            },
+        }
 
     # Fuzzy match - find similar fields
     suggestions = []
@@ -197,21 +259,26 @@ def suggest_field(field: str, target_schema: Optional[str] = None) -> Dict:
             suggestions.append(key)
 
     return {
-        "input_field": field, "found": False,
+        "input_field": field,
+        "found": False,
         "message": "Field not found in mapping table",
         "similar_fields": suggestions[:5],
-        "hint": "Try using detect_schema.py to find actual field names in your data"}
+        "hint": "Try using detect_schema.py to find actual field names in your data",
+    }
 
 
-def list_all_mappings() -> List[Dict]:
+def list_all_mappings() -> list[dict]:
     """List all available field mappings."""
     result = []
     for ecs_field, mapping in FIELD_MAPPINGS.items():
-        result.append({
-            "ecs_field": ecs_field,
-            "sysmon": mapping.get("sysmon"),
-            "windows_security": mapping.get("windows_security"),
-            "description": mapping.get("description")})
+        result.append(
+            {
+                "ecs_field": ecs_field,
+                "sysmon": mapping.get("sysmon"),
+                "windows_security": mapping.get("windows_security"),
+                "description": mapping.get("description"),
+            }
+        )
     return result
 
 
@@ -250,12 +317,17 @@ Exit Codes:
     )
 
     parser.add_argument("--field", "-f", help="Field name to look up")
-    parser.add_argument("--schema", "-s", choices=["ecs", "sysmon", "windows_security"],
-                        help="Target schema for suggestion")
+    parser.add_argument(
+        "--schema", "-s", choices=["ecs", "sysmon", "windows_security"], help="Target schema for suggestion"
+    )
     parser.add_argument("--list", "-l", action="store_true", help="List all field mappings")
-    parser.add_argument("--output", "-o", choices=["json", "table", "summary"],
-                        default="table",
-                        help="Output format: json (raw), table (detailed), summary (brief) (default: table)")
+    parser.add_argument(
+        "--output",
+        "-o",
+        choices=["json", "table", "summary"],
+        default="table",
+        help="Output format: json (raw), table (detailed), summary (brief) (default: table)",
+    )
 
     args = parser.parse_args()
 

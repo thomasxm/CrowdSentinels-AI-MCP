@@ -52,7 +52,7 @@ def auto_capture_elasticsearch_results(
         # No active investigation - return results unchanged
         results["capture_info"] = {
             "captured": False,
-            "reason": "No active investigation. Use create_investigation() first."
+            "reason": "No active investigation. Use create_investigation() first.",
         }
         return results
 
@@ -83,10 +83,7 @@ def auto_capture_elasticsearch_results(
 
     except Exception as e:
         logger.warning(f"Failed to auto-capture IoCs: {e}")
-        results["capture_info"] = {
-            "captured": False,
-            "reason": f"Error: {str(e)}"
-        }
+        results["capture_info"] = {"captured": False, "reason": f"Error: {str(e)}"}
 
     return results
 
@@ -118,7 +115,7 @@ def auto_capture_chainsaw_results(
     if client.active_investigation is None:
         results["capture_info"] = {
             "captured": False,
-            "reason": "No active investigation. Use create_investigation() first."
+            "reason": "No active investigation. Use create_investigation() first.",
         }
         return results
 
@@ -149,10 +146,7 @@ def auto_capture_chainsaw_results(
 
     except Exception as e:
         logger.warning(f"Failed to auto-capture IoCs: {e}")
-        results["capture_info"] = {
-            "captured": False,
-            "reason": f"Error: {str(e)}"
-        }
+        results["capture_info"] = {"captured": False, "reason": f"Error: {str(e)}"}
 
     return results
 
@@ -179,7 +173,7 @@ def auto_capture_wireshark_results(
     if client.active_investigation is None:
         results["capture_info"] = {
             "captured": False,
-            "reason": "No active investigation. Use create_investigation() first."
+            "reason": "No active investigation. Use create_investigation() first.",
         }
         return results
 
@@ -209,10 +203,7 @@ def auto_capture_wireshark_results(
 
     except Exception as e:
         logger.warning(f"Failed to auto-capture IoCs: {e}")
-        results["capture_info"] = {
-            "captured": False,
-            "reason": f"Error: {str(e)}"
-        }
+        results["capture_info"] = {"captured": False, "reason": f"Error: {str(e)}"}
 
     return results
 

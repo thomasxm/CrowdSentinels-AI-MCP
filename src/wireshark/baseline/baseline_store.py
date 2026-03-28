@@ -1,5 +1,6 @@
 # src/wireshark/baseline/baseline_store.py
 """Baseline storage and persistence."""
+
 import json
 import logging
 from pathlib import Path

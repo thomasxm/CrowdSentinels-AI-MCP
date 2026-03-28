@@ -29,11 +29,7 @@ class TestTSharkExecutor:
         from src.wireshark.core.tshark_executor import TSharkExecutor
 
         executor = TSharkExecutor()
-        cmd = executor.build_command(
-            pcap_path="/tmp/test.pcap",
-            display_filter="tcp",
-            fields=["ip.src", "ip.dst"]
-        )
+        cmd = executor.build_command(pcap_path="/tmp/test.pcap", display_filter="tcp", fields=["ip.src", "ip.dst"])
 
         assert "-r" in cmd
         assert "/tmp/test.pcap" in cmd
@@ -47,10 +43,7 @@ class TestTSharkExecutor:
         from src.wireshark.core.tshark_executor import TSharkExecutor
 
         executor = TSharkExecutor()
-        cmd = executor.build_stats_command(
-            pcap_path="/tmp/test.pcap",
-            stat_type="io,phs"
-        )
+        cmd = executor.build_stats_command(pcap_path="/tmp/test.pcap", stat_type="io,phs")
 
         assert "-r" in cmd
         assert "-q" in cmd

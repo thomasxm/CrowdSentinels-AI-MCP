@@ -1,4 +1,5 @@
 """Chainsaw Log Analyzer Client for EVTX hunting and analysis."""
+
 import json
 import logging
 import os
@@ -19,6 +20,7 @@ ENV_EVTX_SAMPLES_PATH = os.environ.get("CHAINSAW_EVTX_SAMPLES_PATH")
 @dataclass
 class PyramidOfPainLevel:
     """Pyramid of Pain priority levels for IoCs."""
+
     level: int
     name: str
     description: str
@@ -29,6 +31,7 @@ class PyramidOfPainLevel:
 @dataclass
 class DiamondModelVertex:
     """Diamond Model of Intrusion Analysis vertex."""
+
     vertex: str
     description: str
     elements: list[str]
@@ -44,43 +47,43 @@ class ChainsawClient:
             name="Hash Values",
             description="File hashes - trivial for attackers to change",
             difficulty_to_change="Trivial",
-            examples=["MD5", "SHA1", "SHA256"]
+            examples=["MD5", "SHA1", "SHA256"],
         ),
         2: PyramidOfPainLevel(
             level=2,
             name="IP Addresses",
             description="IP addresses - easy for attackers to change",
             difficulty_to_change="Easy",
-            examples=["192.0.2.100", "203.0.113.42"]
+            examples=["192.0.2.100", "203.0.113.42"],
         ),
         3: PyramidOfPainLevel(
             level=3,
             name="Domain Names",
             description="Domain names - simple for attackers to change",
             difficulty_to_change="Simple",
-            examples=["evil.com", "malicious.net"]
+            examples=["evil.com", "malicious.net"],
         ),
         4: PyramidOfPainLevel(
             level=4,
             name="Network/Host Artifacts",
             description="Network artifacts - annoying for attackers to change",
             difficulty_to_change="Annoying",
-            examples=["User-Agent strings", "Registry keys", "File paths"]
+            examples=["User-Agent strings", "Registry keys", "File paths"],
         ),
         5: PyramidOfPainLevel(
             level=5,
             name="Tools",
             description="Attacker tools - challenging to change",
             difficulty_to_change="Challenging",
-            examples=["mimikatz", "psexec", "cobalt strike"]
+            examples=["mimikatz", "psexec", "cobalt strike"],
         ),
         6: PyramidOfPainLevel(
             level=6,
             name="TTPs",
             description="Tactics, Techniques, and Procedures - tough to change",
             difficulty_to_change="Tough",
-            examples=["Credential dumping", "Lateral movement", "Persistence mechanisms"]
-        )
+            examples=["Credential dumping", "Lateral movement", "Persistence mechanisms"],
+        ),
     }
 
     # Diamond Model vertices
@@ -88,23 +91,23 @@ class ChainsawClient:
         "adversary": DiamondModelVertex(
             vertex="Adversary",
             description="The attacker or threat actor",
-            elements=["Threat actor identity", "Attribution", "Motivation", "Intent"]
+            elements=["Threat actor identity", "Attribution", "Motivation", "Intent"],
         ),
         "capability": DiamondModelVertex(
             vertex="Capability",
             description="Tools and techniques used by adversary",
-            elements=["Malware", "Exploits", "Tools", "TTPs", "Skills"]
+            elements=["Malware", "Exploits", "Tools", "TTPs", "Skills"],
         ),
         "infrastructure": DiamondModelVertex(
             vertex="Infrastructure",
             description="Physical/logical resources used in attack",
-            elements=["IP addresses", "Domains", "Email addresses", "C2 servers"]
+            elements=["IP addresses", "Domains", "Email addresses", "C2 servers"],
         ),
         "victim": DiamondModelVertex(
             vertex="Victim",
             description="Target of the attack",
-            elements=["Target systems", "Affected hosts", "Users", "Assets"]
-        )
+            elements=["Target systems", "Affected hosts", "Users", "Assets"],
+        ),
     }
 
     def __init__(self, chainsaw_path: str | None = None):
@@ -158,7 +161,9 @@ class ChainsawClient:
             self.sigma_rules = Path(ENV_SIGMA_RULES_PATH) if ENV_SIGMA_RULES_PATH else chainsaw_dir / "sigma"
             self.custom_rules = chainsaw_dir / "rules"
             self.mappings = chainsaw_dir / "mappings"
-            self.sample_evtx = Path(ENV_EVTX_SAMPLES_PATH) if ENV_EVTX_SAMPLES_PATH else chainsaw_dir / "EVTX-ATTACK-SAMPLES"
+            self.sample_evtx = (
+                Path(ENV_EVTX_SAMPLES_PATH) if ENV_EVTX_SAMPLES_PATH else chainsaw_dir / "EVTX-ATTACK-SAMPLES"
+            )
         else:
             # No chainsaw directory — use env vars or None
             self.sigma_rules = Path(ENV_SIGMA_RULES_PATH) if ENV_SIGMA_RULES_PATH else None
@@ -180,6 +185,7 @@ class ChainsawClient:
             return str(p.resolve())
 
         from src.paths import get_user_data_dir
+
         user_dir = get_user_data_dir()
 
         # Try under ~/.crowdsentinel/
@@ -204,15 +210,17 @@ class ChainsawClient:
         logger.warning("EVTX path not found: %s", evtx_path)
         return evtx_path
 
-    def hunt(self,
-             evtx_path: str,
-             sigma_path: str | None = None,
-             mapping_path: str | None = None,
-             custom_rules: str | None = None,
-             from_time: str | None = None,
-             to_time: str | None = None,
-             output_format: str = "json",
-             skip_errors: bool = True) -> dict:
+    def hunt(
+        self,
+        evtx_path: str,
+        sigma_path: str | None = None,
+        mapping_path: str | None = None,
+        custom_rules: str | None = None,
+        from_time: str | None = None,
+        to_time: str | None = None,
+        output_format: str = "json",
+        skip_errors: bool = True,
+    ) -> dict:
         """
         Hunt for threats using Sigma rules.
 
@@ -233,7 +241,7 @@ class ChainsawClient:
             return {
                 "error": "Chainsaw not installed",
                 "message": "Run setup to install chainsaw",
-                "install_command": "See CHAINSAW_GUIDE.md for installation"
+                "install_command": "See CHAINSAW_GUIDE.md for installation",
             }
 
         # Resolve EVTX path (handles relative paths from LLM agent)
@@ -289,7 +297,7 @@ class ChainsawClient:
                 cmd,
                 capture_output=True,
                 text=True,
-                timeout=300  # 5 minute timeout
+                timeout=300,  # 5 minute timeout
             )
 
             if result.returncode != 0:
@@ -297,7 +305,7 @@ class ChainsawClient:
                     "error": "Chainsaw execution failed",
                     "stderr": result.stderr,
                     "returncode": result.returncode,
-                    "command": ' '.join(cmd)
+                    "command": " ".join(cmd),
                 }
 
             # Parse output based on format
@@ -305,12 +313,12 @@ class ChainsawClient:
                 try:
                     # Chainsaw hunt with --json -q outputs a JSON array
                     output = result.stdout.strip()
-                    if output.startswith('['):
+                    if output.startswith("["):
                         # JSON array format
                         detections = json.loads(output)
                     else:
                         # Fallback: try newline-delimited JSON
-                        lines = output.split('\n')
+                        lines = output.split("\n")
                         detections = []
                         for line in lines:
                             if line.strip():
@@ -320,40 +328,31 @@ class ChainsawClient:
                         "success": True,
                         "total_detections": len(detections),
                         "detections": detections,
-                        "command": ' '.join(cmd)
+                        "command": " ".join(cmd),
                     }
                 except json.JSONDecodeError as e:
                     return {
                         "error": "Failed to parse JSON output",
                         "details": str(e),
-                        "raw_output": result.stdout[:1000]
+                        "raw_output": result.stdout[:1000],
                     }
             else:
-                return {
-                    "success": True,
-                    "output": result.stdout,
-                    "command": ' '.join(cmd)
-                }
+                return {"success": True, "output": result.stdout, "command": " ".join(cmd)}
 
         except subprocess.TimeoutExpired:
-            return {
-                "error": "Chainsaw execution timed out",
-                "timeout_seconds": 300,
-                "command": ' '.join(cmd)
-            }
+            return {"error": "Chainsaw execution timed out", "timeout_seconds": 300, "command": " ".join(cmd)}
         except Exception as e:
-            return {
-                "error": f"Chainsaw execution failed: {str(e)}",
-                "command": ' '.join(cmd)
-            }
+            return {"error": f"Chainsaw execution failed: {str(e)}", "command": " ".join(cmd)}
 
-    def search(self,
-               evtx_path: str,
-               search_term: str,
-               case_insensitive: bool = True,
-               event_id: int | None = None,
-               regex: bool = False,
-               output_format: str = "json") -> dict:
+    def search(
+        self,
+        evtx_path: str,
+        search_term: str,
+        case_insensitive: bool = True,
+        event_id: int | None = None,
+        regex: bool = False,
+        output_format: str = "json",
+    ) -> dict:
         """
         Search for specific terms in EVTX files.
 
@@ -371,10 +370,7 @@ class ChainsawClient:
         Command syntax: chainsaw search [OPTIONS] [PATTERN] [PATH]...
         """
         if not self.chainsaw_path.exists():
-            return {
-                "error": "Chainsaw not installed",
-                "message": "Run setup to install chainsaw"
-            }
+            return {"error": "Chainsaw not installed", "message": "Run setup to install chainsaw"}
 
         # Build command: chainsaw search [OPTIONS] [PATTERN] [PATH]...
         cmd = [str(self.chainsaw_path), "search"]
@@ -405,19 +401,14 @@ class ChainsawClient:
         logger.info(f"Executing chainsaw search: {' '.join(cmd)}")
 
         try:
-            result = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                timeout=300
-            )
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
 
             if result.returncode != 0:
                 return {
                     "error": "Chainsaw search failed",
                     "stderr": result.stderr,
                     "returncode": result.returncode,
-                    "command": ' '.join(cmd)
+                    "command": " ".join(cmd),
                 }
 
             # Parse JSON output
@@ -425,12 +416,12 @@ class ChainsawClient:
                 try:
                     # Chainsaw search with --json outputs a JSON array
                     output = result.stdout.strip()
-                    if output.startswith('['):
+                    if output.startswith("["):
                         # JSON array format
                         matches = json.loads(output)
                     else:
                         # Fallback: try newline-delimited JSON
-                        lines = output.split('\n')
+                        lines = output.split("\n")
                         matches = []
                         for line in lines:
                             if line.strip():
@@ -441,32 +432,22 @@ class ChainsawClient:
                         "search_term": search_term,
                         "total_matches": len(matches),
                         "matches": matches,
-                        "command": ' '.join(cmd)
+                        "command": " ".join(cmd),
                     }
                 except json.JSONDecodeError:
                     return {
                         "success": True,
                         "search_term": search_term,
                         "output": result.stdout,
-                        "command": ' '.join(cmd)
+                        "command": " ".join(cmd),
                     }
             else:
-                return {
-                    "success": True,
-                    "search_term": search_term,
-                    "output": result.stdout,
-                    "command": ' '.join(cmd)
-                }
+                return {"success": True, "search_term": search_term, "output": result.stdout, "command": " ".join(cmd)}
 
         except subprocess.TimeoutExpired:
-            return {
-                "error": "Chainsaw search timed out",
-                "timeout_seconds": 300
-            }
+            return {"error": "Chainsaw search timed out", "timeout_seconds": 300}
         except Exception as e:
-            return {
-                "error": f"Chainsaw search failed: {str(e)}"
-            }
+            return {"error": f"Chainsaw search failed: {str(e)}"}
 
     @classmethod
     def categorize_ioc_by_pyramid(cls, ioc_type: str, ioc_value: str) -> dict:
@@ -508,7 +489,7 @@ class ChainsawClient:
             "pyramid_name": pyramid_level.name,
             "description": pyramid_level.description,
             "difficulty_to_change": pyramid_level.difficulty_to_change,
-            "priority": 7 - level  # Invert for priority (level 6 TTPs = priority 1)
+            "priority": 7 - level,  # Invert for priority (level 6 TTPs = priority 1)
         }
 
     @classmethod
@@ -523,22 +504,10 @@ class ChainsawClient:
             Dictionary with Diamond Model mapping
         """
         diamond_mapping = {
-            "adversary": {
-                "identified": False,
-                "elements": []
-            },
-            "capability": {
-                "identified": False,
-                "elements": []
-            },
-            "infrastructure": {
-                "identified": False,
-                "elements": []
-            },
-            "victim": {
-                "identified": False,
-                "elements": []
-            }
+            "adversary": {"identified": False, "elements": []},
+            "capability": {"identified": False, "elements": []},
+            "infrastructure": {"identified": False, "elements": []},
+            "victim": {"identified": False, "elements": []},
         }
 
         # Extract information from detection
@@ -565,44 +534,29 @@ class ChainsawClient:
             computer = system.get("Computer")
             if computer:
                 diamond_mapping["victim"]["identified"] = True
-                diamond_mapping["victim"]["elements"].append({
-                    "type": "host",
-                    "value": computer
-                })
+                diamond_mapping["victim"]["elements"].append({"type": "host", "value": computer})
 
             # User from EventData
             target_user = event_data.get("TargetUserName") or event_data.get("SubjectUserName")
             if target_user:
                 diamond_mapping["victim"]["identified"] = True
-                diamond_mapping["victim"]["elements"].append({
-                    "type": "user",
-                    "value": target_user
-                })
+                diamond_mapping["victim"]["elements"].append({"type": "user", "value": target_user})
 
             # Infrastructure identification - from EventData
             ip_address = event_data.get("IpAddress") or event_data.get("SourceAddress") or event_data.get("DestAddress")
             if ip_address:
                 diamond_mapping["infrastructure"]["identified"] = True
-                diamond_mapping["infrastructure"]["elements"].append({
-                    "type": "ip",
-                    "value": ip_address
-                })
+                diamond_mapping["infrastructure"]["elements"].append({"type": "ip", "value": ip_address})
 
             # Capability identification - from EventData
             image = event_data.get("Image") or event_data.get("SourceImage") or event_data.get("ProcessName")
             if image:
                 diamond_mapping["capability"]["identified"] = True
-                diamond_mapping["capability"]["elements"].append({
-                    "type": "tool",
-                    "value": image
-                })
+                diamond_mapping["capability"]["elements"].append({"type": "tool", "value": image})
 
             command_line = event_data.get("CommandLine")
             if command_line:
                 diamond_mapping["capability"]["identified"] = True
-                diamond_mapping["capability"]["elements"].append({
-                    "type": "technique",
-                    "value": command_line
-                })
+                diamond_mapping["capability"]["elements"].append({"type": "technique", "value": command_line})
 
         return diamond_mapping

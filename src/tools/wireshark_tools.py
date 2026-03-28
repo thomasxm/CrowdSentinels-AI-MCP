@@ -1,5 +1,6 @@
 # src/tools/wireshark_tools.py
 """Wireshark/TShark MCP tools for network traffic analysis."""
+
 import logging
 from pathlib import Path
 from typing import Any
@@ -31,6 +32,7 @@ class WiresharkTools:
         """Lazy load TShark executor."""
         if self._executor is None:
             from src.wireshark.core.tshark_executor import TSharkExecutor
+
             self._executor = TSharkExecutor()
         return self._executor
 
@@ -39,6 +41,7 @@ class WiresharkTools:
         """Lazy load PCAP analyzer."""
         if self._analyzer is None:
             from src.wireshark.core.pcap_analyzer import PcapAnalyzer
+
             self._analyzer = PcapAnalyzer()
         return self._analyzer
 
@@ -47,6 +50,7 @@ class WiresharkTools:
         """Lazy load baseline builder."""
         if self._baseline_builder is None:
             from src.wireshark.baseline.baseline_builder import BaselineBuilder
+
             self._baseline_builder = BaselineBuilder()
         return self._baseline_builder
 
@@ -55,6 +59,7 @@ class WiresharkTools:
         """Lazy load anomaly detector."""
         if self._anomaly_detector is None:
             from src.wireshark.hunting.anomaly_detector import AnomalyDetector
+
             self._anomaly_detector = AnomalyDetector()
         return self._anomaly_detector
 
@@ -63,6 +68,7 @@ class WiresharkTools:
         """Lazy load beaconing detector."""
         if self._beaconing_detector is None:
             from src.wireshark.hunting.beaconing_detector import BeaconingDetector
+
             self._beaconing_detector = BeaconingDetector()
         return self._beaconing_detector
 
@@ -71,6 +77,7 @@ class WiresharkTools:
         """Lazy load lateral movement detector."""
         if self._lateral_movement_detector is None:
             from src.wireshark.hunting.lateral_movement import LateralMovementDetector
+
             self._lateral_movement_detector = LateralMovementDetector()
         return self._lateral_movement_detector
 
@@ -79,6 +86,7 @@ class WiresharkTools:
         """Lazy load IoC hunter."""
         if self._ioc_hunter is None:
             from src.wireshark.hunting.ioc_hunter import IoCHunter
+
             self._ioc_hunter = IoCHunter()
         return self._ioc_hunter
 
@@ -87,6 +95,7 @@ class WiresharkTools:
         """Lazy load session tracker."""
         if self._session_tracker is None:
             from src.wireshark.hunting.session_tracker import SessionTracker
+
             self._session_tracker = SessionTracker()
         return self._session_tracker
 
@@ -95,6 +104,7 @@ class WiresharkTools:
         """Lazy load object extractor."""
         if self._object_extractor is None:
             from src.wireshark.extraction.object_extractor import ObjectExtractor
+
             self._object_extractor = ObjectExtractor()
         return self._object_extractor
 
@@ -103,6 +113,7 @@ class WiresharkTools:
         """Lazy load report generator."""
         if self._report_generator is None:
             from src.wireshark.reporting.report_generator import ReportGenerator
+
             self._report_generator = ReportGenerator()
         return self._report_generator
 
@@ -141,11 +152,7 @@ class WiresharkTools:
 
         # Tool 2: Build Baseline
         @mcp.tool()
-        def build_baseline(
-            pcap_path: str,
-            baseline_name: str,
-            description: str | None = None
-        ) -> dict[str, Any]:
+        def build_baseline(pcap_path: str, baseline_name: str, description: str | None = None) -> dict[str, Any]:
             """
             Build a baseline from normal traffic to compare against suspicious activity.
 
@@ -170,11 +177,7 @@ class WiresharkTools:
 
         # Tool 3: Hunt IoCs
         @mcp.tool()
-        def hunt_iocs(
-            pcap_path: str,
-            iocs: list[str],
-            ioc_type: str | None = None
-        ) -> dict[str, Any]:
+        def hunt_iocs(pcap_path: str, iocs: list[str], ioc_type: str | None = None) -> dict[str, Any]:
             """
             Hunt for specific Indicators of Compromise (IoCs) in a PCAP file.
 
@@ -199,10 +202,7 @@ class WiresharkTools:
 
         # Tool 4: Hunt Anomalies
         @mcp.tool()
-        def hunt_anomalies(
-            pcap_path: str,
-            baseline_name: str | None = None
-        ) -> dict[str, Any]:
+        def hunt_anomalies(pcap_path: str, baseline_name: str | None = None) -> dict[str, Any]:
             """
             Detect network anomalies by comparing against baseline or defaults.
 
@@ -224,9 +224,7 @@ class WiresharkTools:
         # Tool 5: Track Sessions
         @mcp.tool()
         def track_sessions(
-            pcap_path: str,
-            protocol: str = "tcp",
-            port_filter: list[int] | None = None
+            pcap_path: str, protocol: str = "tcp", port_filter: list[int] | None = None
         ) -> dict[str, Any]:
             """
             Track and reconstruct network sessions from PCAP.
@@ -249,11 +247,7 @@ class WiresharkTools:
 
         # Tool 6: Extract Objects
         @mcp.tool()
-        def extract_objects(
-            pcap_path: str,
-            protocol: str = "http",
-            store_files: bool = False
-        ) -> dict[str, Any]:
+        def extract_objects(pcap_path: str, protocol: str = "http", store_files: bool = False) -> dict[str, Any]:
             """
             Extract transferred objects (files) from network traffic.
 
@@ -276,9 +270,7 @@ class WiresharkTools:
         # Tool 7: Detect Beaconing
         @mcp.tool()
         def detect_beaconing(
-            pcap_path: str,
-            min_connections: int = 10,
-            max_jitter_percent: float = 15.0
+            pcap_path: str, min_connections: int = 10, max_jitter_percent: float = 15.0
         ) -> dict[str, Any]:
             """
             Detect C2 beaconing patterns based on connection timing analysis.
@@ -301,10 +293,7 @@ class WiresharkTools:
 
         # Tool 8: Detect Lateral Movement
         @mcp.tool()
-        def detect_lateral_movement(
-            pcap_path: str,
-            internal_only: bool = True
-        ) -> dict[str, Any]:
+        def detect_lateral_movement(pcap_path: str, internal_only: bool = True) -> dict[str, Any]:
             """
             Detect lateral movement patterns in network traffic.
 
@@ -325,10 +314,7 @@ class WiresharkTools:
 
         # Tool 9: Generate IoCs
         @mcp.tool()
-        def generate_iocs(
-            pcap_path: str,
-            min_confidence: int = 5
-        ) -> dict[str, Any]:
+        def generate_iocs(pcap_path: str, min_confidence: int = 5) -> dict[str, Any]:
             """
             Generate structured IoC artifacts from PCAP analysis.
 
@@ -350,9 +336,7 @@ class WiresharkTools:
         # Tool 10: Generate Report
         @mcp.tool()
         def generate_report(
-            pcap_path: str,
-            findings: dict[str, Any] | None = None,
-            investigation_id: str | None = None
+            pcap_path: str, findings: dict[str, Any] | None = None, investigation_id: str | None = None
         ) -> dict[str, Any]:
             """
             Generate an NCSC-style incident report from analysis findings.
@@ -375,11 +359,7 @@ class WiresharkTools:
 
         # Tool 11: Decode Traffic (Utility)
         @mcp.tool()
-        def decode_traffic(
-            pcap_path: str,
-            port: int,
-            protocol: str
-        ) -> dict[str, Any]:
+        def decode_traffic(pcap_path: str, port: int, protocol: str) -> dict[str, Any]:
             """
             Force protocol interpretation on non-standard ports.
 
@@ -428,27 +408,20 @@ class WiresharkTools:
             logger.error(f"Error in pcap_overview: {e}")
             return {"error": str(e)}
 
-    def _build_baseline(
-        self,
-        pcap_path: str,
-        baseline_name: str,
-        description: str | None = None
-    ) -> dict[str, Any]:
+    def _build_baseline(self, pcap_path: str, baseline_name: str, description: str | None = None) -> dict[str, Any]:
         """Internal implementation of build_baseline."""
         try:
             if not Path(pcap_path).exists():
                 return {"error": f"PCAP file not found: {pcap_path}"}
 
-            baseline = self.baseline_builder.build_from_pcap(
-                pcap_path=pcap_path,
-                name=baseline_name
-            )
+            baseline = self.baseline_builder.build_from_pcap(pcap_path=pcap_path, name=baseline_name)
 
             if baseline is None:
                 return {"error": "Failed to build baseline"}
 
             # Save the baseline
             from src.wireshark.baseline.baseline_store import BaselineStore
+
             store = BaselineStore()
             save_path = store.save(baseline_name, baseline)
 
@@ -470,12 +443,7 @@ class WiresharkTools:
             logger.error(f"Error in build_baseline: {e}")
             return {"error": str(e)}
 
-    def _hunt_iocs(
-        self,
-        pcap_path: str,
-        iocs: list[str],
-        ioc_type: str | None = None
-    ) -> dict[str, Any]:
+    def _hunt_iocs(self, pcap_path: str, iocs: list[str], ioc_type: str | None = None) -> dict[str, Any]:
         """Internal implementation of hunt_iocs."""
         try:
             if not Path(pcap_path).exists():
@@ -505,7 +473,7 @@ class WiresharkTools:
                 ip_iocs=ip_iocs if ip_iocs else None,
                 domain_iocs=domain_iocs if domain_iocs else None,
                 hash_iocs=hash_iocs if hash_iocs else None,
-                executor=self.executor
+                executor=self.executor,
             )
 
             # Aggregate all matches
@@ -525,11 +493,7 @@ class WiresharkTools:
             logger.error(f"Error in hunt_iocs: {e}")
             return {"error": str(e)}
 
-    def _hunt_anomalies(
-        self,
-        pcap_path: str,
-        baseline_name: str | None = None
-    ) -> dict[str, Any]:
+    def _hunt_anomalies(self, pcap_path: str, baseline_name: str | None = None) -> dict[str, Any]:
         """Internal implementation of hunt_anomalies."""
         try:
             if not Path(pcap_path).exists():
@@ -539,25 +503,25 @@ class WiresharkTools:
             baseline = None
             if baseline_name:
                 from src.wireshark.baseline.baseline_store import BaselineStore
+
                 store = BaselineStore()
                 baseline = store.load(baseline_name)
 
             # Create anomaly detector with baseline
             from src.wireshark.hunting.anomaly_detector import AnomalyDetector
+
             detector = AnomalyDetector(baseline=baseline)
 
             all_anomalies = []
 
             # Extract port statistics and check for port anomalies
-            port_cmd = [
-                self.executor.tshark_path, "-r", pcap_path, "-q",
-                "-z", "conv,tcp"
-            ]
+            port_cmd = [self.executor.tshark_path, "-r", pcap_path, "-q", "-z", "conv,tcp"]
             returncode, stdout, _ = self.executor.execute(port_cmd, timeout=120)
 
             if returncode == 0 and stdout:
                 # Parse port info and check for anomalies
                 from collections import Counter
+
                 port_counts = Counter()
                 for line in stdout.split("\n"):
                     if ":" in line and "<->" in line:
@@ -571,28 +535,33 @@ class WiresharkTools:
                                     pass
 
                 for port, count in port_counts.items():
-                    port_anomalies = detector.check_port_anomaly(
-                        port=port,
-                        protocol="tcp",
-                        occurrence_count=count
-                    )
+                    port_anomalies = detector.check_port_anomaly(port=port, protocol="tcp", occurrence_count=count)
                     for anomaly in port_anomalies:
-                        all_anomalies.append({
-                            "type": anomaly.type,
-                            "severity": anomaly.severity,
-                            "description": anomaly.description,
-                            "port": anomaly.port,
-                            "confidence": anomaly.confidence,
-                        })
+                        all_anomalies.append(
+                            {
+                                "type": anomaly.type,
+                                "severity": anomaly.severity,
+                                "description": anomaly.description,
+                                "port": anomaly.port,
+                                "confidence": anomaly.confidence,
+                            }
+                        )
 
             # Extract DNS queries and check for DNS anomalies
             dns_cmd = [
-                self.executor.tshark_path, "-r", pcap_path,
-                "-Y", "dns.flags.response == 0",
-                "-T", "fields",
-                "-e", "ip.src",
-                "-e", "dns.qry.name",
-                "-e", "dns.qry.type"
+                self.executor.tshark_path,
+                "-r",
+                pcap_path,
+                "-Y",
+                "dns.flags.response == 0",
+                "-T",
+                "fields",
+                "-e",
+                "ip.src",
+                "-e",
+                "dns.qry.name",
+                "-e",
+                "dns.qry.type",
             ]
             returncode, stdout, _ = self.executor.execute(dns_cmd, timeout=120)
 
@@ -606,18 +575,17 @@ class WiresharkTools:
                             query_type = parts[2] if len(parts) > 2 else "A"
 
                             dns_anomalies = detector.check_dns_anomaly(
-                                query_name=query_name,
-                                query_type=query_type,
-                                response_code=None,
-                                src_ip=src_ip
+                                query_name=query_name, query_type=query_type, response_code=None, src_ip=src_ip
                             )
                             for anomaly in dns_anomalies:
-                                all_anomalies.append({
-                                    "type": anomaly.type,
-                                    "severity": anomaly.severity,
-                                    "description": anomaly.description,
-                                    "confidence": anomaly.confidence,
-                                })
+                                all_anomalies.append(
+                                    {
+                                        "type": anomaly.type,
+                                        "severity": anomaly.severity,
+                                        "description": anomaly.description,
+                                        "confidence": anomaly.confidence,
+                                    }
+                                )
 
             # Generate summary
             summary = {
@@ -642,10 +610,7 @@ class WiresharkTools:
             return {"error": str(e)}
 
     def _track_sessions(
-        self,
-        pcap_path: str,
-        protocol: str = "tcp",
-        port_filter: list[int] | None = None
+        self, pcap_path: str, protocol: str = "tcp", port_filter: list[int] | None = None
     ) -> dict[str, Any]:
         """Internal implementation of track_sessions."""
         try:
@@ -653,9 +618,7 @@ class WiresharkTools:
                 return {"error": f"PCAP file not found: {pcap_path}"}
 
             sessions = self.session_tracker.track_from_pcap(
-                pcap_path=pcap_path,
-                protocol=protocol,
-                executor=self.executor
+                pcap_path=pcap_path, protocol=protocol, executor=self.executor
             )
 
             # Apply port filter if specified
@@ -685,21 +648,14 @@ class WiresharkTools:
             logger.error(f"Error in track_sessions: {e}")
             return {"error": str(e)}
 
-    def _extract_objects(
-        self,
-        pcap_path: str,
-        protocol: str = "http",
-        store_files: bool = False
-    ) -> dict[str, Any]:
+    def _extract_objects(self, pcap_path: str, protocol: str = "http", store_files: bool = False) -> dict[str, Any]:
         """Internal implementation of extract_objects."""
         try:
             if not Path(pcap_path).exists():
                 return {"error": f"PCAP file not found: {pcap_path}"}
 
             results = self.object_extractor.extract_from_pcap(
-                pcap_path=pcap_path,
-                protocols=[protocol],
-                store_files=store_files
+                pcap_path=pcap_path, protocols=[protocol], store_files=store_files
             )
 
             return {
@@ -714,10 +670,7 @@ class WiresharkTools:
             return {"error": str(e)}
 
     def _detect_beaconing(
-        self,
-        pcap_path: str,
-        min_connections: int = 5,
-        max_jitter_percent: float = 90.0
+        self, pcap_path: str, min_connections: int = 5, max_jitter_percent: float = 90.0
     ) -> dict[str, Any]:
         """Internal implementation of detect_beaconing."""
         try:
@@ -736,19 +689,21 @@ class WiresharkTools:
             # Convert BeaconPattern objects to dicts
             patterns = []
             for p in filtered_patterns:
-                patterns.append({
-                    "src_ip": p.source_ip,
-                    "dst_ip": p.dest_ip,
-                    "dst_port": p.dest_port,
-                    "interval_mean": p.interval_mean_seconds,
-                    "jitter_percent": p.jitter_percent,
-                    "occurrence_count": p.occurrence_count,
-                    "confidence": p.confidence,
-                    "events": [
-                        {"timestamp": ts.timestamp(), "src_ip": p.source_ip, "dst_ip": p.dest_ip}
-                        for ts in p.timestamps[:20]  # Limit events
-                    ],
-                })
+                patterns.append(
+                    {
+                        "src_ip": p.source_ip,
+                        "dst_ip": p.dest_ip,
+                        "dst_port": p.dest_port,
+                        "interval_mean": p.interval_mean_seconds,
+                        "jitter_percent": p.jitter_percent,
+                        "occurrence_count": p.occurrence_count,
+                        "confidence": p.confidence,
+                        "events": [
+                            {"timestamp": ts.timestamp(), "src_ip": p.source_ip, "dst_ip": p.dest_ip}
+                            for ts in p.timestamps[:20]  # Limit events
+                        ],
+                    }
+                )
 
             # Generate timeline visualization
             timeline = ""
@@ -756,10 +711,10 @@ class WiresharkTools:
                 from src.wireshark.reporting.timeline_visualizer import (
                     TimelineVisualizer,
                 )
+
                 visualizer = TimelineVisualizer()
                 timeline = visualizer.generate_beaconing_timeline(
-                    beacon_events=patterns[0].get("events", []),
-                    target_ip=patterns[0].get("dst_ip", "unknown")
+                    beacon_events=patterns[0].get("events", []), target_ip=patterns[0].get("dst_ip", "unknown")
                 )
 
             # Build summary
@@ -781,20 +736,13 @@ class WiresharkTools:
             logger.error(f"Error in detect_beaconing: {e}")
             return {"error": str(e)}
 
-    def _detect_lateral_movement(
-        self,
-        pcap_path: str,
-        internal_only: bool = True
-    ) -> dict[str, Any]:
+    def _detect_lateral_movement(self, pcap_path: str, internal_only: bool = True) -> dict[str, Any]:
         """Internal implementation of detect_lateral_movement."""
         try:
             if not Path(pcap_path).exists():
                 return {"error": f"PCAP file not found: {pcap_path}"}
 
-            results = self.lateral_movement_detector.detect_from_pcap(
-                pcap_path=pcap_path,
-                executor=self.executor
-            )
+            results = self.lateral_movement_detector.detect_from_pcap(pcap_path=pcap_path, executor=self.executor)
 
             return {
                 "pcap_path": pcap_path,
@@ -811,11 +759,7 @@ class WiresharkTools:
             logger.error(f"Error in detect_lateral_movement: {e}")
             return {"error": str(e)}
 
-    def _generate_iocs(
-        self,
-        pcap_path: str,
-        min_confidence: int = 5
-    ) -> dict[str, Any]:
+    def _generate_iocs(self, pcap_path: str, min_confidence: int = 5) -> dict[str, Any]:
         """Internal implementation of generate_iocs."""
         try:
             if not Path(pcap_path).exists():
@@ -834,21 +778,25 @@ class WiresharkTools:
                 conf = pattern.get("confidence", 0)
                 conf_int = confidence_map.get(conf, conf) if isinstance(conf, str) else conf
                 if conf_int >= min_confidence:
-                    iocs.append({
-                        "type": "ip",
-                        "value": pattern.get("dst_ip"),
-                        "confidence": conf_int,
-                        "source": "beaconing_detection",
-                    })
+                    iocs.append(
+                        {
+                            "type": "ip",
+                            "value": pattern.get("dst_ip"),
+                            "confidence": conf_int,
+                            "source": "beaconing_detection",
+                        }
+                    )
 
             # Extract IPs from lateral movement
             for finding in lateral.get("findings", {}).get("smb", []):
-                iocs.append({
-                    "type": "ip",
-                    "value": finding.get("dst_ip"),
-                    "confidence": 7,
-                    "source": "lateral_movement",
-                })
+                iocs.append(
+                    {
+                        "type": "ip",
+                        "value": finding.get("dst_ip"),
+                        "confidence": 7,
+                        "source": "lateral_movement",
+                    }
+                )
 
             return {
                 "pcap_path": pcap_path,
@@ -860,10 +808,7 @@ class WiresharkTools:
             return {"error": str(e)}
 
     def _generate_report(
-        self,
-        pcap_path: str,
-        findings: dict[str, Any] | None = None,
-        investigation_id: str | None = None
+        self, pcap_path: str, findings: dict[str, Any] | None = None, investigation_id: str | None = None
     ) -> dict[str, Any]:
         """Internal implementation of generate_report."""
         try:
@@ -877,9 +822,7 @@ class WiresharkTools:
                 }
 
             report = self.report_generator.generate_report(
-                pcap_path=pcap_path,
-                findings=findings,
-                investigation_id=investigation_id
+                pcap_path=pcap_path, findings=findings, investigation_id=investigation_id
             )
 
             return {
@@ -891,12 +834,7 @@ class WiresharkTools:
             logger.error(f"Error in generate_report: {e}")
             return {"error": str(e)}
 
-    def _decode_traffic(
-        self,
-        pcap_path: str,
-        port: int,
-        protocol: str
-    ) -> dict[str, Any]:
+    def _decode_traffic(self, pcap_path: str, port: int, protocol: str) -> dict[str, Any]:
         """Internal implementation of decode_traffic."""
         try:
             if not Path(pcap_path).exists():
@@ -907,7 +845,7 @@ class WiresharkTools:
                 pcap_path=pcap_path,
                 display_filter=f"tcp.port == {port}",
                 decode_as=f"tcp.port=={port},{protocol}",
-                timeout=120
+                timeout=120,
             )
 
             return {

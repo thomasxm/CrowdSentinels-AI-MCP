@@ -6,8 +6,7 @@ from fastmcp import FastMCP
 class RuleManagementTools:
     """Tools for managing and executing detection rules."""
 
-    def _execute_single_rule(self, rule_id: str, index: str,
-                             timeframe_minutes: int = 15, size: int = 100) -> dict:
+    def _execute_single_rule(self, rule_id: str, index: str, timeframe_minutes: int = 15, size: int = 100) -> dict:
         """Execute a single detection rule (internal, no MCP wrapper)."""
         rule = self.rule_loader.get_rule(rule_id)
         if not rule:
@@ -62,7 +61,7 @@ class RuleManagementTools:
             rule_type: str | None = None,
             search_term: str | None = None,
             mitre_tactic: str | None = None,
-            limit: int = 50
+            limit: int = 50,
         ) -> dict:
             """
             List available detection rules with optional filtering.
@@ -111,7 +110,7 @@ class RuleManagementTools:
                 rule_type=rule_type,
                 search_term=search_term,
                 mitre_tactic=mitre_tactic,
-                limit=limit
+                limit=limit,
             )
 
             # Get statistics for context
@@ -120,16 +119,18 @@ class RuleManagementTools:
             # Format rules for display
             rule_summaries = []
             for rule in rules:
-                rule_summaries.append({
-                    "rule_id": rule.rule_id,
-                    "name": rule.display_name,
-                    "platform": rule.platform,
-                    "log_source": rule.log_source,
-                    "type": rule.rule_type,
-                    "category": rule.category,
-                    "mitre_tactics": list(rule.mitre_tactics),
-                    "tags": list(rule.tags)[:10]  # Limit tags displayed
-                })
+                rule_summaries.append(
+                    {
+                        "rule_id": rule.rule_id,
+                        "name": rule.display_name,
+                        "platform": rule.platform,
+                        "log_source": rule.log_source,
+                        "type": rule.rule_type,
+                        "category": rule.category,
+                        "mitre_tactics": list(rule.mitre_tactics),
+                        "tags": list(rule.tags)[:10],  # Limit tags displayed
+                    }
+                )
 
             return {
                 "total_found": len(rules),
@@ -140,8 +141,8 @@ class RuleManagementTools:
                 "statistics": {
                     "total_rules_loaded": stats["total_rules"],
                     "by_platform": stats["by_platform"],
-                    "by_type": stats["by_type"]
-                }
+                    "by_type": stats["by_type"],
+                },
             }
 
         @mcp.tool()
@@ -163,7 +164,7 @@ class RuleManagementTools:
             if not rule:
                 return {
                     "error": f"Rule not found: {rule_id}",
-                    "suggestion": "Use list_detection_rules() to find available rules"
+                    "suggestion": "Use list_detection_rules() to find available rules",
                 }
 
             return {
@@ -176,15 +177,12 @@ class RuleManagementTools:
                 "query": rule.query,
                 "mitre_tactics": list(rule.mitre_tactics),
                 "tags": list(rule.tags),
-                "file_path": rule.file_path
+                "file_path": rule.file_path,
             }
 
         @mcp.tool()
         def execute_detection_rule(
-            rule_id: str,
-            index: str,
-            timeframe_minutes: int | None = 15,
-            size: int = 100
+            rule_id: str, index: str, timeframe_minutes: int | None = 15, size: int = 100
         ) -> dict:
             """
             Execute a specific detection rule against Elasticsearch.
@@ -217,7 +215,7 @@ class RuleManagementTools:
             if not rule:
                 return {
                     "error": f"Rule not found: {rule_id}",
-                    "suggestion": "Use list_detection_rules() to find available rules"
+                    "suggestion": "Use list_detection_rules() to find available rules",
                 }
 
             # Execute based on rule type
@@ -228,7 +226,7 @@ class RuleManagementTools:
                         index=index,
                         lucene_query=rule.query,
                         timeframe_minutes=timeframe_minutes if timeframe_minutes > 0 else None,
-                        size=min(size, 1000)
+                        size=min(size, 1000),
                     )
                 elif rule.rule_type == "eql":
                     # Execute as EQL query
@@ -236,7 +234,7 @@ class RuleManagementTools:
                         index=index,
                         query=rule.query,
                         start_time=f"now-{timeframe_minutes}m" if timeframe_minutes > 0 else None,
-                        size=min(size, 1000)
+                        size=min(size, 1000),
                     )
                 else:
                     return {"error": f"Unsupported rule type: {rule.rule_type}"}
@@ -248,7 +246,7 @@ class RuleManagementTools:
                     "platform": rule.platform,
                     "log_source": rule.log_source,
                     "type": rule.rule_type,
-                    "mitre_tactics": list(rule.mitre_tactics)
+                    "mitre_tactics": list(rule.mitre_tactics),
                 }
 
                 return result
@@ -266,8 +264,8 @@ class RuleManagementTools:
                             "Try using a smaller timeframe (e.g., timeframe_minutes=5)",
                             "Use a more specific index pattern",
                             "Try search_with_lucene() with a simplified version of the query",
-                            "Increase REQUEST_TIMEOUT environment variable"
-                        ]
+                            "Increase REQUEST_TIMEOUT environment variable",
+                        ],
                     }
                 if "parse" in error_msg.lower() or "syntax" in error_msg.lower():
                     return {
@@ -275,21 +273,18 @@ class RuleManagementTools:
                         "rule_id": rule_id,
                         "rule_type": rule.rule_type,
                         "query": rule.query,
-                        "suggestion": "The rule query may have syntax errors or use unsupported features"
+                        "suggestion": "The rule query may have syntax errors or use unsupported features",
                     }
                 return {
                     "error": f"Failed to execute rule: {error_msg}",
                     "rule_id": rule_id,
                     "rule_type": rule.rule_type,
-                    "query_preview": rule.query[:200] + "..." if len(rule.query) > 200 else rule.query
+                    "query_preview": rule.query[:200] + "..." if len(rule.query) > 200 else rule.query,
                 }
 
         @mcp.tool()
         def execute_multiple_rules(
-            rule_ids: list[str],
-            index: str,
-            timeframe_minutes: int | None = 15,
-            max_results_per_rule: int = 50
+            rule_ids: list[str], index: str, timeframe_minutes: int | None = 15, max_results_per_rule: int = 50
         ) -> dict:
             """
             Execute multiple detection rules in batch.
@@ -317,18 +312,14 @@ class RuleManagementTools:
                 )
             """
             if len(rule_ids) > 50:
-                return {
-                    "error": "Too many rules requested",
-                    "limit": 50,
-                    "requested": len(rule_ids)
-                }
+                return {"error": "Too many rules requested", "limit": 50, "requested": len(rule_ids)}
 
             results = {
                 "total_rules_executed": 0,
                 "total_hits": 0,
                 "rules_with_findings": 0,
                 "failed_rules": 0,
-                "results_by_rule": {}
+                "results_by_rule": {},
             }
 
             for rule_id in rule_ids:
@@ -344,10 +335,7 @@ class RuleManagementTools:
 
                 if "error" in rule_result:
                     results["failed_rules"] += 1
-                    results["results_by_rule"][rule_id] = {
-                        "error": rule_result["error"],
-                        "hits": 0
-                    }
+                    results["results_by_rule"][rule_id] = {"error": rule_result["error"], "hits": 0}
                 else:
                     hit_count = rule_result.get("total_hits", 0)
                     results["total_hits"] += hit_count
@@ -359,17 +347,13 @@ class RuleManagementTools:
                         "rule_name": rule_result.get("rule_info", {}).get("name", rule_id),
                         "hits": hit_count,
                         "events": rule_result.get("events", [])[:max_results_per_rule],
-                        "mitre_tactics": rule_result.get("rule_info", {}).get("mitre_tactics", [])
+                        "mitre_tactics": rule_result.get("rule_info", {}).get("mitre_tactics", []),
                     }
 
             return results
 
         @mcp.tool()
-        def search_rules_by_mitre_attack(
-            tactic: str,
-            platform: str | None = None,
-            limit: int = 50
-        ) -> dict:
+        def search_rules_by_mitre_attack(tactic: str, platform: str | None = None, limit: int = 50) -> dict:
             """
             Search detection rules by MITRE ATT&CK tactic.
 
@@ -414,20 +398,22 @@ class RuleManagementTools:
             # Format results
             rule_summaries = []
             for rule in rules:
-                rule_summaries.append({
-                    "rule_id": rule.rule_id,
-                    "name": rule.display_name,
-                    "platform": rule.platform,
-                    "log_source": rule.log_source,
-                    "type": rule.rule_type,
-                    "mitre_tactics": list(rule.mitre_tactics)
-                })
+                rule_summaries.append(
+                    {
+                        "rule_id": rule.rule_id,
+                        "name": rule.display_name,
+                        "platform": rule.platform,
+                        "log_source": rule.log_source,
+                        "type": rule.rule_type,
+                        "mitre_tactics": list(rule.mitre_tactics),
+                    }
+                )
 
             return {
                 "tactic": tactic,
                 "platform_filter": platform,
                 "total_found": len(rule_summaries),
-                "rules": rule_summaries
+                "rules": rule_summaries,
             }
 
         @mcp.tool()
@@ -445,11 +431,7 @@ class RuleManagementTools:
 
         @mcp.tool()
         def hunt_with_rule_category(
-            platform: str,
-            category: str,
-            index: str,
-            timeframe_minutes: int = 15,
-            max_rules: int = 10
+            platform: str, category: str, index: str, timeframe_minutes: int = 15, max_rules: int = 10
         ) -> dict:
             """
             Execute all rules in a specific category for comprehensive hunting.
@@ -477,16 +459,12 @@ class RuleManagementTools:
                 )
             """
             # Find matching rules
-            rules = self.rule_loader.search_rules(
-                platform=platform,
-                log_source=category,
-                limit=min(max_rules, 25)
-            )
+            rules = self.rule_loader.search_rules(platform=platform, log_source=category, limit=min(max_rules, 25))
 
             if not rules:
                 return {
                     "error": f"No rules found for platform={platform}, category={category}",
-                    "suggestion": "Use get_rule_statistics() to see available platforms and categories"
+                    "suggestion": "Use get_rule_statistics() to see available platforms and categories",
                 }
 
             # Execute all rules
@@ -505,11 +483,7 @@ class RuleManagementTools:
             return all_results
 
         @mcp.tool()
-        def validate_rule_for_data(
-            rule_id: str,
-            index: str,
-            sample_size: int = 10
-        ) -> dict:
+        def validate_rule_for_data(rule_id: str, index: str, sample_size: int = 10) -> dict:
             """
             Validate if a detection rule is applicable to your data.
 
@@ -541,7 +515,7 @@ class RuleManagementTools:
             if not rule:
                 return {
                     "error": f"Rule not found: {rule_id}",
-                    "suggestion": "Use list_detection_rules() to find available rules"
+                    "suggestion": "Use list_detection_rules() to find available rules",
                 }
 
             # Analyze the rule query to extract expected fields/values
@@ -553,26 +527,25 @@ class RuleManagementTools:
             # Parse common patterns from Lucene queries
             if "winlog.channel:" in query.lower():
                 import re
-                channels = re.findall(r'winlog\.channel[:\s]+([^\s\)]+)', query, re.IGNORECASE)
+
+                channels = re.findall(r"winlog\.channel[:\s]+([^\s\)]+)", query, re.IGNORECASE)
                 expected_channels.extend(channels)
 
             if "event.code:" in query.lower():
                 import re
-                codes = re.findall(r'event\.code[:\s]+(\d+)', query, re.IGNORECASE)
+
+                codes = re.findall(r"event\.code[:\s]+(\d+)", query, re.IGNORECASE)
                 expected_event_codes.extend(codes)
 
             if "EventLog:" in query:
                 import re
-                logs = re.findall(r'EventLog[:\s]+([^\s\)]+)', query, re.IGNORECASE)
+
+                logs = re.findall(r"EventLog[:\s]+([^\s\)]+)", query, re.IGNORECASE)
                 expected_log_sources.extend(logs)
 
             # Sample data from the index to check compatibility
             try:
-                sample_result = self.search_client.search_with_lucene(
-                    index=index,
-                    lucene_query="*",
-                    size=sample_size
-                )
+                sample_result = self.search_client.search_with_lucene(index=index, lucene_query="*", size=sample_size)
 
                 data_channels = set()
                 data_event_codes = set()
@@ -605,29 +578,35 @@ class RuleManagementTools:
                 if expected_channels:
                     matching_channels = set(expected_channels) & data_channels
                     if not matching_channels:
-                        compatibility_issues.append({
-                            "issue": "Channel mismatch",
-                            "rule_expects": expected_channels,
-                            "data_has": list(data_channels)
-                        })
+                        compatibility_issues.append(
+                            {
+                                "issue": "Channel mismatch",
+                                "rule_expects": expected_channels,
+                                "data_has": list(data_channels),
+                            }
+                        )
 
                 if expected_event_codes:
                     matching_codes = set(expected_event_codes) & data_event_codes
                     if not matching_codes:
-                        compatibility_issues.append({
-                            "issue": "Event code mismatch",
-                            "rule_expects": expected_event_codes,
-                            "data_has": list(data_event_codes)
-                        })
+                        compatibility_issues.append(
+                            {
+                                "issue": "Event code mismatch",
+                                "rule_expects": expected_event_codes,
+                                "data_has": list(data_event_codes),
+                            }
+                        )
 
                 if expected_log_sources:
                     # Check if any expected log source is in data providers
                     if not any(ls.lower() in str(data_providers).lower() for ls in expected_log_sources):
-                        compatibility_issues.append({
-                            "issue": "Log source mismatch",
-                            "rule_expects": expected_log_sources,
-                            "data_providers": list(data_providers)
-                        })
+                        compatibility_issues.append(
+                            {
+                                "issue": "Log source mismatch",
+                                "rule_expects": expected_log_sources,
+                                "data_providers": list(data_providers),
+                            }
+                        )
 
                 is_compatible = len(compatibility_issues) == 0
 
@@ -637,45 +616,40 @@ class RuleManagementTools:
                         "name": rule.display_name,
                         "platform": rule.platform,
                         "log_source": rule.log_source,
-                        "type": rule.rule_type
+                        "type": rule.rule_type,
                     },
                     "compatibility": {
                         "likely_compatible": is_compatible,
-                        "issues": compatibility_issues if compatibility_issues else None
+                        "issues": compatibility_issues if compatibility_issues else None,
                     },
                     "data_analysis": {
                         "sample_size": len(events),
                         "channels_found": list(data_channels),
                         "event_codes_found": list(data_event_codes),
-                        "providers_found": list(data_providers)
+                        "providers_found": list(data_providers),
                     },
                     "rule_requirements": {
                         "expected_channels": expected_channels if expected_channels else None,
                         "expected_event_codes": expected_event_codes if expected_event_codes else None,
-                        "expected_log_sources": expected_log_sources if expected_log_sources else None
+                        "expected_log_sources": expected_log_sources if expected_log_sources else None,
                     },
                     "recommendations": [
                         "Ensure your data contains the required event types",
                         "Check if the log source matches your ingestion pipeline",
-                        f"For this rule, you may need: {rule.log_source} logs"
-                    ] if not is_compatible else ["Rule appears compatible with your data"]
+                        f"For this rule, you may need: {rule.log_source} logs",
+                    ]
+                    if not is_compatible
+                    else ["Rule appears compatible with your data"],
                 }
 
             except Exception as e:
                 return {
                     "error": f"Failed to analyze data: {str(e)}",
-                    "rule_info": {
-                        "rule_id": rule.rule_id,
-                        "name": rule.display_name,
-                        "log_source": rule.log_source
-                    }
+                    "rule_info": {"rule_id": rule.rule_id, "name": rule.display_name, "log_source": rule.log_source},
                 }
 
         @mcp.tool()
-        def suggest_rules_for_data(
-            index: str,
-            sample_size: int = 100
-        ) -> dict:
+        def suggest_rules_for_data(index: str, sample_size: int = 100) -> dict:
             """
             Analyze your data and suggest applicable detection rules.
 
@@ -698,11 +672,7 @@ class RuleManagementTools:
             """
             try:
                 # Sample data to understand its structure
-                sample_result = self.search_client.search_with_lucene(
-                    index=index,
-                    lucene_query="*",
-                    size=sample_size
-                )
+                sample_result = self.search_client.search_with_lucene(index=index, lucene_query="*", size=sample_size)
 
                 events = sample_result.get("response", {}).get("events", [])
                 if not events:
@@ -711,7 +681,7 @@ class RuleManagementTools:
                 if not events:
                     return {
                         "error": "No data found in the specified index",
-                        "suggestion": "Check if the index pattern is correct"
+                        "suggestion": "Check if the index pattern is correct",
                     }
 
                 # Analyze data characteristics
@@ -753,7 +723,7 @@ class RuleManagementTools:
                     "Microsoft-Windows-Sysmon/Operational": "sysmon",
                     "System": "builtin",
                     "Application": "builtin",
-                    "Microsoft-Windows-RPC": "rpc_firewall"
+                    "Microsoft-Windows-RPC": "rpc_firewall",
                 }
 
                 suggested_log_sources = set()
@@ -767,18 +737,16 @@ class RuleManagementTools:
                 # Get rules for suggested log sources
                 suggested_rules = []
                 for log_source in suggested_log_sources:
-                    rules = self.rule_loader.search_rules(
-                        platform=platform,
-                        log_source=log_source,
-                        limit=5
-                    )
+                    rules = self.rule_loader.search_rules(platform=platform, log_source=log_source, limit=5)
                     for rule in rules:
-                        suggested_rules.append({
-                            "rule_id": rule.rule_id,
-                            "name": rule.display_name,
-                            "log_source": rule.log_source,
-                            "mitre_tactics": list(rule.mitre_tactics)
-                        })
+                        suggested_rules.append(
+                            {
+                                "rule_id": rule.rule_id,
+                                "name": rule.display_name,
+                                "log_source": rule.log_source,
+                                "mitre_tactics": list(rule.mitre_tactics),
+                            }
+                        )
 
                 # Get MITRE coverage
                 mitre_coverage = set()
@@ -791,7 +759,7 @@ class RuleManagementTools:
                         "platform": platform,
                         "channels": dict(sorted(channels.items(), key=lambda x: -x[1])[:10]),
                         "event_codes": dict(sorted(event_codes.items(), key=lambda x: -x[1])[:10]),
-                        "providers": dict(sorted(providers.items(), key=lambda x: -x[1])[:10])
+                        "providers": dict(sorted(providers.items(), key=lambda x: -x[1])[:10]),
                     },
                     "suggested_log_sources": list(suggested_log_sources),
                     "suggested_rules": suggested_rules[:20],
@@ -800,12 +768,12 @@ class RuleManagementTools:
                     "tips": [
                         f"Your data appears to be from {platform} systems",
                         f"Found {len(channels)} different log channels",
-                        f"Suggested rules cover {len(mitre_coverage)} MITRE ATT&CK tactics"
-                    ]
+                        f"Suggested rules cover {len(mitre_coverage)} MITRE ATT&CK tactics",
+                    ],
                 }
 
             except Exception as e:
                 return {
                     "error": f"Failed to analyze data: {str(e)}",
-                    "suggestion": "Check if the index exists and contains data"
+                    "suggestion": "Check if the index exists and contains data",
                 }

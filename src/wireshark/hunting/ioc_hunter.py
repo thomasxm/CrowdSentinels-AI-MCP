@@ -1,5 +1,6 @@
 # src/wireshark/hunting/ioc_hunter.py
 """IoC-driven traffic filtering and hunting."""
+
 import logging
 import re
 from datetime import datetime
@@ -17,12 +18,7 @@ class IoCHunter:
         """Initialize IoC hunter."""
         self._compiled_patterns: dict[str, re.Pattern] = {}
 
-    def hunt_ips(
-        self,
-        ip_iocs: list[str],
-        connections: list[dict],
-        check_both_directions: bool = True
-    ) -> list[dict]:
+    def hunt_ips(self, ip_iocs: list[str], connections: list[dict], check_both_directions: bool = True) -> list[dict]:
         """Hunt for IP addresses in connection data.
 
         Args:
@@ -63,10 +59,7 @@ class IoCHunter:
         return matches
 
     def hunt_domains(
-        self,
-        domain_iocs: list[str],
-        dns_queries: list[dict],
-        include_subdomains: bool = True
+        self, domain_iocs: list[str], dns_queries: list[dict], include_subdomains: bool = True
     ) -> list[dict]:
         """Hunt for domains in DNS query data.
 
@@ -102,11 +95,7 @@ class IoCHunter:
 
         return matches
 
-    def hunt_hashes(
-        self,
-        hash_iocs: list[str],
-        file_transfers: list[dict]
-    ) -> list[dict]:
+    def hunt_hashes(self, hash_iocs: list[str], file_transfers: list[dict]) -> list[dict]:
         """Hunt for file hashes in transfer data.
 
         Args:
@@ -136,11 +125,7 @@ class IoCHunter:
 
         return matches
 
-    def hunt_user_agents(
-        self,
-        ua_patterns: list[str],
-        http_requests: list[dict]
-    ) -> list[dict]:
+    def hunt_user_agents(self, ua_patterns: list[str], http_requests: list[dict]) -> list[dict]:
         """Hunt for suspicious user agents in HTTP traffic.
 
         Args:
@@ -192,7 +177,7 @@ class IoCHunter:
         ip_iocs: list[str] | None = None,
         domain_iocs: list[str] | None = None,
         hash_iocs: list[str] | None = None,
-        executor=None
+        executor=None,
     ) -> dict[str, Any]:
         """Hunt for all IoC types in a PCAP file.
 
@@ -217,7 +202,7 @@ class IoCHunter:
             "domain_matches": 0,
             "hash_matches": 0,
             "total_matches": 0,
-            "unique_iocs_found": set()
+            "unique_iocs_found": set(),
         }
 
         # Hunt IPs
@@ -242,10 +227,7 @@ class IoCHunter:
         summary["unique_iocs_found"] = list(summary["unique_iocs_found"])
         summary["total_matches"] = len(all_matches)
 
-        return {
-            "matches": all_matches,
-            "summary": summary
-        }
+        return {"matches": all_matches, "summary": summary}
 
     def _extract_connections(self, pcap_path: str, executor) -> list[dict]:
         """Extract connection data from PCAP."""
@@ -253,19 +235,21 @@ class IoCHunter:
             pcap_path=pcap_path,
             fields=["ip.src", "ip.dst", "tcp.dstport", "udp.dstport", "frame.time_epoch"],
             display_filter="ip",
-            timeout=300
+            timeout=300,
         )
 
         connections = []
         for row in results:
             if row.get("ip.src") and row.get("ip.dst"):
-                connections.append({
-                    "src_ip": row["ip.src"],
-                    "dst_ip": row["ip.dst"],
-                    "dst_port": row.get("tcp.dstport") or row.get("udp.dstport"),
-                    "timestamp": row.get("frame.time_epoch"),
-                    "protocol": "tcp" if row.get("tcp.dstport") else "udp"
-                })
+                connections.append(
+                    {
+                        "src_ip": row["ip.src"],
+                        "dst_ip": row["ip.dst"],
+                        "dst_port": row.get("tcp.dstport") or row.get("udp.dstport"),
+                        "timestamp": row.get("frame.time_epoch"),
+                        "protocol": "tcp" if row.get("tcp.dstport") else "udp",
+                    }
+                )
 
         return connections
 
@@ -275,25 +259,23 @@ class IoCHunter:
             pcap_path=pcap_path,
             fields=["dns.qry.name", "ip.src", "frame.time_epoch"],
             display_filter="dns.flags.response == 0",
-            timeout=120
+            timeout=120,
         )
 
         queries = []
         for row in results:
             if row.get("dns.qry.name"):
-                queries.append({
-                    "query_name": row["dns.qry.name"],
-                    "src_ip": row.get("ip.src"),
-                    "timestamp": row.get("frame.time_epoch")
-                })
+                queries.append(
+                    {
+                        "query_name": row["dns.qry.name"],
+                        "src_ip": row.get("ip.src"),
+                        "timestamp": row.get("frame.time_epoch"),
+                    }
+                )
 
         return queries
 
-    def create_iocs_from_matches(
-        self,
-        matches: list[dict],
-        source_tool: str = "wireshark"
-    ) -> list[NetworkIoC]:
+    def create_iocs_from_matches(self, matches: list[dict], source_tool: str = "wireshark") -> list[NetworkIoC]:
         """Create NetworkIoC objects from hunt matches.
 
         Args:
@@ -336,7 +318,7 @@ class IoCHunter:
                 last_seen=now,
                 occurrence_count=1,
                 source_tool=source_tool,
-                context={"hunt_match": True}
+                context={"hunt_match": True},
             )
             iocs.append(ioc)
 

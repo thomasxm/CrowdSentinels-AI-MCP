@@ -10,6 +10,7 @@ from pydantic import BaseModel, Field
 
 class InvestigationStatus(str, Enum):
     """Investigation status enum."""
+
     ACTIVE = "active"
     PAUSED = "paused"
     CLOSED = "closed"
@@ -18,6 +19,7 @@ class InvestigationStatus(str, Enum):
 
 class Severity(str, Enum):
     """Severity level enum."""
+
     CRITICAL = "critical"
     HIGH = "high"
     MEDIUM = "medium"
@@ -28,6 +30,7 @@ class Severity(str, Enum):
 
 class IoCType(str, Enum):
     """IoC type enum."""
+
     IP = "ip"
     DOMAIN = "domain"
     HASH = "hash"
@@ -46,6 +49,7 @@ class IoCType(str, Enum):
 
 class SourceType(str, Enum):
     """Data source type enum."""
+
     ELASTICSEARCH = "elasticsearch"
     CHAINSAW = "chainsaw"
     WIRESHARK = "wireshark"
@@ -55,6 +59,7 @@ class SourceType(str, Enum):
 
 class IoCSource(BaseModel):
     """Source information for an IoC."""
+
     tool: str
     source_type: SourceType = SourceType.OTHER
     investigation_id: str | None = None
@@ -66,6 +71,7 @@ class IoCSource(BaseModel):
 
 class IoC(BaseModel):
     """Individual Indicator of Compromise."""
+
     id: str = Field(default_factory=lambda: f"ioc-{uuid.uuid4().hex[:8]}")
     type: IoCType
     value: str
@@ -122,6 +128,7 @@ class IoC(BaseModel):
 
 class IoCCollection(BaseModel):
     """Collection of IoCs for an investigation."""
+
     investigation_id: str
     extracted_at: datetime = Field(default_factory=datetime.utcnow)
     total_count: int = 0
@@ -169,14 +176,12 @@ class IoCCollection(BaseModel):
 
     def get_by_source(self, source: str) -> list[IoC]:
         """Get IoCs from a specific source/tool."""
-        return [
-            ioc for ioc in self.iocs
-            if any(s.tool == source for s in ioc.sources)
-        ]
+        return [ioc for ioc in self.iocs if any(s.tool == source for s in ioc.sources)]
 
 
 class TimelineEvent(BaseModel):
     """A significant event in the investigation timeline."""
+
     id: str = Field(default_factory=lambda: f"evt-{uuid.uuid4().hex[:8]}")
     timestamp: datetime
     event_type: str
@@ -194,6 +199,7 @@ class TimelineEvent(BaseModel):
 
 class SourceFindings(BaseModel):
     """Findings from a specific source/tool."""
+
     source: SourceType
     tool: str
     query_time: datetime = Field(default_factory=datetime.utcnow)
@@ -209,6 +215,7 @@ class SourceFindings(BaseModel):
 
 class InvestigationStatistics(BaseModel):
     """Statistics for an investigation."""
+
     total_iocs: int = 0
     total_events: int = 0
     affected_hosts: int = 0
@@ -220,6 +227,7 @@ class InvestigationStatistics(BaseModel):
 
 class InvestigationManifest(BaseModel):
     """Metadata manifest for a single investigation."""
+
     id: str
     name: str
     description: str = ""
@@ -244,6 +252,7 @@ class InvestigationManifest(BaseModel):
 
 class Investigation(BaseModel):
     """Complete investigation data structure."""
+
     manifest: InvestigationManifest
     iocs: IoCCollection
     timeline: list[TimelineEvent] = Field(default_factory=list)
@@ -277,9 +286,7 @@ class Investigation(BaseModel):
             existing.total_events += findings.total_events
             existing.iocs_extracted += findings.iocs_extracted
             existing.key_findings.extend(findings.key_findings)
-            existing.mitre_techniques = list(
-                set(existing.mitre_techniques + findings.mitre_techniques)
-            )
+            existing.mitre_techniques = list(set(existing.mitre_techniques + findings.mitre_techniques))
         else:
             self.source_findings[key] = findings
 
@@ -292,6 +299,7 @@ class Investigation(BaseModel):
 
 class IndexEntry(BaseModel):
     """Entry in the master index for quick lookup."""
+
     id: str
     name: str
     created_at: datetime
@@ -306,6 +314,7 @@ class IndexEntry(BaseModel):
 
 class MasterIndex(BaseModel):
     """Master index of all investigations."""
+
     version: str = "1.0.0"
     last_updated: datetime = Field(default_factory=datetime.utcnow)
     total_investigations: int = 0

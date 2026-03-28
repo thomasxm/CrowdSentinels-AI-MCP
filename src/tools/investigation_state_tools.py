@@ -44,9 +44,7 @@ class InvestigationStateTools:
 
         @mcp.tool()
         def list_investigations(
-            limit: int = 10,
-            status: str | None = None,
-            include_size: bool = False
+            limit: int = 10, status: str | None = None, include_size: bool = False
         ) -> dict[str, Any]:
             """
             List recent investigations with optional filtering.
@@ -71,6 +69,7 @@ class InvestigationStateTools:
             client = get_investigation_client()
 
             from src.storage.models import InvestigationStatus
+
             status_enum = None
             if status:
                 try:
@@ -78,30 +77,30 @@ class InvestigationStateTools:
                 except ValueError:
                     return {
                         "error": f"Invalid status: {status}",
-                        "valid_statuses": [s.value for s in InvestigationStatus]
+                        "valid_statuses": [s.value for s in InvestigationStatus],
                     }
 
             investigations = client.storage.list_investigations(
-                limit=limit,
-                status=status_enum,
-                include_size=include_size
+                limit=limit, status=status_enum, include_size=include_size
             )
 
             # Format for display
             inv_list = []
             for inv in investigations:
-                inv_list.append({
-                    "id": inv.id,
-                    "name": inv.name,
-                    "status": inv.status.value,
-                    "severity": inv.severity.value,
-                    "created_at": inv.created_at.isoformat(),
-                    "updated_at": inv.updated_at.isoformat(),
-                    "ioc_count": inv.ioc_count,
-                    "sources": inv.sources,
-                    "tags": inv.tags,
-                    "size_bytes": inv.size_bytes,
-                })
+                inv_list.append(
+                    {
+                        "id": inv.id,
+                        "name": inv.name,
+                        "status": inv.status.value,
+                        "severity": inv.severity.value,
+                        "created_at": inv.created_at.isoformat(),
+                        "updated_at": inv.updated_at.isoformat(),
+                        "ioc_count": inv.ioc_count,
+                        "sources": inv.sources,
+                        "tags": inv.tags,
+                        "size_bytes": inv.size_bytes,
+                    }
+                )
 
             return {
                 "investigations": inv_list,
@@ -112,10 +111,7 @@ class InvestigationStateTools:
 
         @mcp.tool()
         def create_investigation(
-            name: str,
-            description: str = "",
-            tags: list[str] | None = None,
-            severity: str = "medium"
+            name: str, description: str = "", tags: list[str] | None = None, severity: str = "medium"
         ) -> dict[str, Any]:
             """
             Create a new investigation and make it active.
@@ -150,10 +146,7 @@ class InvestigationStateTools:
             try:
                 sev = Severity(severity.lower())
             except ValueError:
-                return {
-                    "error": f"Invalid severity: {severity}",
-                    "valid_severities": [s.value for s in Severity]
-                }
+                return {"error": f"Invalid severity: {severity}", "valid_severities": [s.value for s in Severity]}
 
             investigation = client.create_investigation(
                 name=name,
@@ -169,7 +162,7 @@ class InvestigationStateTools:
                 "severity": investigation.manifest.severity.value,
                 "created_at": investigation.manifest.created_at.isoformat(),
                 "message": f"Investigation '{name}' created and activated",
-                "tip": "Use threat hunting tools to add findings, or add_iocs_to_investigation() for manual IoCs"
+                "tip": "Use threat hunting tools to add findings, or add_iocs_to_investigation() for manual IoCs",
             }
 
         @mcp.tool()
@@ -201,7 +194,7 @@ class InvestigationStateTools:
             if investigation is None:
                 return {
                     "error": f"Investigation not found: {investigation_id}",
-                    "tip": "Use list_investigations() to see available investigations"
+                    "tip": "Use list_investigations() to see available investigations",
                 }
 
             return {
@@ -216,14 +209,11 @@ class InvestigationStateTools:
                 "timeline_events": len(investigation.timeline),
                 "last_updated": investigation.manifest.updated_at.isoformat(),
                 "message": f"Investigation '{investigation.manifest.name}' resumed",
-                "tip": "Continue threat hunting or use get_investigation_summary() for details"
+                "tip": "Continue threat hunting or use get_investigation_summary() for details",
             }
 
         @mcp.tool()
-        def get_investigation_summary(
-            format: str = "detailed",
-            investigation_id: str | None = None
-        ) -> dict[str, Any]:
+        def get_investigation_summary(format: str = "detailed", investigation_id: str | None = None) -> dict[str, Any]:
             """
             Get a comprehensive summary of an investigation.
 
@@ -251,7 +241,7 @@ class InvestigationStateTools:
             if investigation is None:
                 return {
                     "error": "No active investigation",
-                    "tip": "Use create_investigation() or resume_investigation() first"
+                    "tip": "Use create_investigation() or resume_investigation() first",
                 }
 
             if format == "compact" or format == "detailed":
@@ -281,8 +271,7 @@ class InvestigationStateTools:
 
         @mcp.tool()
         def add_iocs_to_investigation(
-            iocs: list[dict[str, Any]],
-            investigation_id: str | None = None
+            iocs: list[dict[str, Any]], investigation_id: str | None = None
         ) -> dict[str, Any]:
             """
             Manually add IoCs to an investigation.
@@ -317,7 +306,7 @@ class InvestigationStateTools:
             if client.active_investigation is None:
                 return {
                     "error": "No active investigation",
-                    "tip": "Use create_investigation() or resume_investigation() first"
+                    "tip": "Use create_investigation() or resume_investigation() first",
                 }
 
             # Convert to IoC objects
@@ -333,11 +322,13 @@ class InvestigationStateTools:
                     value=ioc_data["value"],
                     tags=ioc_data.get("tags", []),
                     context=ioc_data.get("context", {}),
-                    sources=[IoCSource(
-                        tool="manual_add",
-                        source_type=SourceType.MANUAL,
-                        investigation_id=client.active_investigation_id,
-                    )]
+                    sources=[
+                        IoCSource(
+                            tool="manual_add",
+                            source_type=SourceType.MANUAL,
+                            investigation_id=client.active_investigation_id,
+                        )
+                    ],
                 )
                 ioc_objects.append(ioc)
 
@@ -349,7 +340,7 @@ class InvestigationStateTools:
                 "iocs_merged": len(iocs) - added,
                 "investigation_id": client.active_investigation_id,
                 "total_iocs": client.active_investigation.iocs.total_count,
-                "message": f"Added {added} new IoCs, merged {len(iocs) - added} duplicates"
+                "message": f"Added {added} new IoCs, merged {len(iocs) - added} duplicates",
             }
 
         @mcp.tool()
@@ -358,7 +349,7 @@ class InvestigationStateTools:
             min_priority: int = 1,
             sources: list[str] | None = None,
             active_only: bool = False,
-            limit: int = 100
+            limit: int = 100,
         ) -> dict[str, Any]:
             """
             Get IoCs shared across investigations and tools.
@@ -462,7 +453,7 @@ class InvestigationStateTools:
                     "sources": sources,
                     "active_only": active_only,
                 },
-                "tip": "Use these IoCs with hunt_for_ioc() or other threat hunting tools"
+                "tip": "Use these IoCs with hunt_for_ioc() or other threat hunting tools",
             }
 
         @mcp.tool()
@@ -470,7 +461,7 @@ class InvestigationStateTools:
             format: str = "json",
             ioc_types: list[str] | None = None,
             min_priority: int = 1,
-            investigation_id: str | None = None
+            investigation_id: str | None = None,
         ) -> dict[str, Any]:
             """
             Export IoCs from an investigation in various formats.
@@ -517,10 +508,7 @@ class InvestigationStateTools:
             return result
 
         @mcp.tool()
-        def close_investigation(
-            resolution: str = "",
-            investigation_id: str | None = None
-        ) -> dict[str, Any]:
+        def close_investigation(resolution: str = "", investigation_id: str | None = None) -> dict[str, Any]:
             """
             Close an investigation with a resolution summary.
 
@@ -545,10 +533,7 @@ class InvestigationStateTools:
                 client.resume_investigation(investigation_id)
 
             if client.active_investigation is None:
-                return {
-                    "error": "No active investigation to close",
-                    "tip": "Use resume_investigation() first"
-                }
+                return {"error": "No active investigation to close", "tip": "Use resume_investigation() first"}
 
             inv_id = client.active_investigation_id
             inv_name = client.active_investigation.manifest.name
@@ -567,14 +552,11 @@ class InvestigationStateTools:
                 "resolution": resolution,
                 "final_statistics": stats,
                 "message": f"Investigation '{inv_name}' closed",
-                "tip": "Use resume_investigation() to reopen if needed"
+                "tip": "Use resume_investigation() to reopen if needed",
             }
 
         @mcp.tool()
-        def cleanup_storage(
-            force: bool = False,
-            keep_count: int = 10
-        ) -> dict[str, Any]:
+        def cleanup_storage(force: bool = False, keep_count: int = 10) -> dict[str, Any]:
             """
             Cleanup investigation storage and enforce size limits.
 
@@ -609,7 +591,7 @@ class InvestigationStateTools:
                 "investigations_deleted": results["deleted"],
                 "investigations_compacted": list(results["compacted"].keys()),
                 "storage_stats": client.get_storage_stats(),
-                "message": f"Freed {results['bytes_freed']} bytes"
+                "message": f"Freed {results['bytes_freed']} bytes",
             }
 
         @mcp.tool()
@@ -652,5 +634,5 @@ class InvestigationStateTools:
                 ],
                 "shared_iocs_available": len(shared),
                 "storage_stats": client.get_storage_stats(),
-                "tip": "Use resume_investigation() to continue a previous investigation"
+                "tip": "Use resume_investigation() to continue a previous investigation",
             }

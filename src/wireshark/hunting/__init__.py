@@ -1,4 +1,5 @@
 """Threat hunting modules for network analysis."""
+
 from src.wireshark.hunting.anomaly_detector import AnomalyDetector
 from src.wireshark.hunting.beaconing_detector import BeaconingDetector
 from src.wireshark.hunting.ioc_hunter import IoCHunter

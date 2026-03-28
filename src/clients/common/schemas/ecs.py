@@ -15,7 +15,7 @@ ECS_SCHEMA = LogSourceSchema(
     schema_id="ecs",
     source_type=LogSourceType.ECS,
     description="Elastic Common Schema compliant logs from Elastic Agent, "
-                "Endpoint Security, or other ECS-normalised sources.",
+    "Endpoint Security, or other ECS-normalised sources.",
     index_patterns=[
         "logs-endpoint.*",
         "logs-endpoint.events.*",
@@ -67,9 +67,8 @@ ECS_SCHEMA = LogSourceSchema(
                 "hash_md5": "process.hash.md5",
                 "code_signature_subject_name": "process.code_signature.subject_name",
                 "code_signature_status": "process.code_signature.status",
-            }
+            },
         ),
-
         "process_terminate": EventTypeDefinition(
             event_code="end",
             description="Process ended",
@@ -81,9 +80,8 @@ ECS_SCHEMA = LogSourceSchema(
                 "process_entity_id": "process.entity_id",
                 "exit_code": "process.exit_code",
                 "user": "user.name",
-            }
+            },
         ),
-
         # Network events
         "network_connection": EventTypeDefinition(
             event_code="connection",
@@ -104,9 +102,8 @@ ECS_SCHEMA = LogSourceSchema(
                 "network_transport": "network.transport",
                 "network_protocol": "network.protocol",
                 "user": "user.name",
-            }
+            },
         ),
-
         # DNS events
         "dns_query": EventTypeDefinition(
             event_code="lookup",
@@ -121,9 +118,8 @@ ECS_SCHEMA = LogSourceSchema(
                 "resolved_ip": "dns.resolved_ip",
                 "answers": "dns.answers",
                 "response_code": "dns.response_code",
-            }
+            },
         ),
-
         # File events
         "file_create": EventTypeDefinition(
             event_code="creation",
@@ -139,9 +135,8 @@ ECS_SCHEMA = LogSourceSchema(
                 "file_size": "file.size",
                 "file_hash_sha256": "file.hash.sha256",
                 "user": "user.name",
-            }
+            },
         ),
-
         "file_modify": EventTypeDefinition(
             event_code="modification",
             description="File modified",
@@ -154,9 +149,8 @@ ECS_SCHEMA = LogSourceSchema(
                 "file_name": "file.name",
                 "previous_hash": "file.hash.sha256",
                 "user": "user.name",
-            }
+            },
         ),
-
         "file_delete": EventTypeDefinition(
             event_code="deletion",
             description="File deleted",
@@ -168,9 +162,8 @@ ECS_SCHEMA = LogSourceSchema(
                 "target_filename": "file.path",
                 "file_name": "file.name",
                 "user": "user.name",
-            }
+            },
         ),
-
         # Registry events (Windows)
         "registry_modification": EventTypeDefinition(
             event_code="modification",
@@ -185,9 +178,8 @@ ECS_SCHEMA = LogSourceSchema(
                 "registry_value": "registry.value",
                 "registry_data": "registry.data.strings",
                 "user": "user.name",
-            }
+            },
         ),
-
         # Authentication events
         "authentication_success": EventTypeDefinition(
             event_code="authentication_success",
@@ -199,9 +191,8 @@ ECS_SCHEMA = LogSourceSchema(
                 "user_id": "user.id",
                 "source_ip": "source.ip",
                 "source_port": "source.port",
-            }
+            },
         ),
-
         "authentication_failure": EventTypeDefinition(
             event_code="authentication_failure",
             description="Failed authentication",
@@ -211,9 +202,8 @@ ECS_SCHEMA = LogSourceSchema(
                 "user_domain": "user.domain",
                 "source_ip": "source.ip",
                 "failure_reason": "event.reason",
-            }
+            },
         ),
-
         # Library/module loading
         "library_load": EventTypeDefinition(
             event_code="library_loaded",
@@ -228,7 +218,7 @@ ECS_SCHEMA = LogSourceSchema(
                 "hash_sha256": "dll.hash.sha256",
                 "code_signature_subject": "dll.code_signature.subject_name",
                 "user": "user.name",
-            }
+            },
         ),
-    }
+    },
 )

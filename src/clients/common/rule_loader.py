@@ -1,4 +1,5 @@
 """Rule Loader for Lucene and EQL Detection Rules."""
+
 import logging
 import sys
 
@@ -57,13 +58,15 @@ class DetectionRule:
     def display_name(self) -> str:
         """Generate a human-readable display name."""
         # Convert underscores to spaces and title case
-        return self.name.replace('_', ' ').title()
+        return self.name.replace("_", " ").title()
 
-    def matches_filter(self,
-                      platform: str | None = None,
-                      log_source: str | None = None,
-                      rule_type: str | None = None,
-                      search_term: str | None = None) -> bool:
+    def matches_filter(
+        self,
+        platform: str | None = None,
+        log_source: str | None = None,
+        rule_type: str | None = None,
+        search_term: str | None = None,
+    ) -> bool:
         """Check if this rule matches the given filters."""
         if platform and self.platform.lower() != platform.lower():
             return False
@@ -78,11 +81,15 @@ class DetectionRule:
             search_term = search_term.lower()
             # Search in name, tags, query, platform, log_source
             searchable = (
-                self.name.lower() + " " +
-                self.platform.lower() + " " +
-                self.log_source.lower() + " " +
-                self.category.lower() + " " +
-                " ".join(self.tags).lower()
+                self.name.lower()
+                + " "
+                + self.platform.lower()
+                + " "
+                + self.log_source.lower()
+                + " "
+                + self.category.lower()
+                + " "
+                + " ".join(self.tags).lower()
             )
             if search_term not in searchable:
                 return False
@@ -96,8 +103,9 @@ class RuleLoader:
     # Languages accepted from TOML detection rules
     TOML_ALLOWED_LANGUAGES = {"eql", "esql"}
 
-    def __init__(self, rules_directory: str, hunting_directory: str | None = None,
-                 toml_rules_directory: str | None = None):
+    def __init__(
+        self, rules_directory: str, hunting_directory: str | None = None, toml_rules_directory: str | None = None
+    ):
         """
         Initialise the rule loader.
 
@@ -128,7 +136,7 @@ class RuleLoader:
             "collection": ["collection", "clipboard", "screenshot", "keylog"],
             "command_and_control": ["c2", "beacon", "callback", "tunnel"],
             "exfiltration": ["exfil", "upload", "transfer", "compress"],
-            "impact": ["impact", "delete", "encrypt", "ransom", "wipe"]
+            "impact": ["impact", "delete", "encrypt", "ransom", "wipe"],
         }
 
     def load_all_rules(self) -> int:
@@ -245,16 +253,16 @@ class RuleLoader:
             rule = DetectionRule(
                 rule_id=rule_id,
                 name=name,
-                rule_type='eql',
+                rule_type="eql",
                 query=query.strip(),
                 platform=platform,
-                log_source='hunting',
-                category='threat_hunting',
+                log_source="hunting",
+                category="threat_hunting",
                 file_path=str(toml_file),
-                tags={'hunting', 'elastic', platform},
+                tags={"hunting", "elastic", platform},
                 mitre_tactics=self._extract_tactics_from_mitre(mitre),
                 mitre_techniques=set(mitre),
-                notes=notes
+                notes=notes,
             )
 
             rules.append(rule)
@@ -270,17 +278,17 @@ class RuleLoader:
         SQL/OSQuery starts with: select
         """
         q = query.strip().lower()
-        eql_prefixes = ('process ', 'file ', 'network ', 'registry ', 'any ', 'sequence ')
+        eql_prefixes = ("process ", "file ", "network ", "registry ", "any ", "sequence ")
         return q.startswith(eql_prefixes)
 
     def _detect_hunting_platform(self, toml_file: Path) -> str:
         """Detect platform from hunting file path."""
-        platforms = {'linux', 'windows', 'macos', 'aws', 'azure', 'okta', 'llm', 'cross-platform'}
+        platforms = {"linux", "windows", "macos", "aws", "azure", "okta", "llm", "cross-platform"}
         parts = toml_file.parts
         for part in parts:
             if part.lower() in platforms:
                 return part.lower()
-        return 'unknown'
+        return "unknown"
 
     def _extract_tactics_from_mitre(self, mitre_ids: list[str]) -> set[str]:
         """Extract MITRE tactics from technique IDs using keyword heuristics."""
@@ -288,21 +296,21 @@ class RuleLoader:
 
         # Common technique to tactic mappings
         technique_tactics = {
-            'T1053': 'persistence',  # Scheduled Task
-            'T1059': 'execution',  # Command and Scripting Interpreter
-            'T1071': 'command_and_control',  # Application Layer Protocol
-            'T1105': 'command_and_control',  # Ingress Tool Transfer
-            'T1547': 'persistence',  # Boot or Logon Autostart Execution
-            'T1543': 'persistence',  # Create or Modify System Process
-            'T1070': 'defense_evasion',  # Indicator Removal
-            'T1552': 'credential_access',  # Unsecured Credentials
-            'T1083': 'discovery',  # File and Directory Discovery
-            'T1204': 'execution',  # User Execution
+            "T1053": "persistence",  # Scheduled Task
+            "T1059": "execution",  # Command and Scripting Interpreter
+            "T1071": "command_and_control",  # Application Layer Protocol
+            "T1105": "command_and_control",  # Ingress Tool Transfer
+            "T1547": "persistence",  # Boot or Logon Autostart Execution
+            "T1543": "persistence",  # Create or Modify System Process
+            "T1070": "defense_evasion",  # Indicator Removal
+            "T1552": "credential_access",  # Unsecured Credentials
+            "T1083": "discovery",  # File and Directory Discovery
+            "T1204": "execution",  # User Execution
         }
 
         for technique in mitre_ids:
             # Get base technique (e.g., T1059 from T1059.001)
-            base = technique.split('.')[0] if '.' in technique else technique
+            base = technique.split(".")[0] if "." in technique else technique
             if base in technique_tactics:
                 tactics.add(technique_tactics[base])
 
@@ -362,9 +370,7 @@ class RuleLoader:
         log_source = integrations[0] if integrations else "elastic"
 
         # Extract MITRE from structured [[rule.threat]] sections
-        mitre_tactics, mitre_techniques = self._extract_mitre_from_threat(
-            rule_data.get("threat", [])
-        )
+        mitre_tactics, mitre_techniques = self._extract_mitre_from_threat(rule_data.get("threat", []))
 
         # Build tags
         tags = set()
@@ -402,8 +408,13 @@ class RuleLoader:
     def _detect_toml_platform(self, toml_file: Path, tags: list) -> str:
         """Detect platform from TOML rule directory structure or tags."""
         known_platforms = {
-            "windows", "linux", "macos", "cross-platform",
-            "network", "ml", "integrations",
+            "windows",
+            "linux",
+            "macos",
+            "cross-platform",
+            "network",
+            "ml",
+            "integrations",
         }
         for part in toml_file.parts:
             if part.lower() in known_platforms:
@@ -448,7 +459,7 @@ class RuleLoader:
         """Load a single rule file and parse its metadata."""
         # Read the rule query
         try:
-            with open(file_path, encoding='utf-8') as f:
+            with open(file_path, encoding="utf-8") as f:
                 query = f.read().strip()
         except Exception as e:
             self.logger.error(f"Failed to read {file_path}: {e}")
@@ -460,7 +471,7 @@ class RuleLoader:
 
         # Parse filename: platform__log_source__category__rule_name.type
         filename = file_path.stem  # Remove extension
-        parts = filename.split('__')
+        parts = filename.split("__")
 
         if len(parts) < 3:
             self.logger.warning(f"Invalid filename format: {file_path.name}")
@@ -491,7 +502,7 @@ class RuleLoader:
 
         # Extract additional tags from rule name
         # Common patterns: win_, lnx_, proc_, posh_, etc.
-        name_parts = rule_name.split('_')
+        name_parts = rule_name.split("_")
         for part in name_parts:
             if len(part) > 2:  # Skip very short parts
                 tags.add(part)
@@ -506,7 +517,7 @@ class RuleLoader:
             log_source=log_source,
             category=category,
             file_path=str(file_path),
-            tags=tags
+            tags=tags,
         )
 
         # Map to MITRE ATT&CK tactics based on keywords
@@ -548,13 +559,15 @@ class RuleLoader:
         """Get a specific rule by ID."""
         return self.rules.get(rule_id)
 
-    def search_rules(self,
-                    platform: str | None = None,
-                    log_source: str | None = None,
-                    rule_type: str | None = None,
-                    search_term: str | None = None,
-                    mitre_tactic: str | None = None,
-                    limit: int = 100) -> list[DetectionRule]:
+    def search_rules(
+        self,
+        platform: str | None = None,
+        log_source: str | None = None,
+        rule_type: str | None = None,
+        search_term: str | None = None,
+        mitre_tactic: str | None = None,
+        limit: int = 100,
+    ) -> list[DetectionRule]:
         """
         Search for rules matching the given criteria.
 
@@ -600,20 +613,11 @@ class RuleLoader:
         """Get statistics about loaded rules."""
         return {
             "total_rules": len(self.rules),
-            "by_platform": {
-                platform: len(rule_ids)
-                for platform, rule_ids in self.rules_by_platform.items()
-            },
-            "by_type": {
-                rule_type: len(rule_ids)
-                for rule_type, rule_ids in self.rules_by_type.items()
-            },
-            "by_log_source": {
-                log_source: len(rule_ids)
-                for log_source, rule_ids in self.rules_by_log_source.items()
-            },
+            "by_platform": {platform: len(rule_ids) for platform, rule_ids in self.rules_by_platform.items()},
+            "by_type": {rule_type: len(rule_ids) for rule_type, rule_ids in self.rules_by_type.items()},
+            "by_log_source": {log_source: len(rule_ids) for log_source, rule_ids in self.rules_by_log_source.items()},
             "platforms": list(self.rules_by_platform.keys()),
-            "log_sources": list(self.rules_by_log_source.keys())
+            "log_sources": list(self.rules_by_log_source.keys()),
         }
 
     def get_rules_by_platform(self, platform: str) -> list[DetectionRule]:
@@ -623,7 +627,4 @@ class RuleLoader:
 
     def get_rules_by_mitre_tactic(self, tactic: str) -> list[DetectionRule]:
         """Get all rules mapped to a specific MITRE ATT&CK tactic."""
-        return [
-            rule for rule in self.rules.values()
-            if tactic.lower() in rule.mitre_tactics
-        ]
+        return [rule for rule in self.rules.values() if tactic.lower() in rule.mitre_tactics]

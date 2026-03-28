@@ -153,10 +153,7 @@ class StorageManager:
                 break
 
             # Skip if it's the only active investigation
-            active_count = len([
-                inv for inv in self.index.investigations
-                if inv.status == InvestigationStatus.ACTIVE
-            ])
+            active_count = len([inv for inv in self.index.investigations if inv.status == InvestigationStatus.ACTIVE])
             if active_count <= 1 and oldest.status == InvestigationStatus.ACTIVE:
                 logger.warning("Cannot delete: only one active investigation remaining")
                 break
@@ -184,10 +181,7 @@ class StorageManager:
         deleted = []
 
         # Sort by updated_at ascending
-        sorted_inv = sorted(
-            self.index.investigations,
-            key=lambda x: x.updated_at
-        )
+        sorted_inv = sorted(self.index.investigations, key=lambda x: x.updated_at)
 
         for entry in sorted_inv[:count]:
             if self.delete_investigation(entry.id):
@@ -262,9 +256,7 @@ class StorageManager:
             Dict mapping investigation_id to bytes saved
         """
         results = {}
-        cutoff_date = datetime.utcnow() - timedelta(
-            days=self.config.storage.compact_after_days
-        )
+        cutoff_date = datetime.utcnow() - timedelta(days=self.config.storage.compact_after_days)
 
         for entry in self.index.investigations:
             if entry.updated_at < cutoff_date:
@@ -281,15 +273,14 @@ class StorageManager:
 
         return {
             "current_usage_bytes": current_usage,
-            "current_usage_gb": round(current_usage / (1024 ** 3), 2),
+            "current_usage_gb": round(current_usage / (1024**3), 2),
             "max_size_bytes": max_size,
-            "max_size_gb": round(max_size / (1024 ** 3), 2),
+            "max_size_gb": round(max_size / (1024**3), 2),
             "usage_percent": round((current_usage / max_size) * 100, 1) if max_size > 0 else 0,
             "total_investigations": self.index.total_investigations,
-            "active_investigations": len([
-                inv for inv in self.index.investigations
-                if inv.status == InvestigationStatus.ACTIVE
-            ]),
+            "active_investigations": len(
+                [inv for inv in self.index.investigations if inv.status == InvestigationStatus.ACTIVE]
+            ),
             "storage_path": str(self.config.base_path),
         }
 
@@ -307,10 +298,7 @@ class StorageManager:
         return size
 
     def list_investigations(
-        self,
-        limit: int = 10,
-        status: InvestigationStatus | None = None,
-        include_size: bool = False
+        self, limit: int = 10, status: InvestigationStatus | None = None, include_size: bool = False
     ) -> list[IndexEntry]:
         """
         List investigations with optional filtering.

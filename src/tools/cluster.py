@@ -6,6 +6,7 @@ from fastmcp import FastMCP
 class ClusterTools:
     def __init__(self, search_client):
         self.search_client = search_client
+
     def register_tools(self, mcp: FastMCP):
         @mcp.tool()
         def get_cluster_health() -> dict:

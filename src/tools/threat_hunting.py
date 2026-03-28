@@ -11,9 +11,9 @@ class ThreatHuntingTools:
 
     def register_tools(self, mcp: FastMCP):
         @mcp.tool()
-        def hunt_by_timeframe(index: str, attack_types: list[str],
-                             start_time: str, end_time: str | None = None,
-                             host: str | None = None) -> dict:
+        def hunt_by_timeframe(
+            index: str, attack_types: list[str], start_time: str, end_time: str | None = None, host: str | None = None
+        ) -> dict:
             """
             Hunt for specific attack patterns within a timeframe.
             This tool automatically searches for common attack indicators based on
@@ -48,11 +48,7 @@ class ThreatHuntingTools:
                 )
             """
             result = self.search_client.hunt_by_timeframe(
-                index=index,
-                attack_types=attack_types,
-                start_time=start_time,
-                end_time=end_time,
-                host=host
+                index=index, attack_types=attack_types, start_time=start_time, end_time=end_time, host=host
             )
 
             # Auto-capture IoCs to active investigation
@@ -63,8 +59,7 @@ class ThreatHuntingTools:
             )
 
         @mcp.tool()
-        def analyze_failed_logins(index: str, timeframe_minutes: int = 15,
-                                  threshold: int = 5) -> dict:
+        def analyze_failed_logins(index: str, timeframe_minutes: int = 15, threshold: int = 5) -> dict:
             """
             Analyze failed login attempts to detect potential brute force attacks.
             This tool aggregates failed login events (Event ID 4625) and identifies
@@ -85,9 +80,7 @@ class ThreatHuntingTools:
                 failed login attempts from various source IPs.
             """
             result = self.search_client.analyze_failed_logins(
-                index=index,
-                timeframe_minutes=timeframe_minutes,
-                threshold=threshold
+                index=index, timeframe_minutes=timeframe_minutes, threshold=threshold
             )
 
             # Auto-capture IoCs to active investigation
@@ -98,8 +91,9 @@ class ThreatHuntingTools:
             )
 
         @mcp.tool()
-        def analyze_process_creation(index: str, timeframe_minutes: int = 60,
-                                    process_filter: list[str] | None = None) -> dict:
+        def analyze_process_creation(
+            index: str, timeframe_minutes: int = 60, process_filter: list[str] | None = None
+        ) -> dict:
             """
             Analyze process creation events (Event ID 4688) for suspicious activity.
             This is crucial for detecting malicious process execution and LOLBins usage.
@@ -118,9 +112,7 @@ class ThreatHuntingTools:
                 (Living Off the Land Binaries), or unusual process hierarchies.
             """
             result = self.search_client.analyze_process_creation(
-                index=index,
-                timeframe_minutes=timeframe_minutes,
-                process_filter=process_filter
+                index=index, timeframe_minutes=timeframe_minutes, process_filter=process_filter
             )
 
             # Auto-capture IoCs to active investigation
@@ -131,8 +123,7 @@ class ThreatHuntingTools:
             )
 
         @mcp.tool()
-        def hunt_for_ioc(index: str, ioc: str, ioc_type: str,
-                        timeframe_minutes: int | None = None) -> dict:
+        def hunt_for_ioc(index: str, ioc: str, ioc_type: str, timeframe_minutes: int | None = None) -> dict:
             """
             Hunt for a specific Indicator of Compromise (IoC) across logs.
             This tool searches multiple fields based on the IoC type.
@@ -167,10 +158,7 @@ class ThreatHuntingTools:
                 - Network/host artifacts (medium-hard)
             """
             result = self.search_client.hunt_for_ioc(
-                index=index,
-                ioc=ioc,
-                ioc_type=ioc_type,
-                timeframe_minutes=timeframe_minutes
+                index=index, ioc=ioc, ioc_type=ioc_type, timeframe_minutes=timeframe_minutes
             )
 
             # Auto-capture IoCs to active investigation
@@ -181,8 +169,7 @@ class ThreatHuntingTools:
             )
 
         @mcp.tool()
-        def get_host_activity_timeline(index: str, hostname: str,
-                                       start_time: str, end_time: str | None = None) -> dict:
+        def get_host_activity_timeline(index: str, hostname: str, start_time: str, end_time: str | None = None) -> dict:
             """
             Get a complete timeline of all activity for a specific host.
             This is essential for forensic analysis and incident investigation.
@@ -202,10 +189,7 @@ class ThreatHuntingTools:
                 network connections, and other security events.
             """
             result = self.search_client.get_host_activity_timeline(
-                index=index,
-                hostname=hostname,
-                start_time=start_time,
-                end_time=end_time
+                index=index, hostname=hostname, start_time=start_time, end_time=end_time
             )
 
             # Auto-capture IoCs to active investigation (with timeline extraction)
@@ -217,9 +201,9 @@ class ThreatHuntingTools:
             )
 
         @mcp.tool()
-        def search_with_lucene(index: str, lucene_query: str,
-                              timeframe_minutes: int | None = None,
-                              size: int = 100) -> dict:
+        def search_with_lucene(
+            index: str, lucene_query: str, timeframe_minutes: int | None = None, size: int = 100
+        ) -> dict:
             """
             Execute a Lucene query string search for flexible threat hunting.
             Use this for custom queries that don't fit predefined patterns.
@@ -251,10 +235,7 @@ class ThreatHuntingTools:
                 or follow-up investigations.
             """
             result = self.search_client.search_with_lucene(
-                index=index,
-                lucene_query=lucene_query,
-                timeframe_minutes=timeframe_minutes,
-                size=size
+                index=index, lucene_query=lucene_query, timeframe_minutes=timeframe_minutes, size=size
             )
 
             # Auto-capture IoCs to active investigation
@@ -265,10 +246,9 @@ class ThreatHuntingTools:
             )
 
         @mcp.tool()
-        def hunt_by_kill_chain_stage(index: str, stage: str,
-                                     timeframe_minutes: int = 60,
-                                     host: str | None = None,
-                                     size: int = 100) -> dict:
+        def hunt_by_kill_chain_stage(
+            index: str, stage: str, timeframe_minutes: int = 60, host: str | None = None, size: int = 100
+        ) -> dict:
             """
             Hunt for indicators of a specific Cyber Kill Chain stage.
 
@@ -341,7 +321,7 @@ class ThreatHuntingTools:
             )
 
             # Find the matching stage
-            stage_upper = stage.upper().replace(' ', '_')
+            stage_upper = stage.upper().replace(" ", "_")
             kill_chain_stage = None
 
             for kc_stage in KillChainStage:
@@ -353,7 +333,7 @@ class ThreatHuntingTools:
                 return {
                     "error": f"Invalid stage: {stage}",
                     "valid_stages": [s.name for s in KillChainStage],
-                    "tip": "Use get_kill_chain_overview() to see all valid stages"
+                    "tip": "Use get_kill_chain_overview() to see all valid stages",
                 }
 
             # Get hunting queries for this stage
@@ -365,7 +345,7 @@ class ThreatHuntingTools:
                     "stage": stage_info.name,
                     "message": f"No hunting queries available for {stage_info.name} stage",
                     "description": stage_info.description,
-                    "indicators": stage_info.indicators
+                    "indicators": stage_info.indicators,
                 }
 
             # Execute each hunting query for this stage
@@ -373,14 +353,14 @@ class ThreatHuntingTools:
                 "kill_chain_stage": {
                     "number": kill_chain_stage.value,
                     "name": stage_info.name,
-                    "description": stage_info.description
+                    "description": stage_info.description,
                 },
                 "timeframe_minutes": timeframe_minutes,
                 "index": index,
                 "host_filter": host,
                 "hunting_results": {},
                 "total_hits": 0,
-                "queries_executed": len(hunting_queries)
+                "queries_executed": len(hunting_queries),
             }
 
             for query_name, lucene_query in hunting_queries.items():
@@ -392,29 +372,25 @@ class ThreatHuntingTools:
 
                     # Execute the query
                     query_result = self.search_client.search_with_lucene(
-                        index=index,
-                        lucene_query=final_query,
-                        timeframe_minutes=timeframe_minutes,
-                        size=size
+                        index=index, lucene_query=final_query, timeframe_minutes=timeframe_minutes, size=size
                     )
 
                     results["hunting_results"][query_name] = {
                         "query": final_query,
                         "total_hits": query_result.get("total_hits", 0),
-                        "events": query_result.get("events", [])[:10]  # Limit to 10 events
+                        "events": query_result.get("events", [])[:10],  # Limit to 10 events
                     }
 
                     results["total_hits"] += query_result.get("total_hits", 0)
 
                 except Exception as e:
-                    results["hunting_results"][query_name] = {
-                        "query": final_query,
-                        "error": str(e)
-                    }
+                    results["hunting_results"][query_name] = {"query": final_query, "error": str(e)}
 
             # Add recommendations
             if results["total_hits"] > 0:
-                results["assessment"] = f"⚠ Found {results['total_hits']} potential indicators of {stage_info.name} stage"
+                results["assessment"] = (
+                    f"⚠ Found {results['total_hits']} potential indicators of {stage_info.name} stage"
+                )
                 results["recommendation"] = "Review findings and hunt for adjacent stages using hunt_adjacent_stages()"
             else:
                 results["assessment"] = f"✓ No indicators of {stage_info.name} found in this timeframe"
@@ -427,14 +403,16 @@ class ThreatHuntingTools:
                 query_description=f"Kill chain hunt: {stage} stage in {index}",
             )
 
-        def _hunt_stage(index: str, stage: str, timeframe_minutes: int = 60,
-                        host: str | None = None, size: int = 100) -> dict:
+        def _hunt_stage(
+            index: str, stage: str, timeframe_minutes: int = 60, host: str | None = None, size: int = 100
+        ) -> dict:
             """Internal helper: execute kill chain stage hunt without MCP wrapper."""
             from src.clients.common.cyber_kill_chain import (
                 CyberKillChainClient,
                 KillChainStage,
             )
-            stage_upper = stage.upper().replace(' ', '_')
+
+            stage_upper = stage.upper().replace(" ", "_")
             kill_chain_stage = None
             for kc_stage in KillChainStage:
                 if kc_stage.name == stage_upper:
@@ -458,8 +436,10 @@ class ThreatHuntingTools:
                 try:
                     final_query = f"({lucene_query}) AND host.name:{host}" if host else lucene_query
                     qr = self.search_client.search_with_lucene(
-                        index=index, lucene_query=final_query,
-                        timeframe_minutes=timeframe_minutes, size=size,
+                        index=index,
+                        lucene_query=final_query,
+                        timeframe_minutes=timeframe_minutes,
+                        size=size,
                     )
                     hits = qr.get("total_hits", 0)
                     results["hunting_results"][query_name] = {"total_hits": hits}
@@ -474,11 +454,14 @@ class ThreatHuntingTools:
             return results
 
         @mcp.tool()
-        def hunt_adjacent_stages(index: str, current_stage: str,
-                                timeframe_minutes: int = 120,
-                                hunt_previous: bool = True,
-                                hunt_next: bool = True,
-                                host: str | None = None) -> dict:
+        def hunt_adjacent_stages(
+            index: str,
+            current_stage: str,
+            timeframe_minutes: int = 120,
+            hunt_previous: bool = True,
+            hunt_next: bool = True,
+            host: str | None = None,
+        ) -> dict:
             """
             Hunt for IoCs in stages adjacent to the current attack stage.
 
@@ -550,7 +533,7 @@ class ThreatHuntingTools:
             )
 
             # Find the matching stage
-            stage_upper = current_stage.upper().replace(' ', '_')
+            stage_upper = current_stage.upper().replace(" ", "_")
             kill_chain_stage = None
 
             for kc_stage in KillChainStage:
@@ -559,10 +542,7 @@ class ThreatHuntingTools:
                     break
 
             if not kill_chain_stage:
-                return {
-                    "error": f"Invalid stage: {current_stage}",
-                    "valid_stages": [s.name for s in KillChainStage]
-                }
+                return {"error": f"Invalid stage: {current_stage}", "valid_stages": [s.name for s in KillChainStage]}
 
             # Get adjacent stages
             adjacent = CyberKillChainClient.get_adjacent_stages(kill_chain_stage)
@@ -572,20 +552,20 @@ class ThreatHuntingTools:
                 "current_stage": {
                     "number": kill_chain_stage.value,
                     "name": current_info.name,
-                    "description": current_info.description
+                    "description": current_info.description,
                 },
                 "timeframe_minutes": timeframe_minutes,
                 "index": index,
                 "host_filter": host,
                 "previous_stage_hunt": None,
                 "next_stage_hunt": None,
-                "attack_progression_analysis": {}
+                "attack_progression_analysis": {},
             }
 
             # Hunt for previous stage (how did they get to current stage?)
             # Use _hunt_stage helper to avoid calling the MCP-decorated wrapper
-            if hunt_previous and adjacent['previous']:
-                prev_stage_name = adjacent['previous'].name
+            if hunt_previous and adjacent["previous"]:
+                prev_stage_name = adjacent["previous"].name
                 print(f"Hunting for previous stage: {prev_stage_name}")
 
                 prev_hunt = _hunt_stage(
@@ -599,13 +579,13 @@ class ThreatHuntingTools:
                     "stage": prev_hunt.get("kill_chain_stage"),
                     "total_hits": prev_hunt.get("total_hits", 0),
                     "assessment": prev_hunt.get("assessment"),
-                    "hunting_results": prev_hunt.get("hunting_results", {})
+                    "hunting_results": prev_hunt.get("hunting_results", {}),
                 }
 
             # Hunt for next stage (what are they doing next?)
             # Use _hunt_stage helper to avoid calling the MCP-decorated wrapper
-            if hunt_next and adjacent['next']:
-                next_stage_name = adjacent['next'].name
+            if hunt_next and adjacent["next"]:
+                next_stage_name = adjacent["next"].name
                 print(f"Hunting for next stage: {next_stage_name}")
 
                 next_hunt = _hunt_stage(
@@ -619,7 +599,7 @@ class ThreatHuntingTools:
                     "stage": next_hunt.get("kill_chain_stage"),
                     "total_hits": next_hunt.get("total_hits", 0),
                     "assessment": next_hunt.get("assessment"),
-                    "hunting_results": next_hunt.get("hunting_results", {})
+                    "hunting_results": next_hunt.get("hunting_results", {}),
                 }
 
             # Analyze attack progression
@@ -636,7 +616,7 @@ class ThreatHuntingTools:
             results["attack_progression_analysis"] = {
                 "stages_with_activity": stages_with_activity,
                 "progression_complete": len(stages_with_activity) >= 2,
-                "attack_maturity": f"{len(stages_with_activity)}/3 adjacent stages show activity"
+                "attack_maturity": f"{len(stages_with_activity)}/3 adjacent stages show activity",
             }
 
             # Provide recommendations
@@ -644,16 +624,24 @@ class ThreatHuntingTools:
 
             if results.get("previous_stage_hunt"):
                 if results["previous_stage_hunt"]["total_hits"] > 0:
-                    recommendations.append(f"✓ Previous stage ({results['previous_stage_hunt']['stage']['name']}) shows activity - initial access vector identified")
+                    recommendations.append(
+                        f"✓ Previous stage ({results['previous_stage_hunt']['stage']['name']}) shows activity - initial access vector identified"
+                    )
                 else:
-                    recommendations.append(f"⚠ No evidence of {results['previous_stage_hunt']['stage']['name']} - hunt further back or expand timeframe")
+                    recommendations.append(
+                        f"⚠ No evidence of {results['previous_stage_hunt']['stage']['name']} - hunt further back or expand timeframe"
+                    )
 
             if results.get("next_stage_hunt"):
                 if results["next_stage_hunt"]["total_hits"] > 0:
-                    recommendations.append(f"🚨 CRITICAL: Next stage ({results['next_stage_hunt']['stage']['name']}) shows activity - attack has progressed!")
+                    recommendations.append(
+                        f"🚨 CRITICAL: Next stage ({results['next_stage_hunt']['stage']['name']}) shows activity - attack has progressed!"
+                    )
                     recommendations.append("Immediate action required to prevent further progression")
                 else:
-                    recommendations.append(f"✓ No evidence of {results['next_stage_hunt']['stage']['name']} yet - opportunity to prevent progression")
+                    recommendations.append(
+                        f"✓ No evidence of {results['next_stage_hunt']['stage']['name']} yet - opportunity to prevent progression"
+                    )
                     recommendations.append("Implement preventive controls before they advance")
 
             results["recommendations"] = recommendations

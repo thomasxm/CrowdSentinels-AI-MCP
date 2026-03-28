@@ -1,4 +1,5 @@
 """MCP Tools for Investigation Prompts - Triage Questions for SIEM/SOAR."""
+
 from fastmcp import FastMCP
 
 
@@ -16,10 +17,7 @@ class InvestigationPromptsTools:
 
     def register_tools(self, mcp: FastMCP):
         @mcp.tool()
-        def show_investigation_prompts(
-            platform: str | None = None,
-            show_details: bool = False
-        ) -> dict:
+        def show_investigation_prompts(platform: str | None = None, show_details: bool = False) -> dict:
             """
             Display investigation triage questions for SIEM/SOAR.
 
@@ -65,14 +63,14 @@ class InvestigationPromptsTools:
                         "focus_areas": prompt.focus_areas,
                         "log_sources": prompt.log_sources,
                         "elasticsearch_fields": prompt.elasticsearch_fields,
-                        "mitre_tactics": prompt.mitre_tactics
+                        "mitre_tactics": prompt.mitre_tactics,
                     }
                 else:
                     formatted_prompts[prompt_id] = {
                         "priority": prompt.priority,
                         "platform": prompt.platform.upper(),
                         "question": prompt.question,
-                        "description": prompt.description
+                        "description": prompt.description,
                     }
 
             # Group by platform
@@ -86,15 +84,12 @@ class InvestigationPromptsTools:
                 "linux_prompts": linux_prompts,
                 "windows_prompts": windows_prompts,
                 "usage_tip": "Use start_guided_investigation() to begin investigating with these prompts",
-                "execution_tip": "Use investigate_with_prompt() to execute a specific prompt against your logs"
+                "execution_tip": "Use investigate_with_prompt() to execute a specific prompt against your logs",
             }
 
         @mcp.tool()
         def start_guided_investigation(
-            platform: str,
-            index: str,
-            timeframe_minutes: int = 60,
-            host: str | None = None
+            platform: str, index: str, timeframe_minutes: int = 60, host: str | None = None
         ) -> dict:
             """
             Start a guided investigation with all triage prompts for a platform.
@@ -138,7 +133,7 @@ class InvestigationPromptsTools:
             if not prompts:
                 return {
                     "error": f"No prompts found for platform: {platform}",
-                    "available_platforms": ["linux", "windows"]
+                    "available_platforms": ["linux", "windows"],
                 }
 
             # Build additional filters
@@ -153,7 +148,7 @@ class InvestigationPromptsTools:
                 "timeframe_minutes": timeframe_minutes,
                 "host_filter": host,
                 "total_prompts": len(prompts),
-                "investigation_results": []
+                "investigation_results": [],
             }
 
             total_findings = 0
@@ -164,7 +159,7 @@ class InvestigationPromptsTools:
                     index=index,
                     timeframe_minutes=timeframe_minutes,
                     size=50,  # Limit to 50 events per prompt
-                    additional_filters=additional_filters
+                    additional_filters=additional_filters,
                 )
 
                 if "error" not in result:
@@ -190,7 +185,7 @@ class InvestigationPromptsTools:
             size: int = 100,
             host: str | None = None,
             username: str | None = None,
-            source_ip: str | None = None
+            source_ip: str | None = None,
         ) -> dict:
             """
             Execute a specific investigation prompt against Elasticsearch.
@@ -253,7 +248,7 @@ class InvestigationPromptsTools:
                 index=index,
                 timeframe_minutes=timeframe_minutes,
                 size=min(size, 500),
-                additional_filters=additional_filters
+                additional_filters=additional_filters,
             )
 
             return result
@@ -289,7 +284,7 @@ class InvestigationPromptsTools:
             if not prompt:
                 return {
                     "error": f"Prompt not found: {prompt_id}",
-                    "tip": "Use show_investigation_prompts() to see available prompts"
+                    "tip": "Use show_investigation_prompts() to see available prompts",
                 }
 
             return {
@@ -303,16 +298,12 @@ class InvestigationPromptsTools:
                 "elasticsearch_fields": prompt.elasticsearch_fields,
                 "focus_areas": prompt.focus_areas,
                 "mitre_tactics": prompt.mitre_tactics,
-                "usage": f"investigate_with_prompt(prompt_id='{prompt.id}', index='your-index-*')"
+                "usage": f"investigate_with_prompt(prompt_id='{prompt.id}', index='your-index-*')",
             }
 
         @mcp.tool()
         def quick_triage(
-            platform: str,
-            index: str,
-            host: str,
-            timeframe_minutes: int = 60,
-            top_n_prompts: int = 3
+            platform: str, index: str, host: str, timeframe_minutes: int = 60, top_n_prompts: int = 3
         ) -> dict:
             """
             Quick triage: Run top N priority prompts for fast initial assessment.
@@ -353,14 +344,11 @@ class InvestigationPromptsTools:
 
             # Get top priority prompts
             prompts = InvestigationPromptsClient.get_prompts_by_priority(
-                platform=platform,
-                max_priority=min(top_n_prompts, 5)
+                platform=platform, max_priority=min(top_n_prompts, 5)
             )
 
             if not prompts:
-                return {
-                    "error": f"No prompts found for platform: {platform}"
-                }
+                return {"error": f"No prompts found for platform: {platform}"}
 
             results = {
                 "triage_type": "QUICK TRIAGE",
@@ -368,7 +356,7 @@ class InvestigationPromptsTools:
                 "host": host,
                 "timeframe_minutes": timeframe_minutes,
                 "prompts_executed": len(prompts),
-                "findings": []
+                "findings": [],
             }
 
             total_hits = 0
@@ -379,7 +367,7 @@ class InvestigationPromptsTools:
                     index=index,
                     timeframe_minutes=timeframe_minutes,
                     size=20,  # Quick triage - limited results
-                    additional_filters={"host.name": host}
+                    additional_filters={"host.name": host},
                 )
 
                 if "error" not in result:
@@ -387,21 +375,27 @@ class InvestigationPromptsTools:
                     total_hits += hits
 
                     if hits > 0:
-                        results["findings"].append({
-                            "priority": prompt.priority,
-                            "question": prompt.question,
-                            "hits": hits,
-                            "top_events": result.get("events", [])[:5],  # Show top 5
-                            "prompt_id": prompt.id
-                        })
+                        results["findings"].append(
+                            {
+                                "priority": prompt.priority,
+                                "question": prompt.question,
+                                "hits": hits,
+                                "top_events": result.get("events", [])[:5],  # Show top 5
+                                "prompt_id": prompt.id,
+                            }
+                        )
 
             results["total_findings"] = total_hits
 
             if total_hits == 0:
                 results["assessment"] = "✓ CLEAR - No immediate threats detected"
-                results["recommendation"] = "Host appears clean for this timeframe. Consider running full investigation if suspicious activity suspected."
+                results["recommendation"] = (
+                    "Host appears clean for this timeframe. Consider running full investigation if suspicious activity suspected."
+                )
             else:
                 results["assessment"] = f"⚠ ALERT - {total_hits} suspicious events found"
-                results["recommendation"] = "Review findings and run start_guided_investigation() for comprehensive analysis."
+                results["recommendation"] = (
+                    "Review findings and run start_guided_investigation() for comprehensive analysis."
+                )
 
             return results
