@@ -39,6 +39,44 @@ repos:
             .*\.pyc
           )$
 
+  # shellcheck — static analysis for shell scripts
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.10.0.1
+    hooks:
+      - id: shellcheck
+        name: shellcheck (shell script lint)
+        args: [--severity=warning, --shell=bash, -e, SC2155, -e, SC1090]
+        exclude: |
+          (?x)^(
+            detection-rules/.*|
+            skills/.*|
+            \.venv/.*|
+            \.trees/.*
+          )$
+
+  # actionlint — GitHub Actions workflow linter
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.7
+    hooks:
+      - id: actionlint
+        name: actionlint (GitHub Actions lint)
+
+  # yamllint — YAML best-practice linter (complements check-yaml syntax check)
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.35.1
+    hooks:
+      - id: yamllint
+        name: yamllint (YAML style)
+        args: [-c, .yamllint.yml]
+        exclude: |
+          (?x)^(
+            detection-rules/.*|
+            \.venv/.*|
+            \.trees/.*|
+            rules/.*|
+            uv\.lock
+          )$
+
   # Standard pre-commit hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
@@ -51,3 +89,12 @@ repos:
       - id: check-added-large-files
         args: [--maxkb=500]
       - id: check-merge-conflict
+
+  # pip-audit — dependency vulnerability scanning (network required, pre-push only)
+  - repo: https://github.com/pypa/pip-audit
+    rev: v2.7.3
+    hooks:
+      - id: pip-audit
+        name: pip-audit (dependency CVE scan)
+        args: [--desc, --output, columns]
+        stages: [pre-push]

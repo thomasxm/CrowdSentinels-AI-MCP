@@ -1,0 +1,55 @@
+---
+# yamllint configuration for CrowdSentinel
+# Complements check-yaml (syntax) with style and best-practice checks.
+
+extends: default
+
+rules:
+  # Line length: disabled.
+  # Nuclei templates contain intentional long payload lines (1000+ chars),
+  # GitHub Actions workflows have long run: blocks, and docker-compose
+  # files have long environment strings.
+  line-length: disable
+
+  # Truthy values: allow only true/false (YAML 1.2 style).
+  # check-keys: false prevents flagging "on:" as a truthy key.
+  truthy:
+    allowed-values: ["true", "false"]
+    check-keys: false
+
+  # Indentation: 2 spaces, consistent with all existing project YAML.
+  indentation:
+    spaces: 2
+    indent-sequences: whatever
+    check-multi-line-strings: false
+
+  # Comments: require a space after #.
+  comments:
+    require-starting-space: true
+    ignore-shebangs: true
+    min-spaces-from-content: 1
+
+  # Braces and brackets: allow inline flow mappings/sequences.
+  braces:
+    min-spaces-inside: 0
+    max-spaces-inside: 1
+  brackets:
+    min-spaces-inside: 0
+    max-spaces-inside: 0
+
+  # Document markers: do not require --- at start of every file.
+  document-start: disable
+
+  # Empty lines: allow up to 2 consecutive blank lines.
+  empty-lines:
+    max: 2
+    max-start: 0
+    max-end: 1
+
+  # New line at end of file.
+  new-line-at-end-of-file: enable
+
+  # Octal values: forbid old-style octals (0777 vs 0o777).
+  octal-values:
+    forbid-implicit-octal: true
+    forbid-explicit-octal: false
