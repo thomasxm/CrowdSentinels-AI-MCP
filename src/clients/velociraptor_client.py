@@ -106,6 +106,34 @@ def _sanitize_result_scope(value: str) -> str:
     return value
 
 
+def _sanitize_parameters(value: str) -> str:
+    """Sanitize a VQL env dict parameters string.
+
+    Validates that the string consists of comma-separated key='value' pairs
+    where keys are identifiers and values are single-quoted strings containing
+    only safe characters. Rejects anything that could inject VQL.
+
+    Examples of valid input:
+        "ProcessRegex='.'"
+        "IPRegex='.',PortRegex='^443$'"
+        ""  (empty)
+    """
+    if not value:
+        return value
+    # Each parameter must be: identifier = 'safe_value'
+    # Split on comma, validate each pair
+    for pair in value.split(","):
+        pair = pair.strip()
+        if not pair:
+            continue
+        if not re.match(r"^[A-Za-z_][A-Za-z0-9_]*='[^']*'$", pair):
+            raise ValueError(
+                f"Invalid parameter format: {pair!r}. "
+                "Expected key='value' with no embedded quotes."
+            )
+    return value
+
+
 def _sanitize_drive(value: str) -> str:
     """Sanitize a drive letter (e.g. C:)."""
     if not re.match(r"^[A-Za-z]:$", value):
@@ -235,6 +263,7 @@ class VelociraptorClient:
         artifact = _sanitize_artifact(artifact)
         result_scope = _sanitize_result_scope(result_scope)
         fields = _sanitize_fields(fields)
+        parameters = _sanitize_parameters(parameters)
 
         env_dict = f"dict({parameters})" if parameters else "dict()"
         vql = (
@@ -273,6 +302,7 @@ class VelociraptorClient:
         """
         client_id = _sanitize_client_id(client_id)
         artifact = _sanitize_artifact(artifact)
+        parameters = _sanitize_parameters(parameters)
 
         env_dict = f"dict({parameters})" if parameters else "dict()"
         vql = (

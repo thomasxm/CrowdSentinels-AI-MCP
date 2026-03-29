@@ -171,14 +171,12 @@ class SmartSearchTools:
                 timeframe_minutes=timeframe_minutes,
                 search_after=search_after,
             )
-            # Normalize for auto-capture: smart_search returns {"hits": [flat list]}
-            # but add_findings expects {"hits": {"hits": [...]}} or {"events": [...]}
-            # Move flat hits to events key and remove ambiguous hits key
-            capture_data = {k: v for k, v in result.items() if k != "hits"}
+            # Add events key for auto-capture (add_findings checks "events" for non-nested formats)
+            # Preserve original "hits" key to honour the documented return contract
             if "hits" in result and isinstance(result["hits"], list):
-                capture_data["events"] = result["hits"]
+                result["events"] = result["hits"]
             return auto_capture_elasticsearch_results(
-                capture_data, "smart_search", f"smart_search: {query} in {index}", extract_timeline=True
+                result, "smart_search", f"smart_search: {query} in {index}", extract_timeline=True
             )
 
         @mcp.tool()
@@ -255,12 +253,11 @@ class SmartSearchTools:
                 search_after=search_after,
                 agg_bucket_size=agg_bucket_size,
             )
-            # Normalize for auto-capture: threat_hunt_search uses "sample_events"
-            capture_data = {**result}
-            if "sample_events" in capture_data and isinstance(capture_data["sample_events"], list):
-                capture_data["events"] = capture_data["sample_events"]
+            # Add events key for auto-capture, preserve original keys
+            if "sample_events" in result and isinstance(result["sample_events"], list):
+                result["events"] = result["sample_events"]
             return auto_capture_elasticsearch_results(
-                capture_data, "threat_hunt_search", f"threat_hunt_search: {query} in {index}", extract_timeline=True
+                result, "threat_hunt_search", f"threat_hunt_search: {query} in {index}", extract_timeline=True
             )
 
         @mcp.tool()

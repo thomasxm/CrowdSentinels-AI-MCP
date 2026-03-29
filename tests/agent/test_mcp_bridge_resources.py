@@ -37,14 +37,20 @@ def _make_mock_server_with_resources(resource_map: dict[str, str]) -> MagicMock:
 
     mcp.get_resources = mock_get_resources
 
-    # Mock _resource_manager.read_resource (async, returns content)
-    async def mock_read_resource(uri):
-        if uri in resource_map:
-            return resource_map[uri]
-        raise ValueError(f"Unknown resource: {uri}")
+    # Mock get_resource (async, returns Resource with async read())
+    async def mock_get_resource(uri):
+        if uri not in resource_map:
+            raise ValueError(f"Unknown resource: {uri}")
+        resource = MagicMock()
+        content = resource_map[uri]
 
-    mcp._resource_manager = MagicMock()
-    mcp._resource_manager.read_resource = mock_read_resource
+        async def mock_read():
+            return content
+
+        resource.read = mock_read
+        return resource
+
+    mcp.get_resource = mock_get_resource
 
     server.mcp = mcp
     return server
@@ -135,20 +141,15 @@ class TestMCPBridgeResourceReading:
 
     def test_read_resource_handles_dict_content(self):
         """Should JSON-serialize dict content."""
-        server = _make_mock_server_with_resources({})
+        dict_content = {"key": "value", "nested": {"a": 1}}
+        server = _make_mock_server_with_resources({
+            "crowdsentinel://data": dict_content,
+        })
         bridge = MCPBridge(server, [])
         bridge.start()
 
-        # Manually populate registry and mock a dict return
-        mock_resource = MagicMock()
-        bridge._resource_registry["crowdsentinel://data"] = ("crowdsentinel", mock_resource)
-
-        async def mock_read(uri):
-            return {"key": "value", "nested": {"a": 1}}
-
-        server.mcp._resource_manager.read_resource = mock_read
-
         result = bridge.read_resource("crowdsentinel://data")
+        # Dict content gets JSON-serialized
         parsed = json.loads(result)
         assert parsed["key"] == "value"
 

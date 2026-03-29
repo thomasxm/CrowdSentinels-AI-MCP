@@ -191,9 +191,13 @@ class MCPBridge:
 
         mcp = self._cs_server.mcp
 
+        async def _read():
+            resource = await mcp.get_resource(uri)
+            return await resource.read()
+
         loop = asyncio.new_event_loop()
         try:
-            content = loop.run_until_complete(mcp._resource_manager.read_resource(uri))
+            content = loop.run_until_complete(_read())
         finally:
             loop.close()
 

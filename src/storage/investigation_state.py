@@ -553,8 +553,16 @@ class InvestigationStateClient:
 
         # Get events from results
         if source_type == SourceType.ELASTICSEARCH:
-            events = results.get("hits", {}).get("hits", [])
-            events = [e.get("_source", {}) for e in events]
+            # Standard ES format: {"hits": {"hits": [{"_source": {...}}, ...]}}
+            nested_hits = results.get("hits", {})
+            if isinstance(nested_hits, dict):
+                events = nested_hits.get("hits", [])
+                events = [e.get("_source", {}) for e in events]
+            else:
+                events = []
+            # Fall through to "events" key for normalised formats (e.g. smart_search)
+            if not events:
+                events = results.get("events", [])
         elif source_type == SourceType.CHAINSAW:
             events = results.get("detections", [])
         elif source_type == SourceType.VELOCIRAPTOR:
