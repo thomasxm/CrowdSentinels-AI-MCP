@@ -243,6 +243,15 @@ class SearchMCPServer:
         schema_tools = SchemaTools(self.search_client)
         schema_tools.register_tools(self.mcp)
 
+        # Register DFIR Knowledge Resources
+        # Exposes data sources, IoC reference (Pyramid of Pain), and
+        # cross-correlation playbooks as MCP resources for connected agents
+        self.logger.info("Registering DFIR Knowledge Resources")
+        from src.tools.dfir_resources import DFIRResources
+
+        dfir_resources = DFIRResources()
+        dfir_resources.register_tools(self.mcp)
+
 
 def run_search_server(engine_type, transport, host, port, path):
     """Run search server with specified engine type and transport options.

@@ -105,8 +105,32 @@ def run_agent(
             server_name = bridge._tool_registry[name][0]
         tool_names_by_server.setdefault(server_name, []).append(name)
 
+    # Load key resources for agent context (investigation knowledge)
+    resource_content: dict[str, str] = {}
+    key_resources = [
+        "crowdsentinel://investigation-workflow",
+        "crowdsentinel://ioc-reference",
+        "crowdsentinel://cross-correlation-playbooks",
+    ]
+    # Add Velociraptor guide if available
+    available_uris = {r["uri"] for r in bridge.list_resources()}
+    if "crowdsentinel://velociraptor-guide" in available_uris:
+        key_resources.append("crowdsentinel://velociraptor-guide")
+
+    for uri in key_resources:
+        if uri in available_uris:
+            try:
+                content = bridge.read_resource(uri)
+                if content and not content.startswith('{"error"'):
+                    resource_content[uri] = content
+            except Exception as e:
+                logger.warning("Failed to load resource %s: %s", uri, e)
+
+    if resource_content:
+        _stderr(f"[agent] Loaded {len(resource_content)} knowledge resources")
+
     # Build prompts
-    system_prompt = build_system_prompt(tool_names_by_server)
+    system_prompt = build_system_prompt(tool_names_by_server, resource_content)
     user_message = build_user_message(hunt_data, context)
 
     # Convert tool schemas to provider format

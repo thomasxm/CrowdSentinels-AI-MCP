@@ -58,8 +58,23 @@ Your FINAL response must be valid JSON with this structure:
 """
 
 
-def build_system_prompt(tool_names_by_server: dict[str, list[str]]) -> str:
-    """Build the system prompt with available tool inventory."""
+def build_system_prompt(
+    tool_names_by_server: dict[str, list[str]],
+    resource_content: dict[str, str] | None = None,
+) -> str:
+    """Build the system prompt with available tool inventory and resource knowledge.
+
+    Args:
+        tool_names_by_server: Tool names grouped by server source.
+        resource_content: Optional dict of resource URI -> content to inject
+            as reference knowledge for the agent.
+
+    Returns:
+        Complete system prompt string.
+    """
+    parts = [SYSTEM_PROMPT]
+
+    # Tool inventory
     tools_section = "\n## Available Tools\n"
     for server, names in tool_names_by_server.items():
         tools_section += f"\n**{server}** ({len(names)} tools):\n"
@@ -67,8 +82,25 @@ def build_system_prompt(tool_names_by_server: dict[str, list[str]]) -> str:
         for i in range(0, len(names), 4):
             chunk = names[i : i + 4]
             tools_section += "  " + ", ".join(chunk) + "\n"
+    parts.append(tools_section)
 
-    return SYSTEM_PROMPT + tools_section
+    # Resource knowledge (injected as reference sections)
+    if resource_content:
+        parts.append("\n## Investigation Reference Knowledge\n")
+        parts.append("The following reference data is available from MCP resources.\n")
+        for uri, content in resource_content.items():
+            # Use the last path segment as a readable title
+            title = uri.split("://")[-1].replace("-", " ").replace("/", " — ").title()
+            parts.append(f"\n### {title}\n")
+            # Truncate very large resources to avoid context overflow
+            if len(content) > 8000:
+                parts.append(content[:8000])
+                parts.append("\n... (truncated — use tools for full details)\n")
+            else:
+                parts.append(content)
+            parts.append("")
+
+    return "\n".join(parts)
 
 
 def build_user_message(hunt_data: dict[str, Any], context: str) -> str:

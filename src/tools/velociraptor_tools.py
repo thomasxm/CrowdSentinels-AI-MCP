@@ -20,6 +20,86 @@ from src.storage.auto_capture import auto_capture_velociraptor_results
 
 logger = logging.getLogger(__name__)
 
+VELOCIRAPTOR_GUIDE = """
+# Velociraptor Endpoint Forensics Guide
+
+## Prerequisites
+- `VELOCIRAPTOR_API_CONFIG` env var must point to your `api_client.yaml`
+- Target endpoint must have a Velociraptor agent installed and connected
+
+## Workflow: Always Start with velociraptor_client_info
+Every investigation starts by resolving a hostname to a `client_id`:
+```
+result = velociraptor_client_info(hostname="WORKSTATION01")
+client_id = result["client_id"]  # e.g. "C.abc123def456"
+```
+
+## Artifact Reference
+
+### Evidence of Execution
+| Tool | Artifact | Forensic Question | Key IoCs | Reliability |
+|------|----------|-------------------|----------|-------------|
+| `velociraptor_prefetch` | Windows.Forensics.Prefetch | Was this program ever executed? | process, hash | High (run count + timestamps) |
+| `velociraptor_amcache` | Windows.Detection.Amcache | SHA1 and metadata of executables? | hash, file_path | High (SHA1 + publisher) |
+| `velociraptor_shimcache` | Windows.Registry.AppCompatCache | Was this file path seen by the OS? | file_path | Medium (no execution proof) |
+| `velociraptor_userassist` | Windows.Registry.UserAssist | Did a user interactively launch this? | process, user | High (user-specific, with count) |
+| `velociraptor_bam` | Windows.Forensics.Bam | Background execution evidence? | process, file_path | Medium (Win10+ only) |
+
+### Persistence Mechanisms
+| Tool | Artifact | Forensic Question | Key IoCs |
+|------|----------|-------------------|----------|
+| `velociraptor_services` | Windows.System.Services | Suspicious services installed? | service, hash, file_path |
+| `velociraptor_scheduled_tasks` | Windows.System.TaskScheduler | Suspicious scheduled tasks? | commandline, file_path |
+
+### Live State
+| Tool | Artifact | Forensic Question | Key IoCs |
+|------|----------|-------------------|----------|
+| `velociraptor_pslist` | Windows/Linux.Sys.Pslist | What is currently running? | process, commandline, user |
+| `velociraptor_netstat` | Windows/Linux.Network.NetstatEnriched | Active network connections? | ip, process |
+| `velociraptor_users` | Windows/Linux.Sys.Users | What user accounts exist? | user |
+| `velociraptor_groups` | Linux.Sys.Groups | What groups exist? | user |
+| `velociraptor_mounts` | Linux.Mounts | What filesystems are mounted? | file_path |
+
+### User Activity
+| Tool | Artifact | Forensic Question | Key IoCs |
+|------|----------|-------------------|----------|
+| `velociraptor_shellbags` | Windows.Forensics.Shellbags | What folders did the user browse? | file_path, registry_key |
+| `velociraptor_recentdocs` | Windows.Registry.RecentDocs | What documents were recently accessed? | file_path |
+| `velociraptor_evidence_of_download` | Windows.Analysis.EvidenceOfDownload | What files were downloaded? | url, hash, file_path |
+
+### Filesystem Forensics
+| Tool | Artifact | Forensic Question | Key IoCs |
+|------|----------|-------------------|----------|
+| `velociraptor_ntfs_mft` | Windows.NTFS.MFT | Does this file exist? Timeline? Timestomped? | file_path, hash |
+
+### Generic Collection
+| Tool | Purpose |
+|------|---------|
+| `velociraptor_collect_artifact` | Start any artifact collection (returns flow_id) |
+| `velociraptor_get_collection_results` | Retrieve results from async collection |
+| `velociraptor_list_artifacts` | Discover all available artifacts for Windows/Linux |
+
+---
+
+## Decision Tree: "I found X in SIEM, what do I check on the endpoint?"
+
+- **Suspicious process name** -> `velociraptor_pslist` (still running?), `velociraptor_prefetch` (executed before?), `velociraptor_amcache` (hash?)
+- **Suspicious IP connection** -> `velociraptor_netstat` (active connection?), `velociraptor_evidence_of_download` (downloaded from that IP?)
+- **Persistence alert** -> `velociraptor_services` + `velociraptor_scheduled_tasks`
+- **User compromise** -> `velociraptor_userassist` (what they ran), `velociraptor_shellbags` (where they browsed), `velociraptor_recentdocs` (what they opened)
+- **File on disk** -> `velociraptor_ntfs_mft` (exists? timestamps? timestomped?)
+- **Unknown artifact needed** -> `velociraptor_list_artifacts` to discover, then `velociraptor_collect_artifact`
+
+## SIEM Pivot Patterns (Endpoint -> SIEM)
+
+After collecting endpoint data, pivot to SIEM for fleet-wide visibility:
+- **SHA1 from Amcache** -> `hunt_for_ioc(ioc_type="hash")` — find same binary on other hosts
+- **Binary name from Prefetch** -> `hunt_for_ioc(ioc_type="process")` — lateral movement detection
+- **Remote IPs from Netstat** -> `hunt_for_ioc(ioc_type="ip")` — broader C2 activity
+- **Download URLs** -> `hunt_for_ioc(ioc_type="domain")` — identify other victims
+- **Service DLL hash** -> `hunt_for_ioc(ioc_type="hash")` — persistence across fleet
+"""
+
 
 class VelociraptorTools:
     """MCP tools for Velociraptor forensic artifact collection.
@@ -62,6 +142,19 @@ class VelociraptorTools:
 
     def register_tools(self, mcp: FastMCP):
         tools_instance = self
+
+        # MCP Resource: Velociraptor investigation guide
+        @mcp.resource("crowdsentinel://velociraptor-guide")
+        def get_velociraptor_guide():
+            """
+            Velociraptor endpoint forensics reference guide.
+
+            Read this resource to understand which Velociraptor artifact
+            answers which forensic question, how to pivot from SIEM findings
+            to endpoint validation, and the decision tree for choosing
+            the right artifact collection tool.
+            """
+            return VELOCIRAPTOR_GUIDE
 
         @mcp.tool()
         async def velociraptor_client_info(hostname: str) -> dict:
