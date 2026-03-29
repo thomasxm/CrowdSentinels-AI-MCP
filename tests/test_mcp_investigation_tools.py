@@ -31,13 +31,13 @@ def test_investigation_state_tools():
     config = setup_test_environment()
 
     # Import after setting config
-    # Reset the global client
-    import src.tools.investigation_state_tools as tools_module
+    # Reset the shared singleton (now lives in auto_capture)
+    import src.storage.auto_capture as auto_capture_module
     from src.tools.investigation_state_tools import (
         get_investigation_client,
     )
 
-    tools_module._investigation_client = None
+    auto_capture_module._client = None
 
     client = get_investigation_client()
 
@@ -131,7 +131,7 @@ def test_investigation_state_tools():
     client.save_state()
 
     # Reset client to simulate new session
-    tools_module._investigation_client = None
+    auto_capture_module._client = None
     client2 = get_investigation_client()
 
     loaded = client2.load_investigation(inv_id)

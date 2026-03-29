@@ -11,7 +11,7 @@ from typing import Any
 
 from fastmcp import FastMCP
 
-from src.storage.investigation_state import InvestigationStateClient
+from src.storage.auto_capture import get_client as get_investigation_client
 from src.storage.models import (
     IoC,
     IoCSource,
@@ -19,17 +19,6 @@ from src.storage.models import (
     Severity,
     SourceType,
 )
-
-# Global client instance (singleton for session)
-_investigation_client: InvestigationStateClient | None = None
-
-
-def get_investigation_client() -> InvestigationStateClient:
-    """Get or create the investigation state client singleton."""
-    global _investigation_client
-    if _investigation_client is None:
-        _investigation_client = InvestigationStateClient()
-    return _investigation_client
 
 
 class InvestigationStateTools:

@@ -138,7 +138,7 @@ class VelociraptorTools:
             "source": "velociraptor",
             "tool": tool_name,
         }
-        return auto_capture_velociraptor_results(wrapped, tool_name, description)
+        return auto_capture_velociraptor_results(wrapped, tool_name, description, extract_timeline=True)
 
     def register_tools(self, mcp: FastMCP):
         tools_instance = self
