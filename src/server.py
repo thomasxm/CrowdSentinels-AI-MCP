@@ -1,5 +1,6 @@
 import argparse
 import logging
+import os
 import sys
 
 from fastmcp import FastMCP
@@ -207,6 +208,28 @@ class SearchMCPServer:
             with_exception_handling(esql_tools, self.mcp)
         else:
             self.logger.info("ES|QL hunting tools not registered (not available for this engine)")
+
+        # Register Velociraptor forensic tools (if configured)
+        velociraptor_config = os.environ.get("VELOCIRAPTOR_API_CONFIG")
+        if velociraptor_config:
+            self.logger.info("Registering Velociraptor forensic tools")
+            from src.tools.velociraptor_tools import VelociraptorTools
+
+            velociraptor_tools = VelociraptorTools()
+            velociraptor_tools.logger = self.logger
+
+            with_exception_handling(velociraptor_tools, self.mcp)
+
+            # Register cross-correlation tools (require both ES and Velociraptor)
+            self.logger.info("Registering cross-correlation tools")
+            from src.tools.cross_correlation import CrossCorrelationTools
+
+            cross_tools = CrossCorrelationTools()
+            cross_tools.logger = self.logger
+
+            with_exception_handling(cross_tools, self.mcp)
+        else:
+            self.logger.info("Velociraptor tools not registered (VELOCIRAPTOR_API_CONFIG not set)")
 
         # Register Workflow Guidance (resources, prompts, and tools)
         # This ensures ALL connected AI agents know the investigation workflow

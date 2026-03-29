@@ -462,6 +462,8 @@ class InvestigationStateClient:
             iocs = self.extractor.extract_iocs_from_chainsaw(results, source_tool, investigation.manifest.id)
         elif source_type == SourceType.WIRESHARK:
             iocs = self.extractor.extract_iocs_from_wireshark(results, source_tool, investigation.manifest.id)
+        elif source_type == SourceType.VELOCIRAPTOR:
+            iocs = self.extractor.extract_iocs_from_velociraptor(results, source_tool, investigation.manifest.id)
         else:
             # Generic extraction from hits
             iocs = self.extractor.extract_iocs_from_elasticsearch(results, source_tool, investigation.manifest.id)
@@ -512,6 +514,14 @@ class InvestigationStateClient:
             events = [e.get("_source", {}) for e in events]
         elif source_type == SourceType.CHAINSAW:
             events = results.get("detections", [])
+        elif source_type == SourceType.VELOCIRAPTOR:
+            # Velociraptor results are lists of dicts or dict with "events" key
+            if isinstance(results, list):
+                events = results
+            else:
+                events = results.get("events", []) or results.get("response", [])
+                if isinstance(events, str):
+                    events = []
         else:
             events = results.get("events", []) or results.get("hits", {}).get("hits", [])
 

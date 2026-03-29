@@ -58,6 +58,12 @@ dependencies = [
     "pymisp>=2.4.190",
 ]
 
+[project.optional-dependencies]
+velociraptor = [
+    "pyvelociraptor>=0.1.0",
+    "grpcio>=1.60.0",
+]
+
 [project.urls]
 Homepage = "https://github.com/thomasxm/CrowdSentinels-AI-MCP"
 Repository = "https://github.com/thomasxm/CrowdSentinels-AI-MCP"

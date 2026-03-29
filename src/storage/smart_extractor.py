@@ -237,6 +237,96 @@ class SmartExtractor:
 
         return self._deduplicate_and_prioritize(iocs)
 
+    def extract_iocs_from_velociraptor(
+        self,
+        results: dict[str, Any],
+        source_tool: str = "velociraptor",
+        investigation_id: str | None = None,
+    ) -> list[IoC]:
+        """
+        Extract IoCs from Velociraptor artifact collection results.
+
+        Velociraptor results arrive as a list of dicts (from VQL queries) or
+        a dict with an "events" key wrapping that list. Field names vary by
+        artifact type, so we map common Velociraptor fields to IoC types.
+
+        Args:
+            results: Velociraptor collection results
+            source_tool: Name of the tool that ran the query
+            investigation_id: Associated investigation ID
+
+        Returns:
+            List of extracted IoCs
+        """
+        iocs: list[IoC] = []
+
+        # Normalize: results may be a list or a dict wrapping a list
+        events: list[dict[str, Any]] = []
+        if isinstance(results, list):
+            events = results
+        elif isinstance(results, dict):
+            if "events" in results:
+                events = results.get("events", [])
+            elif "response" in results and isinstance(results["response"], list):
+                events = results["response"]
+            else:
+                # Single result dict
+                events = [results]
+
+        # Field mapping: Velociraptor field -> (IoCType, context_tag)
+        vr_field_map: list[tuple[list[str], IoCType, str]] = [
+            # Process fields
+            (["Name", "Exe", "Binary", "process.name"], IoCType.PROCESS, "process"),
+            # Command line fields
+            (["CommandLine", "command_line", "ExpandedCommand"], IoCType.COMMANDLINE, "commandline"),
+            # File path fields
+            (["FullPath", "OSPath", "Path", "AbsoluteExePath", "DownloadedFilePath"], IoCType.FILE_PATH, "filepath"),
+            # IP address fields
+            (["Laddr", "Raddr"], IoCType.IP, "network"),
+            # Hash fields
+            (["SHA1", "Hash", "FileHash", "HashServiceExe", "HashServiceDll", "MD5"], IoCType.HASH, "hash"),
+            # User fields
+            (["Username", "User", "UserId", "UserAccount"], IoCType.USER, "user"),
+            # Hostname fields
+            (["Hostname", "Fqdn"], IoCType.HOSTNAME, "host"),
+            # Service fields
+            (["ServiceDll", "DisplayName"], IoCType.SERVICE, "service"),
+            # URL fields
+            (["HostUrl", "ReferrerUrl"], IoCType.URL, "url"),
+            # Registry key fields
+            (["Key", "KeyPath", "MountPoint"], IoCType.REGISTRY_KEY, "registry"),
+        ]
+
+        for event in events:
+            if not isinstance(event, dict):
+                continue
+
+            for fields, ioc_type, context_tag in vr_field_map:
+                for field in fields:
+                    value = event.get(field)
+                    if not value or not isinstance(value, str):
+                        continue
+                    value = value.strip()
+                    if not value:
+                        continue
+
+                    # Validate value for the target IoC type
+                    if not self._is_valid_ioc(value, ioc_type):
+                        continue
+
+                    iocs.append(
+                        self._create_ioc(
+                            value,
+                            ioc_type,
+                            SourceType.VELOCIRAPTOR,
+                            source_tool,
+                            investigation_id,
+                            {"field": field, "artifact_type": context_tag},
+                        )
+                    )
+
+        return self._deduplicate_and_prioritize(iocs)
+
     def _extract_from_event(
         self,
         event: dict[str, Any],

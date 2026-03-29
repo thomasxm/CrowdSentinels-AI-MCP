@@ -208,6 +208,69 @@ def auto_capture_wireshark_results(
     return results
 
 
+def auto_capture_velociraptor_results(
+    results: dict[str, Any],
+    tool_name: str,
+    query_description: str = "",
+    extract_timeline: bool = False,
+) -> dict[str, Any]:
+    """
+    Automatically capture IoCs from Velociraptor artifact collection results.
+
+    This function should be called after any Velociraptor forensic collection
+    to automatically extract and store IoCs to the active investigation.
+
+    Args:
+        results: Velociraptor collection results
+        tool_name: Name of the tool that generated results
+        query_description: Description of the query
+        extract_timeline: Whether to extract timeline events
+
+    Returns:
+        Updated results dict with capture_summary added
+    """
+    client = get_client()
+
+    # Check if there's an active investigation
+    if client.active_investigation is None:
+        results["capture_info"] = {
+            "captured": False,
+            "reason": "No active investigation. Use create_investigation() first.",
+        }
+        return results
+
+    try:
+        # Add findings to the active investigation
+        summary = client.add_findings(
+            source_type=SourceType.VELOCIRAPTOR,
+            source_tool=tool_name,
+            results=results,
+            query_description=query_description,
+            extract_timeline=extract_timeline,
+        )
+
+        # Add capture info to results
+        results["capture_info"] = {
+            "captured": True,
+            "investigation_id": client.active_investigation_id,
+            "investigation_name": client.active_investigation.manifest.name,
+            "iocs_added": summary.get("iocs_added", 0),
+            "timeline_events_added": summary.get("timeline_events_added", 0),
+            "total_iocs": client.active_investigation.iocs.total_count,
+        }
+
+        logger.info(
+            f"Auto-captured {summary.get('iocs_added', 0)} IoCs from {tool_name} "
+            f"to investigation {client.active_investigation_id}"
+        )
+
+    except Exception as e:
+        logger.warning(f"Failed to auto-capture Velociraptor IoCs: {e}")
+        results["capture_info"] = {"captured": False, "reason": f"Error: {str(e)}"}
+
+    return results
+
+
 def has_active_investigation() -> bool:
     """Check if there's an active investigation."""
     client = get_client()
