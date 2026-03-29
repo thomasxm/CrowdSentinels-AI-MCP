@@ -277,3 +277,228 @@ jobs:
 
           print("Secret detection: no new secrets found in src/.")
           PYEOF
+
+  codeql:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: python
+          queries: security-extended
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:python"
+          output: codeql-results
+
+      - name: Annotate findings
+        if: always()
+        run: |
+          python3 << 'PYEOF'
+          import json, sys, glob
+
+          sarif_files = glob.glob("codeql-results/*.sarif")
+          if not sarif_files:
+              print("CodeQL: no SARIF results found.")
+              sys.exit(0)
+
+          total = 0
+          high_count = 0
+
+          for sarif_path in sarif_files:
+              with open(sarif_path) as f:
+                  sarif = json.load(f)
+
+              for run in sarif.get("runs", []):
+                  for result in run.get("results", []):
+                      total += 1
+                      level = result.get("level", "note")
+                      rule_id = result.get("ruleId", "unknown")
+                      message = result.get("message", {}).get("text", "").replace("\n", " ")[:200]
+
+                      locations = result.get("locations", [])
+                      file_info = ""
+                      line_info = ""
+                      if locations:
+                          phys = locations[0].get("physicalLocation", {})
+                          artifact = phys.get("artifactLocation", {}).get("uri", "")
+                          line = phys.get("region", {}).get("startLine", 1)
+                          file_info = f"file={artifact},"
+                          line_info = f"line={line}"
+
+                      if level == "error":
+                          high_count += 1
+                          print(f"::warning {file_info}{line_info}::[CodeQL/{rule_id}] HIGH: {message}")
+                      elif level == "warning":
+                          print(f"::warning {file_info}{line_info}::[CodeQL/{rule_id}] MEDIUM: {message}")
+
+          print(f"CodeQL: {total} findings, {high_count} HIGH/CRITICAL.")
+          PYEOF
+
+      - name: Upload CodeQL results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: codeql-results
+          path: codeql-results/
+
+  dast-nuclei:
+    name: DAST (Nuclei)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    services:
+      elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:8.17.2
+        env:
+          discovery.type: single-node
+          xpack.security.enabled: "false"
+          ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+        ports:
+          - 9200:9200
+        options: >-
+          --health-cmd "curl -sf http://localhost:9200/_cluster/health || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      ELASTICSEARCH_HOSTS: "http://localhost:9200"
+      VERIFY_CERTS: "false"
+      DISABLE_HIGH_RISK_OPERATIONS: "true"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - uses: astral-sh/setup-uv@v4
+
+      - name: Clone detection-rules
+        run: git clone --depth 1 https://github.com/elastic/detection-rules.git detection-rules
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Start MCP server
+        run: |
+          uv run crowdsentinel-mcp-server \
+            --transport streamable-http \
+            --host 0.0.0.0 \
+            --port 8000 &
+          echo "MCP_PID=$!" >> "$GITHUB_ENV"
+
+          echo "Waiting for MCP server..."
+          MCP_READY=false
+          for i in $(seq 1 30); do
+            if curl -sf --max-time 3 \
+              -H "Content-Type: application/json" \
+              -H "Accept: application/json, text/event-stream" \
+              -d '{"jsonrpc":"2.0","method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"ci-healthcheck","version":"1.0"}},"id":1}' \
+              http://127.0.0.1:8000/mcp/ > /dev/null 2>&1; then
+              echo "MCP server ready after $((i * 2))s"
+              MCP_READY=true
+              break
+            fi
+            echo "  Attempt $i/30..."
+            sleep 2
+          done
+
+          if [ "$MCP_READY" != "true" ]; then
+            echo "::warning::MCP server failed to start after 60s. Nuclei DAST scan will be ineffective."
+          fi
+
+      - name: Install Nuclei
+        run: |
+          NUCLEI_VERSION="3.3.7"
+          curl -sL "https://github.com/projectdiscovery/nuclei/releases/download/v${NUCLEI_VERSION}/nuclei_${NUCLEI_VERSION}_linux_amd64.zip" -o nuclei.zip
+          unzip -o nuclei.zip nuclei
+          chmod +x nuclei
+          sudo mv nuclei /usr/local/bin/
+          nuclei --version
+
+      - name: Run Nuclei DAST scan
+        run: |
+          nuclei \
+            -t tests/dast/nuclei-templates/ \
+            -u http://127.0.0.1:8000 \
+            -jsonl -o nuclei-results.jsonl \
+            -severity info,low,medium,high,critical \
+            -timeout 10 \
+            -retries 1 \
+            -rate-limit 10 \
+            -duc \
+            -stats || true
+
+          echo "Nuclei scan complete."
+
+      - name: Annotate Nuclei findings
+        if: always()
+        run: |
+          if [ ! -f nuclei-results.jsonl ]; then
+            echo "Nuclei: no results file found."
+            exit 0
+          fi
+
+          python3 << 'PYEOF'
+          import json, sys
+
+          findings = []
+          with open("nuclei-results.jsonl") as f:
+              for line in f:
+                  line = line.strip()
+                  if not line:
+                      continue
+                  try:
+                      findings.append(json.loads(line))
+                  except json.JSONDecodeError:
+                      continue
+
+          if not findings:
+              print("Nuclei: no findings.")
+              sys.exit(0)
+
+          high_count = 0
+          for finding in findings:
+              severity = finding.get("info", {}).get("severity", "info").upper()
+              name = finding.get("info", {}).get("name", "unknown")
+              template_id = finding.get("template-id", "unknown")
+              matched = finding.get("matched-at", "")
+              desc = finding.get("info", {}).get("description", "").replace("\n", " ")[:200]
+
+              if severity in ("HIGH", "CRITICAL"):
+                  high_count += 1
+                  print(f"::warning::[Nuclei/{template_id}] {severity}: {name} at {matched}")
+              elif severity == "MEDIUM":
+                  print(f"::warning::[Nuclei/{template_id}] {severity}: {name} at {matched}")
+
+          print(f"Nuclei: {len(findings)} findings, {high_count} HIGH/CRITICAL.")
+          PYEOF
+
+      - name: Stop MCP server
+        if: always()
+        run: kill "$MCP_PID" 2>/dev/null || true
+
+      - name: Upload Nuclei results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuclei-dast-results
+          path: |
+            nuclei-results.jsonl

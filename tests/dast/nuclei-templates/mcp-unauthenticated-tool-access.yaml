@@ -1,0 +1,57 @@
+id: mcp-unauthenticated-tool-access
+
+info:
+  name: MCP Unauthenticated Tool Access
+  author: crowdsentinel
+  severity: high
+  description: |
+    Sends MCP initialize and tools/list requests without any
+    authentication credentials to verify whether the server exposes
+    sensitive tool information and capabilities to unauthenticated
+    clients.
+  tags: mcp,auth,unauth,tool-access
+
+http:
+  - raw:
+      - |
+        POST /mcp/ HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/json
+        Accept: application/json, text/event-stream
+
+        {"jsonrpc":"2.0","method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"unauth-probe","version":"1.0"}},"id":1}
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        part: body
+        words:
+          - "serverInfo"
+          - "protocolVersion"
+        condition: and
+
+  - raw:
+      - |
+        POST /mcp/ HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/json
+        Accept: application/json, text/event-stream
+
+        {"jsonrpc":"2.0","method":"tools/list","params":{},"id":2}
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        part: body
+        words:
+          - "search_documents"
+          - "general_api_request"
+        condition: or

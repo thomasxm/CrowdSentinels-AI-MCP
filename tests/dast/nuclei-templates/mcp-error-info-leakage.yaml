@@ -1,0 +1,73 @@
+id: mcp-error-info-leakage
+
+info:
+  name: MCP Error Information Leakage
+  author: crowdsentinel
+  severity: medium
+  description: |
+    Sends requests for nonexistent tools, null arguments, and invalid
+    paths to check whether the server leaks internal information such
+    as stack traces, file paths, or dependency details in error
+    responses. Each request is evaluated independently.
+  tags: mcp,info-leak,error-handling,stack-trace
+
+http:
+  - raw:
+      - |
+        POST /mcp/ HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/json
+        Accept: application/json, text/event-stream
+
+        {"jsonrpc":"2.0","method":"tools/call","params":{"name":"nonexistent_tool_xyz","arguments":{}},"id":1}
+
+    matchers-condition: or
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "Traceback"
+          - "File \"/home/"
+          - "site-packages"
+          - "uvicorn.error"
+        condition: or
+
+  - raw:
+      - |
+        POST /mcp/ HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/json
+        Accept: application/json, text/event-stream
+
+        {"jsonrpc":"2.0","method":"tools/call","params":{"name":"search_documents","arguments":null},"id":2}
+
+    matchers-condition: or
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "Traceback"
+          - "File \"/home/"
+          - "site-packages"
+          - "uvicorn.error"
+        condition: or
+
+  - raw:
+      - |
+        POST /mcp/ HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/json
+        Accept: application/json, text/event-stream
+
+        {"jsonrpc":"2.0","method":"nonexistent/path","params":{},"id":3}
+
+    matchers-condition: or
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "Traceback"
+          - "File \"/home/"
+          - "site-packages"
+          - "uvicorn.error"
+        condition: or

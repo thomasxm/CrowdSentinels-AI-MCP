@@ -1,0 +1,72 @@
+id: mcp-method-enumeration
+
+info:
+  name: MCP Method Enumeration
+  author: crowdsentinel
+  severity: info
+  description: |
+    Probes for undocumented or additional MCP methods including
+    resources/list, prompts/list, server/info, and completion/complete
+    with a path traversal reference to discover exposed capabilities.
+  tags: mcp,enumeration,discovery,methods
+
+http:
+  - raw:
+      - |
+        POST /mcp/ HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/json
+        Accept: application/json, text/event-stream
+
+        {"jsonrpc":"2.0","method":"resources/list","params":{},"id":1}
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "result"
+
+  - raw:
+      - |
+        POST /mcp/ HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/json
+        Accept: application/json, text/event-stream
+
+        {"jsonrpc":"2.0","method":"prompts/list","params":{},"id":2}
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "result"
+
+  - raw:
+      - |
+        POST /mcp/ HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/json
+        Accept: application/json, text/event-stream
+
+        {"jsonrpc":"2.0","method":"server/info","params":{},"id":3}
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "result"
+
+  - raw:
+      - |
+        POST /mcp/ HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/json
+        Accept: application/json, text/event-stream
+
+        {"jsonrpc":"2.0","method":"completion/complete","params":{"ref":{"type":"ref/resource","uri":"file:///../../../etc/passwd"},"argument":{"name":"test","value":"t"}},"id":4}
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "result"
