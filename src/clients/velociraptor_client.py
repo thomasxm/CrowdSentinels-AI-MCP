@@ -293,24 +293,33 @@ class VelociraptorClient:
         artifact: str,
     ) -> str:
         """
-        Check if a flow has completed.
+        Check if a flow has completed by querying flow metadata directly.
+
+        Uses the flows() VQL plugin which returns the flow state reliably
+        across all artifact types (Windows and Linux).
 
         Returns:
-            'FINISHED' or 'RUNNING'
+            'FINISHED', 'RUNNING', or 'ERROR'
         """
         client_id = _sanitize_client_id(client_id)
         flow_id = _sanitize_flow_id(flow_id)
-        artifact = _sanitize_artifact(artifact)
 
         vql = (
-            f"SELECT * FROM flow_logs("
+            f"SELECT state FROM flows("
             f"client_id='{client_id}',flow_id='{flow_id}') "
-            f"WHERE message =~ '^Collection {artifact} is done after' "
-            f"LIMIT 100"
+            f"LIMIT 1"
         )
 
         results = await self.run_vql(vql)
-        return "FINISHED" if results else "RUNNING"
+        if not results:
+            return "RUNNING"
+
+        state = str(results[0].get("state", "")).upper()
+        if state == "FINISHED":
+            return "FINISHED"
+        if state == "ERROR":
+            return "ERROR"
+        return "RUNNING"
 
     async def get_flow_results(
         self,

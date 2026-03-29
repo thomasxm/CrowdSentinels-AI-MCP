@@ -39,6 +39,7 @@ class InvestigationStateClient:
         )
         self._active_investigation: Investigation | None = None
         self._active_id: str | None = None
+        self._restore_active_investigation()
 
     @property
     def active_investigation(self) -> Investigation | None:
@@ -49,6 +50,46 @@ class InvestigationStateClient:
     def active_investigation_id(self) -> str | None:
         """Get the ID of the currently active investigation."""
         return self._active_id
+
+    def _restore_active_investigation(self) -> None:
+        """Restore active investigation from disk marker on startup.
+
+        Reads the `.active` file from the investigations directory. If it
+        contains a valid investigation ID whose status is still 'active',
+        sets it as the current active investigation so auto-capture and
+        other tools can see it immediately.
+        """
+        active_file = self.config.active_file_path
+        if not active_file.exists():
+            return
+        try:
+            active_id = active_file.read_text().strip()
+            if not active_id:
+                return
+            investigation = self.load_investigation(active_id)
+            if investigation and investigation.manifest.status.value == "active":
+                self._active_investigation = investigation
+                self._active_id = active_id
+                logger.info("Restored active investigation from disk: %s", active_id)
+            else:
+                # Stale marker — investigation was closed or deleted
+                self._clear_active_id()
+        except Exception as e:
+            logger.warning("Failed to restore active investigation: %s", e)
+
+    def _persist_active_id(self) -> None:
+        """Write active investigation ID to disk so other client instances can find it."""
+        if self._active_id:
+            self.config.ensure_directories()
+            self.config.active_file_path.write_text(self._active_id)
+
+    def _clear_active_id(self) -> None:
+        """Remove active investigation marker from disk."""
+        try:
+            if self.config.active_file_path.exists():
+                self.config.active_file_path.unlink()
+        except Exception as e:
+            logger.warning("Failed to clear active investigation marker: %s", e)
 
     def create_investigation(
         self,
@@ -97,6 +138,7 @@ class InvestigationStateClient:
         if auto_activate:
             self._active_investigation = investigation
             self._active_id = investigation.manifest.id
+            self._persist_active_id()
 
         return investigation
 
@@ -190,6 +232,7 @@ class InvestigationStateClient:
             # Set as active
             self._active_investigation = investigation
             self._active_id = investigation_id
+            self._persist_active_id()
 
             logger.info(f"Resumed investigation: {investigation_id}")
 
@@ -916,6 +959,7 @@ class InvestigationStateClient:
         if investigation.manifest.id == self._active_id:
             self._active_investigation = None
             self._active_id = None
+            self._clear_active_id()
 
         logger.info(f"Closed investigation: {investigation.manifest.id}")
         return True
