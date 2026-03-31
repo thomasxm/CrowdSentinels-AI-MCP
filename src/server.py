@@ -1,5 +1,6 @@
 import argparse
 import logging
+import os
 import sys
 
 from fastmcp import FastMCP
@@ -208,6 +209,28 @@ class SearchMCPServer:
         else:
             self.logger.info("ES|QL hunting tools not registered (not available for this engine)")
 
+        # Register Velociraptor forensic tools (if configured)
+        velociraptor_config = os.environ.get("VELOCIRAPTOR_API_CONFIG")
+        if velociraptor_config:
+            self.logger.info("Registering Velociraptor forensic tools")
+            from src.tools.velociraptor_tools import VelociraptorTools
+
+            velociraptor_tools = VelociraptorTools()
+            velociraptor_tools.logger = self.logger
+
+            with_exception_handling(velociraptor_tools, self.mcp)
+
+            # Register cross-correlation tools (require both ES and Velociraptor)
+            self.logger.info("Registering cross-correlation tools")
+            from src.tools.cross_correlation import CrossCorrelationTools
+
+            cross_tools = CrossCorrelationTools()
+            cross_tools.logger = self.logger
+
+            with_exception_handling(cross_tools, self.mcp)
+        else:
+            self.logger.info("Velociraptor tools not registered (VELOCIRAPTOR_API_CONFIG not set)")
+
         # Register Workflow Guidance (resources, prompts, and tools)
         # This ensures ALL connected AI agents know the investigation workflow
         self.logger.info("Registering Workflow Guidance (resources, prompts, tools)")
@@ -219,6 +242,15 @@ class SearchMCPServer:
         self.logger.info("Registering Schema Tools (resources, introspection)")
         schema_tools = SchemaTools(self.search_client)
         schema_tools.register_tools(self.mcp)
+
+        # Register DFIR Knowledge Resources
+        # Exposes data sources, IoC reference (Pyramid of Pain), and
+        # cross-correlation playbooks as MCP resources for connected agents
+        self.logger.info("Registering DFIR Knowledge Resources")
+        from src.tools.dfir_resources import DFIRResources
+
+        dfir_resources = DFIRResources()
+        dfir_resources.register_tools(self.mcp)
 
 
 def run_search_server(engine_type, transport, host, port, path):

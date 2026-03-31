@@ -54,6 +54,11 @@ class StorageConfig:
         return self.base_path / "investigations"
 
     @property
+    def active_file_path(self) -> Path:
+        """Path to active investigation marker file."""
+        return self.investigations_path / ".active"
+
+    @property
     def config_file_path(self) -> Path:
         """Path to config.json file."""
         return self.base_path / "config.json"

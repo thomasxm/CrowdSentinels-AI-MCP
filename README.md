@@ -47,7 +47,9 @@ https://github.com/user-attachments/assets/0d0381f0-5b68-43b2-8630-19ec130885b2
 - **AI-Guided Investigation Workflows** — Built-in prompts guide agents through proper IR methodology
 - **Persistent Investigation State** — Memory-managed IoC tracking, forensic timelines, and cross-query correlation that survives across sessions (8GB FIFO storage)
 - **Cross-Tool IoC Correlation** — IoCs discovered in one tool are automatically available to all others
-- **Multi-Source Analysis** — Elasticsearch, EVTX logs (Chainsaw), PCAP files (Wireshark)
+- **Multi-Source Analysis** — Elasticsearch, EVTX logs (Chainsaw), PCAP files (Wireshark), live endpoint forensics (Velociraptor)
+- **Velociraptor Endpoint Forensics** — 20 MCP tools for live artefact collection (processes, network, persistence, execution evidence, NTFS MFT) with automatic IoC extraction
+- **DFIR Knowledge Resources** — 9 MCP resources exposing investigation playbooks, Pyramid of Pain reference, and cross-correlation guidance directly to connected AI agents
 - **Standalone CLI** — Full threat hunting from the terminal without an MCP client
 
 ---
@@ -485,14 +487,14 @@ crowdsentinel hunt "powershell" -i winlogbeat-* -o json | \
 <tr>
 <td width="50%">
 
-### 84 MCP Tools
-Threat hunting, detection rules, forensics, network analysis, and IoC enrichment — all accessible via natural language
+### 125+ MCP Tools
+Threat hunting, detection rules, forensics, endpoint collection, network analysis, cross-correlation, and IoC enrichment — all accessible via natural language
 
 ### 6,060 Detection Rules
 Pre-built Lucene, EQL & ES|QL rules with automatic MITRE ATT&CK mapping
 
 ### Investigation State
-Persistent IoC tracking across tools and sessions with FIFO storage
+Persistent IoC tracking across tools and sessions with cross-source correlation and FIFO storage
 
 </td>
 <td width="50%">
@@ -503,8 +505,9 @@ Persistent IoC tracking across tools and sessions with FIFO storage
 - Diamond Model (4 vertices)
 - MITRE ATT&CK (automatic mapping)
 
-### 3 Data Sources + Threat Intel
-- Elasticsearch / OpenSearch
+### 4 Data Sources + Threat Intel
+- Elasticsearch / OpenSearch (SIEM)
+- Velociraptor (live endpoint forensics)
 - EVTX logs (Chainsaw + Sigma)
 - PCAP files (Wireshark/TShark)
 - IoC enrichment (Shodan, VirusTotal, AbuseIPDB, ThreatFox)
@@ -527,25 +530,28 @@ Persistent IoC tracking across tools and sessions with FIFO storage
 ┌─────────────────────────────────────────────────────────────────┐
 │                    CrowdSentinel MCP Server                      │
 │  ┌───────────────┐ ┌───────────────┐ ┌───────────────────────┐  │
-│  │   84 Tools    │ │ 6,060 Rules   │ │ Security Frameworks   │  │
+│  │  125+ Tools   │ │ 6,060 Rules   │ │ Security Frameworks   │  │
 │  │ - Hunting     │ │ - Lucene      │ │ - Cyber Kill Chain    │  │
 │  │ - Detection   │ │ - EQL         │ │ - Pyramid of Pain     │  │
 │  │ - Forensics   │ │ - Sigma       │ │ - Diamond Model       │  │
-│  │ - Network     │ │               │ │ - MITRE ATT&CK        │  │
-│  │ - Enrichment  │ │               │ │                       │  │
+│  │ - Endpoint    │ │               │ │ - MITRE ATT&CK        │  │
+│  │ - Network     │ │               │ │                       │  │
+│  │ - Enrichment  │ │               │ │ 9 MCP Resources       │  │
+│  │ - Correlation │ │               │ │ (DFIR knowledge base) │  │
 │  └───────────────┘ └───────────────┘ └───────────────────────┘  │
 │  ┌─────────────────────────────────────────────────────────────┐│
 │  │              Investigation State (Persistent)                ││
-│  │    Cross-tool IoC sharing, enrichment, STIX 2.1 export      ││
+│  │    Cross-source IoC sharing, auto-capture, STIX 2.1 export  ││
 │  └─────────────────────────────────────────────────────────────┘│
-└─────────────────────────┬───────────────────┬───────────────────┘
-                          │                   │
-        ┌─────────────────┼───────────────┐   │
-        ▼                 ▼               ▼   ▼
-┌───────────────┐ ┌───────────────┐ ┌───────────────┐
-│ Elasticsearch │ │   Chainsaw    │ │   Wireshark   │
-│  /OpenSearch  │ │  (EVTX/Sigma) │ │    (PCAP)     │
-└───────────────┘ └───────────────┘ └───────────────┘
+└──────────┬──────────────┬───────────────────┬───────────────────┘
+           │              │                   │
+  ┌────────┼──────────────┼───────────────┐   │
+  ▼        ▼              ▼               ▼   ▼
+┌──────────────┐ ┌───────────────┐ ┌───────────────┐ ┌───────────────┐
+│Elasticsearch │ │ Velociraptor  │ │   Chainsaw    │ │   Wireshark   │
+│ /OpenSearch  │ │  (EDR/DFIR)   │ │  (EVTX/Sigma) │ │    (PCAP)     │
+│   (SIEM)     │ │  (Endpoint)   │ │  (Offline)    │ │  (Network)    │
+└──────────────┘ └───────────────┘ └───────────────┘ └───────────────┘
                           │
   ┌───────────────────────┼───────────────────────┐
   ▼                       ▼                       ▼
@@ -557,8 +563,8 @@ Persistent IoC tracking across tools and sessions with FIFO storage
                           │
                           ▼ (Roadmap)
 ┌───────────────┐ ┌───────────────┐ ┌───────────────┐
-│    Splunk     │ │ Velociraptor  │ │     Zeek      │
-│               │ │  (EDR/DFIR)   │ │   (NSM/IDS)   │
+│    Splunk     │ │  Carbon Black │ │     Zeek      │
+│               │ │  (EDR)        │ │   (NSM/IDS)   │
 └───────────────┘ └───────────────┘ └───────────────┘
 ```
 
@@ -964,6 +970,66 @@ docker-compose -f docker-compose-opensearch.yml up -d
 | **Custom Rule Builder** | Planned | Create detection rules via natural language |
 
 See [CHANGELOG.md](CHANGELOG.md) for detailed version history.
+
+---
+
+## Velociraptor Integration (Live Endpoint Forensics)
+
+CrowdSentinel integrates with [Velociraptor](https://docs.velociraptor.app/) for live endpoint forensic artefact collection. When configured, 20 additional MCP tools and 3 cross-correlation tools become available.
+
+### Setup
+
+```bash
+# Install optional dependencies
+pip install crowdsentinel-mcp-server[velociraptor]
+
+# Set the Velociraptor API config path
+export VELOCIRAPTOR_API_CONFIG="/path/to/api_client.yaml"
+```
+
+The API client config is generated from the Velociraptor server:
+```bash
+velociraptor config api_client --name crowdsentinel --role administrator,api \
+  --config server.config.yaml /path/to/api_client.yaml
+```
+
+### Available Tools
+
+| Category | Tools | Use Case |
+|:---------|:------|:---------|
+| **Discovery** | `velociraptor_client_info`, `velociraptor_list_artifacts` | Resolve hostnames, discover available artefacts |
+| **Live State** | `velociraptor_pslist`, `velociraptor_netstat`, `velociraptor_users` | Running processes, active network connections, user accounts |
+| **Execution Evidence** | `velociraptor_prefetch`, `velociraptor_amcache`, `velociraptor_shimcache`, `velociraptor_userassist`, `velociraptor_bam` | Forensic proof of programme execution |
+| **Persistence** | `velociraptor_services`, `velociraptor_scheduled_tasks` | Service and scheduled task persistence mechanisms |
+| **User Activity** | `velociraptor_shellbags`, `velociraptor_recentdocs`, `velociraptor_evidence_of_download` | User browsing, document access, file downloads |
+| **Filesystem** | `velociraptor_ntfs_mft` | MFT search for files by name, path, or timestamp |
+| **Cross-Correlation** | `correlate_siem_with_endpoint`, `endpoint_to_siem_pivot`, `build_unified_timeline` | Validate SIEM findings on endpoints, pivot from endpoint IoCs to fleet-wide SIEM searches |
+
+### Cross-Source IoC Sharing
+
+IoCs extracted from Velociraptor artefacts are automatically captured into the active investigation alongside SIEM, Chainsaw, and Wireshark findings. Use `get_shared_iocs` to retrieve the combined indicator set for cross-source correlation.
+
+```
+SIEM (Elasticsearch)          Endpoint (Velociraptor)
+       │                              │
+  hunt_by_timeframe()         velociraptor_pslist()
+       │                              │
+  auto_capture ──────► Investigation State ◄────── auto_capture
+                              │
+                     get_shared_iocs()
+```
+
+### DFIR Knowledge Resources
+
+9 MCP resources provide structured investigation reference data directly to connected AI agents:
+
+| Resource | Content |
+|:---------|:--------|
+| `crowdsentinel://investigation-workflow` | Mandatory 4-phase IR workflow |
+| `crowdsentinel://ioc-reference` | IoC types ranked by Pyramid of Pain |
+| `crowdsentinel://cross-correlation-playbooks` | 5 investigation playbooks (suspicious process, brute force, lateral movement, persistence, exfiltration) |
+| `crowdsentinel://velociraptor-guide` | Artefact reference tables and "found X in SIEM → check Y on endpoint" decision tree |
+| `crowdsentinel://data-sources` | All data source capabilities and investigation decision matrix |
 
 ---
 

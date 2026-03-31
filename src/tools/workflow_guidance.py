@@ -34,6 +34,22 @@ Use hunting tools to gather evidence:
 | `esql_query` | Ad-hoc ES|QL queries |
 | `eql_search` | Ad-hoc EQL queries |
 
+### Phase 1.5: Endpoint Validation (if Velociraptor is configured)
+Validate SIEM findings with live endpoint forensics:
+
+| Tool | Use Case |
+|------|----------|
+| `velociraptor_client_info` | Resolve hostname to client_id |
+| `velociraptor_pslist` | Check if suspicious processes are still running |
+| `velociraptor_netstat` | Verify suspicious network connections on endpoint |
+| `velociraptor_services` | Check for persistence via services |
+| `velociraptor_scheduled_tasks` | Check for persistence via scheduled tasks |
+| `velociraptor_prefetch` | Evidence of execution from Prefetch |
+| `velociraptor_amcache` | Evidence of execution from Amcache |
+| `velociraptor_shimcache` | Evidence of execution from ShimCache |
+| `velociraptor_evidence_of_download` | Check for downloaded malware |
+| `velociraptor_ntfs_mft` | Search MFT for suspicious files |
+
 ### Phase 2: Analysis (MANDATORY - DO NOT SKIP)
 
 After EVERY search/hunt query, you MUST analyze the results:
@@ -144,6 +160,59 @@ RECOMMENDED_NEXT_STEPS = {
     "hunt_adjacent_stages": {
         "next_step": "analyze_search_results",
         "hint": "Use analyze_search_results() on each stage's results",
+    },
+    # Velociraptor endpoint tools → Analysis / SIEM correlation
+    "velociraptor_pslist": {
+        "next_step": "analyze_search_results",
+        "hint": "Extract IoCs from process listing, then hunt_for_ioc() to correlate with SIEM",
+    },
+    "velociraptor_netstat": {
+        "next_step": "hunt_for_ioc",
+        "hint": "Correlate suspicious IPs/ports against SIEM logs with hunt_for_ioc()",
+    },
+    "velociraptor_services": {
+        "next_step": "analyze_search_results",
+        "hint": "Check service binaries and DLLs for suspicious paths or unsigned executables",
+    },
+    "velociraptor_scheduled_tasks": {
+        "next_step": "analyze_search_results",
+        "hint": "Analyze scheduled task commands for persistence indicators",
+    },
+    "velociraptor_prefetch": {
+        "next_step": "hunt_for_ioc",
+        "hint": "Search SIEM for matching binary names across other endpoints",
+    },
+    "velociraptor_amcache": {
+        "next_step": "hunt_for_ioc",
+        "hint": "Search SIEM for SHA1 hashes found in Amcache across other endpoints",
+    },
+    "velociraptor_shimcache": {
+        "next_step": "analyze_search_results",
+        "hint": "Cross-reference ShimCache paths with known malware locations",
+    },
+    "velociraptor_evidence_of_download": {
+        "next_step": "hunt_for_ioc",
+        "hint": "Search SIEM for the download URLs and file hashes across other endpoints",
+    },
+    "velociraptor_ntfs_mft": {
+        "next_step": "analyze_search_results",
+        "hint": "Analyze MFT entries for timestamp anomalies (timestomping) or suspicious paths",
+    },
+    "velociraptor_userassist": {
+        "next_step": "analyze_search_results",
+        "hint": "Correlate executed programs with known tools and attack frameworks",
+    },
+    "velociraptor_bam": {
+        "next_step": "analyze_search_results",
+        "hint": "Cross-reference BAM entries with other execution evidence",
+    },
+    "velociraptor_shellbags": {
+        "next_step": "analyze_search_results",
+        "hint": "Analyze folder access patterns for lateral movement indicators",
+    },
+    "velociraptor_recentdocs": {
+        "next_step": "analyze_search_results",
+        "hint": "Check for exfiltration indicators in recently accessed documents",
     },
 }
 
@@ -303,11 +372,28 @@ Begin your investigation now, following this workflow strictly.
             "hunt_by_kill_chain_stage",
             "hunt_adjacent_stages",
         }
+        endpoint_tools = {
+            "velociraptor_pslist",
+            "velociraptor_netstat",
+            "velociraptor_services",
+            "velociraptor_scheduled_tasks",
+            "velociraptor_prefetch",
+            "velociraptor_amcache",
+            "velociraptor_shimcache",
+            "velociraptor_userassist",
+            "velociraptor_bam",
+            "velociraptor_shellbags",
+            "velociraptor_recentdocs",
+            "velociraptor_evidence_of_download",
+            "velociraptor_ntfs_mft",
+        }
         analysis_tools = {"analyze_search_results", "analyze_kill_chain_stage", "map_events_to_kill_chain"}
         reporting_tools = {"generate_investigation_report"}
 
         if tool_name in collection_tools:
             return "Phase 1: Data Collection"
+        if tool_name in endpoint_tools:
+            return "Phase 1.5: Endpoint Validation"
         if tool_name in analysis_tools:
             return "Phase 2: Analysis"
         if tool_name in reporting_tools:

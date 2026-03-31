@@ -2,6 +2,8 @@
 
 from fastmcp import FastMCP
 
+from src.storage.auto_capture import auto_capture_elasticsearch_results
+
 
 class SmartSearchTools:
     """Tools that combine search with automatic summarization and IoC extraction."""
@@ -160,7 +162,7 @@ class SmartSearchTools:
                 # Or using offset (simple)
                 result = smart_search(..., offset=20)
             """
-            return self._execute_smart_search(
+            result = self._execute_smart_search(
                 index=index,
                 query=query,
                 fields=fields,
@@ -168,6 +170,13 @@ class SmartSearchTools:
                 offset=offset,
                 timeframe_minutes=timeframe_minutes,
                 search_after=search_after,
+            )
+            # Add events key for auto-capture (add_findings checks "events" for non-nested formats)
+            # Preserve original "hits" key to honour the documented return contract
+            if "hits" in result and isinstance(result["hits"], list):
+                result["events"] = result["hits"]
+            return auto_capture_elasticsearch_results(
+                result, "smart_search", f"smart_search: {query} in {index}", extract_timeline=True
             )
 
         @mcp.tool()
@@ -232,7 +241,7 @@ class SmartSearchTools:
                 # Page 2
                 result = threat_hunt_search(..., search_after=result["pagination"]["next_search_after"])
             """
-            return self._execute_threat_hunt_search(
+            result = self._execute_threat_hunt_search(
                 index=index,
                 query=query,
                 timeframe_minutes=timeframe_minutes,
@@ -243,6 +252,12 @@ class SmartSearchTools:
                 offset=offset,
                 search_after=search_after,
                 agg_bucket_size=agg_bucket_size,
+            )
+            # Add events key for auto-capture, preserve original keys
+            if "sample_events" in result and isinstance(result["sample_events"], list):
+                result["events"] = result["sample_events"]
+            return auto_capture_elasticsearch_results(
+                result, "threat_hunt_search", f"threat_hunt_search: {query} in {index}", extract_timeline=True
             )
 
         @mcp.tool()

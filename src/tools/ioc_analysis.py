@@ -1,5 +1,6 @@
 """IoC Analysis and Decision-Making Tools for incident response."""
 
+import json
 from typing import Annotated
 
 from fastmcp import FastMCP
@@ -14,9 +15,9 @@ class IoCAnalysisTools:
         @mcp.tool()
         def analyze_search_results(
             search_results: Annotated[
-                dict,
+                dict | str,
                 Field(
-                    description='REQUIRED. Search results dict. Accepts ES format {"hits":{"hits":[...]}}, simplified {"hits":[...]}, or hunt output {"sample_events":[...], "summary":{"total_hits": N}}'
+                    description='REQUIRED. Search results as dict or JSON string. Accepts ES format {"hits":{"hits":[...]}}, simplified {"hits":[...]}, or hunt output {"sample_events":[...], "summary":{"total_hits": N}}'
                 ),
             ] = None,
             context: str = "",
@@ -64,6 +65,12 @@ class IoCAnalysisTools:
                 return {
                     "error": "search_results parameter is required. Pass the output from threat_hunt_search, search_with_lucene, or search_documents."
                 }
+            # Accept JSON string or dict
+            if isinstance(search_results, str):
+                try:
+                    search_results = json.loads(search_results)
+                except (json.JSONDecodeError, TypeError):
+                    return {"error": "search_results must be a valid JSON string or dict."}
             return self.search_client.analyze_search_results(search_results=search_results, context=context)
 
         @mcp.tool()
