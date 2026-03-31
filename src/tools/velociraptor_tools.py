@@ -243,6 +243,7 @@ class VelociraptorTools:
 
             if os_type.lower() == "linux":
                 artifact = "Linux.Network.NetstatEnriched"
+                result_scope = ""
                 parameters = (
                     f"IPRegex='{IPRegex}',"
                     f"PortRegex='{PortRegex}',"
@@ -250,20 +251,22 @@ class VelociraptorTools:
                     f"ConnectionStatusRegex='{ConnectionStatusRegex}'"
                 )
             else:
-                artifact = "Windows.Network.NetstatEnriched/Netstat"
+                artifact = "Windows.Network.NetstatEnriched"
+                result_scope = "/Netstat"
                 if Fields == "*":
                     Fields = "Pid,Ppid,Name,Path,CommandLine,Username,Authenticode.Trusted,Type,Status,Laddr,Lport,Raddr,Rport"
                 parameters = (
                     f"IPRegex='{IPRegex}',"
                     f"PortRegex='{PortRegex}',"
-                    f"ProcessNameRegex='{ProcessNameRegex}'"
+                    f"ProcessNameRegex='{ProcessNameRegex}',"
+                    f"ConnectionStatusRegex='{ConnectionStatusRegex}'"
                 )
 
-            results = await client.collect_realtime(client_id, artifact, parameters, Fields)
+            results = await client.collect_realtime(client_id, artifact, parameters, Fields, result_scope)
             return tools_instance._wrap_results(results, "velociraptor_netstat", f"Netstat ({os_type})")
 
         @mcp.tool()
-        async def velociraptor_users(client_id: str, os_type: str = "linux", Fields: str = "*") -> dict:
+        async def velociraptor_users(client_id: str, os_type: str = "windows", Fields: str = "*") -> dict:
             """
             List users on an endpoint.
 

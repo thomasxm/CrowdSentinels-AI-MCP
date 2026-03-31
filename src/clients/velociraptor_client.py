@@ -220,6 +220,7 @@ class VelociraptorClient:
             Client info dict or None if not found
         """
         hostname = _sanitize_hostname(hostname)
+        hostname_pattern = re.escape(hostname)
         vql = (
             f"SELECT client_id,"
             "timestamp(epoch=first_seen_at) as FirstSeen,"
@@ -230,8 +231,8 @@ class VelociraptorClient:
             "os_info.release as OS,"
             "os_info.machine as Machine,"
             "agent_information.version as AgentVersion "
-            f"FROM clients() WHERE os_info.hostname =~ '^{hostname}$' "
-            f"OR os_info.fqdn =~ '^{hostname}$' "
+            f"FROM clients() WHERE os_info.hostname =~ '^{hostname_pattern}$' "
+            f"OR os_info.fqdn =~ '^{hostname_pattern}$' "
             "ORDER BY LastSeen DESC LIMIT 1"
         )
 
